@@ -1,0 +1,81 @@
+@import './fonts.css';
+@import './tailwind.css';
+@import './theme.css';
+
+/* Print styles */
+@media print {
+  /* Hide elements that shouldn't be printed */
+  button, .no-print, nav, header, aside, footer {
+    display: none !important;
+  }
+
+  /* Hide tabs navigation */
+  [role="tablist"] {
+    display: none !important;
+  }
+
+  /* Hide filters and selects */
+  select, input[type="date"], label {
+    display: none !important;
+  }
+
+  /* Hide card headers and descriptions except title */
+  .space-y-6 > div:first-child {
+    display: none !important;
+  }
+
+  /* Remove padding from main container */
+  body, html {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Remove card styling for print */
+  [class*="Card"] {
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Ensure planning tables print properly */
+  .overflow-x-auto {
+    overflow: visible !important;
+  }
+
+  /* Page setup */
+  @page {
+    size: landscape;
+    margin: 1cm;
+  }
+
+  /* Ensure colors are preserved in print */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  /* Make tables fit better on page */
+  table {
+    page-break-inside: avoid;
+  }
+
+  /* Prevent breaking inside calendar cells */
+  .grid > div {
+    page-break-inside: avoid;
+  }
+
+  /* Show print-only elements */
+  .print-only {
+    display: block !important;
+  }
+
+  /* Adjust font sizes for print */
+  body {
+    font-size: 10pt;
+  }
+}
+
+/* Hide print-only elements on screen */
+.print-only {
+  display: none;
+}

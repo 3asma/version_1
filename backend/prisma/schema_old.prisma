@@ -1,0 +1,73 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model Prospect {
+  id                    String      @id @default(uuid())
+  firstName             String
+  lastName              String
+  age                   Int
+  occupation            Occupation
+  subject               String
+  giftCode              String?
+  observation           Observation
+  contact               String[]
+  action                String?
+  status                String      @default("prospect")
+  freeSessionsCompleted Int         @default(0)
+  absences              Int         @default(0)
+  createdAt             DateTime    @default(now())
+  updatedAt             DateTime    @updatedAt
+}
+
+enum Occupation {
+  STUDENT
+  EMPLOYEE
+}
+
+enum Observation {
+  ALONE
+  ACCOMPANIED
+}
+
+model Candidate {
+  id            String          @id @default(uuid())
+  candidateCode String          @unique
+  firstName     String
+  lastName      String
+  email         String?         @unique
+  phone         String?
+  age           Int
+  occupation    Occupation
+  giftCode      String?
+  observation   Observation
+  contact       String[]
+  action        String?
+  status        CandidateStatus @default(PENDING)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+}
+
+enum CandidateStatus {
+  ACTIVE
+  INACTIVE
+  PENDING
+}
