@@ -13,19 +13,27 @@ export interface User {
 
 export interface Prospect {
   id: string;
+  membershipNumber?: string | null;
   firstName: string;
   lastName: string;
+  gender?: 'MALE' | 'FEMALE' | null;
   age: number;
-  occupation: 'student' | 'employee';
-  subject: string;
-  giftCode?: string;
-  observation: 'alone' | 'accompanied';
-  contact?: string[];
-  action?: string;
-  status: 'prospect';
+  occupation: 'STUDENT' | 'EMPLOYEE';
+  phone?: string | null;
+  email?: string | null;
+  registrationDate?: string | null;
+  giftCode?: string | null;
+  observation: 'ALONE' | 'ACCOMPANIED';
+  action?: string | null;
+  firstContactId?: string | null;
+  secondContactId?: string | null;
+  status: string;
   freeSessionsCompleted: number;
   absences: number;
+  firstContact?: Commercial | null;
+  secondContact?: Commercial | null;
   createdAt: string;
+  updatedAt: string;
 }
 
 export interface Commercial {
@@ -36,6 +44,7 @@ export interface Commercial {
   email: string;
   action: string;
   createdAt: string;
+  updatedAt: string;
 }
 
 export interface Candidate {
@@ -43,76 +52,66 @@ export interface Candidate {
   candidateCode: string;
   firstName: string;
   lastName: string;
+  email?: string | null;
+  phone?: string | null;
   age: number;
-  occupation: 'student' | 'employee';
-  giftCode?: string;
-  observation: 'alone' | 'accompanied';
-  contact?: string[];
-  formationId?: string;
-  action?: string;
-  status: 'active' | 'inactive' | 'pending';
+  occupation: 'STUDENT' | 'EMPLOYEE';
+  observation: 'ALONE' | 'ACCOMPANIED';
+  firstContactId?: string | null;
+  secondContactId?: string | null;
+  action?: string | null;
+  firstContact?: Commercial | null;
+  secondContact?: Commercial | null;
+  status: 'ACTIVE' | 'INACTIVE' | 'PENDING';
+  membershipNumber?: string | null;
+  gender?: 'MALE' | 'FEMALE' | null;
+  registrationDate?: string | null;
+  inscriptions?: Inscription[];
   createdAt: string;
-}
-
-export interface CandidateAssignment {
-  id: string;
-  candidateId: string;
-  formationId: string;
-  assignmentType: 'inscription' | 'réaffectation';
-  duration: number;
-  price: number;
-  volumeHoraire: number;
-  date: string;
-  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Professor {
   id: string;
-  firstName: string;
-  lastName: string;
-  phone: string;
-  email: string;
-  address: string;
-  subjects: string[];
-  type: 'permanent' | 'temporary';
+  nom: string;
+  prenom: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string | null;
+  telephone?: string | null;
+  phone?: string | null;
+  adresse?: string | null;
+  address?: string | null;
+  type: string;
   dayOff: string;
   maxSessions: number;
-  totalHoursWorked: number;
+  subjects?: string[];
+  totalHoursWorked?: number;
+  inscriptions?: Inscription[];
+  createdAt?: string;
+  updatedAt?: string;
 }
-
 
 export interface Room {
   id: string;
-  roomNumber: string;
-  type: string;
-  capacity: number;
-  available: boolean;
+  numero?: string;
+  capacite?: number;
+  roomNumber?: string;
+  capacity?: number;
+  type?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface Formation {
   id: string;
-  subject: string;
-  level: string;
-  type: 'group' | 'pair' | 'individual';
-  duration: number; // minutes
-  totalSessions: number;
-}
-
-export interface Group {
-  id: string;
-  nom: string;
-  type: 'MONOME' | 'BINOME' | 'GROUPE';
-  effectif: number;
-  description?: string;
-  formationId: string;
-  createdAt: string;
-  members?: {
-    id: string;
-    candidateId: string;
-    candidate: Candidate;
-  }[];
-  professorId?: string | null;
-  professor?: Professor | null;
+  matiere?: string;
+  niveau?: string;
+  subject?: string;
+  level?: string;
+  type?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface Session {
@@ -126,19 +125,128 @@ export interface Session {
   duration: number;
   status: 'scheduled' | 'completed' | 'cancelled';
   attendance?: 'present' | 'absent';
+  learningMode?: string;
+  candidate?: {
+    firstName: string;
+    lastName: string;
+  } | null;
+  inscriptionCode?: string;
+  reservationCode?: string;
+  formation?: {
+    subject: string;
+    level: string;
+  } | null;
+  professor?: {
+    firstName: string;
+    lastName: string;
+  } | null;
+  room?: {
+    roomNumber: string;
+  } | null;
+  startTimeText?: string;
+  endTimeText?: string;
+  reservationDate?: string;
+  startTime?: string;
+  endTime?: string;
 }
+
+export const mapReservationToSession = (r: any): Session => {
+  const dateObj = new Date(r.reservationDate);
+  const date = dateObj.toISOString().split('T')[0];
+  const start = new Date(r.startTime);
+  const end = new Date(r.endTime);
+  const time = start.toISOString().split('T')[1].substring(0, 5);
+  const duration = Math.round((end.getTime() - start.getTime()) / 60000);
+
+  let status: 'scheduled' | 'completed' | 'cancelled' = 'scheduled';
+  if (r.status === 'CANCELLED') status = 'cancelled';
+  else if (r.status === 'COMPLETED') status = 'completed';
+
+  return {
+    id: r.id,
+    candidateId: r.inscription?.candidateId || '',
+    professorId: r.professorId,
+    roomId: r.roomId,
+    formationId: r.inscription?.formationId || '',
+    date,
+    time,
+    duration,
+    status,
+    reservationDate: r.reservationDate,
+    startTime: r.startTime,
+    endTime: r.endTime,
+    attendance: r.status === 'COMPLETED' ? 'present' : undefined,
+    learningMode: r.inscription?.learningMode || '',
+    candidate: r.inscription?.candidate ? {
+      firstName: r.inscription.candidate.firstName,
+      lastName: r.inscription.candidate.lastName
+    } : null,
+    inscriptionCode: r.inscription?.inscriptionCode || '',
+    reservationCode: r.reservationCode,
+    formation: r.inscription?.formation ? {
+      subject: r.inscription.formation.matiere,
+      level: r.inscription.formation.niveau
+    } : null,
+    professor: r.professor ? {
+      firstName: r.professor.prenom,
+      lastName: r.professor.nom
+    } : null,
+    room: r.room ? {
+      roomNumber: r.room.numero
+    } : null,
+    startTimeText: time,
+    endTimeText: end.toISOString().split('T')[1].substring(0, 5)
+  };
+};
+
+export const mapPaymentFromBackend = (p: any): Payment => {
+  const generatedInvoices = JSON.parse(localStorage.getItem('generated_invoices') || '{}');
+  const invoiceNumber = generatedInvoices[p.id];
+  const paymentMethodMap: Record<string, string> = {
+    CASH: 'cash',
+    BANK_TRANSFER: 'bank_transfer',
+    CHEQUE: 'check',
+    CARD: 'cash'
+  };
+  const statusMap: Record<string, string> = {
+    PENDING: 'pending',
+    COMPLETED: 'validated',
+    FAILED: 'pending',
+    REFUNDED: 'pending'
+  };
+
+  return {
+    id: p.id,
+    reference: p.paymentCode,
+    candidateId: p.candidateId,
+    formationId: p.formationId,
+    amount: p.amount,
+    paymentDate: p.paymentDate?.split('T')[0] || p.paymentDate || '',
+    paymentMethod: (paymentMethodMap[p.paymentMethod?.toUpperCase()] || 'cash') as any,
+    status: (statusMap[p.status?.toUpperCase()] || 'pending') as any,
+    invoiceGenerated: !!invoiceNumber,
+    invoiceNumber: invoiceNumber || undefined,
+    checkDetails: p.paymentMethod?.toUpperCase() === 'CHEQUE' ? {
+      type: 'bank_check',
+      dueDate: p.paymentDate?.split('T')[0] || p.paymentDate || '',
+      checkStatus: (p.status === 'COMPLETED' ? 'validated' : 'pending')
+    } : undefined,
+    isMonthlyPayment: false,
+    createdAt: p.createdAt
+  };
+};
 
 export interface ReservationRequest {
   id: string;
   professorId: string;
   candidateId: string;
   roomId: string;
-  formationId?: string; // Added to track which formation for the reservation
+  formationId?: string;
   date: string;
   time: string;
   status: 'pending' | 'approved' | 'rejected';
   type: 'professor_cancellation' | 'candidate_request' | 'candidate_cancellation';
-  sessionId?: string; // For cancellation requests
+  sessionId?: string;
   createdAt: string;
 }
 
@@ -178,6 +286,29 @@ export interface Invoice {
   year: number;
 }
 
+export interface Inscription {
+  id: string;
+  inscriptionCode: string;
+  dateInscription: string;
+  status: 'WAITING' | 'ASSIGNED' | 'ACTIVE' | 'CANCELLED' | 'COMPLETED';
+  note?: string | null;
+  duration?: number | null;
+  price?: number | null;
+  volumeHoraire?: number | null;
+  remainingHours: number;
+  learningMode: 'MONOME' | 'BINOME' | 'GROUPE';
+  candidateId: string;
+  formationId: string;
+  professorId?: string | null;
+  learningGroupId?: string | null;
+  learningGroup?: any;
+  candidate?: Candidate;
+  formation?: Formation;
+  professor?: Professor | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
 interface AppContextType {
   currentUser: User | null;
   login: (email: string, password: string) => Promise<boolean>;
@@ -185,68 +316,57 @@ interface AppContextType {
 
   // Prospects
   prospects: Prospect[];
-  addProspect: (prospect: Omit<Prospect, 'id' | 'status' | 'freeSessionsCompleted' | 'absences' | 'createdAt'>) => Promise<void>;
+  addProspect: (prospect: Omit<Prospect, 'id' | 'status' | 'freeSessionsCompleted' | 'absences' | 'createdAt' | 'updatedAt'>) => Promise<void>;
   updateProspect: (id: string, prospect: Partial<Prospect>) => Promise<void>;
   deleteProspect: (id: string) => Promise<void>;
   transformToCandidate: (prospectId: string, formationId: string) => Promise<string | null>;
 
   // Commercials
   commercials: Commercial[];
-  addCommercial: (commercial: Omit<Commercial, 'id' | 'createdAt'>) => void;
-  updateCommercial: (id: string, commercial: Partial<Commercial>) => void;
-  deleteCommercial: (id: string) => void;
+  addCommercial: (commercial: Omit<Commercial, 'id' | 'createdAt' | 'updatedAt'>) => Promise<{ success: boolean; error?: string }>;
+  updateCommercial: (id: string, commercial: Partial<Commercial>) => Promise<{ success: boolean; error?: string }>;
+  deleteCommercial: (id: string) => Promise<void>;
 
   // Candidates
   candidates: Candidate[];
-  addCandidate: (candidate: Omit<Candidate, 'id' | 'candidateCode' | 'status' | 'createdAt'>) => Promise<void>;
+  addCandidate: (candidate: Omit<Candidate, 'id' | 'candidateCode' | 'status' | 'createdAt' | 'updatedAt'>) => Promise<void>;
   updateCandidate: (id: string, updates: Partial<Candidate>) => Promise<void>;
   deleteCandidate: (id: string) => Promise<void>;
 
-  // Candidate Assignments
-  candidateAssignments: CandidateAssignment[];
-  addCandidateAssignment: (assignment: Omit<CandidateAssignment, 'id' | 'createdAt'>) => void;
-  getCandidateAssignments: (candidateId: string) => CandidateAssignment[];
+  // Inscriptions
+  inscriptions: Inscription[];
+  learningGroups: any[];
+  addInscription: (inscription: Omit<Inscription, 'id' | 'dateInscription' | 'createdAt' | 'updatedAt'>) => Promise<void>;
+  updateInscriptionStatus: (id: string, statut: Inscription['status']) => Promise<void>;
+  updateInscription: (id: string, updates: Partial<Inscription>) => Promise<void>;
+  updateLearningGroup: (groupId: string, data: any) => Promise<void>;
+  deleteInscription: (id: string) => Promise<void>;
+  deleteLearningGroup: (id: string) => Promise<void>;
 
   // Professors
   professors: Professor[];
-  addProfessor: (professor: Omit<Professor, 'id'>) => Promise<void>;
+  addProfessor: (professor: Omit<Professor, 'id' | 'createdAt' | 'updatedAt'>) => Promise<void>;
   updateProfessor: (id: string, updates: Partial<Professor>) => Promise<void>;
   deleteProfessor: (id: string) => Promise<boolean>;
 
-  // Inscriptions
-  inscriptions: Inscription[];
-  addInscription: (inscription: Omit<Inscription, 'id' | 'dateInscription'>) => Promise<void>;
-  updateInscriptionStatus: (id: string, statut: Inscription['statut']) => Promise<void>;
-  updateInscription: (id: string, updates: Partial<Inscription>) => Promise<void>;
-  deleteInscription: (id: string) => Promise<void>;
-
   // Rooms
   rooms: Room[];
-  addRoom: (room: Omit<Room, 'id'>) => Promise<void>;
+  addRoom: (room: Omit<Room, 'id' | 'createdAt' | 'updatedAt'>) => Promise<void>;
   updateRoom: (id: string, updates: Partial<Room>) => Promise<void>;
   deleteRoom: (id: string) => Promise<boolean>;
 
   // Formations
   formations: Formation[];
-  addFormation: (formation: Omit<Formation, 'id'>) => Promise<void>;
+  addFormation: (formation: Omit<Formation, 'id' | 'createdAt' | 'updatedAt'>) => Promise<void>;
   updateFormation: (id: string, updates: Partial<Formation>) => Promise<void>;
   deleteFormation: (id: string) => Promise<boolean>;
-
-  // Groups
-  groups: Group[];
-  addGroup: (group: Omit<Group, 'id' | 'createdAt' | 'members' | 'effectif'> & { candidateIds?: string[] }) => Promise<void>;
-  updateGroup: (id: string, updates: Partial<Group>) => Promise<void>;
-  deleteGroup: (id: string) => Promise<void>;
-  addCandidateToGroup: (groupId: string, candidateId: string) => Promise<void>;
-  removeCandidateFromGroup: (groupId: string, candidateId: string) => Promise<void>;
-  assignProfessorToGroup: (groupId: string, professorId: string) => Promise<void>;
-  removeProfessorFromGroup: (groupId: string) => Promise<void>;
 
   // Sessions
   sessions: Session[];
   addSession: (session: Omit<Session, 'id' | 'status'>) => boolean;
-  cancelSession: (id: string) => void;
+  cancelSession: (id: string) => Promise<void> | void;
   markAttendance: (id: string, attendance: 'present' | 'absent') => void;
+  refreshPlanning: () => Promise<Session[] | undefined>;
 
   // Reservation Requests
   reservationRequests: ReservationRequest[];
@@ -255,35 +375,21 @@ interface AppContextType {
 
   // Payments
   payments: Payment[];
-  addPayment: (payment: Omit<Payment, 'id' | 'reference' | 'createdAt'>) => void;
-  updatePayment: (id: string, updates: Partial<Payment>) => void;
+  addPayment: (payment: Omit<Payment, 'id' | 'reference' | 'createdAt'>) => Promise<void> | void;
+  updatePayment: (id: string, updates: Partial<Payment>) => Promise<void> | void;
+  deletePayment: (id: string) => Promise<void> | void;
 
   // Invoices
   invoices: Invoice[];
   generateInvoice: (paymentId: string) => string | null;
   isLoadingSession: boolean;
-}
 
-export interface Inscription {
-  id: string;
-  candidateId: string;
-  formationId: string;
-  statut: 'ACTIVE' | 'CANCELLED' | 'COMPLETED' | 'WAITING' | 'ASSIGNED';
-  status?: string;
-  dateInscription: string;
-  duration?: number;
-  price?: number;
-  volumeHoraire?: number;
-  remainingHours: number;
-  note?: string;
-  candidate?: Candidate;
-  formation?: Formation;
-  learningMode?: 'MONOME' | 'BINOME' | 'GROUPE';
+  // Keep compatibility for destructured but unused route prop
+  addCandidateAssignment?: any;
 }
 
 export const AppContext = createContext<AppContextType | undefined>(undefined);
 
-// Mock users
 const mockUsers: User[] = [
   { id: '1', email: 'reception@formation.com', name: 'Agent Réception', role: 'agent_reception' },
   { id: '2', email: 'reservation@formation.com', name: 'Agent Réservation', role: 'agent_reservation' },
@@ -298,234 +404,15 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   // Data states
   const [commercials, setCommercials] = useState<Commercial[]>([]);
-
   const [prospects, setProspects] = useState<Prospect[]>([]);
-
-  // Restore session on mount
-  useEffect(() => {
-    const restoreSession = async () => {
-      const token = localStorage.getItem('token');
-      if (token && !currentUser) {
-        try {
-          const response = await api.get('/auth/me');
-          if (response.data.message === 'success') {
-            const { user } = response.data;
-            setCurrentUser({
-              id: user.id,
-              email: user.email,
-              name: user.email.split('@')[0],
-              role: user.role.toLowerCase() as UserRole
-            });
-          }
-        } catch (error) {
-          console.error('Session restoration failed:', error);
-          localStorage.removeItem('token');
-        } finally {
-          setIsLoadingSession(false);
-        }
-      } else {
-        setIsLoadingSession(false);
-      }
-    };
-    restoreSession();
-  }, [currentUser]);
-
-  // Inactivity Timeout (30 minutes)
-  useEffect(() => {
-    if (!currentUser) return;
-
-    const TIMEOUT = 30 * 60 * 1000; // 30 minutes
-    let timeoutId: any;
-
-    const resetTimer = () => {
-      if (timeoutId) clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        logout();
-      }, TIMEOUT);
-    };
-
-    const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'];
-    events.forEach(event => document.addEventListener(event, resetTimer));
-
-    resetTimer();
-
-    return () => {
-      if (timeoutId) clearTimeout(timeoutId);
-      events.forEach(event => document.removeEventListener(event, resetTimer));
-    };
-  }, [currentUser]);
-
-  // Fetch prospects on mount
-  useEffect(() => {
-    const fetchProspects = async () => {
-      if (currentUser) {
-        try {
-          const response = await api.get('/prospects');
-          if (response.data.message === 'success') {
-            setProspects(response.data.data);
-          }
-        } catch (error) {
-          console.error('Failed to fetch prospects:', error);
-        }
-      }
-    };
-    fetchProspects();
-  }, [currentUser]);
-
-  // Fetch commercials on mount
-  useEffect(() => {
-    const fetchCommercials = async () => {
-      if (currentUser) {
-        try {
-          const response = await api.get('/commercials');
-          if (response.data.message === 'success') {
-            setCommercials(response.data.data);
-          }
-        } catch (error) {
-          console.error('Failed to fetch commercials:', error);
-        }
-      }
-    };
-    fetchCommercials();
-  }, [currentUser]);
-
   const [candidates, setCandidates] = useState<Candidate[]>([]);
   const [inscriptions, setInscriptions] = useState<Inscription[]>([]);
-
-  // Fetch candidates on mount
-  useEffect(() => {
-    const fetchCandidates = async () => {
-      if (currentUser) {
-        try {
-          const response = await api.get('/candidates');
-          const inscriptionsRes = await api.get('/inscriptions');
-
-          if (response.data.message === 'success') {
-            const activeInscriptions = inscriptionsRes.data.message === 'success'
-              ? inscriptionsRes.data.data.filter((ins: any) => {
-                const s = ins.status || ins.statut;
-                return s && s !== 'CANCELLED';
-              })
-              : [];
-
-            const normalized = response.data.data.map((c: any) => {
-              const activeIns = activeInscriptions.find((ins: any) => ins.candidateId === c.id);
-              return {
-                ...c,
-                occupation: c.occupation?.toLowerCase(),
-                observation: c.observation?.toLowerCase(),
-                status: c.status?.toLowerCase(),
-                formationId: activeIns ? activeIns.formationId : 'unassigned'
-              };
-            });
-            setCandidates(normalized);
-          }
-
-          if (inscriptionsRes.data.message === 'success') {
-            const mapped = inscriptionsRes.data.data.map((ins: any) => ({
-              ...ins,
-              statut: ins.status || ins.statut
-            }));
-            setInscriptions(mapped);
-          }
-        } catch (error) {
-          console.error('Failed to fetch candidates/inscriptions:', error);
-        }
-      }
-    };
-    fetchCandidates();
-  }, [currentUser]);
-
-  const [groups, setGroups] = useState<Group[]>([]);
-
-  // Fetch groups on mount
-  useEffect(() => {
-    const fetchGroups = async () => {
-      if (currentUser) {
-        try {
-          const response = await api.get('/groups');
-          if (response.data.message === 'success') {
-            setGroups(response.data.data);
-          }
-        } catch (error) {
-          console.error('Failed to fetch groups:', error);
-        }
-      }
-    };
-    fetchGroups();
-  }, [currentUser]);
-
+  const [learningGroups, setLearningGroups] = useState<any[]>([]);
   const [professors, setProfessors] = useState<Professor[]>([]);
-
   const [rooms, setRooms] = useState<Room[]>([]);
-
   const [formations, setFormations] = useState<Formation[]>([]);
 
-  // Fetch formations on mount
-  useEffect(() => {
-    const fetchFormations = async () => {
-      if (currentUser) {
-        try {
-          const response = await api.get('/formations');
-          if (response.data.message === 'success') {
-            const mapped = response.data.data.map((f: any) => ({
-              ...f,
-              subject: f.matiere,
-              level: f.niveau
-            }));
-            setFormations(mapped);
-          }
-        } catch (error) {
-          console.error('Failed to fetch formations:', error);
-        }
-      }
-    };
-    fetchFormations();
-
-    const fetchRooms = async () => {
-      if (currentUser) {
-        try {
-          const response = await api.get('/rooms');
-          if (response.data.message === 'success') {
-            const mapped = response.data.data.map((r: any) => ({
-              ...r,
-              roomNumber: r.numero,
-              capacity: r.capacite
-            }));
-            setRooms(mapped);
-          }
-        } catch (error) {
-          console.error('Failed to fetch rooms:', error);
-        }
-      }
-    };
-    fetchRooms();
-
-    const fetchProfessors = async () => {
-      if (currentUser) {
-        try {
-          const response = await api.get('/professors');
-          if (response.data.message === 'success') {
-            const mapped = response.data.data.map((p: any) => ({
-              ...p,
-              firstName: p.prenom,
-              lastName: p.nom,
-              phone: p.telephone,
-              email: p.email,
-              address: p.adresse,
-              subjects: p.specialite ? p.specialite.split(', ').map((s: string) => s.trim()) : [],
-              totalHoursWorked: 0
-            }));
-            setProfessors(mapped);
-          }
-        } catch (error) {
-          console.error('Failed to fetch professors:', error);
-        }
-      }
-    };
-    fetchProfessors();
-  }, [currentUser]);
-
+  // Sessions and other local state mocks
   const [sessions, setSessions] = useState<Session[]>([
     {
       id: 's1',
@@ -596,32 +483,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
   ]);
 
-  const [candidateAssignments, setCandidateAssignments] = useState<CandidateAssignment[]>([
-    {
-      id: 'ca1',
-      candidateId: 'c1',
-      formationId: 'f1',
-      assignmentType: 'inscription',
-      duration: 6,
-      price: 2500,
-      volumeHoraire: 72,
-      date: '2026-02-15',
-      createdAt: '2026-02-15T09:00:00Z'
-    },
-    {
-      id: 'ca2',
-      candidateId: 'c2',
-      formationId: 'f2',
-      assignmentType: 'inscription',
-      duration: 3,
-      price: 1500,
-      volumeHoraire: 36,
-      date: '2026-02-20',
-      createdAt: '2026-02-20T14:00:00Z'
-    }
-  ]);
-
-
   const [reservationRequests, setReservationRequests] = useState<ReservationRequest[]>([
     {
       id: 'rr1',
@@ -636,25 +497,265 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
   ]);
 
-  // Generate unique candidate code
-  const generateCandidateCode = (): string => {
-    const num = candidates.length + 1;
-    return `CAND${num.toString().padStart(3, '0')}`;
+  const [payments, setPayments] = useState<Payment[]>([]);
+
+  const [invoices, setInvoices] = useState<Invoice[]>([
+    {
+      id: 'inv1',
+      invoiceNumber: 'INV-2026-001',
+      paymentId: 'pay1',
+      candidateId: 'c1',
+      amount: 2500,
+      generatedDate: '2026-04-15T10:30:00Z',
+      year: 2026
+    }
+  ]);
+
+  // Restore session on mount
+  useEffect(() => {
+    const restoreSession = async () => {
+      const token = localStorage.getItem('token');
+      if (token && !currentUser) {
+        try {
+          const response = await api.get('/auth/me');
+          if (response.data.message === 'success') {
+            const { user } = response.data;
+            const mockUser = mockUsers.find(mu => mu.email === user.email);
+            setCurrentUser({
+              id: user.id,
+              email: user.email,
+              name: mockUser ? mockUser.name : user.email.split('@')[0],
+              role: mockUser ? mockUser.role : (user.role.toLowerCase() as UserRole)
+            });
+          }
+        } catch (error) {
+          console.error('Session restoration failed:', error);
+          localStorage.removeItem('token');
+        } finally {
+          setIsLoadingSession(false);
+        }
+      } else {
+        setIsLoadingSession(false);
+      }
+    };
+    restoreSession();
+  }, [currentUser]);
+
+  // Inactivity Timeout (30 minutes)
+  useEffect(() => {
+    if (!currentUser) return;
+
+    const TIMEOUT = 30 * 60 * 1000;
+    let timeoutId: any;
+
+    const resetTimer = () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        logout();
+      }, TIMEOUT);
+    };
+
+    const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'];
+    events.forEach(event => document.addEventListener(event, resetTimer));
+
+    resetTimer();
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      events.forEach(event => document.removeEventListener(event, resetTimer));
+    };
+  }, [currentUser]);
+
+  const refreshInscriptions = async () => {
+    try {
+      const [response, candidatesRes] = await Promise.all([
+        api.get('/inscriptions'),
+        api.get('/candidates')
+      ]);
+      if (response.data.message === 'success') {
+        const groups = response.data.data;
+        setLearningGroups(groups);
+        const flattened = groups.flatMap((group: any) =>
+          (group.inscriptions || []).map((ins: any) => ({
+            ...ins,
+            learningGroup: {
+              id: group.id,
+              groupName: group.groupName,
+              inscriptionCode: group.inscriptionCode,
+              learningMode: group.learningMode,
+              formationId: group.formationId,
+              professorId: group.professorId,
+              dateInscription: group.dateInscription,
+              note: group.note
+            },
+            formation: group.formation,
+            professor: group.professor
+          }))
+        );
+        setInscriptions(flattened);
+      }
+      if (candidatesRes && candidatesRes.data.message === 'success') {
+        setCandidates(candidatesRes.data.data);
+      }
+    } catch (error) {
+      console.error('Failed to refresh inscriptions:', error);
+    }
   };
+
+  // Fetch data on mount
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!currentUser) return;
+      try {
+        const results = await Promise.allSettled([
+          api.get('/prospects'),
+          api.get('/commercials'),
+          api.get('/candidates'),
+          api.get('/inscriptions'),
+          api.get('/formations'),
+          api.get('/rooms'),
+          api.get('/professors'),
+          api.get('/reservations'),
+          api.get('/payments')
+        ]);
+
+        const prospectsRes = results[0];
+        const commercialsRes = results[1];
+        const candidatesRes = results[2];
+        const inscriptionsRes = results[3];
+        const formationsRes = results[4];
+        const roomsRes = results[5];
+        const professorsRes = results[6];
+        const reservationsRes = results[7];
+        const paymentsRes = results[8];
+
+        if (prospectsRes.status === 'fulfilled' && prospectsRes.value.data.message === 'success') {
+          const normalized = prospectsRes.value.data.data.map((p: any) => ({
+            ...p,
+            occupation: p.occupation,
+            observation: p.observation
+          }));
+          setProspects(normalized);
+        } else {
+          console.error('Failed to load prospects:', prospectsRes.status === 'rejected' ? prospectsRes.reason : 'Invalid data format');
+        }
+
+        if (commercialsRes.status === 'fulfilled' && commercialsRes.value.data.message === 'success') {
+          setCommercials(commercialsRes.value.data.data);
+        } else {
+          console.error('Failed to load commercials:', commercialsRes.status === 'rejected' ? commercialsRes.reason : 'Invalid data format');
+        }
+
+        let activeInscriptions: any[] = [];
+        if (inscriptionsRes.status === 'fulfilled' && inscriptionsRes.value.data.message === 'success') {
+          const groups = inscriptionsRes.value.data.data;
+          setLearningGroups(groups);
+          const flattened = groups.flatMap((group: any) =>
+            (group.inscriptions || []).map((ins: any) => ({
+              ...ins,
+              learningGroup: {
+                id: group.id,
+                groupName: group.groupName,
+                inscriptionCode: group.inscriptionCode,
+                learningMode: group.learningMode,
+                formationId: group.formationId,
+                professorId: group.professorId,
+                dateInscription: group.dateInscription,
+                note: group.note
+              },
+              formation: group.formation,
+              professor: group.professor
+            }))
+          );
+          setInscriptions(flattened);
+          activeInscriptions = flattened.filter((ins: any) => ins.status === 'ACTIVE' || ins.statut === 'ACTIVE');
+        } else {
+          console.error('Failed to load inscriptions:', inscriptionsRes.status === 'rejected' ? inscriptionsRes.reason : 'Invalid data format');
+        }
+
+        if (formationsRes.status === 'fulfilled' && formationsRes.value.data.message === 'success') {
+          const mapped = formationsRes.value.data.data.map((f: any) => ({
+            ...f,
+            subject: f.matiere,
+            level: f.niveau
+          }));
+          setFormations(mapped);
+        } else {
+          console.error('Failed to load formations:', formationsRes.status === 'rejected' ? formationsRes.reason : 'Invalid data format');
+        }
+
+        if (roomsRes.status === 'fulfilled' && roomsRes.value.data.message === 'success') {
+          const mapped = roomsRes.value.data.data.map((r: any) => ({
+            ...r,
+            roomNumber: r.numero,
+            capacity: r.capacite
+          }));
+          setRooms(mapped);
+        } else {
+          console.error('Failed to load rooms:', roomsRes.status === 'rejected' ? roomsRes.reason : 'Invalid data format');
+        }
+
+        if (professorsRes.status === 'fulfilled' && professorsRes.value.data.message === 'success') {
+          const mapped = professorsRes.value.data.data.map((p: any) => ({
+            ...p,
+            firstName: p.prenom,
+            lastName: p.nom,
+            phone: p.telephone,
+            email: p.email,
+            address: p.adresse,
+            subjects: p.specialite ? p.specialite.split(', ').map((s: string) => s.trim()) : [],
+            totalHoursWorked: Number(p.totalHoursWorked || 0)
+          }));
+          setProfessors(mapped);
+        } else {
+          console.error('Failed to load professors:', professorsRes.status === 'rejected' ? professorsRes.reason : 'Invalid data format');
+        }
+
+        if (candidatesRes.status === 'fulfilled' && candidatesRes.value.data.message === 'success') {
+          const normalized = candidatesRes.value.data.data.map((c: any) => {
+            const activeIns = activeInscriptions.find((ins: any) => ins.candidateId === c.id);
+            return {
+              ...c,
+              formationId: activeIns ? activeIns.formationId : 'unassigned'
+            };
+          });
+          setCandidates(normalized);
+        } else {
+          console.error('Failed to load candidates:', candidatesRes.status === 'rejected' ? candidatesRes.reason : 'Invalid data format');
+        }
+
+        if (reservationsRes.status === 'fulfilled' && reservationsRes.value.data.message === 'success') {
+          const mapped = reservationsRes.value.data.data.map(mapReservationToSession);
+          setSessions(mapped);
+        } else {
+          console.error('Failed to load reservations:', reservationsRes.status === 'rejected' ? reservationsRes.reason : 'Invalid data format');
+        }
+
+        if (paymentsRes.status === 'fulfilled' && paymentsRes.value.data.message === 'success') {
+          setPayments(paymentsRes.value.data.data.map(mapPaymentFromBackend));
+        } else {
+          console.error('Failed to load payments:', paymentsRes.status === 'rejected' ? paymentsRes.reason : 'Invalid data format');
+        }
+      } catch (error) {
+        console.error('Failed to fetch initial application data:', error);
+      }
+    };
+    fetchData();
+  }, [currentUser]);
 
   // Auth functions
   const login = async (email: string, password: string): Promise<boolean> => {
     try {
       const response = await api.post('/auth/login', { email, password });
-
       if (response.data.message === 'success') {
         const { token, user } = response.data;
         localStorage.setItem('token', token);
+        const mockUser = mockUsers.find(mu => mu.email === user.email);
         setCurrentUser({
           id: user.id,
           email: user.email,
-          name: user.email.split('@')[0], // Fallback name
-          role: user.role.toLowerCase() as UserRole
+          name: mockUser ? mockUser.name : user.email.split('@')[0],
+          role: mockUser ? mockUser.role : (user.role.toLowerCase() as UserRole)
         });
         return true;
       }
@@ -670,17 +771,18 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     setCurrentUser(null);
   };
 
-  const addCommercial = async (commercial: Omit<Commercial, 'id' | 'createdAt'>) => {
+  // Commercial functions
+  const addCommercial = async (commercial: Omit<Commercial, 'id' | 'createdAt' | 'updatedAt'>) => {
     try {
       const response = await api.post('/commercials', commercial);
       if (response.data.message === 'success') {
-        setCommercials([...commercials, response.data.data]);
+        setCommercials(prev => [...prev, response.data.data]);
         return { success: true };
       }
       return { success: false, error: response.data.error || 'Erreur inconnue' };
     } catch (error: any) {
       console.error('Failed to add commercial:', error);
-      return { success: false, error: error.response?.data?.error || 'Erreur lors de l\'ajout' };
+      throw error;
     }
   };
 
@@ -688,13 +790,13 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     try {
       const response = await api.patch(`/commercials/${id}`, updates);
       if (response.data.message === 'success') {
-        setCommercials(commercials.map(c => c.id === id ? response.data.data : c));
+        setCommercials(prev => prev.map(c => c.id === id ? response.data.data : c));
         return { success: true };
       }
       return { success: false, error: response.data.error || 'Erreur inconnue' };
     } catch (error: any) {
       console.error('Failed to update commercial:', error);
-      return { success: false, error: error.response?.data?.error || 'Erreur lors de la modification' };
+      throw error;
     }
   };
 
@@ -702,39 +804,68 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     try {
       const response = await api.delete(`/commercials/${id}`);
       if (response.data.message === 'success') {
-        setCommercials(commercials.filter(c => c.id !== id));
+        setCommercials(prev => prev.filter(c => c.id !== id));
       }
     } catch (error) {
       console.error('Failed to delete commercial:', error);
+      throw error;
     }
   };
 
   // Prospect functions
-  const addProspect = async (prospect: Omit<Prospect, 'id' | 'status' | 'freeSessionsCompleted' | 'absences' | 'createdAt'>) => {
+  const addProspect = async (prospect: Omit<Prospect, 'id' | 'status' | 'freeSessionsCompleted' | 'absences' | 'createdAt' | 'updatedAt'>) => {
     try {
-      const response = await api.post('/prospects', prospect);
+      const response = await api.post('/prospects', {
+        membershipNumber: prospect.membershipNumber || null,
+        firstName: prospect.firstName,
+        lastName: prospect.lastName,
+        gender: prospect.gender || null,
+        age: Number(prospect.age),
+        occupation: prospect.occupation,
+        phone: prospect.phone || null,
+        email: prospect.email || null,
+        registrationDate: prospect.registrationDate ? new Date(prospect.registrationDate).toISOString() : null,
+        giftCode: prospect.giftCode || null,
+        observation: prospect.observation,
+        action: prospect.action || null,
+        firstContactId: prospect.firstContactId || null,
+        secondContactId: prospect.secondContactId || null
+      });
       if (response.data.message === 'success') {
-        setProspects([response.data.data, ...prospects]);
+        setProspects(prev => [response.data.data, ...prev]);
       }
     } catch (error) {
       console.error('Failed to add prospect:', error);
+      throw error;
     }
   };
 
   const updateProspect = async (id: string, updates: Partial<Prospect>) => {
     try {
-      const response = await api.patch(`/prospects/${id}`, updates);
+      const response = await api.patch(`/prospects/${id}`, {
+        membershipNumber: updates.membershipNumber,
+        firstName: updates.firstName,
+        lastName: updates.lastName,
+        gender: updates.gender,
+        age: updates.age !== undefined ? Number(updates.age) : undefined,
+        occupation: updates.occupation,
+        phone: updates.phone,
+        email: updates.email,
+        registrationDate: updates.registrationDate ? new Date(updates.registrationDate).toISOString() : undefined,
+        giftCode: updates.giftCode,
+        observation: updates.observation,
+        action: updates.action,
+        firstContactId: updates.firstContactId,
+        secondContactId: updates.secondContactId,
+        freeSessionsCompleted: updates.freeSessionsCompleted !== undefined ? Number(updates.freeSessionsCompleted) : undefined,
+        absences: updates.absences !== undefined ? Number(updates.absences) : undefined
+      });
       if (response.data.message === 'success') {
-        // Normalize backend Enums (UPPERCASE) to frontend types (lowercase)
-        const normalizedData = {
-          ...response.data.data,
-          occupation: response.data.data.occupation.toLowerCase(),
-          observation: response.data.data.observation.toLowerCase()
-        };
-        setProspects(prospects.map(p => p.id === id ? normalizedData : p));
+        setProspects(prev => prev.map(p => p.id === id ? response.data.data : p));
       }
     } catch (error) {
       console.error('Failed to update prospect:', error);
+      throw error;
     }
   };
 
@@ -742,69 +873,90 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     try {
       const response = await api.delete(`/prospects/${id}`);
       if (response.data.message === 'success') {
-        setProspects(prospects.filter(p => p.id !== id));
+        setProspects(prev => prev.filter(p => p.id !== id));
       }
     } catch (error) {
       console.error('Failed to delete prospect:', error);
+      throw error;
     }
   };
 
   const transformToCandidate = async (prospectId: string, formationId: string): Promise<string | null> => {
     const prospect = prospects.find(p => p.id === prospectId);
-    const formation = formations.find(f => f.id === formationId);
-
-    if (!prospect || !formation) {
-      return null;
-    }
-
-    const remainingSessions = 5 - prospect.freeSessionsCompleted - (prospect.absences || 0);
-
-    if (remainingSessions > 0) {
-      return null;
-    }
+    if (!prospect) return null;
 
     try {
-      const candidateCode = generateCandidateCode();
-      const newCandidate: Candidate = {
-        id: `c${candidates.length + 1}`,
-        candidateCode,
+      const response = await api.post('/candidates', {
         firstName: prospect.firstName,
         lastName: prospect.lastName,
-        age: prospect.age,
-        occupation: prospect.occupation.toLowerCase() as 'student' | 'employee',
-        giftCode: prospect.giftCode,
-        observation: prospect.observation.toLowerCase() as 'alone' | 'accompanied',
-        contact: prospect.contact,
-        formationId,
-        action: prospect.action,
-        status: 'active',
-        createdAt: new Date().toISOString()
-      };
+        age: Number(prospect.age),
+        occupation: prospect.occupation,
+        observation: prospect.observation,
+        firstContactId: prospect.firstContactId || null,
+        secondContactId: prospect.secondContactId || null,
+        action: prospect.action || null,
+        gender: prospect.gender || null,
+        email: prospect.email || null,
+        phone: prospect.phone || null,
+        registrationDate: prospect.registrationDate ? new Date(prospect.registrationDate).toISOString() : null,
+        status: 'ACTIVE'
+      });
+      if (response.data.message === 'success') {
+        const added = response.data.data;
+        const normalizedAdded = {
+          ...added,
+          formationId
+        };
+        setCandidates(prev => [normalizedAdded, ...prev]);
 
-      setCandidates([...candidates, newCandidate]);
+        // Delete from prospects
+        await api.delete(`/prospects/${prospectId}`);
+        setProspects(prev => prev.filter(p => p.id !== prospectId));
 
-      // Delete prospect from backend
-      await deleteProspect(prospectId);
+        // Create Default Inscription
+        const defaultCode = added.candidateCode ? added.candidateCode.replace('CAN-', 'INS-') : `INS-TRANS-${Date.now()}`;
+        await addInscription({
+          inscriptionCode: defaultCode,
+          candidateId: added.id,
+          formationId,
+          status: 'ACTIVE',
+          learningMode: 'GROUPE',
+          remainingHours: 0
+        });
 
-      return candidateCode;
-    } catch (error) {
-      console.error('Transformation failed:', error);
+        return added.candidateCode;
+      }
       return null;
+    } catch (error) {
+      console.error('Transformation to candidate failed:', error);
+      throw error;
     }
   };
 
   // Candidate functions
-  const addCandidate = async (candidate: Omit<Candidate, 'id' | 'candidateCode' | 'status' | 'createdAt'>) => {
+  const addCandidate = async (candidate: Omit<Candidate, 'id' | 'candidateCode' | 'status' | 'createdAt' | 'updatedAt'>) => {
     try {
-      const response = await api.post('/candidates', candidate);
+      const response = await api.post('/candidates', {
+        firstName: candidate.firstName,
+        lastName: candidate.lastName,
+        email: candidate.email || null,
+        phone: candidate.phone || null,
+        age: Number(candidate.age),
+        occupation: candidate.occupation,
+        observation: candidate.observation,
+        firstContactId: candidate.firstContactId || null,
+        secondContactId: candidate.secondContactId || null,
+        action: candidate.action || null,
+        gender: candidate.gender || null,
+        membershipNumber: candidate.membershipNumber || null,
+        registrationDate: candidate.registrationDate ? new Date(candidate.registrationDate).toISOString() : null
+      });
       if (response.data.message === 'success') {
-        const newCandidate = {
+        const added = {
           ...response.data.data,
-          occupation: response.data.data.occupation?.toLowerCase(),
-          observation: response.data.data.observation?.toLowerCase(),
-          status: response.data.data.status?.toLowerCase()
+          formationId: 'unassigned'
         };
-        setCandidates(prev => [newCandidate, ...prev]);
+        setCandidates(prev => [added, ...prev]);
       }
     } catch (error) {
       console.error('Failed to add candidate:', error);
@@ -814,15 +966,28 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   const updateCandidate = async (id: string, updates: Partial<Candidate>) => {
     try {
-      const response = await api.patch(`/candidates/${id}`, updates);
+      const response = await api.patch(`/candidates/${id}`, {
+        firstName: updates.firstName,
+        lastName: updates.lastName,
+        email: updates.email,
+        phone: updates.phone,
+        age: updates.age !== undefined ? Number(updates.age) : undefined,
+        occupation: updates.occupation,
+        observation: updates.observation,
+        firstContactId: updates.firstContactId,
+        secondContactId: updates.secondContactId,
+        action: updates.action,
+        status: updates.status,
+        gender: updates.gender,
+        membershipNumber: updates.membershipNumber,
+        registrationDate: updates.registrationDate ? new Date(updates.registrationDate).toISOString() : undefined
+      });
       if (response.data.message === 'success') {
-        const updated = {
-          ...response.data.data,
-          occupation: response.data.data.occupation?.toLowerCase(),
-          observation: response.data.data.observation?.toLowerCase(),
-          status: response.data.data.status?.toLowerCase()
-        };
-        setCandidates(prev => prev.map(c => c.id === id ? updated : c));
+        const updated = response.data.data;
+        setCandidates(prev => prev.map(c => c.id === id ? {
+          ...c,
+          ...updated
+        } : c));
       }
     } catch (error) {
       console.error('Failed to update candidate:', error);
@@ -843,63 +1008,69 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   };
 
   // Inscription functions
-  const addInscription = async (inscription: Omit<Inscription, 'id' | 'dateInscription'>) => {
+  const addInscription = async (inscription: Omit<Inscription, 'id' | 'dateInscription' | 'createdAt' | 'updatedAt'>) => {
     try {
-      const response = await api.post('/inscriptions', inscription);
+      const response = await api.post('/inscriptions', {
+        inscriptionCode: inscription.inscriptionCode,
+        candidateId: inscription.candidateId,
+        formationId: inscription.formationId,
+        status: inscription.status,
+        note: inscription.note || null,
+        duration: inscription.duration !== undefined ? Number(inscription.duration) : null,
+        price: inscription.price !== undefined ? Number(inscription.price) : null,
+        volumeHoraire: inscription.volumeHoraire !== undefined ? Number(inscription.volumeHoraire) : null,
+        remainingHours: inscription.remainingHours !== undefined ? Number(inscription.remainingHours) : 0,
+        learningMode: inscription.learningMode,
+        professorId: inscription.professorId || null
+      });
       if (response.data.message === 'success') {
-        const newIns = {
-          ...response.data.data,
-          statut: response.data.data.status || response.data.data.statut
-        };
-        setInscriptions(prev => [newIns, ...prev]);
+        const added = response.data.data;
+        await refreshInscriptions();
 
-        // Update candidate's formationId in state for UI consistency
-        if (newIns.statut && newIns.statut !== 'CANCELLED') {
-          setCandidates(prev => prev.map(c =>
-            c.id === newIns.candidateId ? { ...c, formationId: newIns.formationId } : c
-          ));
+        // Dynamically update corresponding candidate formationId in state
+        if (added.status === 'ACTIVE') {
+          setCandidates(prev => prev.map(c => c.id === added.candidateId ? { ...c, formationId: added.formationId } : c));
         }
       }
     } catch (error) {
       console.error('Failed to add inscription:', error);
+      throw error;
     }
   };
 
-  const updateInscriptionStatus = async (id: string, statut: Inscription['statut']) => {
+  const updateInscriptionStatus = async (id: string, status: Inscription['status']) => {
     try {
-      const response = await api.patch(`/inscriptions/${id}`, { status: statut });
-      if (response.data.message === 'success') {
-        const updated = {
-          ...response.data.data,
-          statut: response.data.data.status || response.data.data.statut
-        };
-        setInscriptions(prev => prev.map(ins => ins.id === id ? updated : ins));
-
-        // If it was the active one and was cancelled, or if a new one became active, update candidates
-        if (updated.statut === 'CANCELLED') {
-          setCandidates(prev => prev.map(c =>
-            c.id === updated.candidateId ? { ...c, formationId: 'unassigned' } : c
-          ));
-        } else {
-          setCandidates(prev => prev.map(c =>
-            c.id === updated.candidateId ? { ...c, formationId: updated.formationId } : c
-          ));
-        }
-      }
+      await updateInscription(id, { status });
     } catch (error) {
       console.error('Failed to update inscription status:', error);
+      throw error;
     }
   };
 
   const updateInscription = async (id: string, updates: Partial<Inscription>) => {
     try {
-      const response = await api.patch(`/inscriptions/${id}`, updates);
+      const response = await api.patch(`/inscriptions/${id}`, {
+        inscriptionCode: updates.inscriptionCode,
+        status: updates.status,
+        note: updates.note,
+        duration: updates.duration !== undefined ? Number(updates.duration) : undefined,
+        price: updates.price !== undefined ? Number(updates.price) : undefined,
+        volumeHoraire: updates.volumeHoraire !== undefined ? Number(updates.volumeHoraire) : undefined,
+        remainingHours: updates.remainingHours !== undefined ? Number(updates.remainingHours) : undefined,
+        learningMode: updates.learningMode,
+        professorId: updates.professorId,
+        dateInscription: updates.dateInscription ? new Date(updates.dateInscription).toISOString() : undefined
+      });
       if (response.data.message === 'success') {
-        const updated = {
-          ...response.data.data,
-          statut: response.data.data.status || response.data.data.statut
-        };
-        setInscriptions(prev => prev.map(ins => ins.id === id ? updated : ins));
+        const updated = response.data.data;
+        await refreshInscriptions();
+
+        // Sync candidate formationId in case status was toggled
+        if (updated.status === 'ACTIVE') {
+          setCandidates(prev => prev.map(c => c.id === updated.candidateId ? { ...c, formationId: updated.formationId } : c));
+        } else if (updated.status === 'CANCELLED') {
+          setCandidates(prev => prev.map(c => c.id === updated.candidateId ? { ...c, formationId: 'unassigned' } : c));
+        }
       }
     } catch (error) {
       console.error('Failed to update inscription:', error);
@@ -909,60 +1080,60 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   const deleteInscription = async (id: string) => {
     try {
-      const insToDelete = inscriptions.find(i => i.id === id);
+      const target = inscriptions.find(ins => ins.id === id);
       const response = await api.delete(`/inscriptions/${id}`);
       if (response.data.message === 'success') {
-        setInscriptions(prev => prev.filter(ins => ins.id !== id));
-        if (insToDelete && (insToDelete.status || insToDelete.statut) !== 'CANCELLED') {
-          setCandidates(prev => prev.map(c =>
-            c.id === insToDelete.candidateId ? { ...c, formationId: 'unassigned' } : c
-          ));
+        await refreshInscriptions();
+        if (target && target.status === 'ACTIVE') {
+          setCandidates(prev => prev.map(c => c.id === target.candidateId ? { ...c, formationId: 'unassigned' } : c));
         }
       }
     } catch (error) {
       console.error('Failed to delete inscription:', error);
+      throw error;
     }
   };
 
-  // Override addCandidateAssignment to use backend inscriptions
-  const addCandidateAssignment = async (assignment: Omit<CandidateAssignment, 'id' | 'createdAt'>) => {
-    // If formationId is present, create an inscription
-    if (assignment.formationId && assignment.formationId !== 'unassigned') {
-      await addInscription({
-        candidateId: assignment.candidateId,
-        formationId: assignment.formationId,
-        statut: 'ACTIVE',
-        duration: assignment.duration,
-        price: assignment.price,
-        volumeHoraire: assignment.volumeHoraire,
-        remainingHours: assignment.volumeHoraire,
-        note: `Affectation via ${assignment.assignmentType}`,
-        learningMode: 'GROUPE'
-      });
+  const deleteLearningGroup = async (id: string) => {
+    try {
+      const response = await api.delete(`/learning-groups/${id}`);
+      if (response.data.message === 'success') {
+        await refreshInscriptions();
+      }
+    } catch (error) {
+      console.error('Failed to delete learning group:', error);
+      throw error;
     }
   };
 
-  const getCandidateAssignments = (candidateId: string): CandidateAssignment[] => {
-    return candidateAssignments.filter(ca => ca.candidateId === candidateId);
+  const updateLearningGroup = async (groupId: string, data: any) => {
+    try {
+      const response = await api.put(`/inscriptions/groups/${groupId}`, data);
+      if (response.data.message === 'success') {
+        await refreshInscriptions();
+      }
+    } catch (error) {
+      console.error('Failed to update learning group:', error);
+      throw error;
+    }
   };
 
   // Professor functions
-  const addProfessor = async (professor: Omit<Professor, 'id'>) => {
+  const addProfessor = async (professor: Omit<Professor, 'id' | 'createdAt' | 'updatedAt'>) => {
     try {
       const response = await api.post('/professors', {
-        prenom: professor.firstName,
-        nom: professor.lastName,
-        telephone: professor.phone,
-        email: professor.email,
-        adresse: professor.address,
-        specialite: Array.isArray(professor.subjects) ? professor.subjects.join(', ') : professor.subjects,
-        type: professor.type,
-        dayOff: professor.dayOff,
-        maxSessions: professor.maxSessions
+        prenom: professor.prenom || (professor as any).firstName,
+        nom: professor.nom || (professor as any).lastName,
+        telephone: professor.telephone || (professor as any).phone || null,
+        email: professor.email || null,
+        adresse: professor.adresse || (professor as any).address || null,
+        type: professor.type || 'permanent',
+        dayOff: professor.dayOff || 'Sunday',
+        maxSessions: professor.maxSessions !== undefined ? parseInt(String(professor.maxSessions)) : 25
       });
       if (response.data.message === 'success') {
         const newProf = response.data.data;
-        setProfessors([...professors, {
+        const mapped = {
           ...newProf,
           firstName: newProf.prenom,
           lastName: newProf.nom,
@@ -970,27 +1141,37 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
           email: newProf.email,
           address: newProf.adresse,
           subjects: newProf.specialite ? newProf.specialite.split(', ').map((s: string) => s.trim()) : [],
-          totalHoursWorked: 0
-        }]);
+          totalHoursWorked: Number(newProf.totalHoursWorked || 0)
+        };
+        setProfessors(prev => [...prev, mapped]);
       }
     } catch (error) {
       console.error('Failed to add professor:', error);
+      throw error;
     }
   };
 
   const updateProfessor = async (id: string, updates: Partial<Professor>) => {
     try {
-      const backendUpdates: any = { ...updates };
-      if (updates.firstName) backendUpdates.prenom = updates.firstName;
-      if (updates.lastName) backendUpdates.nom = updates.lastName;
-      if (updates.phone) backendUpdates.telephone = updates.phone;
-      if (updates.address) backendUpdates.adresse = updates.address;
-      if (updates.subjects) backendUpdates.specialite = Array.isArray(updates.subjects) ? updates.subjects.join(', ') : updates.subjects;
+      const nom = updates.nom || (updates as any).lastName;
+      const prenom = updates.prenom || (updates as any).firstName;
+      const telephone = updates.telephone || (updates as any).phone;
+      const adresse = updates.adresse || (updates as any).address;
 
-      const response = await api.patch(`/professors/${id}`, backendUpdates);
+      const payload: any = {};
+      if (nom !== undefined) payload.nom = nom;
+      if (prenom !== undefined) payload.prenom = prenom;
+      if (updates.email !== undefined) payload.email = updates.email;
+      if (telephone !== undefined) payload.telephone = telephone;
+      if (adresse !== undefined) payload.adresse = adresse;
+      if (updates.type !== undefined) payload.type = updates.type;
+      if (updates.dayOff !== undefined) payload.dayOff = updates.dayOff;
+      if (updates.maxSessions !== undefined) payload.maxSessions = parseInt(String(updates.maxSessions));
+
+      const response = await api.patch(`/professors/${id}`, payload);
       if (response.data.message === 'success') {
         const updated = response.data.data;
-        setProfessors(professors.map(p => p.id === id ? {
+        const mapped = {
           ...updated,
           firstName: updated.prenom,
           lastName: updated.nom,
@@ -998,248 +1179,151 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
           email: updated.email,
           address: updated.adresse,
           subjects: updated.specialite ? updated.specialite.split(', ').map((s: string) => s.trim()) : [],
-          totalHoursWorked: 0
-        } : p));
+          totalHoursWorked: Number(updated.totalHoursWorked || 0)
+        };
+        setProfessors(prev => prev.map(p => p.id === id ? mapped : p));
       }
     } catch (error) {
       console.error('Failed to update professor:', error);
+      throw error;
     }
   };
 
   const deleteProfessor = async (id: string): Promise<boolean> => {
-    const hasScheduledSessions = sessions.some(
-      s => s.professorId === id && s.status === 'scheduled'
-    );
-
-    if (hasScheduledSessions) {
-      return false;
-    }
-
     try {
       const response = await api.delete(`/professors/${id}`);
       if (response.data.message === 'success') {
-        setProfessors(professors.filter(p => p.id !== id));
+        setProfessors(prev => prev.filter(p => p.id !== id));
         return true;
       }
       return false;
     } catch (error) {
       console.error('Failed to delete professor:', error);
-      return false;
+      throw error;
     }
   };
 
-
   // Room functions
-  const addRoom = async (room: Omit<Room, 'id'>) => {
+  const addRoom = async (room: Omit<Room, 'id' | 'createdAt' | 'updatedAt'>) => {
     try {
+      const numero = room.numero || (room as any).roomNumber;
+      const capacite = room.capacite !== undefined ? room.capacite : (room as any).capacity;
       const response = await api.post('/rooms', {
-        numero: room.roomNumber,
-        capacite: room.capacity,
-        type: room.type,
-        available: room.available
+        numero,
+        capacite: parseInt(String(capacite))
       });
       if (response.data.message === 'success') {
         const newRoom = response.data.data;
-        setRooms([...rooms, {
+        const mapped = {
           ...newRoom,
           roomNumber: newRoom.numero,
           capacity: newRoom.capacite
-        }]);
+        };
+        setRooms(prev => [...prev, mapped]);
       }
     } catch (error) {
       console.error('Failed to add room:', error);
+      throw error;
     }
   };
 
   const updateRoom = async (id: string, updates: Partial<Room>) => {
     try {
-      const backendUpdates: any = { ...updates };
-      if (updates.roomNumber) backendUpdates.numero = updates.roomNumber;
-      if (updates.capacity) backendUpdates.capacite = updates.capacity;
+      const numero = updates.numero !== undefined ? updates.numero : updates.roomNumber;
+      const capacite = updates.capacite !== undefined ? updates.capacite : updates.capacity;
 
-      const response = await api.patch(`/rooms/${id}`, backendUpdates);
+      const payload: any = {};
+      if (numero !== undefined) payload.numero = numero;
+      if (capacite !== undefined) payload.capacite = parseInt(String(capacite));
+
+      const response = await api.patch(`/rooms/${id}`, payload);
       if (response.data.message === 'success') {
         const updated = response.data.data;
-        setRooms(rooms.map(r => r.id === id ? {
+        const mapped = {
           ...updated,
           roomNumber: updated.numero,
           capacity: updated.capacite
-        } : r));
+        };
+        setRooms(prev => prev.map(r => r.id === id ? mapped : r));
       }
     } catch (error) {
       console.error('Failed to update room:', error);
+      throw error;
     }
   };
 
   const deleteRoom = async (id: string): Promise<boolean> => {
-    const hasScheduledSessions = sessions.some(
-      s => s.roomId === id && s.status === 'scheduled'
-    );
-
-    if (hasScheduledSessions) {
-      return false;
-    }
-
     try {
       const response = await api.delete(`/rooms/${id}`);
       if (response.data.message === 'success') {
-        setRooms(rooms.filter(r => r.id !== id));
+        setRooms(prev => prev.filter(r => r.id !== id));
         return true;
       }
       return false;
     } catch (error) {
       console.error('Failed to delete room:', error);
-      return false;
+      throw error;
     }
   };
 
   // Formation functions
-  const addFormation = async (formation: Omit<Formation, 'id'>) => {
+  const addFormation = async (formation: Omit<Formation, 'id' | 'createdAt' | 'updatedAt'>) => {
     try {
-      // Map frontend fields (subject) to backend fields (matiere) if needed
-      // Actually, looking at Formation interface in AppContext.tsx:
-      // subject, level, prix, volumeHoraire, description
-      // Wait, let's check the Formation interface again.
+      const matiere = formation.matiere || (formation as any).subject;
+      const niveau = formation.niveau || (formation as any).level;
       const response = await api.post('/formations', {
-        matiere: (formation as any).subject || (formation as any).matiere,
-        niveau: formation.level || (formation as any).niveau,
-        prix: (formation as any).prix || 0,
-        volumeHoraire: (formation as any).volumeHoraire || (formation as any).duration || 0,
-        description: (formation as any).description || ''
+        matiere,
+        niveau
       });
       if (response.data.message === 'success') {
         const newFormation = response.data.data;
-        setFormations([...formations, {
+        const mapped = {
           ...newFormation,
           subject: newFormation.matiere,
           level: newFormation.niveau
-        }]);
+        };
+        setFormations(prev => [...prev, mapped]);
       }
     } catch (error) {
       console.error('Failed to add formation:', error);
+      throw error;
     }
   };
 
   const updateFormation = async (id: string, updates: Partial<Formation>) => {
     try {
-      const backendUpdates: any = { ...updates };
-      if (updates.subject) backendUpdates.matiere = updates.subject;
-      if (updates.level) backendUpdates.niveau = updates.level;
+      const matiere = updates.matiere !== undefined ? updates.matiere : updates.subject;
+      const niveau = updates.niveau !== undefined ? updates.niveau : updates.level;
+      const payload: any = {};
+      if (matiere !== undefined) payload.matiere = matiere;
+      if (niveau !== undefined) payload.niveau = niveau;
 
-      const response = await api.patch(`/formations/${id}`, backendUpdates);
+      const response = await api.patch(`/formations/${id}`, payload);
       if (response.data.message === 'success') {
         const updated = response.data.data;
-        setFormations(formations.map(f => f.id === id ? {
+        const mapped = {
           ...updated,
           subject: updated.matiere,
           level: updated.niveau
-        } : f));
+        };
+        setFormations(prev => prev.map(f => f.id === id ? mapped : f));
       }
     } catch (error) {
       console.error('Failed to update formation:', error);
+      throw error;
     }
   };
 
   const deleteFormation = async (id: string): Promise<boolean> => {
-    const hasActiveCandidates = candidates.some(c => c.formationId === id);
-
-    if (hasActiveCandidates) {
-      return false;
-    }
-
     try {
       const response = await api.delete(`/formations/${id}`);
       if (response.data.message === 'success') {
-        setFormations(formations.filter(f => f.id !== id));
+        setFormations(prev => prev.filter(f => f.id !== id));
         return true;
       }
       return false;
     } catch (error) {
       console.error('Failed to delete formation:', error);
-      return false;
-    }
-  };
-
-  const addGroup = async (group: Omit<Group, 'id' | 'createdAt' | 'members' | 'effectif'> & { candidateIds?: string[] }) => {
-    try {
-      const response = await api.post('/groups', group);
-      if (response.data.message === 'success') {
-        setGroups([...groups, response.data.data]);
-      }
-    } catch (error) {
-      console.error('Failed to add group:', error);
-      throw error;
-    }
-  };
-
-  const updateGroup = async (id: string, updates: Partial<Group>) => {
-    try {
-      const response = await api.patch(`/groups/${id}`, updates);
-      if (response.data.message === 'success') {
-        setGroups(groups.map(g => g.id === id ? response.data.data : g));
-      }
-    } catch (error) {
-      console.error('Failed to update group:', error);
-      throw error;
-    }
-  };
-
-  const deleteGroup = async (id: string) => {
-    try {
-      const response = await api.delete(`/groups/${id}`);
-      if (response.data.message === 'success') {
-        setGroups(groups.filter(g => g.id !== id));
-      }
-    } catch (error) {
-      console.error('Failed to delete group:', error);
-      throw error;
-    }
-  };
-
-  const addCandidateToGroup = async (groupId: string, candidateId: string) => {
-    try {
-      const response = await api.post(`/groups/${groupId}/add-candidate`, { candidateId });
-      if (response.data.message === 'success') {
-        setGroups(groups.map(g => g.id === groupId ? response.data.data : g));
-      }
-    } catch (error) {
-      console.error('Failed to add candidate to group:', error);
-      throw error;
-    }
-  };
-
-  const removeCandidateFromGroup = async (groupId: string, candidateId: string) => {
-    try {
-      const response = await api.delete(`/groups/${groupId}/candidate/${candidateId}`);
-      if (response.data.message === 'success') {
-        setGroups(groups.map(g => g.id === groupId ? response.data.data : g));
-      }
-    } catch (error) {
-      console.error('Failed to remove candidate from group:', error);
-      throw error;
-    }
-  };
-
-  const assignProfessorToGroup = async (groupId: string, professorId: string) => {
-    try {
-      const response = await api.post(`/groups/${groupId}/assign-professor`, { professorId });
-      if (response.data.message === 'success') {
-        setGroups(groups.map(g => g.id === groupId ? response.data.data : g));
-      }
-    } catch (error) {
-      console.error("Error assigning professor to group:", error);
-      throw error;
-    }
-  };
-
-  const removeProfessorFromGroup = async (groupId: string) => {
-    try {
-      const response = await api.delete(`/groups/${groupId}/remove-professor`);
-      if (response.data.message === 'success') {
-        setGroups(groups.map(g => g.id === groupId ? response.data.data : g));
-      }
-    } catch (error) {
-      console.error("Error removing professor from group:", error);
       throw error;
     }
   };
@@ -1251,16 +1335,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     const room = rooms.find(r => r.id === session.roomId);
     const formation = formations.find(f => f.id === session.formationId);
 
-    // Validations (RG-RES-01 to RG-RES-08)
     if (!candidate || !professor || !room || !formation) {
       return false;
     }
 
-    if (!professor.subjects.includes(formation.subject)) {
-      return false;
-    }
-
-    // Check for conflicts
     const hasConflict = sessions.some(s =>
       s.date === session.date &&
       s.time === session.time &&
@@ -1282,44 +1360,62 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     return true;
   };
 
-  const cancelSession = (id: string) => {
-    setSessions(sessions.map(s =>
-      s.id === id ? { ...s, status: 'cancelled' as const } : s
-    ));
+  const refreshPlanning = async () => {
+    try {
+      const res = await api.get('/reservations', { params: { t: Date.now() } });
+      if (res.data.message === 'success') {
+        const mapped = res.data.data.map(mapReservationToSession);
+        setSessions(mapped);
+        return mapped;
+      }
+    } catch (error) {
+      console.error('Failed to refresh planning:', error);
+    }
+  };
+
+  const cancelSession = async (id: string) => {
+    try {
+      await api.delete(`/reservations/${id}`);
+      await refreshPlanning();
+    } catch (error) {
+      console.error('Failed to cancel session:', error);
+    }
   };
 
   const markAttendance = (id: string, attendance: 'present' | 'absent') => {
     const session = sessions.find(s => s.id === id);
 
     if (session) {
-      // Update professor hours worked
       const professor = professors.find(p => p.id === session.professorId);
       if (professor && attendance === 'present') {
-        const hoursToAdd = session.duration / 60; // Convert minutes to hours
+        const hoursToAdd = session.duration / 60;
         updateProfessor(professor.id, {
-          totalHoursWorked: professor.totalHoursWorked + hoursToAdd
+          nom: professor.nom,
+          prenom: professor.prenom,
+          type: professor.type,
+          dayOff: professor.dayOff,
+          maxSessions: professor.maxSessions
         });
       }
 
-      // Mark the session as completed
       setSessions(sessions.map(s =>
         s.id === id ? { ...s, status: 'completed' as const, attendance } : s
       ));
 
-      // Update remaining hours for candidate's inscription
       if (attendance === 'present') {
         const inscription = inscriptions.find(ins =>
           ins.candidateId === session.candidateId &&
           ins.formationId === session.formationId &&
-          ins.statut === 'ACTIVE'
+          ins.status === 'ACTIVE'
         );
         if (inscription) {
           const hoursToDeduct = session.duration / 60;
           api.post(`/inscriptions/${inscription.id}/deduct-hours`, { hours: hoursToDeduct })
             .then(response => {
               if (response.data.message === 'success') {
+                const updated = response.data.data;
                 setInscriptions(prev => prev.map(ins =>
-                  ins.id === inscription.id ? response.data.data : ins
+                  ins.id === inscription.id ? updated : ins
                 ));
               }
             })
@@ -1346,16 +1442,16 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     if (request && status === 'approved' && request.type === 'candidate_request') {
       const candidate = candidates.find(c => c.id === request.candidateId);
       if (candidate) {
-        const formation = formations.find(f => f.id === candidate.formationId);
-        if (formation) {
+        const activeIns = inscriptions.find(ins => ins.candidateId === request.candidateId && ins.status === 'ACTIVE');
+        if (activeIns) {
           addSession({
             candidateId: request.candidateId,
             professorId: request.professorId,
             roomId: request.roomId,
-            formationId: candidate.formationId,
+            formationId: activeIns.formationId,
             date: request.date,
             time: request.time,
-            duration: formation.duration
+            duration: 60
           });
         }
       }
@@ -1382,77 +1478,95 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     ));
   };
 
+  const refreshPayments = async () => {
+    try {
+      const res = await api.get('/payments');
+      if (res.data.message === 'success') {
+        setPayments(res.data.data.map(mapPaymentFromBackend));
+      }
+    } catch (error) {
+      console.error('Failed to refresh payments:', error);
+    }
+  };
+
   // Payment functions
-  const [payments, setPayments] = useState<Payment[]>([
-    {
-      id: 'pay1',
-      reference: 'PAY-2026-001',
-      candidateId: 'c1',
-      formationId: 'f1',
-      amount: 2500,
-      paymentDate: '2026-04-15',
-      paymentMethod: 'bank_transfer',
-      status: 'validated',
-      invoiceGenerated: true,
-      invoiceNumber: 'INV-2026-001',
-      isMonthlyPayment: false,
-      createdAt: '2026-04-15T10:00:00Z'
-    },
-    {
-      id: 'pay2',
-      reference: 'PAY-2026-002',
-      candidateId: 'c2',
-      formationId: 'f2',
-      amount: 1800,
-      paymentDate: '2026-05-01',
-      paymentMethod: 'check',
-      status: 'pending',
-      invoiceGenerated: false,
-      checkDetails: {
-        type: 'bank_check',
-        dueDate: '2026-05-20',
-        checkStatus: 'pending'
-      },
-      isMonthlyPayment: true,
-      monthlySchedule: {
-        totalMonths: 3,
-        currentMonth: 1,
-        nextDueDate: '2026-06-01'
-      },
-      createdAt: '2026-05-01T09:00:00Z'
-    }
-  ]);
-
-  const [invoices, setInvoices] = useState<Invoice[]>([
-    {
-      id: 'inv1',
-      invoiceNumber: 'INV-2026-001',
-      paymentId: 'pay1',
-      candidateId: 'c1',
-      amount: 2500,
-      generatedDate: '2026-04-15T10:30:00Z',
-      year: 2026
-    }
-  ]);
-
-  const generateInvoiceNumber = (year: number): string => {
-    const yearInvoices = invoices.filter(inv => inv.year === year);
-    const nextNumber = yearInvoices.length + 1;
-    return `INV-${year}-${String(nextNumber).padStart(3, '0')}`;
-  };
-
-  const addPayment = (payment: Omit<Payment, 'id' | 'reference' | 'createdAt'>) => {
-    const newPayment: Payment = {
-      ...payment,
-      id: `pay${payments.length + 1}`,
-      reference: `PAY-${new Date().getFullYear()}-${String(payments.length + 1).padStart(3, '0')}`,
-      createdAt: new Date().toISOString()
+  const addPayment = async (payment: Omit<Payment, 'id' | 'reference' | 'createdAt'>) => {
+    const paymentMethodMap: Record<string, string> = {
+      cash: 'CASH',
+      bank_transfer: 'BANK_TRANSFER',
+      check: 'CHEQUE'
     };
-    setPayments([...payments, newPayment]);
+    const statusMap: Record<string, string> = {
+      reservation: 'PENDING',
+      pending: 'PENDING',
+      paid: 'COMPLETED',
+      validated: 'COMPLETED'
+    };
+
+    const payload = {
+      candidateId: payment.candidateId,
+      formationId: payment.formationId,
+      amount: Number(payment.amount),
+      paymentMethod: paymentMethodMap[payment.paymentMethod] || 'CASH',
+      status: statusMap[payment.status] || 'PENDING',
+      paymentDate: payment.paymentDate ? new Date(payment.paymentDate).toISOString() : new Date().toISOString(),
+      note: (payment as any).note || ''
+    };
+
+    try {
+      const response = await api.post('/payments', payload);
+      if (response.data.message === 'success') {
+        await refreshPayments();
+      }
+    } catch (error) {
+      console.error('Failed to add payment:', error);
+      throw error;
+    }
   };
 
-  const updatePayment = (id: string, updates: Partial<Payment>) => {
-    setPayments(payments.map(p => p.id === id ? { ...p, ...updates } : p));
+  const updatePayment = async (id: string, updates: Partial<Payment>) => {
+    const paymentMethodMap: Record<string, string> = {
+      cash: 'CASH',
+      bank_transfer: 'BANK_TRANSFER',
+      check: 'CHEQUE'
+    };
+    const statusMap: Record<string, string> = {
+      reservation: 'PENDING',
+      pending: 'PENDING',
+      paid: 'COMPLETED',
+      validated: 'COMPLETED'
+    };
+
+    const payload: any = {};
+    if (updates.candidateId !== undefined) payload.candidateId = updates.candidateId;
+    if (updates.formationId !== undefined) payload.formationId = updates.formationId;
+    if (updates.amount !== undefined) payload.amount = Number(updates.amount);
+    if (updates.paymentMethod !== undefined) payload.paymentMethod = paymentMethodMap[updates.paymentMethod] || 'CASH';
+    if (updates.status !== undefined) payload.status = statusMap[updates.status] || 'PENDING';
+    if (updates.paymentDate !== undefined) payload.paymentDate = updates.paymentDate ? new Date(updates.paymentDate).toISOString() : undefined;
+    if ((updates as any).note !== undefined) payload.note = (updates as any).note;
+
+    try {
+      const response = await api.patch(`/payments/${id}`, payload);
+      if (response.data.message === 'success') {
+        await refreshPayments();
+      }
+    } catch (error) {
+      console.error('Failed to update payment:', error);
+      throw error;
+    }
+  };
+
+  const deletePayment = async (id: string) => {
+    try {
+      const response = await api.delete(`/payments/${id}`);
+      if (response.data.message === 'success' || response.status === 204) {
+        await refreshPayments();
+      }
+    } catch (error) {
+      console.error('Failed to delete payment:', error);
+      throw error;
+    }
   };
 
   const generateInvoice = (paymentId: string): string | null => {
@@ -1462,7 +1576,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
 
     const year = new Date().getFullYear();
-    const invoiceNumber = generateInvoiceNumber(year);
+    const invoiceNumber = `INV-${year}-${String(invoices.length + 1).padStart(3, '0')}`;
 
     const newInvoice: Invoice = {
       id: `inv${invoices.length + 1}`,
@@ -1474,8 +1588,12 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       year
     };
 
+    const generatedInvoices = JSON.parse(localStorage.getItem('generated_invoices') || '{}');
+    generatedInvoices[paymentId] = invoiceNumber;
+    localStorage.setItem('generated_invoices', JSON.stringify(generatedInvoices));
+
     setInvoices([...invoices, newInvoice]);
-    updatePayment(paymentId, { invoiceGenerated: true, invoiceNumber });
+    setPayments(prev => prev.map(p => p.id === paymentId ? { ...p, invoiceGenerated: true, invoiceNumber } : p));
 
     return invoiceNumber;
   };
@@ -1497,14 +1615,14 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     addCandidate,
     updateCandidate,
     deleteCandidate,
-    candidateAssignments,
-    addCandidateAssignment,
-    getCandidateAssignments,
     inscriptions,
+    learningGroups,
     addInscription,
     updateInscriptionStatus,
     updateInscription,
+    updateLearningGroup,
     deleteInscription,
+    deleteLearningGroup,
     professors,
     addProfessor,
     updateProfessor,
@@ -1517,17 +1635,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     addFormation,
     updateFormation,
     deleteFormation,
-    groups,
-    addGroup,
-    updateGroup,
-    deleteGroup,
-    addCandidateToGroup,
-    removeCandidateFromGroup,
-    assignProfessorToGroup,
-    removeProfessorFromGroup,
     sessions,
     addSession,
     cancelSession,
+    refreshPlanning,
     markAttendance,
     reservationRequests,
     addReservationRequest,
@@ -1535,6 +1646,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     payments,
     addPayment,
     updatePayment,
+    deletePayment,
     invoices,
     generateInvoice,
     isLoadingSession

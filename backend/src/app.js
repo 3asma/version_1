@@ -10,14 +10,18 @@ import roomRoutes from './routes/roomRoutes.js';
 import professorRoutes from './routes/professorRoutes.js';
 import inscriptionRoutes from './routes/inscriptionRoutes.js';
 import groupRoutes from './routes/groupRoutes.js';
+import learningGroupRoutes from './routes/learningGroupRoutes.js';
 import commercialRoutes from './routes/commercialRoutes.js';
+import reservationRoutes from './routes/reservationRoutes.js';
+import planningRoutes from './routes/planningRoutes.js';
+import paymentRoutes from './routes/paymentRoutes.js';
 
 const app = express();
 
 app.use(morgan('dev'));
 
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: ['http://localhost:5173', 'http://127.0.0.1:5173'],
     credentials: true
 }));
 app.use(express.json());
@@ -30,8 +34,12 @@ app.use('/formations', formationRoutes);
 app.use('/rooms', roomRoutes);
 app.use('/professors', professorRoutes);
 app.use('/inscriptions', inscriptionRoutes);
+app.use('/learning-groups', learningGroupRoutes);
 app.use('/groups', groupRoutes);
 app.use('/commercials', commercialRoutes);
+app.use('/reservations', reservationRoutes);
+app.use('/planning', planningRoutes);
+app.use('/payments', paymentRoutes);
 
 // Health check endpoint (Public)
 app.get('/health', async (req, res) => {

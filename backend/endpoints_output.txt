@@ -1,0 +1,37 @@
+- /prospects: status 500, message: error, error: 
+Invalid `prisma.prospect.findMany()` invocation:
+
+{
+  orderBy: {
+    createdAt: "desc"
+  },
+  include: {
+    firstContact: true,
+    ~~~~~~~~~~~~
+    secondContact: true
+  }
+}
+
+Unknown field `firstContact` for include statement on model `Prospect`. Available options are marked with ?.
+- /commercials: status 200, message: success, error: none
+- /candidates: status 200, message: success, error: none
+- /inscriptions: status 500, message: error, error: Cannot read properties of undefined (reading 'findMany')
+- /formations: status 200, message: success, error: none
+- /rooms: status 200, message: success, error: none
+- /professors: status 500, message: error, error: 
+Invalid `prisma.professor.findMany()` invocation:
+
+{
+  orderBy: {
+    createdAt: "desc"
+  },
+  include: {
+    inscriptions: true,
+    ~~~~~~~~~~~~
+?   groups?: true
+  }
+}
+
+Unknown field `inscriptions` for include statement on model `Professor`. Available options are marked with ?.
+- /reservations: status 500, message: error, error: Cannot read properties of undefined (reading 'findMany')
+- /payments: status 200, message: success, error: none

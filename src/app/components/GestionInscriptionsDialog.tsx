@@ -12,7 +12,7 @@ import { toast } from 'sonner';
 interface GestionInscriptionsDialogProps {
     isOpen: boolean;
     onOpenChange: (open: boolean) => void;
-    groupId?: string | null;
+    inscriptionId?: string | null;
     candidateId?: string | null;
     onSuccess?: () => void;
 }
@@ -20,7 +20,7 @@ interface GestionInscriptionsDialogProps {
 export function GestionInscriptionsDialog({
     isOpen,
     onOpenChange,
-    groupId,
+    inscriptionId,
     candidateId,
     onSuccess
 }: GestionInscriptionsDialogProps) {
@@ -28,18 +28,15 @@ export function GestionInscriptionsDialog({
         candidates,
         formations,
         inscriptions,
-        groups,
         professors,
         addInscription,
         updateInscription,
-        addGroup,
-        updateGroup,
-        addCandidateToGroup,
-        removeCandidateFromGroup
+        updateLearningGroup
     } = useApp();
 
     const [formState, setFormState] = useState({
-        type: 'MONOME' as 'MONOME' | 'BINOME' | 'GROUPE',
+        inscriptionCode: '',
+        type: 'MONOME' as 'MONOME' | 'BINOME' | 'GROUPE' | 'SPECIFIQUE',
         nom: '',
         formationId: '',
         candidateIds: [] as string[],
@@ -57,32 +54,35 @@ export function GestionInscriptionsDialog({
     // Initialize & Edit Form State
     useEffect(() => {
         if (isOpen) {
-            if (groupId) {
-                const group = groups.find(g => g.id === groupId);
-                if (group) {
-                    const firstMemberId = group.members?.[0]?.candidateId;
-                    const matchingIns = firstMemberId
-                        ? inscriptions.find(ins => ins.candidateId === firstMemberId && ins.formationId === group.formationId)
-                        : null;
+            if (inscriptionId) {
+                const ins = inscriptions.find(i => i.id === inscriptionId);
+                if (ins) {
+                    const groupInscriptions = ins.learningGroupId
+                        ? inscriptions.filter(x => x.learningGroupId === ins.learningGroupId)
+                        : [ins];
+                    const memberIds = groupInscriptions.map(x => x.candidateId);
+                    const isSpecific = ins.learningGroup?.groupName?.toLowerCase().includes('spécifique') || ins.learningGroup?.groupName?.toLowerCase().includes('specifique');
 
                     setFormState({
-                        type: group.type,
-                        nom: group.nom,
-                        formationId: group.formationId,
-                        candidateIds: group.members?.map(m => m.candidateId) || [],
-                        professorId: group.professorId || '',
-                        price: matchingIns?.price || 0,
-                        duration: matchingIns?.duration || 6,
-                        volumeHoraire: matchingIns?.volumeHoraire || 72,
-                        startDate: matchingIns?.dateInscription
-                            ? new Date(matchingIns.dateInscription).toISOString().split('T')[0]
+                        inscriptionCode: ins.inscriptionCode || '',
+                        type: isSpecific ? 'SPECIFIQUE' : (ins.learningMode || 'MONOME'),
+                        nom: ins.learningGroup?.groupName || '',
+                        formationId: ins.formationId,
+                        candidateIds: memberIds,
+                        professorId: ins.professorId || '',
+                        price: ins.price || 0,
+                        duration: ins.duration || 6,
+                        volumeHoraire: ins.volumeHoraire || 72,
+                        startDate: ins.dateInscription
+                            ? new Date(ins.dateInscription).toISOString().split('T')[0]
                             : new Date().toISOString().split('T')[0],
-                        note: matchingIns?.note || ''
+                        note: ins.note || ''
                     });
                 }
             } else {
                 // Reset form for creation
                 setFormState({
+                    inscriptionCode: '',
                     type: 'MONOME',
                     nom: '',
                     formationId: '',
@@ -97,11 +97,11 @@ export function GestionInscriptionsDialog({
             }
             setSearchQuery('');
         }
-    }, [isOpen, groupId, groups, inscriptions, candidateId]);
+    }, [isOpen, inscriptionId, inscriptions, candidateId]);
 
     // Set defaults when Formation or Type changes
     useEffect(() => {
-        if (formState.formationId && !groupId) {
+        if (formState.formationId && !inscriptionId) {
             const formation = formations.find(f => f.id === formState.formationId);
             if (formation) {
                 const hoursPerMonth = formState.type === 'BINOME' ? 18 : 12;
@@ -116,7 +116,7 @@ export function GestionInscriptionsDialog({
                 }));
             }
         }
-    }, [formState.formationId, formState.type, formations, groupId]);
+    }, [formState.formationId, formState.type, formations, inscriptionId]);
 
     const handleFormationChange = (newFormationId: string) => {
         setFormState(prev => ({
@@ -126,7 +126,7 @@ export function GestionInscriptionsDialog({
         }));
     };
 
-    const handleTypeChange = (newType: 'MONOME' | 'BINOME' | 'GROUPE') => {
+    const handleTypeChange = (newType: 'MONOME' | 'BINOME' | 'GROUPE' | 'SPECIFIQUE') => {
         setFormState(prev => {
             const hoursPerMonth = newType === 'BINOME' ? 18 : 12;
             const durationVal = prev.duration || 6;
@@ -152,21 +152,38 @@ export function GestionInscriptionsDialog({
         }));
     };
 
-    // Get eligible candidates for the current formation selection
+    // Get eligible candidates for the current formation selection (no other active inscription for this formation)
     const availableCandidates = candidates.filter(candidate => {
         if (!formState.formationId) return false;
-        // Check if the candidate is already in another group for this same formation (excluding the current group we are editing)
-        const isInOtherGroup = groups.some(g =>
-            g.formationId === formState.formationId &&
-            g.id !== groupId &&
-            g.members?.some(m => m.candidateId === candidate.id)
+
+        const targetIns = inscriptionId ? inscriptions.find(x => x.id === inscriptionId) : null;
+        const currentGroupCandidateIds = targetIns?.learningGroupId
+            ? inscriptions.filter(x => x.learningGroupId === targetIns.learningGroupId).map(x => x.candidateId)
+            : [];
+
+        const hasOtherActiveInscription = inscriptions.some(ins =>
+            ins.formationId === formState.formationId &&
+            ins.candidateId === candidate.id &&
+            !currentGroupCandidateIds.includes(candidate.id) &&
+            String(ins.status || (ins as any).statut).toUpperCase() === 'ACTIVE'
         );
-        // Include the candidate if they match search criteria and are active or pending
+
         const matchesSearch = `${candidate.firstName} ${candidate.lastName}`
             .toLowerCase()
             .includes(searchQuery.toLowerCase()) || candidate.candidateCode.toLowerCase().includes(searchQuery.toLowerCase());
 
-        return !isInOtherGroup && (candidate.status === 'active' || candidate.status === 'pending') && matchesSearch;
+        const statusLower = String(candidate.status || '').toLowerCase();
+        return !hasOtherActiveInscription && (statusLower === 'active' || statusLower === 'pending') && matchesSearch;
+    });
+
+    const displayCandidates = [...availableCandidates];
+    formState.candidateIds.forEach(id => {
+        if (!displayCandidates.some(c => c.id === id)) {
+            const cand = candidates.find(c => c.id === id);
+            if (cand) {
+                displayCandidates.push(cand);
+            }
+        }
     });
 
     const handleCandidateToggle = (candId: string) => {
@@ -190,9 +207,9 @@ export function GestionInscriptionsDialog({
                 }
             }
 
-            // Auto-generate name for the group if not editing
+            // Auto-generate name for visual reference if not editing
             let suggestedName = prev.nom;
-            if (!groupId) {
+            if (!inscriptionId) {
                 const selectedNames = candidates
                     .filter(c => newCandidateIds.includes(c.id))
                     .map(c => `${c.firstName} ${c.lastName.charAt(0)}.`);
@@ -201,9 +218,9 @@ export function GestionInscriptionsDialog({
                     suggestedName = `Monôme ${selectedNames[0]}`;
                 } else if (prev.type === 'BINOME' && selectedNames.length > 0) {
                     suggestedName = `Binôme ${selectedNames.slice(0, 2).join(' & ')}`;
-                } else if (prev.type === 'GROUPE') {
-                    const subject = formations.find(f => f.id === prev.formationId)?.subject || '';
-                    suggestedName = `Groupe ${subject}`;
+                } else if (prev.type === 'GROUPE' || prev.type === 'SPECIFIQUE') {
+                    const subject = (formations.find(f => f.id === prev.formationId) as any)?.subject || '';
+                    suggestedName = prev.type === 'SPECIFIQUE' ? `Spécifique ${subject}` : `Groupe ${subject}`;
                 }
             }
 
@@ -218,7 +235,22 @@ export function GestionInscriptionsDialog({
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        const { type, nom, formationId, candidateIds, professorId, price, duration, volumeHoraire, startDate, note } = formState;
+        const { inscriptionCode, type, nom, formationId, candidateIds, professorId, price, duration, volumeHoraire, startDate, note } = formState;
+
+        if (!inscriptionCode || inscriptionCode.trim() === '') {
+            toast.error("Veuillez saisir un numéro d'inscription.");
+            return;
+        }
+
+        const trimmedCode = inscriptionCode.trim();
+        if (trimmedCode.length < 3 || trimmedCode.length > 50) {
+            toast.error("Le numéro d'inscription doit contenir entre 3 et 50 caractères.");
+            return;
+        }
+        if (!/^[a-zA-Z0-9\-_/]+$/.test(trimmedCode)) {
+            toast.error("Le numéro d'inscription ne peut contenir que des lettres, chiffres, tirets, underscores et slashes.");
+            return;
+        }
 
         if (!formationId) {
             toast.error('Veuillez sélectionner une formation.');
@@ -237,118 +269,71 @@ export function GestionInscriptionsDialog({
             toast.error('Un binôme doit contenir exactement 2 candidats.');
             return;
         }
-        if (type === 'GROUPE' && candidateIds.length < 1) {
-            toast.error('Un groupe doit contenir au moins 1 candidat.');
-            return;
-        }
-
-        const groupName = type === 'MONOME'
-            ? `Monôme ${candidates.find(c => c.id === candidateIds[0])?.firstName || ''} ${candidates.find(c => c.id === candidateIds[0])?.lastName || ''}`.trim()
-            : type === 'BINOME'
-                ? `Binôme ${candidateIds.map(id => {
-                    const c = candidates.find(cand => cand.id === id);
-                    return c ? `${c.firstName} ${c.lastName.charAt(0)}.` : '';
-                }).join(' & ')}`
-                : nom;
-
-        if (type === 'GROUPE' && !groupName.trim()) {
-            toast.error('Le nom du groupe est obligatoire pour un groupe.');
+        if ((type === 'GROUPE' || type === 'SPECIFIQUE') && candidateIds.length < 1) {
+            toast.error(type === 'SPECIFIQUE' ? 'Un groupe spécifique doit contenir au moins 1 candidat.' : 'Un groupe doit contenir au moins 1 candidat.');
             return;
         }
 
         setIsSubmitting(true);
         try {
-            // 1. Process candidate inscriptions
-            for (const candidateId of candidateIds) {
-                const existing = inscriptions.find(ins =>
-                    ins.candidateId === candidateId &&
-                    ins.formationId === formationId &&
-                    (ins.status || ins.statut) !== 'CANCELLED'
-                );
+            if (inscriptionId) {
+                const targetIns = inscriptions.find(x => x.id === inscriptionId);
+                const learningGroupId = targetIns?.learningGroupId;
 
-                if (existing) {
-                    await updateInscription(existing.id, {
+                if (learningGroupId) {
+                    let finalGroupName = nom || '';
+                    if (!finalGroupName) {
+                        const subject = (formations.find(f => f.id === formationId) as any)?.subject || '';
+                        finalGroupName = type === 'SPECIFIQUE' ? `Spécifique ${subject}` : `Groupe ${subject}`;
+                    }
+
+                    await updateLearningGroup(learningGroupId, {
+                        groupName: finalGroupName,
+                        inscriptionCode: trimmedCode,
+                        formationId,
+                        professorId: professorId || null,
+                        learningMode: type,
+                        dateInscription: new Date(startDate).toISOString(),
+                        note: note || `Mis à jour via Gestion Inscriptions`,
+                        candidateIds
+                    });
+                } else {
+                    await updateInscription(inscriptionId, {
+                        inscriptionCode: trimmedCode,
                         price: Number(price),
                         duration: Number(duration),
                         volumeHoraire: Number(volumeHoraire),
-                        learningMode: type,
+                        learningMode: type === 'SPECIFIQUE' ? 'GROUPE' : type,
                         dateInscription: new Date(startDate).toISOString(),
+                        professorId: professorId || null,
                         note: note || `Mis à jour via Gestion Inscriptions`
                     });
-                } else {
+                }
+            } else {
+                // Creating new inscriptions
+                for (let i = 0; i < candidateIds.length; i++) {
                     await addInscription({
-                        candidateId,
+                        inscriptionCode: trimmedCode,
+                        candidateId: candidateIds[i],
                         formationId,
-                        statut: 'ACTIVE',
+                        status: 'ACTIVE',
                         duration: Number(duration),
                         price: Number(price),
                         volumeHoraire: Number(volumeHoraire),
                         remainingHours: Number(volumeHoraire),
-                        learningMode: type,
+                        learningMode: type === 'SPECIFIQUE' ? 'GROUPE' : type,
                         professorId: professorId || undefined,
                         note: note || `Créé via Gestion Inscriptions`
-                    } as any);
-                }
-            }
-
-            // 2. Synchronize group / affectation
-            if (type === 'MONOME') {
-                if (groupId) {
-                    await updateGroup(groupId, {
-                        nom: groupName,
-                        type: 'MONOME',
-                        formationId,
-                        professorId: professorId || null
-                    });
-                    // Sync members
-                    const originalGroup = groups.find(g => g.id === groupId);
-                    const originalMemberIds = originalGroup?.members?.map(m => m.candidateId) || [];
-                    const toAdd = candidateIds.filter(id => !originalMemberIds.includes(id));
-                    const toRemove = originalMemberIds.filter(id => !candidateIds.includes(id));
-
-                    for (const id of toAdd) await addCandidateToGroup(groupId, id);
-                    for (const id of toRemove) await removeCandidateFromGroup(groupId, id);
-                }
-            } else {
-                if (groupId) {
-                    // Editing existing group
-                    await updateGroup(groupId, {
-                        nom: groupName,
-                        type,
-                        formationId,
-                        professorId: professorId || null
-                    });
-
-                    // Sync members
-                    const originalGroup = groups.find(g => g.id === groupId);
-                    const originalMemberIds = originalGroup?.members?.map(m => m.candidateId) || [];
-                    const toAdd = candidateIds.filter(id => !originalMemberIds.includes(id));
-                    const toRemove = originalMemberIds.filter(id => !candidateIds.includes(id));
-
-                    for (const id of toAdd) {
-                        await addCandidateToGroup(groupId, id);
-                    }
-                    for (const id of toRemove) {
-                        await removeCandidateFromGroup(groupId, id);
-                    }
-                } else {
-                    // Creating a new group
-                    await addGroup({
-                        nom: groupName,
-                        type,
-                        formationId,
-                        candidateIds,
-                        professorId: professorId || undefined
                     });
                 }
             }
 
-            toast.success(groupId ? 'Inscription mise à jour avec succès.' : 'Inscription créée avec succès.');
+            toast.success(inscriptionId ? 'Inscription mise à jour avec succès.' : 'Inscription créée avec succès.');
             onOpenChange(false);
             if (onSuccess) onSuccess();
         } catch (error: any) {
             console.error(error);
-            toast.error(error.response?.data?.error || "Une erreur est survenue lors de l'enregistrement.");
+            toast.error(error.response?.data?.error || error.message || "Le numéro d'inscription existe déjà.");
         } finally {
             setIsSubmitting(false);
         }
@@ -358,7 +343,7 @@ export function GestionInscriptionsDialog({
     const isRuleRespected =
         (formState.type === 'MONOME' && activeCandidatesCount === 1) ||
         (formState.type === 'BINOME' && activeCandidatesCount === 2) ||
-        (formState.type === 'GROUPE' && activeCandidatesCount >= 1);
+        ((formState.type === 'GROUPE' || formState.type === 'SPECIFIQUE') && activeCandidatesCount >= 1);
 
     return (
         <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -366,15 +351,30 @@ export function GestionInscriptionsDialog({
                 <DialogHeader>
                     <DialogTitle className="text-2xl flex items-center gap-2 font-bold text-gray-900 border-b pb-2">
                         <BookOpen className="text-indigo-600" size={24} />
-                        {groupId ? 'Modifier Inscription / Groupe' : 'Gestion des Inscriptions'}
+                        {inscriptionId ? 'Modifier Inscription' : 'Gestion des Inscriptions'}
                     </DialogTitle>
                     <DialogDescription className="text-gray-500 pt-1">
-                        Créer ou modifier une inscription et son groupe
+                        Créer ou modifier une inscription
                     </DialogDescription>
                 </DialogHeader>
 
                 <form onSubmit={handleSubmit} className="space-y-6 pt-4">
                     <div className="grid grid-cols-2 gap-4">
+                        {/* Field 0: N° d'inscription */}
+                        <div className="space-y-2 col-span-2">
+                            <Label htmlFor="inscriptionCode" className="font-semibold text-gray-700 text-sm">
+                                N° d'inscription *
+                            </Label>
+                            <Input
+                                id="inscriptionCode"
+                                placeholder="Ex: INS-2026-0001"
+                                value={formState.inscriptionCode}
+                                onChange={(e) => setFormState(prev => ({ ...prev, inscriptionCode: e.target.value }))}
+                                className="h-10 rounded-lg font-mono"
+                                required
+                            />
+                        </div>
+
                         {/* Field 1: Type d'inscription */}
                         <div className="space-y-2 col-span-2 sm:col-span-1">
                             <Label htmlFor="type" className="font-semibold text-gray-700 text-sm">
@@ -383,7 +383,6 @@ export function GestionInscriptionsDialog({
                             <Select
                                 value={formState.type}
                                 onValueChange={(val: any) => handleTypeChange(val)}
-                                disabled={!!groupId}
                             >
                                 <SelectTrigger id="type" className="h-10 rounded-lg">
                                     <SelectValue />
@@ -392,23 +391,23 @@ export function GestionInscriptionsDialog({
                                     <SelectItem value="MONOME">Monôme (1 candidat)</SelectItem>
                                     <SelectItem value="BINOME">Binôme (2 candidats)</SelectItem>
                                     <SelectItem value="GROUPE">Groupe (Sélection multiple)</SelectItem>
+                                    <SelectItem value="SPECIFIQUE">Spécifique (Sélection multiple)</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
 
-                        {/* Field 2: Nom du groupe (Visible only for GROUPE) */}
-                        {formState.type === 'GROUPE' && (
+                        {/* Field 2: Nom (Visual only, kept for layout) */}
+                        {(formState.type === 'GROUPE' || formState.type === 'SPECIFIQUE') && (
                             <div className="space-y-2 col-span-2 sm:col-span-1">
                                 <Label htmlFor="nom" className="font-semibold text-gray-700 text-sm">
-                                    Nom du groupe *
+                                    {formState.type === 'SPECIFIQUE' ? "Nom de l'inscription *" : 'Nom du groupe *'}
                                 </Label>
                                 <Input
                                     id="nom"
-                                    placeholder="Ex: Groupe A / Classe 1"
+                                    placeholder={formState.type === 'SPECIFIQUE' ? "Ex: Session spécifique A" : "Ex: Groupe A / Classe 1"}
                                     value={formState.nom}
                                     onChange={(e) => setFormState(prev => ({ ...prev, nom: e.target.value }))}
                                     className="h-10 rounded-lg"
-                                    required
                                 />
                             </div>
                         )}
@@ -422,7 +421,6 @@ export function GestionInscriptionsDialog({
                                 value={formState.formationId}
                                 onValueChange={(val) => handleFormationChange(val)}
                                 required
-                                disabled={!!groupId}
                             >
                                 <SelectTrigger id="formation" className="h-10 rounded-lg">
                                     <SelectValue placeholder="Sélectionner une formation" />
@@ -430,7 +428,7 @@ export function GestionInscriptionsDialog({
                                 <SelectContent>
                                     {formations.map((f) => (
                                         <SelectItem key={f.id} value={f.id}>
-                                            {f.subject} ({f.level})
+                                            {(f as any).subject} ({(f as any).level})
                                         </SelectItem>
                                     ))}
                                 </SelectContent>
@@ -453,7 +451,7 @@ export function GestionInscriptionsDialog({
                                     <SelectItem value="none">Aucun professeur</SelectItem>
                                     {professors.map((p) => (
                                         <SelectItem key={p.id} value={p.id}>
-                                            {p.firstName} {p.lastName}
+                                            {(p as any).firstName} {(p as any).lastName}
                                         </SelectItem>
                                     ))}
                                 </SelectContent>
@@ -484,7 +482,7 @@ export function GestionInscriptionsDialog({
                                 </div>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-48 overflow-y-auto p-1 bg-white rounded border">
-                                    {availableCandidates.map(candidate => {
+                                    {displayCandidates.map(candidate => {
                                         const isSelected = formState.candidateIds.includes(candidate.id);
                                         return (
                                             <div
@@ -510,7 +508,7 @@ export function GestionInscriptionsDialog({
                                             </div>
                                         );
                                     })}
-                                    {availableCandidates.length === 0 && (
+                                    {displayCandidates.length === 0 && (
                                         <div className="text-xs text-gray-400 text-center py-6 italic w-full col-span-2">
                                             Aucun candidat disponible pour cette formation.
                                         </div>
@@ -528,7 +526,7 @@ export function GestionInscriptionsDialog({
                                             <AlertCircle size={14} />
                                             {formState.type === 'MONOME' && "Sélectionnez exactement 1 candidat"}
                                             {formState.type === 'BINOME' && "Sélectionnez exactement 2 candidats"}
-                                            {formState.type === 'GROUPE' && "Sélectionnez au moins 1 candidat"}
+                                            {(formState.type === 'GROUPE' || formState.type === 'SPECIFIQUE') && "Sélectionnez au moins 1 candidat"}
                                         </span>
                                     )}
                                 </div>

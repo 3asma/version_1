@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useApp } from '../context/AppContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Input } from '../components/ui/input';
@@ -10,13 +10,16 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 import { RadioGroup, RadioGroupItem } from '../components/ui/radio-group';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '../components/ui/alert-dialog';
-import { Search, UserPlus, Pencil, Trash2, User, Briefcase, Hash, Gift, Eye, Users, BookOpen, Calendar, DollarSign, Clock, CheckCircle, XCircle, FileText } from 'lucide-react';
+import { Search, UserPlus, Pencil, Trash2, User, Briefcase, Hash, Gift, Eye, Users, BookOpen, Calendar, DollarSign, Clock, CheckCircle, XCircle, FileText, CreditCard } from 'lucide-react';
 import { toast } from 'sonner';
 import { exportPDF } from '../services/api';
 
 
 export default function Candidates() {
   const { currentUser, candidates, inscriptions, formations, commercials, addCandidate, updateCandidate, deleteCandidate, addCandidateAssignment, deleteInscription } = useApp();
+  const uniqueActions = useMemo(() => {
+    return Array.from(new Set(commercials.map(c => c.action))).filter(Boolean).sort();
+  }, [commercials]);
 
   const isCandidateActive = (candidateId: string) =>
     inscriptions.some(
@@ -39,12 +42,43 @@ export default function Candidates() {
     occupation: 'student' as 'student' | 'employee',
     giftCode: '',
     observation: 'alone' as 'alone' | 'accompanied',
-    contact: [] as string[],
-    action: ''
+    firstContactId: '',
+    secondContactId: 'none',
+    action: '',
+    membershipNumber: '',
+    gender: '' as 'MALE' | 'FEMALE' | '',
+    registrationDate: '',
+    email: '',
+    phone: ''
   });
 
   const handleInputChange = (field: string, value: any) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData(prev => {
+      const updated = { ...prev, [field]: value };
+      if (field === 'action') {
+        updated.firstContactId = '';
+        updated.secondContactId = 'none';
+      }
+      return updated;
+    });
+  };
+
+  const getFilteredCommercialsForField = (fieldNum: 1 | 2) => {
+    if (!formData.action) return [];
+    let list = commercials.filter(c => c.action === formData.action);
+    if (selectedCandidate) {
+      const candidate = candidates.find(c => c.id === selectedCandidate);
+      if (candidate) {
+        const originalCommercialId = fieldNum === 1 ? candidate.firstContactId : candidate.secondContactId;
+        if (originalCommercialId && originalCommercialId !== 'none' && !list.some(c => c.id === originalCommercialId)) {
+          const savedCommercial = commercials.find(c => c.id === originalCommercialId);
+          if (savedCommercial) {
+            list = [...list, savedCommercial];
+          }
+        }
+      }
+    }
+    return list;
   };
 
   const handleSearch = () => {
@@ -58,16 +92,30 @@ export default function Candidates() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!formData.firstContactId) {
+      toast.error('Le Contact 1 est obligatoire.');
+      return;
+    }
+    if (formData.firstContactId && formData.secondContactId && formData.secondContactId !== 'none' && formData.firstContactId === formData.secondContactId) {
+      toast.error('Le Contact 1 et le Contact 2 doivent être différents.');
+      return;
+    }
+
     try {
       await addCandidate({
         firstName: formData.firstName,
         lastName: formData.lastName,
         age: parseInt(formData.age),
         occupation: formData.occupation,
-        giftCode: formData.giftCode || undefined,
         observation: formData.observation,
-        contact: formData.contact.length > 0 ? formData.contact : undefined,
-        action: formData.action || undefined
+        firstContactId: formData.firstContactId || undefined,
+        secondContactId: formData.secondContactId !== 'none' ? formData.secondContactId : undefined,
+        action: formData.action || undefined,
+        membershipNumber: formData.membershipNumber || undefined,
+        gender: formData.gender !== '' ? formData.gender : undefined,
+        registrationDate: formData.registrationDate || undefined,
+        email: formData.email || undefined,
+        phone: formData.phone || undefined
       });
 
       toast.success('Candidat ajouté avec succès');
@@ -86,10 +134,277 @@ export default function Candidates() {
       occupation: 'student',
       giftCode: '',
       observation: 'alone',
-      contact: [],
-      action: ''
+      firstContactId: '',
+      secondContactId: 'none',
+      action: '',
+      membershipNumber: '',
+      gender: '',
+      registrationDate: '',
+      email: '',
+      phone: ''
     });
   };
+
+  const renderCandidateFields = (mode: 'add' | 'edit') => {
+    const commercials1 = getFilteredCommercialsForField(1);
+    const commercials2 = getFilteredCommercialsForField(2);
+
+    return (
+      <>
+        <div className="bg-gray-50 rounded-xl p-6 space-y-6">
+          <h3 className="font-semibold text-lg flex items-center gap-2 border-b pb-2">
+            <User className="text-blue-600" size={20} />
+            Informations du candidat
+          </h3>
+
+          <div className="grid grid-cols-2 gap-6">
+            {/* 1. Numéro d'adhésion */}
+            <div className="space-y-2">
+              <Label htmlFor={`${mode}-membershipNumber`} className="text-base font-semibold flex items-center gap-2">
+                <CreditCard size={16} className="text-gray-600" />
+                Numéro d'adhésion
+              </Label>
+              <Input
+                id={`${mode}-membershipNumber`}
+                value={formData.membershipNumber}
+                onChange={(e) => handleInputChange('membershipNumber', e.target.value)}
+                className="h-12 rounded-xl"
+                placeholder="Ex: ADH-2026-1234"
+              />
+            </div>
+
+            {/* 2. Nom */}
+            <div className="space-y-2">
+              <Label htmlFor={`${mode}-lastName`} className="text-base font-semibold flex items-center gap-2">
+                <User size={16} className="text-gray-600" />
+                Nom *
+              </Label>
+              <Input
+                id={`${mode}-lastName`}
+                value={formData.lastName}
+                onChange={(e) => handleInputChange('lastName', e.target.value)}
+                className="h-12 rounded-xl"
+                placeholder="Entrez le nom"
+                required
+              />
+            </div>
+
+            {/* 3. Prénom */}
+            <div className="space-y-2">
+              <Label htmlFor={`${mode}-firstName`} className="text-base font-semibold flex items-center gap-2">
+                <User size={16} className="text-gray-600" />
+                Prénom *
+              </Label>
+              <Input
+                id={`${mode}-firstName`}
+                value={formData.firstName}
+                onChange={(e) => handleInputChange('firstName', e.target.value)}
+                className="h-12 rounded-xl"
+                placeholder="Entrez le prénom"
+                required
+              />
+            </div>
+
+            {/* 4. Genre */}
+            <div className="space-y-2">
+              <Label htmlFor={`${mode}-gender`} className="text-base font-semibold flex items-center gap-2">
+                <User size={16} className="text-gray-600" />
+                Genre
+              </Label>
+              <Select
+                value={formData.gender}
+                onValueChange={(value) => handleInputChange('gender', value)}
+              >
+                <SelectTrigger className="h-12 rounded-xl bg-white">
+                  <SelectValue placeholder="Sélectionner le genre" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="MALE">Homme</SelectItem>
+                  <SelectItem value="FEMALE">Femme</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* 5. Âge */}
+            <div className="space-y-2">
+              <Label htmlFor={`${mode}-age`} className="text-base font-semibold flex items-center gap-2">
+                <Hash size={16} className="text-gray-600" />
+                Âge *
+              </Label>
+              <Input
+                id={`${mode}-age`}
+                type="number"
+                value={formData.age}
+                onChange={(e) => handleInputChange('age', e.target.value)}
+                className="h-12 rounded-xl"
+                placeholder="Ex: 25"
+                required
+              />
+            </div>
+
+            {/* 6. Profession */}
+            <div className="space-y-2">
+              <Label htmlFor={`${mode}-occupation`} className="text-base font-semibold flex items-center gap-2">
+                <Briefcase size={16} className="text-gray-600" />
+                Profession *
+              </Label>
+              <Select
+                value={formData.occupation}
+                onValueChange={(value) => handleInputChange('occupation', value)}
+              >
+                <SelectTrigger className="h-12 rounded-xl bg-white">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="student">Étudiant</SelectItem>
+                  <SelectItem value="employee">Employé</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* 7. Téléphone */}
+            <div className="space-y-2">
+              <Label htmlFor={`${mode}-phone`} className="text-base font-semibold flex items-center gap-2">
+                <User size={16} className="text-gray-600" />
+                Téléphone
+              </Label>
+              <Input
+                id={`${mode}-phone`}
+                value={formData.phone}
+                onChange={(e) => handleInputChange('phone', e.target.value)}
+                className="h-12 rounded-xl"
+                placeholder="Ex: 0612345678"
+              />
+            </div>
+
+            {/* 8. Email */}
+            <div className="space-y-2">
+              <Label htmlFor={`${mode}-email`} className="text-base font-semibold flex items-center gap-2">
+                <User size={16} className="text-gray-600" />
+                Email
+              </Label>
+              <Input
+                id={`${mode}-email`}
+                type="email"
+                value={formData.email}
+                onChange={(e) => handleInputChange('email', e.target.value)}
+                className="h-12 rounded-xl"
+                placeholder="exemple@email.com"
+              />
+            </div>
+
+            {/* 9. Action */}
+            <div className="space-y-2">
+              <Label htmlFor={`${mode}-action`} className="text-base font-semibold flex items-center gap-2">
+                <Briefcase size={16} className="text-gray-600" />
+                Action *
+              </Label>
+              <Select
+                value={formData.action}
+                onValueChange={(value) => handleInputChange('action', value)}
+              >
+                <SelectTrigger className="h-12 rounded-xl bg-white">
+                  <SelectValue placeholder="Sélectionner une action" />
+                </SelectTrigger>
+                <SelectContent>
+                  {uniqueActions.map((act) => (
+                    <SelectItem key={act} value={act}>
+                      {act}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* 10. Premier contact */}
+            <div className="space-y-2">
+              <Label htmlFor={`${mode}-contact1`} className="text-base font-semibold flex items-center gap-2">
+                <Users size={16} className="text-gray-600" />
+                Premier contact *
+              </Label>
+              <Select
+                value={formData.firstContactId}
+                onValueChange={(value) => handleInputChange('firstContactId', value)}
+                disabled={!formData.action}
+              >
+                <SelectTrigger className="h-12 rounded-xl bg-white">
+                  <SelectValue placeholder={formData.action ? "Sélectionner premier contact" : "Sélectionner action"} />
+                </SelectTrigger>
+                <SelectContent>
+                  {commercials1.map((commercial) => (
+                    <SelectItem key={commercial.id} value={commercial.id}>
+                      {commercial.firstName} {commercial.lastName}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* 11. Deuxième contact */}
+            <div className="space-y-2">
+              <Label htmlFor={`${mode}-contact2`} className="text-base font-semibold flex items-center gap-2">
+                <Users size={16} className="text-gray-600" />
+                Deuxième contact (Optionnel)
+              </Label>
+              <Select
+                value={formData.secondContactId}
+                onValueChange={(value) => handleInputChange('secondContactId', value)}
+                disabled={!formData.action}
+              >
+                <SelectTrigger className="h-12 rounded-xl bg-white">
+                  <SelectValue placeholder={formData.action ? "Aucun" : "Sélectionner action"} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none">Aucun</SelectItem>
+                  {commercials2.map((commercial) => (
+                    <SelectItem key={commercial.id} value={commercial.id}>
+                      {commercial.firstName} {commercial.lastName}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* 12. Observation */}
+            <div className="space-y-2">
+              <Label htmlFor={`${mode}-observation`} className="text-base font-semibold flex items-center gap-2">
+                <Eye size={16} className="text-gray-600" />
+                Observation *
+              </Label>
+              <Select
+                value={formData.observation}
+                onValueChange={(value) => handleInputChange('observation', value)}
+              >
+                <SelectTrigger className="h-12 rounded-xl bg-white">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="alone">Seul</SelectItem>
+                  <SelectItem value="accompanied">Accompagné</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* 13. Date d'inscription */}
+            <div className="space-y-2">
+              <Label htmlFor={`${mode}-registrationDate`} className="text-base font-semibold flex items-center gap-2">
+                <Calendar size={16} className="text-gray-600" />
+                Date d'inscription
+              </Label>
+              <Input
+                id={`${mode}-registrationDate`}
+                type="date"
+                value={formData.registrationDate}
+                onChange={(e) => handleInputChange('registrationDate', e.target.value)}
+                className="h-12 rounded-xl"
+              />
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  };
+
 
 
 
@@ -103,8 +418,14 @@ export default function Candidates() {
         occupation: candidate.occupation,
         giftCode: candidate.giftCode || '',
         observation: candidate.observation,
-        contact: candidate.contact || [],
-        action: candidate.action || ''
+        firstContactId: candidate.firstContactId || '',
+        secondContactId: candidate.secondContactId || 'none',
+        action: candidate.action || '',
+        membershipNumber: candidate.membershipNumber || '',
+        gender: candidate.gender || '',
+        registrationDate: candidate.registrationDate ? new Date(candidate.registrationDate).toISOString().substring(0, 10) : '',
+        email: candidate.email || '',
+        phone: candidate.phone || ''
       });
       setSelectedCandidate(candidateId);
       setIsEditDialogOpen(true);
@@ -116,17 +437,30 @@ export default function Candidates() {
 
     if (!selectedCandidate) return;
 
+    if (!formData.firstContactId) {
+      toast.error('Le Contact 1 est obligatoire.');
+      return;
+    }
+    if (formData.firstContactId && formData.secondContactId && formData.secondContactId !== 'none' && formData.firstContactId === formData.secondContactId) {
+      toast.error('Le Contact 1 et le Contact 2 doivent être différents.');
+      return;
+    }
+
     try {
-      const candidate = candidates.find(c => c.id === selectedCandidate);
       await updateCandidate(selectedCandidate, {
         firstName: formData.firstName,
         lastName: formData.lastName,
         age: parseInt(formData.age),
         occupation: formData.occupation,
-        giftCode: formData.giftCode || undefined,
         observation: formData.observation,
-        contact: formData.contact.length > 0 ? formData.contact : undefined,
-        action: formData.action || undefined
+        firstContactId: formData.firstContactId || undefined,
+        secondContactId: formData.secondContactId !== 'none' ? formData.secondContactId : undefined,
+        action: formData.action || undefined,
+        membershipNumber: formData.membershipNumber || undefined,
+        gender: formData.gender !== '' ? formData.gender : undefined,
+        registrationDate: formData.registrationDate || undefined,
+        email: formData.email || undefined,
+        phone: formData.phone || undefined
       });
 
       toast.success('Candidat modifié avec succès');
@@ -211,183 +545,7 @@ export default function Candidates() {
                   </DialogHeader>
 
                   <form onSubmit={handleSubmit} className="space-y-6">
-                    {/* Section Informations principales */}
-                    <div className="bg-gray-50 rounded-xl p-6 space-y-4">
-                      <h3 className="font-semibold text-lg flex items-center gap-2">
-                        <User className="text-blue-600" size={20} />
-                        Informations principales
-                      </h3>
-                      <div className="grid grid-cols-2 gap-6">
-                        <div className="space-y-2">
-                          <Label htmlFor="firstName" className="text-base font-semibold flex items-center gap-2">
-                            <User size={16} className="text-gray-600" />
-                            Prénom *
-                          </Label>
-                          <Input
-                            id="firstName"
-                            value={formData.firstName}
-                            onChange={(e) => handleInputChange('firstName', e.target.value)}
-                            className="h-12 rounded-xl"
-                            placeholder="Entrez le prénom"
-                            required
-                          />
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor="lastName" className="text-base font-semibold flex items-center gap-2">
-                            <User size={16} className="text-gray-600" />
-                            Nom *
-                          </Label>
-                          <Input
-                            id="lastName"
-                            value={formData.lastName}
-                            onChange={(e) => handleInputChange('lastName', e.target.value)}
-                            className="h-12 rounded-xl"
-                            placeholder="Entrez le nom"
-                            required
-                          />
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor="occupation" className="text-base font-semibold flex items-center gap-2">
-                            <Briefcase size={16} className="text-gray-600" />
-                            Fonction *
-                          </Label>
-                          <Select
-                            value={formData.occupation}
-                            onValueChange={(value) => handleInputChange('occupation', value)}
-                          >
-                            <SelectTrigger className="h-12 rounded-xl">
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="student">Étudiant</SelectItem>
-                              <SelectItem value="employee">Employé</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor="age" className="text-base font-semibold flex items-center gap-2">
-                            <Hash size={16} className="text-gray-600" />
-                            Âge *
-                          </Label>
-                          <Input
-                            id="age"
-                            type="number"
-                            value={formData.age}
-                            onChange={(e) => handleInputChange('age', e.target.value)}
-                            className="h-12 rounded-xl"
-                            placeholder="Ex: 25"
-                            required
-                          />
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Section Informations complémentaires */}
-                    <div className="bg-gray-50 rounded-xl p-6 space-y-4">
-                      <h3 className="font-semibold text-lg flex items-center gap-2">
-                        <Gift className="text-purple-600" size={20} />
-                        Informations complémentaires
-                      </h3>
-                      <div className="grid grid-cols-2 gap-6">
-                        <div className="space-y-2">
-                          <Label htmlFor="giftCode" className="text-base font-semibold flex items-center gap-2">
-                            <Gift size={16} className="text-gray-600" />
-                            Code cadeau
-                          </Label>
-                          <Input
-                            id="giftCode"
-                            value={formData.giftCode}
-                            onChange={(e) => handleInputChange('giftCode', e.target.value)}
-                            className="h-12 rounded-xl"
-                            placeholder="Ex: PROMO2026"
-                          />
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor="observation" className="text-base font-semibold flex items-center gap-2">
-                            <Eye size={16} className="text-gray-600" />
-                            Observation *
-                          </Label>
-                          <Select
-                            value={formData.observation}
-                            onValueChange={(value) => handleInputChange('observation', value)}
-                          >
-                            <SelectTrigger className="h-12 rounded-xl">
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="alone">Seul</SelectItem>
-                              <SelectItem value="accompanied">Accompagné</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor="action" className="text-base font-semibold flex items-center gap-2">
-                            <Briefcase size={16} className="text-gray-600" />
-                            Action *
-                          </Label>
-                          <Select
-                            value={formData.action}
-                            onValueChange={(value) => {
-                              handleInputChange('action', value);
-                              setFormData(prev => ({ ...prev, contact: [] }));
-                            }}
-                          >
-                            <SelectTrigger className="h-12 rounded-xl">
-                              <SelectValue placeholder="Sélectionner une action" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="action1">Action 1</SelectItem>
-                              <SelectItem value="action2">Action 2</SelectItem>
-                              <SelectItem value="action3">Action 3</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor="contact" className="text-base font-semibold flex items-center gap-2">
-                            <Users size={16} className="text-gray-600" />
-                            Contact {formData.action && '*'}
-                          </Label>
-                          {formData.action ? (
-                            <div className="border rounded-xl p-4 space-y-2 max-h-32 overflow-y-auto bg-white">
-                              {commercials
-                                .filter(c => c.action === formData.action)
-                                .map((commercial) => (
-                                  <div key={commercial.id} className="flex items-center space-x-2">
-                                    <input
-                                      type="checkbox"
-                                      id={`commercial-${commercial.id}`}
-                                      checked={formData.contact.includes(commercial.id)}
-                                      onChange={(e) => {
-                                        const newContacts = e.target.checked
-                                          ? [...formData.contact, commercial.id]
-                                          : formData.contact.filter(id => id !== commercial.id);
-                                        setFormData(prev => ({ ...prev, contact: newContacts }));
-                                      }}
-                                      className="w-4 h-4 rounded border-gray-300"
-                                    />
-                                    <label
-                                      htmlFor={`commercial-${commercial.id}`}
-                                      className="text-sm cursor-pointer flex-1"
-                                    >
-                                      {commercial.firstName} {commercial.lastName}
-                                    </label>
-                                  </div>
-                                ))}
-                            </div>
-                          ) : (
-                            <div className="border rounded-xl p-4 text-sm text-gray-500 bg-white h-12 flex items-center">
-                              Sélectionnez d'abord une action
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </div>
+                    {renderCandidateFields('add')}
 
                     <div className="flex justify-end gap-3 pt-4 border-t">
                       <Button
@@ -473,6 +631,18 @@ export default function Candidates() {
                   <p className="text-sm text-gray-600">Type</p>
                   <p className="font-medium capitalize">{getFormation(searchResult.formationId)?.type || '-'}</p>
                 </div>
+                <div className="space-y-1">
+                  <p className="text-sm text-gray-600">Numéro d'adhésion</p>
+                  <p className="font-semibold">{searchResult.membershipNumber || '-'}</p>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-sm text-gray-600">Genre</p>
+                  <p className="font-semibold">{searchResult.gender === 'MALE' ? 'Homme' : searchResult.gender === 'FEMALE' ? 'Femme' : '-'}</p>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-sm text-gray-600">Date d'inscription</p>
+                  <p className="font-semibold">{searchResult.registrationDate ? new Date(searchResult.registrationDate).toLocaleDateString('fr-FR') : '-'}</p>
+                </div>
               </div>
 
               {searchResult.formationId !== 'unassigned' && (() => {
@@ -542,6 +712,7 @@ export default function Candidates() {
                   <TableHead className="font-semibold">Formation</TableHead>
                   <TableHead className="font-semibold text-center">Heures</TableHead>
                   <TableHead className="font-semibold">Code</TableHead>
+                  <TableHead className="font-semibold">N° Adhésion</TableHead>
                   <TableHead className="font-semibold">Statut</TableHead>
                   <TableHead className="font-semibold text-right">Actions</TableHead>
                 </TableRow>
@@ -628,6 +799,9 @@ export default function Candidates() {
                     <TableCell className="font-mono text-sm font-semibold text-blue-700">
                       {candidate.candidateCode}
                     </TableCell>
+                    <TableCell className="font-mono text-xs font-semibold text-gray-700">
+                      {candidate.membershipNumber || '-'}
+                    </TableCell>
                     <TableCell>
                       <Badge className={isCandidateActive(candidate.id) ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}>
                         {isCandidateActive(candidate.id) ? 'Actif' : 'Non actif'}
@@ -665,179 +839,14 @@ export default function Candidates() {
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto scrollbar-hide">
           <DialogHeader>
-            <DialogTitle className="text-2xl">Modifier le candidat</DialogTitle>
+            <DialogTitle className="text-2xl">Modifier le candidat - {selectedCandidate ? candidates.find(c => c.id === selectedCandidate)?.candidateCode || '' : ''}</DialogTitle>
             <DialogDescription>
               Modifiez les informations du candidat
             </DialogDescription>
           </DialogHeader>
 
           <form onSubmit={handleUpdate} className="space-y-6">
-            {/* Même structure que le formulaire d'ajout */}
-            <div className="bg-gray-50 rounded-xl p-6 space-y-4">
-              <h3 className="font-semibold text-lg flex items-center gap-2">
-                <User className="text-blue-600" size={20} />
-                Informations principales
-              </h3>
-              <div className="grid grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <Label htmlFor="edit-firstName" className="text-base font-semibold flex items-center gap-2">
-                    <User size={16} className="text-gray-600" />
-                    Prénom *
-                  </Label>
-                  <Input
-                    id="edit-firstName"
-                    value={formData.firstName}
-                    onChange={(e) => handleInputChange('firstName', e.target.value)}
-                    className="h-12 rounded-xl"
-                    required
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="edit-lastName" className="text-base font-semibold flex items-center gap-2">
-                    <User size={16} className="text-gray-600" />
-                    Nom *
-                  </Label>
-                  <Input
-                    id="edit-lastName"
-                    value={formData.lastName}
-                    onChange={(e) => handleInputChange('lastName', e.target.value)}
-                    className="h-12 rounded-xl"
-                    required
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="edit-occupation" className="text-base font-semibold flex items-center gap-2">
-                    <Briefcase size={16} className="text-gray-600" />
-                    Fonction *
-                  </Label>
-                  <Select value={formData.occupation} onValueChange={(value) => handleInputChange('occupation', value)}>
-                    <SelectTrigger className="h-12 rounded-xl">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="student">Étudiant</SelectItem>
-                      <SelectItem value="employee">Employé</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="edit-age" className="text-base font-semibold flex items-center gap-2">
-                    <Hash size={16} className="text-gray-600" />
-                    Âge *
-                  </Label>
-                  <Input
-                    id="edit-age"
-                    type="number"
-                    value={formData.age}
-                    onChange={(e) => handleInputChange('age', e.target.value)}
-                    className="h-12 rounded-xl"
-                    required
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-gray-50 rounded-xl p-6 space-y-4">
-              <h3 className="font-semibold text-lg flex items-center gap-2">
-                <Gift className="text-purple-600" size={20} />
-                Informations complémentaires
-              </h3>
-              <div className="grid grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <Label htmlFor="edit-giftCode" className="text-base font-semibold flex items-center gap-2">
-                    <Gift size={16} className="text-gray-600" />
-                    Code cadeau
-                  </Label>
-                  <Input
-                    id="edit-giftCode"
-                    value={formData.giftCode}
-                    onChange={(e) => handleInputChange('giftCode', e.target.value)}
-                    className="h-12 rounded-xl"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="edit-observation" className="text-base font-semibold flex items-center gap-2">
-                    <Eye size={16} className="text-gray-600" />
-                    Observation *
-                  </Label>
-                  <Select value={formData.observation} onValueChange={(value) => handleInputChange('observation', value)}>
-                    <SelectTrigger className="h-12 rounded-xl">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="alone">Seul</SelectItem>
-                      <SelectItem value="accompanied">Accompagné</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="edit-action" className="text-base font-semibold flex items-center gap-2">
-                    <Briefcase size={16} className="text-gray-600" />
-                    Action *
-                  </Label>
-                  <Select
-                    value={formData.action}
-                    onValueChange={(value) => {
-                      handleInputChange('action', value);
-                      setFormData(prev => ({ ...prev, contact: [] }));
-                    }}
-                  >
-                    <SelectTrigger className="h-12 rounded-xl">
-                      <SelectValue placeholder="Sélectionner une action" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="action1">Action 1</SelectItem>
-                      <SelectItem value="action2">Action 2</SelectItem>
-                      <SelectItem value="action3">Action 3</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="edit-contact" className="text-base font-semibold flex items-center gap-2">
-                    <Users size={16} className="text-gray-600" />
-                    Contact {formData.action && '*'}
-                  </Label>
-                  {formData.action ? (
-                    <div className="border rounded-xl p-4 space-y-2 max-h-32 overflow-y-auto bg-white">
-                      {commercials
-                        .filter(c => c.action === formData.action)
-                        .map((commercial) => (
-                          <div key={commercial.id} className="flex items-center space-x-2">
-                            <input
-                              type="checkbox"
-                              id={`edit-commercial-${commercial.id}`}
-                              checked={formData.contact.includes(commercial.id)}
-                              onChange={(e) => {
-                                const newContacts = e.target.checked
-                                  ? [...formData.contact, commercial.id]
-                                  : formData.contact.filter(id => id !== commercial.id);
-                                setFormData(prev => ({ ...prev, contact: newContacts }));
-                              }}
-                              className="w-4 h-4 rounded border-gray-300"
-                            />
-                            <label
-                              htmlFor={`edit-commercial-${commercial.id}`}
-                              className="text-sm cursor-pointer flex-1"
-                            >
-                              {commercial.firstName} {commercial.lastName}
-                            </label>
-                          </div>
-                        ))}
-                    </div>
-                  ) : (
-                    <div className="border rounded-xl p-4 text-sm text-gray-500 bg-white h-12 flex items-center">
-                      Sélectionnez d'abord une action
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
+            {renderCandidateFields('edit')}
             {/* Section Formations & Inscriptions */}
             <div className="bg-gray-50 rounded-xl p-6 space-y-4">
               <h3 className="font-semibold text-lg flex items-center gap-2">

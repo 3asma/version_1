@@ -9,7 +9,7 @@ export const exportRoomsPDF = async (req, res) => {
             { label: 'Capacité', key: 'capacite', width: 245 }
         ];
         const rows = data.map(r => ({
-            nom: r.nom || '',
+            nom: r.numero || '',
             capacite: r.capacite !== undefined && r.capacite !== null ? String(r.capacite) : ''
         }));
         streamPDF(res, 'Rooms', headers, rows);
@@ -39,6 +39,21 @@ export const getRoomById = async (req, res) => {
 };
 
 export const createRoom = async (req, res) => {
+    const { numero, roomNumber, capacite, capacity } = req.body;
+    const finalNumero = numero || roomNumber;
+    const finalCapacite = capacite !== undefined ? capacite : capacity;
+
+    if (!finalNumero || typeof finalNumero !== 'string' || finalNumero.trim() === '') {
+        return res.status(400).json({ message: 'error', error: 'NUMERO_REQUIRED' });
+    }
+    if (finalCapacite === undefined || finalCapacite === null) {
+        return res.status(400).json({ message: 'error', error: 'CAPACITE_REQUIRED' });
+    }
+    const cap = parseInt(finalCapacite);
+    if (isNaN(cap) || cap <= 0) {
+        return res.status(400).json({ message: 'error', error: 'INVALID_CAPACITE' });
+    }
+
     try {
         const room = await roomService.createRoom(req.body);
         res.status(201).json({ message: 'success', data: room });
@@ -56,6 +71,20 @@ export const createRoom = async (req, res) => {
 };
 
 export const updateRoom = async (req, res) => {
+    const { numero, roomNumber, capacite, capacity } = req.body;
+    const finalNumero = numero || roomNumber;
+    const finalCapacite = capacite !== undefined ? capacite : capacity;
+
+    if (finalNumero !== undefined && (typeof finalNumero !== 'string' || finalNumero.trim() === '')) {
+        return res.status(400).json({ message: 'error', error: 'INVALID_NUMERO' });
+    }
+    if (finalCapacite !== undefined) {
+        const cap = parseInt(finalCapacite);
+        if (isNaN(cap) || cap <= 0) {
+            return res.status(400).json({ message: 'error', error: 'INVALID_CAPACITE' });
+        }
+    }
+
     try {
         const room = await roomService.updateRoom(req.params.id, req.body);
         res.json({ message: 'success', data: room });

@@ -18,29 +18,66 @@ async function generateCandidateCode() {
 
 class CandidateService {
     normalizeData(data) {
-        const n = { ...data };
-        delete n.formationId; // Candidate model no longer has this field
+        const allowedKeys = [
+            'candidateCode',
+            'firstName',
+            'lastName',
+            'age',
+            'occupation',
+            'phone',
+            'email',
+            'observation',
+            'action',
+            'status'
+        ];
+
+        const n = {};
+        for (const key of allowedKeys) {
+            if (key in data) {
+                n[key] = data[key];
+            }
+        }
+
         if (n.firstName) n.firstName = n.firstName.trim().charAt(0).toUpperCase() + n.firstName.trim().slice(1).toLowerCase();
         if (n.lastName) n.lastName = n.lastName.trim().toUpperCase();
         if (n.email) n.email = n.email.trim().toLowerCase();
-        if (n.action) n.action = n.action.trim();
         if (n.occupation) n.occupation = n.occupation.toUpperCase();
         if (n.observation) n.observation = n.observation.toUpperCase();
         if (n.status) n.status = n.status.toUpperCase();
+
+        if ('action' in n) {
+            n.action = (n.action && n.action.trim() !== '') ? n.action.trim() : null;
+        }
+
+        if ('age' in n && n.age !== undefined && n.age !== null) {
+            n.age = parseInt(n.age);
+        }
         return n;
     }
 
     async getAllCandidates() {
         return await prisma.candidate.findMany({
             orderBy: { createdAt: 'desc' },
-            include: { inscriptions: true }
+            include: {
+                inscriptions: {
+                    include: {
+                        formation: true
+                    }
+                }
+            }
         });
     }
 
     async getCandidateById(id) {
         return await prisma.candidate.findUnique({
             where: { id },
-            include: { inscriptions: true }
+            include: {
+                inscriptions: {
+                    include: {
+                        formation: true
+                    }
+                }
+            }
         });
     }
 
@@ -55,7 +92,14 @@ class CandidateService {
         const candidateCode = await generateCandidateCode();
 
         return await prisma.candidate.create({
-            data: { ...normalized, candidateCode }
+            data: { ...normalized, candidateCode },
+            include: {
+                inscriptions: {
+                    include: {
+                        formation: true
+                    }
+                }
+            }
         });
     }
 
@@ -71,7 +115,17 @@ class CandidateService {
             throw new Error('INVALID_STATUS');
         }
 
-        return await prisma.candidate.update({ where: { id }, data: normalized });
+        return await prisma.candidate.update({
+            where: { id },
+            data: normalized,
+            include: {
+                inscriptions: {
+                    include: {
+                        formation: true
+                    }
+                }
+            }
+        });
     }
 
     async deleteCandidate(id) {

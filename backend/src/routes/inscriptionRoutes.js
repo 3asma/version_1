@@ -7,7 +7,8 @@ import {
     createInscription,
     updateInscription,
     deleteInscription,
-    deductHours
+    deductHours,
+    updateLearningGroup
 } from '../controllers/inscriptionController.js';
 
 const router = express.Router();
@@ -19,6 +20,7 @@ router.get('/export/pdf', exportInscriptionsPDF);
 router.get('/', getAllInscriptions);
 router.get('/:id', getInscriptionById);
 
+router.put('/groups/:id', updateLearningGroup);
 router.post('/', createInscription);
 router.patch('/:id', updateInscription);
 router.delete('/:id', deleteInscription);

@@ -32,17 +32,13 @@ export default function Rooms() {
 
   const [formData, setFormData] = useState({
     roomNumber: '',
-    type: '',
-    capacity: '',
-    available: true
+    capacity: ''
   });
 
   const resetForm = () => {
     setFormData({
       roomNumber: '',
-      type: '',
-      capacity: '',
-      available: true
+      capacity: ''
     });
   };
 
@@ -50,10 +46,8 @@ export default function Rooms() {
     const room = rooms.find(r => r.id === roomId);
     if (room) {
       setFormData({
-        roomNumber: room.roomNumber,
-        type: room.type,
-        capacity: room.capacity.toString(),
-        available: room.available
+        roomNumber: room.roomNumber || '',
+        capacity: room.capacity !== undefined ? room.capacity.toString() : ''
       });
       setEditingRoom(roomId);
       setIsAddDialogOpen(true);
@@ -78,30 +72,29 @@ export default function Rooms() {
     setSelectedRoomId(null);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (editingRoom) {
-      updateRoom(editingRoom, {
-        roomNumber: formData.roomNumber,
-        type: formData.type,
-        capacity: parseInt(formData.capacity),
-        available: formData.available
-      });
-      toast.success('Salle mise à jour');
-      setEditingRoom(null);
-    } else {
-      addRoom({
-        roomNumber: formData.roomNumber,
-        type: formData.type,
-        capacity: parseInt(formData.capacity),
-        available: formData.available
-      });
-      toast.success('Salle ajoutée');
+    try {
+      if (editingRoom) {
+        await updateRoom(editingRoom, {
+          roomNumber: formData.roomNumber,
+          capacity: parseInt(formData.capacity)
+        });
+        toast.success('Salle mise à jour');
+        setEditingRoom(null);
+      } else {
+        await addRoom({
+          roomNumber: formData.roomNumber,
+          capacity: parseInt(formData.capacity)
+        });
+        toast.success('Salle ajoutée');
+      }
+      setIsAddDialogOpen(false);
+      resetForm();
+    } catch (error) {
+      toast.error('Erreur lors de l\'enregistrement de la salle');
     }
-
-    setIsAddDialogOpen(false);
-    resetForm();
   };
 
   const handleDialogClose = (open: boolean) => {
@@ -160,17 +153,6 @@ export default function Rooms() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="type">Type de salle *</Label>
-                  <Input
-                    id="type"
-                    placeholder="Ex: Individuel, Binôme, Groupe"
-                    value={formData.type}
-                    onChange={(e) => setFormData(prev => ({ ...prev, type: e.target.value }))}
-                    required
-                  />
-                </div>
-
-                <div className="space-y-2">
                   <Label htmlFor="capacity">Capacité *</Label>
                   <Input
                     id="capacity"
@@ -179,15 +161,6 @@ export default function Rooms() {
                     value={formData.capacity}
                     onChange={(e) => setFormData(prev => ({ ...prev, capacity: e.target.value }))}
                     required
-                  />
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="available">Disponible</Label>
-                  <Switch
-                    id="available"
-                    checked={formData.available}
-                    onCheckedChange={(checked) => setFormData(prev => ({ ...prev, available: checked }))}
                   />
                 </div>
 
@@ -218,9 +191,7 @@ export default function Rooms() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Numéro</TableHead>
-                  <TableHead>Type</TableHead>
                   <TableHead>Capacité</TableHead>
-                  <TableHead>Disponibilité</TableHead>
                   <TableHead>Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -230,15 +201,9 @@ export default function Rooms() {
                     <TableCell className="font-medium text-lg">
                       {room.roomNumber}
                     </TableCell>
-                    <TableCell>{room.type}</TableCell>
                     <TableCell>
                       <Badge variant="outline">
                         {room.capacity} personnes
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant={room.available ? 'default' : 'secondary'}>
-                        {room.available ? 'Disponible' : 'Indisponible'}
                       </Badge>
                     </TableCell>
                     <TableCell>

@@ -45,8 +45,8 @@ export default function Formations() {
     const formation = formations.find(f => f.id === formationId);
     if (formation) {
       setFormData({
-        subject: formation.subject,
-        level: formation.level
+        subject: formation.subject || '',
+        level: formation.level || ''
       });
       setEditingFormation(formationId);
       setIsAddDialogOpen(true);
@@ -71,29 +71,29 @@ export default function Formations() {
     setSelectedFormationId(null);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (editingFormation) {
-      updateFormation(editingFormation, {
-        subject: formData.subject,
-        level: formData.level
-      });
-      toast.success('Formation mise à jour');
-      setEditingFormation(null);
-    } else {
-      addFormation({
-        subject: formData.subject,
-        level: formData.level,
-        type: 'individual',
-        duration: 60,
-        totalSessions: 1
-      });
-      toast.success('Formation ajoutée');
+    try {
+      if (editingFormation) {
+        await updateFormation(editingFormation, {
+          subject: formData.subject,
+          level: formData.level
+        });
+        toast.success('Formation mise à jour');
+        setEditingFormation(null);
+      } else {
+        await addFormation({
+          subject: formData.subject,
+          level: formData.level
+        });
+        toast.success('Formation ajoutée');
+      }
+      setIsAddDialogOpen(false);
+      resetForm();
+    } catch (error) {
+      toast.error('Erreur lors de l\'enregistrement de la formation');
     }
-
-    setIsAddDialogOpen(false);
-    resetForm();
   };
 
   const handleDialogClose = (open: boolean) => {

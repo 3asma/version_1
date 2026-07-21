@@ -1,0 +1,78 @@
+﻿--- STARTING RESERVATION SEARCH API VERIFICATION ---
+Authenticated successfully!
+Test codes found. Candidate Code: CAN-2026-9577, Inscription Code: INS-2026-0001
+Test codes found:
+ - Candidate: CAN-2026-9577 / can-2026-9577
+ - Inscription: INS-2026-0001 / ins-2026-0001
+
+Testing search by Candidate Code (Uppercase): CAN-2026-9577
+Status: 200
+Response payload: {
+  "message": "success",
+  "data": {
+    "exists": true,
+    "inscriptionId": "06650fe4-e645-4c06-ab54-185a248242cc",
+    "candidateId": "678e2fee-ca13-4481-ba60-26ec038eca23",
+    "formationId": "77e3cf59-187f-40f6-8539-bfb1b1e5752a",
+    "professorId": "44d4c132-6915-4e54-90e6-7bafffa51ed5",
+    "roomId": null
+  }
+}
+
+Testing search by Candidate Code (Lowercase): can-2026-9577
+Status: 200
+Response payload: {
+  "message": "success",
+  "data": {
+    "exists": true,
+    "inscriptionId": "06650fe4-e645-4c06-ab54-185a248242cc",
+    "candidateId": "678e2fee-ca13-4481-ba60-26ec038eca23",
+    "formationId": "77e3cf59-187f-40f6-8539-bfb1b1e5752a",
+    "professorId": "44d4c132-6915-4e54-90e6-7bafffa51ed5",
+    "roomId": null
+  }
+}
+
+Testing search by Inscription Code (Uppercase): INS-2026-0001
+Status: 200
+Response payload: {
+  "message": "success",
+  "data": {
+    "exists": true,
+    "inscriptionId": "06650fe4-e645-4c06-ab54-185a248242cc",
+    "candidateId": "678e2fee-ca13-4481-ba60-26ec038eca23",
+    "formationId": "77e3cf59-187f-40f6-8539-bfb1b1e5752a",
+    "professorId": "44d4c132-6915-4e54-90e6-7bafffa51ed5",
+    "roomId": null
+  }
+}
+
+Testing search by Inscription Code (Lowercase): ins-2026-0001
+Status: 200
+Response payload: {
+  "message": "success",
+  "data": {
+    "exists": true,
+    "inscriptionId": "06650fe4-e645-4c06-ab54-185a248242cc",
+    "candidateId": "678e2fee-ca13-4481-ba60-26ec038eca23",
+    "formationId": "77e3cf59-187f-40f6-8539-bfb1b1e5752a",
+    "professorId": "44d4c132-6915-4e54-90e6-7bafffa51ed5",
+    "roomId": null
+  }
+}
+
+Testing search by Unknown Code: XYZ-UNKNOWN-999
+Status: 404
+Response payload: {
+  "message": "error",
+  "error": "No candidate or inscription matches the entered code"
+}
+
+Testing search with Empty Code
+Status: 400
+Response payload: {
+  "message": "error",
+  "error": "CODE_REQUIRED"
+}
+
+--- RESERVATION SEARCH API VERIFIED SUCCESSFULLY ---

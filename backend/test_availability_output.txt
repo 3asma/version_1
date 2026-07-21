@@ -1,0 +1,213 @@
+﻿Ôùç injected env (0) from .env // tip: Ôîü auth for agents [www.vestauth.com]
+--- STARTING RESERVATION AVAILABILITY VERIFICATION ---
+Temporary DB components set up successfully:
+ - Prof 1: P1 (040ab89c-7ebb-42ee-86ae-483269c46da4)
+ - Prof 2: P2 (33121817-1a7c-4990-b7cf-9761b3b0c780)
+ - Room 1: TEMP-R1 (32bae754-70d7-4f4a-8c57-a82d4dff3bb8)
+ - Room 2: TEMP-R2 (da47c8f7-ff7e-43d8-b873-7582f9f24f14)
+ - Candidate 1: (79ad33f7-a9f6-4925-9709-79cb39dae3b2)
+ - Candidate 2: (b025d630-c6df-44ac-8a6b-fe9768413d36)
+
+Creating baseline reservation for Prof 1, Room 1, Candidate 1...
+Baseline reservation created successfully! ID: ba1dde46-14f1-4e01-8a24-62fe4f59eb2c
+
+Scenario: 1. No Conflict (different time)
+Status: 200
+Data: {
+  "available": true,
+  "conflicts": {
+    "professor": false,
+    "room": false,
+    "candidate": false
+  },
+  "professorAvailable": true,
+  "candidateAvailable": true,
+  "availableRooms": [
+    {
+      "id": "cfa1eaa5-492c-4dde-90f6-57468a1a2661",
+      "numero": "1",
+      "capacite": 10
+    },
+    {
+      "id": "32bae754-70d7-4f4a-8c57-a82d4dff3bb8",
+      "numero": "TEMP-R1",
+      "capacite": 10
+    },
+    {
+      "id": "da47c8f7-ff7e-43d8-b873-7582f9f24f14",
+      "numero": "TEMP-R2",
+      "capacite": 20
+    }
+  ]
+}
+
+Scenario: 2. Edge Case (New starts exactly when existing ends)
+Status: 200
+Data: {
+  "available": true,
+  "conflicts": {
+    "professor": false,
+    "room": false,
+    "candidate": false
+  },
+  "professorAvailable": true,
+  "candidateAvailable": true,
+  "availableRooms": [
+    {
+      "id": "cfa1eaa5-492c-4dde-90f6-57468a1a2661",
+      "numero": "1",
+      "capacite": 10
+    },
+    {
+      "id": "32bae754-70d7-4f4a-8c57-a82d4dff3bb8",
+      "numero": "TEMP-R1",
+      "capacite": 10
+    },
+    {
+      "id": "da47c8f7-ff7e-43d8-b873-7582f9f24f14",
+      "numero": "TEMP-R2",
+      "capacite": 20
+    }
+  ]
+}
+
+Scenario: 3. Edge Case (New ends exactly when existing starts)
+Status: 200
+Data: {
+  "available": true,
+  "conflicts": {
+    "professor": false,
+    "room": false,
+    "candidate": false
+  },
+  "professorAvailable": true,
+  "candidateAvailable": true,
+  "availableRooms": [
+    {
+      "id": "cfa1eaa5-492c-4dde-90f6-57468a1a2661",
+      "numero": "1",
+      "capacite": 10
+    },
+    {
+      "id": "32bae754-70d7-4f4a-8c57-a82d4dff3bb8",
+      "numero": "TEMP-R1",
+      "capacite": 10
+    },
+    {
+      "id": "da47c8f7-ff7e-43d8-b873-7582f9f24f14",
+      "numero": "TEMP-R2",
+      "capacite": 20
+    }
+  ]
+}
+
+Scenario: 4. Professor Conflict Only
+Status: 200
+Data: {
+  "available": false,
+  "conflicts": {
+    "professor": true,
+    "room": false,
+    "candidate": false
+  },
+  "professorAvailable": false,
+  "candidateAvailable": true,
+  "availableRooms": [
+    {
+      "id": "cfa1eaa5-492c-4dde-90f6-57468a1a2661",
+      "numero": "1",
+      "capacite": 10
+    },
+    {
+      "id": "da47c8f7-ff7e-43d8-b873-7582f9f24f14",
+      "numero": "TEMP-R2",
+      "capacite": 20
+    }
+  ]
+}
+
+Scenario: 5. Room Conflict Only
+Status: 200
+Data: {
+  "available": false,
+  "conflicts": {
+    "professor": false,
+    "room": true,
+    "candidate": false
+  },
+  "professorAvailable": true,
+  "candidateAvailable": true,
+  "availableRooms": [
+    {
+      "id": "cfa1eaa5-492c-4dde-90f6-57468a1a2661",
+      "numero": "1",
+      "capacite": 10
+    },
+    {
+      "id": "da47c8f7-ff7e-43d8-b873-7582f9f24f14",
+      "numero": "TEMP-R2",
+      "capacite": 20
+    }
+  ]
+}
+
+Scenario: 6. Candidate Conflict Only
+Status: 200
+Data: {
+  "available": false,
+  "conflicts": {
+    "professor": false,
+    "room": false,
+    "candidate": true
+  },
+  "professorAvailable": true,
+  "candidateAvailable": false,
+  "availableRooms": [
+    {
+      "id": "cfa1eaa5-492c-4dde-90f6-57468a1a2661",
+      "numero": "1",
+      "capacite": 10
+    },
+    {
+      "id": "da47c8f7-ff7e-43d8-b873-7582f9f24f14",
+      "numero": "TEMP-R2",
+      "capacite": 20
+    }
+  ]
+}
+
+Scenario: 7. Multiple Simultaneous Conflicts (ALL)
+Status: 200
+Data: {
+  "available": false,
+  "conflicts": {
+    "professor": true,
+    "room": true,
+    "candidate": true
+  },
+  "professorAvailable": false,
+  "candidateAvailable": false,
+  "availableRooms": [
+    {
+      "id": "cfa1eaa5-492c-4dde-90f6-57468a1a2661",
+      "numero": "1",
+      "capacite": 10
+    },
+    {
+      "id": "da47c8f7-ff7e-43d8-b873-7582f9f24f14",
+      "numero": "TEMP-R2",
+      "capacite": 20
+    }
+  ]
+}
+
+Scenario: 8. Validation Error (Missing date)
+Status: 400
+Data: {
+  "message": "error",
+  "error": "MISSING_REQUIRED_FIELDS"
+}
+--- RESERVATION AVAILABILITY VERIFIED SUCCESSFULLY ---
+
+Tearing down temporary DB components...
+Teardown complete.

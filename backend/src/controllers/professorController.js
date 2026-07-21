@@ -5,18 +5,16 @@ export const exportProfessorsPDF = async (req, res) => {
     try {
         const data = await professorService.getAllProfessors();
         const headers = [
-            { label: 'Nom', key: 'nom', width: 90 },
-            { label: 'Prénom', key: 'prenom', width: 90 },
-            { label: 'E-mail', key: 'email', width: 130 },
-            { label: 'Téléphone', key: 'telephone', width: 95 },
-            { label: 'Spécialité', key: 'specialite', width: 90 }
+            { label: 'Nom', key: 'nom', width: 110 },
+            { label: 'Prénom', key: 'prenom', width: 110 },
+            { label: 'E-mail', key: 'email', width: 160 },
+            { label: 'Téléphone', key: 'telephone', width: 115 }
         ];
         const rows = data.map(p => ({
             nom: p.nom || '',
             prenom: p.prenom || '',
             email: p.email || '',
-            telephone: p.telephone || '',
-            specialite: p.specialite || ''
+            telephone: p.telephone || ''
         }));
         streamPDF(res, 'Professors', headers, rows);
     } catch (error) {
@@ -40,11 +38,42 @@ export const getProfessorById = async (req, res) => {
         if (!professor) return res.status(404).json({ message: 'error', error: 'Professor not found' });
         res.json({ message: 'success', data: professor });
     } catch (error) {
-        res.status(500).json({ message: 'error', error: error.message });
+        res.status(505).json({ message: 'error', error: error.message });
     }
 };
 
 export const createProfessor = async (req, res) => {
+    const { nom, firstName, prenom, lastName, email, telephone, phone, adresse, address, type, dayOff, maxSessions } = req.body;
+    const finalNom = nom || lastName;
+    const finalPrenom = prenom || firstName;
+    const finalTelephone = telephone || phone;
+    const finalAdresse = adresse || address;
+
+    if (!finalNom || typeof finalNom !== 'string' || finalNom.trim() === '') {
+        return res.status(400).json({ message: 'error', error: 'NOM_REQUIRED' });
+    }
+    if (!finalPrenom || typeof finalPrenom !== 'string' || finalPrenom.trim() === '') {
+        return res.status(400).json({ message: 'error', error: 'PRENOM_REQUIRED' });
+    }
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        return res.status(400).json({ message: 'error', error: 'INVALID_EMAIL' });
+    }
+    if (finalTelephone && typeof finalTelephone !== 'string') {
+        return res.status(400).json({ message: 'error', error: 'telephone must be a string' });
+    }
+    if (finalAdresse && typeof finalAdresse !== 'string') {
+        return res.status(400).json({ message: 'error', error: 'adresse must be a string' });
+    }
+    if (type && typeof type !== 'string') {
+        return res.status(400).json({ message: 'error', error: 'type must be a string' });
+    }
+    if (dayOff && typeof dayOff !== 'string') {
+        return res.status(400).json({ message: 'error', error: 'dayOff must be a string' });
+    }
+    if (maxSessions !== undefined && (isNaN(maxSessions) || parseInt(maxSessions) <= 0)) {
+        return res.status(400).json({ message: 'error', error: 'maxSessions must be a positive number' });
+    }
+
     try {
         const professor = await professorService.createProfessor(req.body);
         res.status(201).json({ message: 'success', data: professor });
@@ -62,6 +91,37 @@ export const createProfessor = async (req, res) => {
 };
 
 export const updateProfessor = async (req, res) => {
+    const { nom, firstName, prenom, lastName, email, telephone, phone, adresse, address, type, dayOff, maxSessions } = req.body;
+    const finalNom = nom || lastName;
+    const finalPrenom = prenom || firstName;
+    const finalTelephone = telephone || phone;
+    const finalAdresse = adresse || address;
+
+    if (finalNom !== undefined && (typeof finalNom !== 'string' || finalNom.trim() === '')) {
+        return res.status(400).json({ message: 'error', error: 'NOM_REQUIRED' });
+    }
+    if (finalPrenom !== undefined && (typeof finalPrenom !== 'string' || finalPrenom.trim() === '')) {
+        return res.status(400).json({ message: 'error', error: 'PRENOM_REQUIRED' });
+    }
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        return res.status(400).json({ message: 'error', error: 'INVALID_EMAIL' });
+    }
+    if (finalTelephone !== undefined && typeof finalTelephone !== 'string') {
+        return res.status(400).json({ message: 'error', error: 'telephone must be a string' });
+    }
+    if (finalAdresse !== undefined && typeof finalAdresse !== 'string') {
+        return res.status(400).json({ message: 'error', error: 'adresse must be a string' });
+    }
+    if (type !== undefined && typeof type !== 'string') {
+        return res.status(400).json({ message: 'error', error: 'type must be a string' });
+    }
+    if (dayOff !== undefined && typeof dayOff !== 'string') {
+        return res.status(400).json({ message: 'error', error: 'dayOff must be a string' });
+    }
+    if (maxSessions !== undefined && (isNaN(maxSessions) || parseInt(maxSessions) <= 0)) {
+        return res.status(400).json({ message: 'error', error: 'maxSessions must be a positive number' });
+    }
+
     try {
         const professor = await professorService.updateProfessor(req.params.id, req.body);
         res.json({ message: 'success', data: professor });

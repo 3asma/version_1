@@ -1,0 +1,86 @@
+﻿node.exe : Loaded Prisma config 
+from prisma.config.ts.
+Au caractère C:\Program 
+Files\nodejs\npx.ps1:29 : 3
++   & $NODE_EXE $NPX_CLI_JS $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : Not 
+   Specified: (Loaded Prisma c..  
+  .isma.config.ts.:String) [],    
+ RemoteException
+    + FullyQualifiedErrorId : Nat 
+   iveCommandError
+ 
+
+Prisma config detected, skipping 
+environment variable loading.
+Prisma schema loaded from prisma\schema.prisma
+Datasource "db": PostgreSQL database "formation_db", schema "public" at "localhost:5432"
+
+Drift detected: Your database schema is not in sync with your migration history.
+
+The following is a summary of the differences between the expected database schema given your migrations files, and the actual schema of the database.
+
+It should be understood as the set of changes to get from the expected schema to the actual schema.
+
+[+] Added enums
+  - Gender
+
+[-] Removed enums
+  - GroupType
+
+[-] Removed tables
+  - Group
+  - GroupCandidate
+
+[*] Changed the `CandidateStatus` enum
+  [+] Added variant `PENDING`
+
+[*] Changed the `Candidate` table
+  [-] Removed column `contact`
+  [-] Removed column `formationId`
+  [-] Removed column `giftCode`
+  [+] Added column `firstContactId`
+  [+] Added column `gender`
+  [+] Added column `membershipNumber`
+  [+] Added column `registrationDate`
+  [+] Added column `secondContactId`
+  [*] Altered column `status` (default changed from `Some(Value(Enum("ACTIVE")))` to `Some(Value(Enum("PENDING")))`)
+  [+] Added unique index on columns (membershipNumber)
+  [+] Added foreign key on columns (firstContactId)
+  [+] Added foreign key on columns (secondContactId)
+
+[*] Changed the `Group` table
+  [-] Removed foreign key on columns (formationId)
+  [-] Removed foreign key on columns (professorId)
+
+[*] Changed the `GroupCandidate` table
+  [-] Removed foreign key on columns (candidateId)
+  [-] Removed foreign key on columns (groupId)
+
+[*] Changed the `Inscription` table
+  [-] Removed foreign key on columns (groupId)
+  [-] Removed column `groupId`
+
+[*] Changed the `Professor` table
+  [-] Removed column `specialite`
+
+[*] Changed the `Prospect` table
+  [-] Removed column `contact`
+  [-] Removed column `subject`
+  [+] Added column `email`
+  [+] Added column `firstContactId`
+  [+] Added column `gender`
+  [+] Added column `membershipNumber`
+  [+] Added column `phone`
+  [+] Added column `registrationDate`
+  [+] Added column `secondContactId`
+  [+] Added unique index on columns (email)
+  [+] Added unique index on columns (membershipNumber)
+  [+] Added foreign key on columns (firstContactId)
+  [+] Added foreign key on columns (secondContactId)
+
+We need to reset the "public" schema at "localhost:5432"
+
+You may use prisma migrate reset to drop the development database.
+All data will be lost.

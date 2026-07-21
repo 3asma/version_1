@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -47,6 +48,7 @@ model Candidate {
   contact       String[]
   inscriptions  Inscription[]
   groups        GroupCandidate[]
+  payments      Payment[]
   action        String?
   status        CandidateStatus @default(PENDING)
   createdAt     DateTime        @default(now())
@@ -86,6 +88,7 @@ model Formation {
   description   String?
   inscriptions  Inscription[]
   groups        Group[]
+  payments      Payment[]
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 }
@@ -99,6 +102,7 @@ model Room {
   description String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  reservations Reservation[]
 }
 
 model Professor {
@@ -114,6 +118,7 @@ model Professor {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   groups      Group[]
+  reservations Reservation[]
 }
 
 enum LearningMode {
@@ -148,6 +153,7 @@ model Inscription {
   group           Group?            @relation(fields: [groupId], references: [id], onDelete: SetNull)
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
+  reservations    Reservation[]
 
   @@index([candidateId])
   @@index([formationId])
@@ -207,4 +213,70 @@ model Commercial {
   action    String   @default("action1")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+enum PaymentMethod {
+  CASH
+  CARD
+  BANK_TRANSFER
+  CHEQUE
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+model Payment {
+  id            String        @id @default(uuid())
+  paymentCode   String        @unique
+  candidateId   String
+  formationId   String
+  amount        Float
+  paymentMethod PaymentMethod
+  status        PaymentStatus
+  paymentDate   DateTime      @default(now())
+  note          String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  candidate     Candidate     @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  formation     Formation     @relation(fields: [formationId], references: [id], onDelete: Cascade)
+
+  @@index([candidateId])
+  @@index([formationId])
+  @@index([paymentDate])
+}
+
+enum ReservationStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+model Reservation {
+  id              String            @id @default(uuid())
+  reservationCode String            @unique
+  reservationDate DateTime
+  startTime       DateTime
+  endTime         DateTime
+  status          ReservationStatus @default(PENDING)
+  inscriptionId   String
+  professorId     String
+  roomId          String
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  inscription     Inscription       @relation(fields: [inscriptionId], references: [id], onDelete: Cascade)
+  professor       Professor         @relation(fields: [professorId], references: [id], onDelete: Cascade)
+  room            Room              @relation(fields: [roomId], references: [id], onDelete: Cascade)
+
+  @@index([reservationDate])
+  @@index([professorId])
+  @@index([roomId])
+  @@index([inscriptionId])
+  @@unique([inscriptionId, reservationDate, startTime])
 }

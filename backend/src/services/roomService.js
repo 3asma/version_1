@@ -2,31 +2,34 @@ import prisma from '../config/prisma.js';
 
 class RoomService {
     normalizeData(data) {
-        const n = { ...data };
-        if (n.numero) n.numero = n.numero.trim().toUpperCase();
-        if (n.roomNumber) {
-            n.numero = n.roomNumber.trim().toUpperCase();
-            delete n.roomNumber;
+        const n = {};
+
+        let rawNumero = data.numero || data.roomNumber;
+        let rawCapacite = data.capacite !== undefined ? data.capacite : data.capacity;
+
+        if (rawNumero !== undefined && rawNumero !== null) {
+            n.numero = String(rawNumero).trim().toUpperCase();
         }
-        if (n.description) n.description = n.description.trim();
-        if (n.type) n.type = n.type.trim();
+        if (rawCapacite !== undefined && rawCapacite !== null) {
+            n.capacite = parseInt(rawCapacite);
+        }
         return n;
     }
 
     validateData(data, isUpdate = false) {
-        const { numero, capacite, capacity } = data;
-
-        const actualCapacite = capacite !== undefined ? capacite : capacity;
+        const { numero, capacite } = data;
 
         if (!isUpdate) {
             if (!numero || numero.trim() === '') throw new Error('NUMERO_REQUIRED');
-            if (actualCapacite === undefined || actualCapacite === null) throw new Error('CAPACITE_REQUIRED');
+            if (capacite === undefined || capacite === null) throw new Error('CAPACITE_REQUIRED');
         } else {
             if (numero !== undefined && numero.trim() === '') throw new Error('NUMERO_REQUIRED');
         }
 
-        if (actualCapacite !== undefined && parseInt(actualCapacite) <= 0) {
-            throw new Error('INVALID_CAPACITE');
+        if (capacite !== undefined) {
+            if (isNaN(capacite) || capacite <= 0) {
+                throw new Error('INVALID_CAPACITE');
+            }
         }
     }
 
@@ -46,16 +49,8 @@ class RoomService {
         const existing = await prisma.room.findUnique({ where: { numero: normalized.numero } });
         if (existing) throw new Error('DUPLICATE_ROOM_NUMBER');
 
-        const capacite = normalized.capacite !== undefined ? normalized.capacite : normalized.capacity;
-
         return await prisma.room.create({
-            data: {
-                numero: normalized.numero,
-                capacite: parseInt(capacite),
-                type: normalized.type || 'Individuel',
-                available: normalized.available !== undefined ? normalized.available : true,
-                description: normalized.description || ''
-            }
+            data: normalized
         });
     }
 
@@ -68,16 +63,9 @@ class RoomService {
             if (existing && existing.id !== id) throw new Error('DUPLICATE_ROOM_NUMBER');
         }
 
-        const updateData = { ...normalized };
-        if (updateData.capacite !== undefined) updateData.capacite = parseInt(updateData.capacite);
-        if (updateData.capacity !== undefined) {
-            updateData.capacite = parseInt(updateData.capacity);
-            delete updateData.capacity;
-        }
-
         return await prisma.room.update({
             where: { id },
-            data: updateData
+            data: normalized
         });
     }
 

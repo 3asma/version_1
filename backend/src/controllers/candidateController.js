@@ -47,7 +47,7 @@ export const getCandidateById = async (req, res) => {
 };
 
 export const createCandidate = async (req, res) => {
-    const { firstName, lastName, age, occupation, observation, email, contact } = req.body;
+    const { firstName, lastName, age, occupation, observation, email, phone, firstContactId, secondContactId, action, membershipNumber, gender, registrationDate, status } = req.body;
 
     // Strict validation
     if (!firstName || !lastName || !age || !occupation || !observation) {
@@ -65,8 +65,29 @@ export const createCandidate = async (req, res) => {
     if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         return res.status(400).json({ message: 'error', error: 'Invalid email format' });
     }
-    if (contact && !Array.isArray(contact)) {
-        return res.status(400).json({ message: 'error', error: 'Contact must be an array of strings' });
+    if (phone && typeof phone !== 'string') {
+        return res.status(400).json({ message: 'error', error: 'phone must be a string' });
+    }
+    if (firstContactId && typeof firstContactId !== 'string') {
+        return res.status(400).json({ message: 'error', error: 'firstContactId must be a string' });
+    }
+    if (secondContactId && typeof secondContactId !== 'string') {
+        return res.status(400).json({ message: 'error', error: 'secondContactId must be a string' });
+    }
+    if (action && typeof action !== 'string') {
+        return res.status(400).json({ message: 'error', error: 'action must be a string' });
+    }
+    if (membershipNumber && typeof membershipNumber !== 'string') {
+        return res.status(400).json({ message: 'error', error: 'membershipNumber must be a string' });
+    }
+    if (gender && !['MALE', 'FEMALE', 'male', 'female', ''].includes(gender)) {
+        return res.status(400).json({ message: 'error', error: 'Invalid gender. Use MALE or FEMALE' });
+    }
+    if (registrationDate && isNaN(Date.parse(registrationDate))) {
+        return res.status(400).json({ message: 'error', error: 'Invalid registrationDate format' });
+    }
+    if (status && !['ACTIVE', 'INACTIVE', 'PENDING', 'active', 'inactive', 'pending'].includes(status)) {
+        return res.status(400).json({ message: 'error', error: 'Invalid status. Use ACTIVE, INACTIVE, or PENDING' });
     }
 
     try {
@@ -76,15 +97,22 @@ export const createCandidate = async (req, res) => {
         let status = 500;
         let msg = error.message;
         if (error.message === 'EMAIL_TAKEN') { status = 409; msg = 'Email already in use'; }
+        if (error.message === 'MEMBERSHIP_NUMBER_TAKEN') { status = 409; msg = 'Membership number already in use'; }
         if (error.message === 'CODE_GENERATION_FAILED') { status = 503; msg = 'Could not generate unique candidate code'; }
         res.status(status).json({ message: 'error', error: msg });
     }
 };
 
 export const updateCandidate = async (req, res) => {
-    const { age, occupation, observation, email, contact, status } = req.body;
+    const { firstName, lastName, age, occupation, observation, email, phone, firstContactId, secondContactId, action, status, gender, registrationDate, membershipNumber } = req.body;
 
     // Partial validation for updates
+    if (firstName && typeof firstName !== 'string') {
+        return res.status(400).json({ message: 'error', error: 'firstName must be a string' });
+    }
+    if (lastName && typeof lastName !== 'string') {
+        return res.status(400).json({ message: 'error', error: 'lastName must be a string' });
+    }
     if (age !== undefined && (typeof age !== 'number' || age <= 0)) {
         return res.status(400).json({ message: 'error', error: 'Age must be a positive number' });
     }
@@ -97,11 +125,29 @@ export const updateCandidate = async (req, res) => {
     if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         return res.status(400).json({ message: 'error', error: 'Invalid email format' });
     }
+    if (phone && typeof phone !== 'string') {
+        return res.status(400).json({ message: 'error', error: 'phone must be a string' });
+    }
     if (status && !['ACTIVE', 'INACTIVE', 'PENDING', 'active', 'inactive', 'pending'].includes(status)) {
         return res.status(400).json({ message: 'error', error: 'Invalid status. Use ACTIVE, INACTIVE, or PENDING' });
     }
-    if (contact && !Array.isArray(contact)) {
-        return res.status(400).json({ message: 'error', error: 'Contact must be an array of strings' });
+    if (firstContactId && typeof firstContactId !== 'string') {
+        return res.status(400).json({ message: 'error', error: 'firstContactId must be a string' });
+    }
+    if (secondContactId && typeof secondContactId !== 'string') {
+        return res.status(400).json({ message: 'error', error: 'secondContactId must be a string' });
+    }
+    if (action && typeof action !== 'string') {
+        return res.status(400).json({ message: 'error', error: 'action must be a string' });
+    }
+    if (membershipNumber && typeof membershipNumber !== 'string') {
+        return res.status(400).json({ message: 'error', error: 'membershipNumber must be a string' });
+    }
+    if (gender && !['MALE', 'FEMALE', 'male', 'female', ''].includes(gender)) {
+        return res.status(400).json({ message: 'error', error: 'Invalid gender. Use MALE or FEMALE' });
+    }
+    if (registrationDate && isNaN(Date.parse(registrationDate))) {
+        return res.status(400).json({ message: 'error', error: 'Invalid registrationDate format' });
     }
 
     try {
@@ -111,6 +157,7 @@ export const updateCandidate = async (req, res) => {
         let statusCode = 400;
         let msg = error.message;
         if (error.message === 'EMAIL_TAKEN') { statusCode = 409; msg = 'Email already in use'; }
+        if (error.message === 'MEMBERSHIP_NUMBER_TAKEN') { statusCode = 409; msg = 'Membership number already in use'; }
         if (error.message === 'INVALID_STATUS') { statusCode = 400; msg = 'Invalid status used'; }
         if (error.code === 'P2025') { statusCode = 404; msg = 'Candidate not found'; }
         res.status(statusCode).json({ message: 'error', error: msg });

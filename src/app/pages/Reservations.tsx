@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
@@ -10,6 +10,8 @@ import { Badge } from '../components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
 import { Calendar, Check, X } from 'lucide-react';
 import { toast } from 'sonner';
+import api from '../services/api';
+import { LearningGroupDetailsDialog } from '../components/LearningGroupDetailsDialog';
 
 export default function Reservations() {
   const {
@@ -17,13 +19,15 @@ export default function Reservations() {
     professors,
     rooms,
     formations,
-    addSession,
     reservationRequests,
     updateReservationRequest,
-    getCandidateAssignments,
-    getProfessorAssignments,
-    sessions
+    inscriptions
   } = useApp();
+
+  // Local helper functions for assignments as they are not defined in AppContext
+  const getCandidateAssignments = (candidateId: string) => {
+    return inscriptions.filter(ins => ins.candidateId === candidateId);
+  };
 
   const [formData, setFormData] = useState({
     candidateCode: '',
@@ -31,34 +35,165 @@ export default function Reservations() {
     professorId: '',
     roomId: '',
     date: '',
-    time: ''
+    startTime: '',
+    endTime: ''
   });
 
   const [selectedCandidate, setSelectedCandidate] = useState<typeof candidates[0] | null>(null);
   const [candidateFormations, setCandidateFormations] = useState<ReturnType<typeof getCandidateAssignments>>([]);
+  const [selectedLearningGroup, setSelectedLearningGroup] = useState<any | null>(null);
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+
+  const [searchResult, setSearchResult] = useState<{
+    exists: boolean;
+    inscriptionId: string;
+    candidateId: string;
+    formationId: string;
+    professorId: string | null;
+    roomId: string | null;
+    learningGroup?: any | null;
+  } | null>(null);
+
+  const [isSearching, setIsSearching] = useState(false);
+  const [isCheckingAvailability, setIsCheckingAvailability] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const [availabilityResult, setAvailabilityResult] = useState<{
+    available: boolean;
+    professorAvailable: boolean;
+    candidateAvailable: boolean;
+    availableRooms: Array<{
+      id: string;
+      numero: string;
+      capacite?: number;
+    }>;
+  } | null>(null);
 
   const handleCandidateCodeChange = (code: string) => {
-    setFormData(prev => ({ ...prev, candidateCode: code, formationId: '' }));
-    const candidate = candidates.find(c => c.candidateCode.toLowerCase() === code.toLowerCase());
-    setSelectedCandidate(candidate || null);
+    setFormData(prev => ({
+      ...prev,
+      candidateCode: code,
+      formationId: '',
+      professorId: '',
+      roomId: ''
+    }));
+    setSelectedCandidate(null);
+    setSelectedLearningGroup(null);
+    setSearchResult(null);
+    setAvailabilityResult(null);
+    setCandidateFormations([]);
+  };
 
-    if (candidate) {
-      const assignments = getCandidateAssignments(candidate.id);
-      setCandidateFormations(assignments);
-      // Auto-select formation if only one
-      if (assignments.length === 1) {
-        setFormData(prev => ({ ...prev, formationId: assignments[0].formationId }));
+  const handleSearch = async (enteredCode: string) => {
+    const codeToSearch = enteredCode || formData.candidateCode;
+    if (!codeToSearch.trim()) {
+      toast.error('Veuillez saisir un code');
+      return;
+    }
+
+    setIsSearching(true);
+    setSelectedCandidate(null);
+    setCandidateFormations([]);
+    setSearchResult(null);
+    setAvailabilityResult(null);
+    setSelectedLearningGroup(null);
+
+    try {
+      const res = await api.get(`/reservations/search?code=${encodeURIComponent(codeToSearch.trim())}`);
+      if (res.data.message === 'success') {
+        const data = res.data.data;
+        setSearchResult(data);
+        setSelectedLearningGroup(data.learningGroup || null);
+
+        // Find candidate in context to display name
+        const matchCandidate = candidates.find(c => c.id === data.candidateId);
+        setSelectedCandidate(matchCandidate || null);
+
+        // Populate details: note professorId is saved but roomId is NOT prefused to force checking first
+        setFormData(prev => ({
+          ...prev,
+          formationId: data.formationId || '',
+          professorId: data.professorId || '',
+          roomId: ''
+        }));
+
+        if (matchCandidate) {
+          const assignments = getCandidateAssignments(matchCandidate.id);
+          setCandidateFormations(assignments);
+        }
+        toast.success('Bénéficiaire / Inscription identifié(e)');
       }
-    } else {
+    } catch (error: any) {
+      setSearchResult(null);
+      setSelectedCandidate(null);
+      setSelectedLearningGroup(null);
       setCandidateFormations([]);
+      const status = error.response?.status;
+      if (status === 404) {
+        toast.error('Aucune inscription ou candidat trouvé.');
+      } else if (status === 400) {
+        toast.error(error.response?.data?.error || 'Validation error');
+      } else {
+        toast.error('Une erreur est survenue lors de la recherche.');
+      }
+    } finally {
+      setIsSearching(false);
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Perform availability checks reactively
+  useEffect(() => {
+    const runAvailabilityCheck = async () => {
+      const { date, startTime, endTime } = formData;
+      const candidateId = searchResult?.candidateId;
+      const professorId = searchResult?.professorId;
+
+      if (!date || !startTime || !endTime || !professorId || !candidateId) {
+        setAvailabilityResult(null);
+        return;
+      }
+
+      try {
+        setIsCheckingAvailability(true);
+        const payload = {
+          reservationDate: `${date}T00:00:00.000Z`,
+          startTime: `${date}T${startTime}:00.000Z`,
+          endTime: `${date}T${endTime}:00.000Z`,
+          professorId,
+          candidateId
+        };
+        const res = await api.post('/reservations/availability', payload);
+        if (res.data.message === 'success') {
+          setAvailabilityResult(res.data.data);
+        }
+      } catch (err) {
+        console.error('Availability check failed:', err);
+        setAvailabilityResult(null);
+      } finally {
+        setIsCheckingAvailability(false);
+      }
+    };
+
+    runAvailabilityCheck();
+  }, [formData.date, formData.startTime, formData.endTime, searchResult?.professorId, searchResult?.candidateId]);
+
+  // Reset roomId if it becomes unavailable
+  useEffect(() => {
+    if (availabilityResult) {
+      const stillAvailable = availabilityResult.availableRooms.some(r => r.id === formData.roomId);
+      if (!stillAvailable) {
+        setFormData(prev => ({ ...prev, roomId: '' }));
+      }
+    } else {
+      setFormData(prev => ({ ...prev, roomId: '' }));
+    }
+  }, [availabilityResult]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!selectedCandidate) {
-      toast.error('Candidat introuvable');
+    if (!selectedCandidate || !searchResult) {
+      toast.error('Veuillez d\'abord rechercher et sélectionner un candidat valide');
       return;
     }
 
@@ -67,37 +202,62 @@ export default function Reservations() {
       return;
     }
 
-    const formation = formations.find(f => f.id === formData.formationId);
-    if (!formation) {
-      toast.error('Formation introuvable');
+    const { date, startTime, endTime, roomId } = formData;
+    const professorId = searchResult.professorId;
+    if (!date || !startTime || !endTime || !professorId || !roomId) {
+      toast.error('Veuillez remplir tous les champs requis');
       return;
     }
 
-    const success = addSession({
-      candidateId: selectedCandidate.id,
-      professorId: formData.professorId,
-      roomId: formData.roomId,
-      formationId: formData.formationId,
-      date: formData.date,
-      time: formData.time,
-      duration: formation.duration
-    });
-
-    if (success) {
-      toast.success('Séance réservée avec succès');
-      setFormData({
-        candidateCode: '',
-        formationId: '',
-        professorId: '',
-        roomId: '',
-        date: '',
-        time: ''
-      });
-      setSelectedCandidate(null);
-      setCandidateFormations([]);
-    } else {
-      toast.error('Impossible de réserver : conflit d\'horaire ou contraintes non respectées');
+    if (!availabilityResult || !availabilityResult.professorAvailable || !availabilityResult.candidateAvailable) {
+      toast.error('Création impossible : ressources indisponibles');
+      return;
     }
+
+    try {
+      setIsSubmitting(true);
+      const payload = {
+        reservationCode: `RES-${Date.now()}`,
+        reservationDate: `${date}T00:00:00.000Z`,
+        startTime: `${date}T${startTime}:00.000Z`,
+        endTime: `${date}T${endTime}:00.000Z`,
+        inscriptionId: searchResult.inscriptionId,
+        professorId,
+        roomId,
+        status: 'CONFIRMED'
+      };
+
+      const res = await api.post('/reservations', payload);
+      if (res.status === 201 || res.status === 200) {
+        toast.success('Séance réservée avec succès');
+        setFormData({
+          candidateCode: '',
+          formationId: '',
+          professorId: '',
+          roomId: '',
+          date: '',
+          startTime: '',
+          endTime: ''
+        });
+        setSelectedCandidate(null);
+        setSelectedLearningGroup(null);
+        setCandidateFormations([]);
+        setSearchResult(null);
+        setAvailabilityResult(null);
+      }
+    } catch (error: any) {
+      toast.error(error.response?.data?.error || 'Erreur lors de la réservation');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const getProfName = () => {
+    if (!selectedLearningGroup?.professor) return 'Non affecté';
+    const p = selectedLearningGroup.professor;
+    const prenom = p.prenom !== undefined ? p.prenom : (p as any).firstName || '';
+    const nom = p.nom !== undefined ? p.nom : (p as any).lastName || '';
+    return `${prenom} ${nom}`.trim() || 'Non affecté';
   };
 
   const handleApprove = (requestId: string) => {
@@ -109,61 +269,6 @@ export default function Reservations() {
     updateReservationRequest(requestId, 'rejected');
     toast.success('Demande rejetée');
   };
-
-  // Check if professor is available at the given date and time
-  const isProfessorAvailable = (professorId: string, date: string, time: string) => {
-    if (!date || !time) return true; // If no date/time selected, show all
-
-    // Check if professor has any session at this date/time
-    const hasConflict = sessions.some(session =>
-      session.professorId === professorId &&
-      session.date === date &&
-      session.time === time &&
-      session.status !== 'cancelled'
-    );
-
-    return !hasConflict;
-  };
-
-  // Check if room is available at the given date and time
-  const isRoomAvailable = (roomId: string, date: string, time: string) => {
-    if (!date || !time) return true; // If no date/time selected, show all
-
-    // Check if room has any session at this date/time
-    const hasConflict = sessions.some(session =>
-      session.roomId === roomId &&
-      session.date === date &&
-      session.time === time &&
-      session.status !== 'cancelled'
-    );
-
-    return !hasConflict;
-  };
-
-  const availableProfessors = professors.filter(prof => {
-    if (!formData.formationId) return false;
-    // Check if professor is assigned to this formation
-    const profAssignments = getProfessorAssignments(prof.id);
-    const isAssigned = profAssignments.some(assignment => assignment.formationId === formData.formationId);
-
-    // Check availability for selected date/time
-    if (formData.date && formData.time) {
-      return isAssigned && isProfessorAvailable(prof.id, formData.date, formData.time);
-    }
-
-    return isAssigned;
-  });
-
-  const availableRooms = rooms.filter(room => {
-    if (!room.available) return false;
-
-    // Check availability for selected date/time
-    if (formData.date && formData.time) {
-      return isRoomAvailable(room.id, formData.date, formData.time);
-    }
-
-    return true;
-  });
 
   const pendingRequests = reservationRequests.filter(r => r.status === 'pending');
 
@@ -195,44 +300,63 @@ export default function Reservations() {
             <CardHeader>
               <CardTitle>Réserver une séance</CardTitle>
               <CardDescription>
-                Recherchez un candidat et créez une nouvelle réservation
+                Recherchez un candidat ou inscription via son code et créez une nouvelle réservation
               </CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Candidate Search */}
                 <div className="space-y-2">
-                  <Label htmlFor="candidateCode">Code candidat *</Label>
-                  <Input
-                    id="candidateCode"
-                    placeholder="Ex: CAND001"
-                    value={formData.candidateCode}
-                    onChange={(e) => handleCandidateCodeChange(e.target.value)}
-                    required
-                  />
+                  <Label htmlFor="candidateCode">Code candidat ou inscription *</Label>
+                  <div className="flex gap-2">
+                    <Input
+                      id="candidateCode"
+                      placeholder="Ex: CAN-2026-9577 ou INS-2026-0001"
+                      value={formData.candidateCode}
+                      onChange={(e) => handleCandidateCodeChange(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          handleSearch(formData.candidateCode);
+                        }
+                      }}
+                      required
+                    />
+                    <Button
+                      type="button"
+                      onClick={() => handleSearch(formData.candidateCode)}
+                      disabled={isSearching}
+                    >
+                      {isSearching ? 'Recherche...' : 'Rechercher'}
+                    </Button>
+                  </div>
                 </div>
 
-                {/* Candidate Info */}
-                {selectedCandidate && (
+                {/* Group Info */}
+                {selectedLearningGroup && (
                   <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
                     <div>
-                      <p className="text-sm text-gray-600">Candidat</p>
-                      <p className="font-medium">
-                        {selectedCandidate.firstName} {selectedCandidate.lastName}
-                      </p>
+                      <p className="text-sm text-gray-600">Groupe</p>
+                      <button
+                        type="button"
+                        className="font-bold text-indigo-650 hover:underline text-left cursor-pointer"
+                        onClick={() => setIsDetailsOpen(true)}
+                      >
+                        {selectedLearningGroup.groupName}
+                      </button>
                     </div>
                   </div>
                 )}
 
                 {/* Reservation Details */}
-                {selectedCandidate && (
+                {selectedCandidate && searchResult && (
                   <>
                     {candidateFormations.length > 1 && (
                       <div className="space-y-2">
                         <Label htmlFor="formationId">Formation *</Label>
                         <Select
                           value={formData.formationId}
-                          onValueChange={(value) => setFormData(prev => ({ ...prev, formationId: value, professorId: '', roomId: '' }))}
+                          onValueChange={(value) => setFormData(prev => ({ ...prev, formationId: value, roomId: '' }))}
                           required
                         >
                           <SelectTrigger>
@@ -244,7 +368,7 @@ export default function Reservations() {
                               if (!formation) return null;
                               return (
                                 <SelectItem key={assignment.id} value={formation.id}>
-                                  {formation.subject} - {formation.level} ({formation.type})
+                                  {formation.matiere} - {formation.niveau}
                                 </SelectItem>
                               );
                             })}
@@ -253,67 +377,43 @@ export default function Reservations() {
                       </div>
                     )}
 
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-3 gap-4">
                       <div className="space-y-2">
                         <Label htmlFor="date">Date *</Label>
                         <Input
                           id="date"
                           type="date"
                           value={formData.date}
-                          onChange={(e) => setFormData(prev => ({ ...prev, date: e.target.value, professorId: '', roomId: '' }))}
+                          onChange={(e) => setFormData(prev => ({ ...prev, date: e.target.value, roomId: '' }))}
                           required
                         />
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="time">Heure *</Label>
+                        <Label htmlFor="startTime">Heure début *</Label>
                         <Input
-                          id="time"
+                          id="startTime"
                           type="time"
-                          value={formData.time}
-                          onChange={(e) => setFormData(prev => ({ ...prev, time: e.target.value, professorId: '', roomId: '' }))}
+                          value={formData.startTime}
+                          onChange={(e) => setFormData(prev => ({ ...prev, startTime: e.target.value, roomId: '' }))}
+                          required
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="endTime">Heure fin *</Label>
+                        <Input
+                          id="endTime"
+                          type="time"
+                          value={formData.endTime}
+                          onChange={(e) => setFormData(prev => ({ ...prev, endTime: e.target.value, roomId: '' }))}
                           required
                         />
                       </div>
                     </div>
 
-                    {formData.date && formData.time && (
-                      <div className="p-4 bg-green-50 rounded-lg border border-green-200">
-                        <p className="text-sm text-green-700 font-medium">
-                          Vérification de disponibilité pour le {formData.date} à {formData.time}
-                        </p>
-                        <p className="text-xs text-green-600 mt-1">
-                          {availableProfessors.length} professeur(s) et {availableRooms.length} salle(s) disponible(s)
-                        </p>
-                      </div>
-                    )}
-
-                    {formData.date && formData.time && formData.formationId && (
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="professorId">Professeur disponible *</Label>
-                          <Select
-                            value={formData.professorId}
-                            onValueChange={(value) => setFormData(prev => ({ ...prev, professorId: value }))}
-                            required
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="Sélectionner un professeur" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {availableProfessors.length === 0 ? (
-                                <div className="p-2 text-sm text-gray-500">Aucun professeur disponible</div>
-                              ) : (
-                                availableProfessors.map(prof => (
-                                  <SelectItem key={prof.id} value={prof.id}>
-                                    {prof.firstName} {prof.lastName}
-                                  </SelectItem>
-                                ))
-                              )}
-                            </SelectContent>
-                          </Select>
-                        </div>
-
+                    {formData.date && formData.startTime && formData.endTime && (
+                      <div className="grid grid-cols-1 gap-4">
                         <div className="space-y-2">
                           <Label htmlFor="roomId">Salle disponible *</Label>
                           <Select
@@ -325,12 +425,14 @@ export default function Reservations() {
                               <SelectValue placeholder="Sélectionner une salle" />
                             </SelectTrigger>
                             <SelectContent>
-                              {availableRooms.length === 0 ? (
-                                <div className="p-2 text-sm text-gray-500">Aucune salle disponible</div>
+                              {!availabilityResult?.availableRooms || availabilityResult.availableRooms.length === 0 ? (
+                                <div className="p-2 text-sm text-gray-500">
+                                  {availabilityResult ? "Aucune salle disponible" : "Vérification en cours..."}
+                                </div>
                               ) : (
-                                availableRooms.map(room => (
+                                availabilityResult.availableRooms.map(room => (
                                   <SelectItem key={room.id} value={room.id}>
-                                    Salle {room.roomNumber} ({room.type})
+                                    Salle {room.numero} (Capacité: {room.capacite || 'N/A'})
                                   </SelectItem>
                                 ))
                               )}
@@ -340,9 +442,33 @@ export default function Reservations() {
                       </div>
                     )}
 
+                    {formData.date && formData.startTime && formData.endTime && (
+                      <div className="p-4 bg-gray-50 rounded-lg border border-gray-200 mt-4 space-y-2">
+                        <p className="font-semibold text-sm mb-2 text-gray-700">Statut de disponibilité :</p>
+                        {isCheckingAvailability ? (
+                          <p className="text-sm text-gray-500">Vérification de disponibilité en cours...</p>
+                        ) : availabilityResult ? (
+                          <div className="space-y-1 text-sm font-semibold">
+                            <p className={!availabilityResult.professorAvailable ? "text-red-600" : "text-green-600"}>
+                              {!availabilityResult.professorAvailable
+                                ? `✗ Professeur : ${getProfName()} indisponible`
+                                : `✓ Professeur : ${getProfName()} disponible`}
+                            </p>
+                            {availabilityResult.availableRooms.length === 0 && (
+                              <p className="text-red-600 mt-2 font-bold">
+                                Aucune salle n'est disponible pour ce créneau.
+                              </p>
+                            )}
+                          </div>
+                        ) : (
+                          <p className="text-sm text-red-500">Impossible de vérifier la disponibilité</p>
+                        )}
+                      </div>
+                    )}
+
                     <div className="flex justify-end">
-                      <Button type="submit">
-                        Réserver la séance
+                      <Button type="submit" disabled={isSubmitting}>
+                        {isSubmitting ? 'Réservation...' : 'Réserver la séance'}
                       </Button>
                     </div>
                   </>
@@ -370,7 +496,7 @@ export default function Reservations() {
                   {/* Cancellation Requests */}
                   {pendingRequests.filter(r => r.type === 'professor_cancellation' || r.type === 'candidate_cancellation').length > 0 && (
                     <div>
-                      <h3 className="text-lg font-semibold mb-3 text-red-600">Demandes d'annulation</h3>
+                      <h3 className="text-lg font-semibold mb-3 text-red-650">Demandes d'annulation</h3>
                       <Table>
                         <TableHeader>
                           <TableRow>
@@ -390,6 +516,9 @@ export default function Reservations() {
                               const candidate = candidates.find(c => c.id === request.candidateId);
                               const room = rooms.find(r => r.id === request.roomId);
 
+                              const profFullName = professor ? `${professor.prenom} ${professor.nom}` : 'N/A';
+                              const candFullName = candidate ? `${candidate.firstName} ${candidate.lastName}` : 'N/A';
+
                               return (
                                 <TableRow key={request.id}>
                                   <TableCell>
@@ -399,18 +528,18 @@ export default function Reservations() {
                                   </TableCell>
                                   <TableCell className="font-medium">
                                     {request.type === 'professor_cancellation'
-                                      ? `${professor?.firstName} ${professor?.lastName}`
-                                      : `${candidate?.firstName} ${candidate?.lastName}`
+                                      ? profFullName
+                                      : candFullName
                                     }
                                   </TableCell>
                                   <TableCell>
-                                    {candidate?.firstName} {candidate?.lastName}
+                                    {candFullName}
                                   </TableCell>
                                   <TableCell>
                                     {request.date} à {request.time}
                                   </TableCell>
                                   <TableCell>
-                                    Salle {room?.roomNumber}
+                                    Salle {room?.numero || 'N/A'}
                                   </TableCell>
                                   <TableCell>
                                     <div className="flex gap-2">
@@ -426,7 +555,7 @@ export default function Reservations() {
                                       <Button
                                         size="sm"
                                         variant="outline"
-                                        className="text-red-600 border-red-600 hover:bg-red-50"
+                                        className="text-red-650 border-red-650 hover:bg-red-50"
                                         onClick={() => handleReject(request.id)}
                                       >
                                         <X size={16} className="mr-1" />
@@ -445,7 +574,7 @@ export default function Reservations() {
                   {/* Candidate Requests */}
                   {pendingRequests.filter(r => r.type === 'candidate_request').length > 0 && (
                     <div>
-                      <h3 className="text-lg font-semibold mb-3 text-blue-600">Demandes de réservation des candidats</h3>
+                      <h3 className="text-lg font-semibold mb-3 text-blue-650">Demandes de réservation des candidats</h3>
                       <Table>
                         <TableHeader>
                           <TableRow>
@@ -461,14 +590,15 @@ export default function Reservations() {
                             .map((request) => {
                               const candidate = candidates.find(c => c.id === request.candidateId);
                               const formation = formations.find(f => f.id === request.formationId);
+                              const candFullName = candidate ? `${candidate.firstName} ${candidate.lastName}` : 'N/A';
 
                               return (
                                 <TableRow key={request.id}>
                                   <TableCell className="font-medium">
-                                    {candidate?.firstName} {candidate?.lastName}
+                                    {candFullName}
                                   </TableCell>
                                   <TableCell>
-                                    {formation ? `${formation.subject} - ${formation.level}` : 'Non spécifiée'}
+                                    {formation ? `${formation.matiere} - ${formation.niveau}` : 'Non spécifiée'}
                                   </TableCell>
                                   <TableCell>
                                     {request.date} à {request.time}
@@ -487,7 +617,7 @@ export default function Reservations() {
                                       <Button
                                         size="sm"
                                         variant="outline"
-                                        className="text-red-600 border-red-600 hover:bg-red-50"
+                                        className="text-red-650 border-red-650 hover:bg-red-50"
                                         onClick={() => handleReject(request.id)}
                                       >
                                         <X size={16} className="mr-1" />
@@ -508,6 +638,11 @@ export default function Reservations() {
           </Card>
         </TabsContent>
       </Tabs>
+      <LearningGroupDetailsDialog
+        isOpen={isDetailsOpen}
+        onClose={() => setIsDetailsOpen(false)}
+        group={selectedLearningGroup}
+      />
     </div>
   );
 }

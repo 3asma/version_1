@@ -34,7 +34,7 @@ class GroupService {
 
         if (!nom || nom.trim() === '') throw new Error('GROUP_NAME_REQUIRED');
         if (!type) throw new Error('GROUP_TYPE_REQUIRED');
-        if (!['MONOME', 'BINOME', 'GROUPE'].includes(type)) {
+        if (!['MONOME', 'BINOME', 'GROUPE', 'SPECIFIQUE'].includes(type)) {
             throw new Error('INVALID_GROUP_TYPE');
         }
         if (!formationId) throw new Error('FORMATION_ID_REQUIRED');
@@ -65,16 +65,14 @@ class GroupService {
             // Validation 2: Verify candidate has a valid Inscription for the Group's Formation
             const inscription = await prisma.inscription.findFirst({
                 where: {
-                    candidateId,
                     formationId,
-                    status: { in: ['WAITING', 'ASSIGNED', 'ACTIVE'] }
+                    status: { in: ['WAITING', 'ASSIGNED', 'ACTIVE'] },
+                    candidateId
                 }
             });
             if (!inscription) {
                 throw new Error(`CANDIDATE_NO_ACTIVE_INSCRIPTION_${candidateId}`);
             }
-
-            // Validation 4: Prevent duplicate membership in same group (enforced by unique array, but let's double check index)
         }
 
         // Ensure array uniqueness
@@ -102,9 +100,9 @@ class GroupService {
         for (const candidateId of uniqueCandidateIds) {
             const inscription = await prisma.inscription.findFirst({
                 where: {
-                    candidateId,
                     formationId,
-                    status: 'WAITING'
+                    status: 'WAITING',
+                    candidateId
                 }
             });
             if (inscription) {
@@ -137,7 +135,7 @@ class GroupService {
 
         const newType = type !== undefined ? type : group.type;
         if (type !== undefined) {
-            if (!['MONOME', 'BINOME', 'GROUPE'].includes(type)) {
+            if (!['MONOME', 'BINOME', 'GROUPE', 'SPECIFIQUE'].includes(type)) {
                 throw new Error('INVALID_GROUP_TYPE');
             }
             updateData.type = type;
@@ -174,9 +172,9 @@ class GroupService {
                 for (const member of group.members) {
                     const inscription = await prisma.inscription.findFirst({
                         where: {
-                            candidateId: member.candidateId,
                             formationId: newFormationId,
-                            status: { in: ['WAITING', 'ASSIGNED', 'ACTIVE'] }
+                            status: { in: ['WAITING', 'ASSIGNED', 'ACTIVE'] },
+                            candidateId: member.candidateId
                         }
                     });
                     if (!inscription) {
@@ -226,9 +224,9 @@ class GroupService {
         // 3. Verify candidate has a valid Inscription for the Group's Formation
         const inscription = await prisma.inscription.findFirst({
             where: {
-                candidateId,
                 formationId: group.formationId,
-                status: { in: ['WAITING', 'ASSIGNED', 'ACTIVE'] }
+                status: { in: ['WAITING', 'ASSIGNED', 'ACTIVE'] },
+                candidateId
             }
         });
         if (!inscription) throw new Error('CANDIDATE_NO_ACTIVE_INSCRIPTION');

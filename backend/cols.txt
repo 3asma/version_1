@@ -1,0 +1,62 @@
+[
+  {
+    "column_name": "age",
+    "data_type": "integer"
+  },
+  {
+    "column_name": "status",
+    "data_type": "USER-DEFINED"
+  },
+  {
+    "column_name": "createdAt",
+    "data_type": "timestamp without time zone"
+  },
+  {
+    "column_name": "updatedAt",
+    "data_type": "timestamp without time zone"
+  },
+  {
+    "column_name": "occupation",
+    "data_type": "USER-DEFINED"
+  },
+  {
+    "column_name": "observation",
+    "data_type": "USER-DEFINED"
+  },
+  {
+    "column_name": "action",
+    "data_type": "text"
+  },
+  {
+    "column_name": "contact",
+    "data_type": "ARRAY"
+  },
+  {
+    "column_name": "id",
+    "data_type": "text"
+  },
+  {
+    "column_name": "giftCode",
+    "data_type": "text"
+  },
+  {
+    "column_name": "candidateCode",
+    "data_type": "text"
+  },
+  {
+    "column_name": "firstName",
+    "data_type": "text"
+  },
+  {
+    "column_name": "lastName",
+    "data_type": "text"
+  },
+  {
+    "column_name": "email",
+    "data_type": "text"
+  },
+  {
+    "column_name": "phone",
+    "data_type": "text"
+  }
+]

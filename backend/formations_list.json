@@ -1,0 +1,97 @@
+[
+  {
+    "id": "77e3cf59-187f-40f6-8539-bfb1b1e5752a",
+    "matiere": "Français",
+    "niveau": "A2"
+  },
+  {
+    "id": "19ac8834-1eea-45d0-826f-77185ff0caa3",
+    "matiere": "Français",
+    "niveau": "B1"
+  },
+  {
+    "id": "dc8cef03-2fec-49d7-98a4-0293a4030b64",
+    "matiere": "Français",
+    "niveau": "B2"
+  },
+  {
+    "id": "afd24827-2199-434d-a207-aec261da9862",
+    "matiere": "Français",
+    "niveau": "A1"
+  },
+  {
+    "id": "481f144b-949d-489d-95dd-a067fb7d0312",
+    "matiere": "Français",
+    "niveau": "C1"
+  },
+  {
+    "id": "d27a6fa0-f1e2-4fd8-9b4f-0d42857c6ef5",
+    "matiere": "Français",
+    "niveau": "C2"
+  },
+  {
+    "id": "44df1420-c09d-4f31-8e1e-9f2d0d04271a",
+    "matiere": "Anglais",
+    "niveau": "Pré-starter"
+  },
+  {
+    "id": "bf355f32-e179-49d9-86bd-c3ab78567276",
+    "matiere": "Anglais",
+    "niveau": "Starter"
+  },
+  {
+    "id": "80c5f131-6f9b-4d2d-8a0c-1f10b3e66631",
+    "matiere": "Anglais",
+    "niveau": "Elementary"
+  },
+  {
+    "id": "07093ff6-ec2f-491c-86f8-1a3f9dfd1388",
+    "matiere": "Anglais",
+    "niveau": "Pré-intermediate"
+  },
+  {
+    "id": "41f267c3-e38c-4155-932b-188d039422b8",
+    "matiere": "Anglais",
+    "niveau": "Intermediate"
+  },
+  {
+    "id": "a33a7ff4-a97a-40b2-85fb-c93de3dfe533",
+    "matiere": "Anglais",
+    "niveau": "Upper Intermediate"
+  },
+  {
+    "id": "894c7c2e-9350-4af2-ad16-4579fefa5bc1",
+    "matiere": "Anglais",
+    "niveau": "Advanced"
+  },
+  {
+    "id": "b70b101e-ad98-4cec-890a-ddb7e0c2975f",
+    "matiere": "Anglais",
+    "niveau": "JUNIOR"
+  },
+  {
+    "id": "87ec090a-b09e-45b9-8929-86c1f06f6416",
+    "matiere": "Anglais",
+    "niveau": "Alpha 1"
+  },
+  {
+    "id": "22233a8c-b6e4-4a77-90f8-0e49394faf5a",
+    "matiere": "Anglais",
+    "niveau": "Alpha 2"
+  },
+  {
+    "id": "8b52a9e0-7159-4fdd-9b82-b2151204d2ca",
+    "matiere": "Anglais",
+    "niveau": "Alphabétisation"
+  },
+  {
+    "id": "59571b23-4dd0-48b7-a153-9e9b95d262b5",
+    "matiere": "Test Formation",
+    "niveau": "Intermediate"
+  },
+  {
+    "id": "3c24b0b5-31fb-439e-a3dc-1ecea7c65332",
+    "matiere": "Test Grouping Formation",
+    "niveau": "Beginner"
+  }
+]

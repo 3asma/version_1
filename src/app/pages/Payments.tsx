@@ -8,11 +8,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../components/ui/table';
 import { Badge } from '../components/ui/badge';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '../components/ui/dialog';
-import { DollarSign, CreditCard, TrendingUp, AlertCircle, Plus, FileText, Download, Printer, Upload, Calendar, CheckCircle, Eye, XCircle, Clock } from 'lucide-react';
+import { DollarSign, CreditCard, TrendingUp, AlertCircle, Plus, FileText, Download, Printer, Upload, Calendar, CheckCircle, Eye, XCircle, Clock, Pencil, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function Payments() {
-  const { payments, candidates, formations, addPayment, updatePayment, generateInvoice, invoices, inscriptions } = useApp();
+  const { payments, candidates, formations, addPayment, updatePayment, deletePayment, generateInvoice, invoices, inscriptions } = useApp();
 
   const isCandidateActive = (candidateId: string) =>
     inscriptions.some(
@@ -27,6 +27,7 @@ export default function Payments() {
   const [searchQuery, setSearchQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [filterMethod, setFilterMethod] = useState<string>('all');
+  const [selectedPaymentId, setSelectedPaymentId] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     candidateId: '',
@@ -40,14 +41,15 @@ export default function Payments() {
     checkScan: '',
     isMonthlyPayment: false,
     totalMonths: '1',
-    currentMonth: '1'
+    currentMonth: '1',
+    note: ''
   });
 
   const handleInputChange = (field: string, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const paymentData: any = {
@@ -57,31 +59,54 @@ export default function Payments() {
       paymentDate: formData.paymentDate,
       paymentMethod: formData.paymentMethod,
       status: formData.status,
-      invoiceGenerated: false,
-      isMonthlyPayment: formData.isMonthlyPayment
+      note: formData.note
     };
 
-    if (formData.paymentMethod === 'check') {
-      paymentData.checkDetails = {
-        type: formData.checkType,
-        dueDate: formData.checkDueDate,
-        scanUrl: formData.checkScan || undefined,
-        checkStatus: 'pending' as const
-      };
+    try {
+      if (selectedPaymentId) {
+        await updatePayment(selectedPaymentId, paymentData);
+        toast.success('Paiement modifié avec succès');
+      } else {
+        await addPayment(paymentData);
+        toast.success('Paiement enregistré avec succès');
+      }
+      setIsAddDialogOpen(false);
+      resetForm();
+      setSelectedPaymentId(null);
+    } catch (error: any) {
+      toast.error(error.response?.data?.error || 'Erreur lors de l\'enregistrement du paiement');
     }
+  };
 
-    if (formData.isMonthlyPayment) {
-      paymentData.monthlySchedule = {
-        totalMonths: parseInt(formData.totalMonths),
-        currentMonth: parseInt(formData.currentMonth),
-        nextDueDate: formData.checkDueDate
-      };
+  const handleEdit = (payment: any) => {
+    setSelectedPaymentId(payment.id);
+    setFormData({
+      candidateId: payment.candidateId,
+      formationId: payment.formationId,
+      amount: String(payment.amount),
+      paymentDate: payment.paymentDate,
+      paymentMethod: payment.paymentMethod,
+      status: payment.status,
+      note: payment.note || '',
+      checkType: 'bank_check',
+      checkDueDate: '',
+      checkScan: '',
+      isMonthlyPayment: false,
+      totalMonths: '1',
+      currentMonth: '1'
+    });
+    setIsAddDialogOpen(true);
+  };
+
+  const handleDelete = async (id: string) => {
+    if (confirm('Êtes-vous sûr de vouloir supprimer ce paiement ?')) {
+      try {
+        await deletePayment(id);
+        toast.success('Paiement supprimé avec succès');
+      } catch (error: any) {
+        toast.error(error.response?.data?.error || 'Erreur lors de la suppression du paiement');
+      }
     }
-
-    addPayment(paymentData);
-    toast.success('Paiement ajouté avec succès');
-    setIsAddDialogOpen(false);
-    resetForm();
   };
 
   const resetForm = () => {
@@ -92,6 +117,7 @@ export default function Payments() {
       paymentDate: new Date().toISOString().split('T')[0],
       paymentMethod: 'cash',
       status: 'pending',
+      note: '',
       checkType: 'bank_check',
       checkDueDate: '',
       checkScan: '',
@@ -271,7 +297,13 @@ export default function Payments() {
           <h1 className="text-3xl font-bold text-gray-900">Gestion des Paiements</h1>
           <p className="text-gray-500 mt-2">Suivi complet des paiements, chèques et facturation</p>
         </div>
-        <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+        <Dialog open={isAddDialogOpen} onOpenChange={(open) => {
+          setIsAddDialogOpen(open);
+          if (!open) {
+            resetForm();
+            setSelectedPaymentId(null);
+          }
+        }}>
           <DialogTrigger asChild>
             <Button size="lg" className="shadow-md">
               <Plus size={20} className="mr-2" />
@@ -280,9 +312,13 @@ export default function Payments() {
           </DialogTrigger>
           <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle className="text-2xl">Ajouter un paiement</DialogTitle>
+              <DialogTitle className="text-2xl">
+                {selectedPaymentId ? 'Modifier le paiement' : 'Ajouter un paiement'}
+              </DialogTitle>
               <DialogDescription>
-                Enregistrer un nouveau paiement avec tous les détails nécessaires
+                {selectedPaymentId
+                  ? 'Modifier les détails de ce paiement'
+                  : 'Enregistrer un nouveau paiement avec tous les détails nécessaires'}
               </DialogDescription>
             </DialogHeader>
 
@@ -295,7 +331,7 @@ export default function Payments() {
                       <SelectValue placeholder="Sélectionner un candidat" />
                     </SelectTrigger>
                     <SelectContent>
-                      {candidates.filter(c => isCandidateActive(c.id)).map((candidate) => (
+                      {candidates.map((candidate) => (
                         <SelectItem key={candidate.id} value={candidate.id}>
                           {candidate.candidateCode} - {candidate.firstName} {candidate.lastName}
                         </SelectItem>
@@ -371,6 +407,15 @@ export default function Payments() {
                       <SelectItem value="pending">En attente</SelectItem>
                     </SelectContent>
                   </Select>
+                </div>
+                <div className="space-y-2 col-span-2">
+                  <Label htmlFor="note">Note</Label>
+                  <Input
+                    id="note"
+                    value={formData.note}
+                    onChange={(e) => handleInputChange('note', e.target.value)}
+                    placeholder="Aucune note"
+                  />
                 </div>
               </div>
 
@@ -477,6 +522,7 @@ export default function Payments() {
                 <Button type="button" variant="outline" onClick={() => {
                   setIsAddDialogOpen(false);
                   resetForm();
+                  setSelectedPaymentId(null);
                 }}>
                   Annuler
                 </Button>
@@ -715,6 +761,22 @@ export default function Payments() {
                               title="Voir détails"
                             >
                               <Eye size={16} />
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              onClick={() => handleEdit(payment)}
+                              title="Modifier"
+                            >
+                              <Pencil size={16} className="text-blue-600" />
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              onClick={() => handleDelete(payment.id)}
+                              title="Supprimer"
+                            >
+                              <Trash2 size={16} className="text-red-650" />
                             </Button>
                             {!payment.invoiceGenerated && payment.status === 'validated' && (
                               <Button

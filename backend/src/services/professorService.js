@@ -2,26 +2,44 @@ import prisma from '../config/prisma.js';
 
 class ProfessorService {
     normalizeData(data) {
-        const n = { ...data };
+        const allowedKeys = [
+            'id',
+            'nom',
+            'prenom',
+            'email',
+            'telephone',
+            'adresse',
+            'type',
+            'dayOff',
+            'maxSessions',
+            'firstName',
+            'lastName',
+            'phone',
+            'address'
+        ];
 
-        // Mapping from frontend
-        if (n.firstName) { n.prenom = n.firstName.trim(); delete n.firstName; }
-        if (n.lastName) { n.nom = n.lastName.trim(); delete n.lastName; }
-        if (n.phone) { n.telephone = n.phone.trim(); delete n.phone; }
-        if (n.address) { n.adresse = n.address.trim(); delete n.address; }
-        if (n.subjects) {
-            n.specialite = Array.isArray(n.subjects) ? n.subjects.join(', ') : n.subjects.trim();
-            delete n.subjects;
+        const raw = {};
+        for (const key of allowedKeys) {
+            if (key in data) {
+                raw[key] = data[key];
+            }
         }
 
-        if (n.nom) n.nom = n.nom.trim();
-        if (n.prenom) n.prenom = n.prenom.trim();
-        if (n.email) n.email = n.email.trim().toLowerCase();
-        if (n.telephone) n.telephone = n.telephone.trim();
-        if (n.adresse) n.adresse = n.adresse.trim();
-        if (n.specialite) n.specialite = n.specialite.trim();
-        if (n.dayOff) n.dayOff = n.dayOff.trim();
-        if (n.type) n.type = n.type.trim();
+        const n = {};
+        let prenom = raw.prenom !== undefined ? raw.prenom : raw.firstName;
+        let nom = raw.nom !== undefined ? raw.nom : raw.lastName;
+        let telephone = raw.telephone !== undefined ? raw.telephone : raw.phone;
+        let adresse = raw.adresse !== undefined ? raw.adresse : raw.address;
+
+        if (prenom !== undefined && prenom !== null) n.prenom = String(prenom).trim();
+        if (nom !== undefined && nom !== null) n.nom = String(nom).trim();
+        if (telephone !== undefined && telephone !== null) n.telephone = String(telephone).trim();
+        if (adresse !== undefined && adresse !== null) n.adresse = String(adresse).trim();
+
+        if (raw.email !== undefined && raw.email !== null) n.email = String(raw.email).trim().toLowerCase();
+        if (raw.dayOff !== undefined && raw.dayOff !== null) n.dayOff = String(raw.dayOff).trim();
+        if (raw.type !== undefined && raw.type !== null) n.type = String(raw.type).trim();
+        if (raw.maxSessions !== undefined && raw.maxSessions !== null) n.maxSessions = parseInt(raw.maxSessions);
 
         return n;
     }
@@ -43,11 +61,17 @@ class ProfessorService {
     }
 
     async getAllProfessors() {
-        return await prisma.professor.findMany({ orderBy: { createdAt: 'desc' } });
+        return await prisma.professor.findMany({
+            orderBy: { createdAt: 'desc' },
+            include: { groups: true }
+        });
     }
 
     async getProfessorById(id) {
-        return await prisma.professor.findUnique({ where: { id } });
+        return await prisma.professor.findUnique({
+            where: { id },
+            include: { groups: true }
+        });
     }
 
     async createProfessor(data) {
@@ -59,18 +83,19 @@ class ProfessorService {
             if (existing) throw new Error('DUPLICATE_EMAIL');
         }
 
+        const creationData = {
+            email: null,
+            telephone: null,
+            adresse: null,
+            type: 'permanent',
+            dayOff: 'Sunday',
+            maxSessions: 25,
+            ...normalized
+        };
+
         return await prisma.professor.create({
-            data: {
-                nom: normalized.nom,
-                prenom: normalized.prenom,
-                email: normalized.email || null,
-                telephone: normalized.telephone || null,
-                adresse: normalized.adresse || null,
-                specialite: normalized.specialite || null,
-                type: normalized.type || 'permanent',
-                dayOff: normalized.dayOff || 'Sunday',
-                maxSessions: normalized.maxSessions ? parseInt(normalized.maxSessions) : 25
-            }
+            data: creationData,
+            include: { groups: true }
         });
     }
 
@@ -83,12 +108,10 @@ class ProfessorService {
             if (existing && existing.id !== id) throw new Error('DUPLICATE_EMAIL');
         }
 
-        const updateData = { ...normalized };
-        if (updateData.maxSessions !== undefined) updateData.maxSessions = parseInt(updateData.maxSessions);
-
         return await prisma.professor.update({
             where: { id },
-            data: updateData
+            data: normalized,
+            include: { groups: true }
         });
     }
 

@@ -99,10 +99,10 @@ export default function Professors() {
     setSelectedProfessorId(null);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const subjects = formData.subjects.split(',').map(s => s.trim()).filter(s => s);
+    const subjects = formData.subjects ? formData.subjects.split(',').map(s => s.trim()).filter(s => s) : [];
 
     if (editingProfessor) {
       updateProfessor(editingProfessor, {
@@ -118,23 +118,29 @@ export default function Professors() {
       });
       toast.success('Professeur mis à jour');
       setEditingProfessor(null);
+      setIsAddDialogOpen(false);
+      resetForm();
     } else {
-      addProfessor({
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        phone: formData.phone,
-        email: formData.email,
-        address: formData.address,
-        subjects,
-        type: formData.type,
-        dayOff: formData.dayOff,
-        maxSessions: parseInt(formData.maxSessions)
-      });
-      toast.success('Professeur ajouté');
+      try {
+        await addProfessor({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          phone: formData.phone,
+          email: formData.email,
+          address: formData.address,
+          subjects,
+          type: formData.type,
+          dayOff: formData.dayOff,
+          maxSessions: parseInt(formData.maxSessions),
+          totalHoursWorked: 0
+        });
+        toast.success('Professeur ajouté');
+        setIsAddDialogOpen(false);
+        resetForm();
+      } catch (error) {
+        toast.error('Erreur lors de l\'ajout du professeur');
+      }
     }
-
-    setIsAddDialogOpen(false);
-    resetForm();
   };
 
   const handleDialogClose = (open: boolean) => {
@@ -376,16 +382,7 @@ export default function Professors() {
                     />
                   </div>
 
-                  <div className="space-y-2 col-span-2">
-                    <Label htmlFor="subjects">Matières enseignées (séparées par des virgules) *</Label>
-                    <Input
-                      id="subjects"
-                      placeholder="Ex: Anglais, Espagnol"
-                      value={formData.subjects}
-                      onChange={(e) => setFormData(prev => ({ ...prev, subjects: e.target.value }))}
-                      required
-                    />
-                  </div>
+
 
                   <div className="space-y-2">
                     <Label htmlFor="type">Type *</Label>

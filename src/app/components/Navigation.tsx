@@ -103,7 +103,7 @@ export function Navigation() {
         category: 'gestion'
       });
       items.push({
-        path: '/groups',
+        path: '/inscriptions',
         icon: Users,
         label: 'Inscriptions',
         badge: null,

@@ -1,0 +1,43 @@
+﻿node.exe : Loaded Prisma config 
+from prisma.config.ts.
+Au caractère C:\Program 
+Files\nodejs\npx.ps1:27 : 12
++   $input | & $NODE_EXE 
+$NPX_CLI_JS $args
++            
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : Not 
+   Specified: (Loaded Prisma c..  
+  .isma.config.ts.:String) [],    
+ RemoteException
+    + FullyQualifiedErrorId : Nat 
+   iveCommandError
+ 
+
+Prisma config detected, skipping 
+environment variable loading.
+Prisma schema loaded from prisma\schema.prisma
+Datasource "db": PostgreSQL database "formation_db", schema "public" at "localhost:5432"
+
+
+ÔÜá´©Å  Warnings for the current datasource:
+
+  ÔÇó A unique constraint covering the columns `[membershipNumber]` on the table `Candidate` will be added. If there are existing duplicate values, this will fail.
+  ÔÇó A unique constraint covering the columns `[membershipNumber]` on the table `Prospect` will be added. If there are existing duplicate values, this will fail.
+  ÔÇó A unique constraint covering the columns `[email]` on the table `Prospect` will be added. If there are existing duplicate values, this will fail.
+
+Error: Prisma Migrate has 
+detected that the environment is 
+non-interactive, which is not 
+supported.
+
+`prisma migrate dev` is an 
+interactive command designed to 
+create new migrations and evolve 
+the database in development.
+To apply existing migrations in 
+deployments, use prisma migrate 
+deploy.
+See https://www.prisma.io/docs/ref
+erence/api-reference/command-refer
+ence#migrate-deploy

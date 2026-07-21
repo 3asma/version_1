@@ -5,18 +5,12 @@ export const exportFormationsPDF = async (req, res) => {
     try {
         const data = await formationService.getAllFormations();
         const headers = [
-            { label: 'Matière', key: 'matiere', width: 140 },
-            { label: 'Niveau', key: 'niveau', width: 120 },
-            { label: 'Durée (min)', key: 'duration', width: 80 },
-            { label: 'Prix', key: 'prix', width: 75 },
-            { label: 'Vol. Horaire', key: 'volumeHoraire', width: 80 }
+            { label: 'Matière', key: 'matiere', width: 250 },
+            { label: 'Niveau', key: 'niveau', width: 245 }
         ];
         const rows = data.map(f => ({
             matiere: f.matiere || '',
-            niveau: f.niveau || '',
-            duration: f.duration !== undefined && f.duration !== null ? String(f.duration) : '',
-            prix: f.prix !== undefined && f.prix !== null ? String(f.prix) : '',
-            volumeHoraire: f.volumeHoraire !== undefined && f.volumeHoraire !== null ? String(f.volumeHoraire) : ''
+            niveau: f.niveau || ''
         }));
         streamPDF(res, 'Formations', headers, rows);
     } catch (error) {
@@ -45,6 +39,17 @@ export const getFormationById = async (req, res) => {
 };
 
 export const createFormation = async (req, res) => {
+    const { matiere, subject, niveau, level } = req.body;
+    const finalMatiere = matiere || subject;
+    const finalNiveau = niveau || level;
+
+    if (!finalMatiere || String(finalMatiere).trim() === '') {
+        return res.status(400).json({ message: 'error', error: 'MATIERE_REQUIRED' });
+    }
+    if (!finalNiveau || String(finalNiveau).trim() === '') {
+        return res.status(400).json({ message: 'error', error: 'NIVEAU_REQUIRED' });
+    }
+
     try {
         const formation = await formationService.createFormation(req.body);
         res.status(201).json({ message: 'success', data: formation });
@@ -62,6 +67,17 @@ export const createFormation = async (req, res) => {
 };
 
 export const updateFormation = async (req, res) => {
+    const { matiere, subject, niveau, level } = req.body;
+    const finalMatiere = matiere || subject;
+    const finalNiveau = niveau || level;
+
+    if (finalMatiere !== undefined && String(finalMatiere).trim() === '') {
+        return res.status(400).json({ message: 'error', error: 'MATIERE_REQUIRED' });
+    }
+    if (finalNiveau !== undefined && String(finalNiveau).trim() === '') {
+        return res.status(400).json({ message: 'error', error: 'NIVEAU_REQUIRED' });
+    }
+
     try {
         const formation = await formationService.updateFormation(req.params.id, req.body);
         res.json({ message: 'success', data: formation });

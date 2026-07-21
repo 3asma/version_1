@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useApp } from '../context/AppContext';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../components/ui/table';
 import { Badge } from '../components/ui/badge';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '../components/ui/alert-dialog';
-import { UserPlus, ArrowRight, User, Briefcase, Calendar, Hash, Gift, Eye, Users, ShieldAlert, CheckCircle, Edit, Trash2, BookOpen, FileText } from 'lucide-react';
+import { UserPlus, ArrowRight, User, Briefcase, Calendar, Hash, Gift, Eye, Users, ShieldAlert, CheckCircle, Edit, Trash2, BookOpen, FileText, CreditCard } from 'lucide-react';
 import { toast } from 'sonner';
 import { exportPDF } from '../services/api';
 
@@ -29,59 +29,79 @@ export default function Prospects() {
   };
 
   const [formData, setFormData] = useState({
+    membershipNumber: '',
     firstName: '',
     lastName: '',
     age: '',
     occupation: 'student' as 'student' | 'employee',
-    subject: '',
     giftCode: '',
     observation: 'alone' as 'alone' | 'accompanied',
-    contact1: '',
-    contact2: 'none',
-    action: ''
+    firstContactId: '',
+    secondContactId: 'none',
+    action: '',
+    gender: '' as 'MALE' | 'FEMALE' | '',
+    email: '',
+    phone: '',
+    registrationDate: ''
   });
 
   const handleInputChange = (field: string, value: any) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData(prev => {
+      const updated = { ...prev, [field]: value };
+      if (field === 'action') {
+        updated.firstContactId = '';
+        updated.secondContactId = 'none';
+      }
+      return updated;
+    });
   };
 
   const resetForm = () => {
     setFormData({
+      membershipNumber: '',
       firstName: '',
       lastName: '',
       age: '',
       occupation: 'student',
-      subject: '',
       giftCode: '',
       observation: 'alone',
-      contact1: '',
-      contact2: 'none',
-      action: ''
+      firstContactId: '',
+      secondContactId: 'none',
+      action: '',
+      gender: '',
+      email: '',
+      phone: '',
+      registrationDate: ''
     });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.contact1) {
+    if (!formData.firstContactId) {
       toast.error('Le Contact 1 est obligatoire.');
       return;
     }
-    if (formData.contact1 && formData.contact2 && formData.contact2 !== 'none' && formData.contact1 === formData.contact2) {
+    if (formData.firstContactId && formData.secondContactId && formData.secondContactId !== 'none' && formData.firstContactId === formData.secondContactId) {
       toast.error('Le Contact 1 et le Contact 2 doivent être différents.');
       return;
     }
 
     addProspect({
+      membershipNumber: formData.membershipNumber || undefined,
       firstName: formData.firstName,
       lastName: formData.lastName,
       age: parseInt(formData.age),
       occupation: formData.occupation,
-      subject: 'Non affecté',
       giftCode: formData.giftCode || undefined,
       observation: formData.observation,
-      contact: formData.contact2 && formData.contact2 !== 'none' ? [formData.contact1, formData.contact2] : [formData.contact1],
-      action: formData.action || undefined
+      firstContactId: formData.firstContactId || undefined,
+      secondContactId: formData.secondContactId !== 'none' ? formData.secondContactId : undefined,
+      action: formData.action || undefined,
+      gender: formData.gender !== '' ? formData.gender : undefined,
+      email: formData.email || undefined,
+      phone: formData.phone || undefined,
+      registrationDate: formData.registrationDate || undefined
     });
 
     toast.success('Prospect ajouté avec succès');
@@ -149,28 +169,31 @@ export default function Prospects() {
     e.preventDefault();
     if (!selectedProspect) return;
 
-    if (!formData.contact1) {
+    if (!formData.firstContactId) {
       toast.error('Le Contact 1 est obligatoire.');
       return;
     }
-    if (formData.contact1 && formData.contact2 && formData.contact2 !== 'none' && formData.contact1 === formData.contact2) {
+    if (formData.firstContactId && formData.secondContactId && formData.secondContactId !== 'none' && formData.firstContactId === formData.secondContactId) {
       toast.error('Le Contact 1 et le Contact 2 doivent être différents.');
       return;
     }
 
     await updateProspect(selectedProspect, {
+      membershipNumber: formData.membershipNumber || undefined,
       firstName: formData.firstName,
       lastName: formData.lastName,
       age: parseInt(formData.age),
       occupation: formData.occupation as 'student' | 'employee',
-      subject: formData.subject,
       giftCode: formData.giftCode || undefined,
       observation: formData.observation as 'alone' | 'accompanied',
-      contact: formData.contact2 && formData.contact2 !== 'none' ? [formData.contact1, formData.contact2] : [formData.contact1],
-      action: formData.action || undefined
-    });
-
-    toast.success('Prospect mis à jour avec succès');
+      firstContactId: formData.firstContactId || undefined,
+      secondContactId: formData.secondContactId !== 'none' ? formData.secondContactId : undefined,
+      action: formData.action || undefined,
+      gender: formData.gender !== '' ? formData.gender : undefined,
+      email: formData.email || undefined,
+      phone: formData.phone || undefined,
+      registrationDate: formData.registrationDate || undefined
+    }); toast.success('Prospect mis à jour avec succès');
     setIsEditDialogOpen(false);
     resetForm();
     setSelectedProspect(null);
@@ -180,14 +203,19 @@ export default function Prospects() {
   const canTransform = currentUser?.role === 'agent_reservation' || currentUser?.role === 'admin';
 
   const renderProspectFields = (mode: 'add' | 'edit') => {
+    const uniqueActions = useMemo(() => {
+      return Array.from(new Set(commercials.map(c => c.action))).filter(Boolean).sort();
+    }, [commercials]);
+
     const getFilteredCommercialsForField = (fieldNum: 1 | 2) => {
+      if (!formData.action) return [];
       let list = commercials.filter(c => c.action === formData.action);
 
       // Rule 5: display original contact temporarily on edit even if action doesn't match
       if (selectedProspect) {
         const prospect = prospects.find(p => p.id === selectedProspect);
-        if (prospect && prospect.contact) {
-          const originalCommercialId = prospect.contact[fieldNum - 1];
+        if (prospect) {
+          const originalCommercialId = fieldNum === 1 ? prospect.firstContactId : prospect.secondContactId;
           if (originalCommercialId && originalCommercialId !== 'none' && !list.some(c => c.id === originalCommercialId)) {
             const savedCommercial = commercials.find(c => c.id === originalCommercialId);
             if (savedCommercial) {
@@ -204,27 +232,29 @@ export default function Prospects() {
 
     return (
       <>
-        <div className="bg-gray-50 rounded-xl p-6 space-y-4">
-          <h3 className="font-semibold text-lg flex items-center gap-2">
+        <div className="bg-gray-50 rounded-xl p-6 space-y-6">
+          <h3 className="font-semibold text-lg flex items-center gap-2 border-b pb-2">
             <User className="text-blue-600" size={20} />
-            Informations principales
+            Informations du prospect
           </h3>
+
           <div className="grid grid-cols-2 gap-6">
+            {/* 1. Numéro d'adhésion */}
             <div className="space-y-2">
-              <Label htmlFor={`${mode}-firstName`} className="text-base font-semibold flex items-center gap-2">
-                <User size={16} className="text-gray-600" />
-                Prénom *
+              <Label htmlFor={`${mode}-membershipNumber`} className="text-base font-semibold flex items-center gap-2">
+                <CreditCard size={16} className="text-gray-600" />
+                Numéro d'adhésion
               </Label>
               <Input
-                id={`${mode}-firstName`}
-                value={formData.firstName}
-                onChange={(e) => handleInputChange('firstName', e.target.value)}
+                id={`${mode}-membershipNumber`}
+                value={formData.membershipNumber}
+                onChange={(e) => handleInputChange('membershipNumber', e.target.value)}
                 className="h-12 rounded-xl"
-                placeholder="Entrez le prénom"
-                required
+                placeholder="Ex: ADH-2026-1234"
               />
             </div>
 
+            {/* 2. Nom */}
             <div className="space-y-2">
               <Label htmlFor={`${mode}-lastName`} className="text-base font-semibold flex items-center gap-2">
                 <User size={16} className="text-gray-600" />
@@ -240,25 +270,43 @@ export default function Prospects() {
               />
             </div>
 
+            {/* 3. Prénom */}
             <div className="space-y-2">
-              <Label htmlFor={`${mode}-occupation`} className="text-base font-semibold flex items-center gap-2">
-                <Briefcase size={16} className="text-gray-600" />
-                Fonction *
+              <Label htmlFor={`${mode}-firstName`} className="text-base font-semibold flex items-center gap-2">
+                <User size={16} className="text-gray-600" />
+                Prénom *
+              </Label>
+              <Input
+                id={`${mode}-firstName`}
+                value={formData.firstName}
+                onChange={(e) => handleInputChange('firstName', e.target.value)}
+                className="h-12 rounded-xl"
+                placeholder="Entrez le prénom"
+                required
+              />
+            </div>
+
+            {/* 4. Genre */}
+            <div className="space-y-2">
+              <Label htmlFor={`${mode}-gender`} className="text-base font-semibold flex items-center gap-2">
+                <User size={16} className="text-gray-600" />
+                Genre
               </Label>
               <Select
-                value={formData.occupation}
-                onValueChange={(value) => handleInputChange('occupation', value)}
+                value={formData.gender}
+                onValueChange={(value) => handleInputChange('gender', value)}
               >
-                <SelectTrigger className="h-12 rounded-xl">
-                  <SelectValue />
+                <SelectTrigger className="h-12 rounded-xl bg-white">
+                  <SelectValue placeholder="Sélectionner le genre" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="student">Étudiant</SelectItem>
-                  <SelectItem value="employee">Employé</SelectItem>
+                  <SelectItem value="MALE">Homme</SelectItem>
+                  <SelectItem value="FEMALE">Femme</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
+            {/* 5. Âge */}
             <div className="space-y-2">
               <Label htmlFor={`${mode}-age`} className="text-base font-semibold flex items-center gap-2">
                 <Hash size={16} className="text-gray-600" />
@@ -274,15 +322,151 @@ export default function Prospects() {
                 required
               />
             </div>
-          </div>
-        </div>
 
-        <div className="bg-gray-50 rounded-xl p-6 space-y-4">
-          <h3 className="font-semibold text-lg flex items-center gap-2">
-            <Gift className="text-purple-600" size={20} />
-            Informations complémentaires
-          </h3>
-          <div className="grid grid-cols-2 gap-6">
+            {/* 6. Profession */}
+            <div className="space-y-2">
+              <Label htmlFor={`${mode}-occupation`} className="text-base font-semibold flex items-center gap-2">
+                <Briefcase size={16} className="text-gray-600" />
+                Profession *
+              </Label>
+              <Select
+                value={formData.occupation}
+                onValueChange={(value) => handleInputChange('occupation', value)}
+              >
+                <SelectTrigger className="h-12 rounded-xl">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="student">Étudiant</SelectItem>
+                  <SelectItem value="employee">Employé</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* 7. Téléphone */}
+            <div className="space-y-2">
+              <Label htmlFor={`${mode}-phone`} className="text-base font-semibold flex items-center gap-2">
+                <User size={16} className="text-gray-600" />
+                Téléphone
+              </Label>
+              <Input
+                id={`${mode}-phone`}
+                value={formData.phone}
+                onChange={(e) => handleInputChange('phone', e.target.value)}
+                className="h-12 rounded-xl"
+                placeholder="Ex: 0612345678"
+              />
+            </div>
+
+            {/* 8. Email */}
+            <div className="space-y-2">
+              <Label htmlFor={`${mode}-email`} className="text-base font-semibold flex items-center gap-2">
+                <User size={16} className="text-gray-600" />
+                Email
+              </Label>
+              <Input
+                id={`${mode}-email`}
+                type="email"
+                value={formData.email}
+                onChange={(e) => handleInputChange('email', e.target.value)}
+                className="h-12 rounded-xl"
+                placeholder="exemple@email.com"
+              />
+            </div>
+
+            {/* 9. Action */}
+            <div className="space-y-2">
+              <Label htmlFor={`${mode}-action`} className="text-base font-semibold flex items-center gap-2">
+                <Briefcase size={16} className="text-gray-600" />
+                Action *
+              </Label>
+              <Select
+                value={formData.action}
+                onValueChange={(value) => handleInputChange('action', value)}
+              >
+                <SelectTrigger className="h-12 rounded-xl">
+                  <SelectValue placeholder="Sélectionner une action" />
+                </SelectTrigger>
+                <SelectContent>
+                  {uniqueActions.map((act) => (
+                    <SelectItem key={act} value={act}>
+                      {act}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* 10. Premier contact */}
+            <div className="space-y-2">
+              <Label htmlFor={`${mode}-contact1`} className="text-base font-semibold flex items-center gap-2">
+                <Users size={16} className="text-gray-600" />
+                Premier contact *
+              </Label>
+              <Select
+                value={formData.firstContactId}
+                onValueChange={(value) => handleInputChange('firstContactId', value)}
+                disabled={!formData.action}
+              >
+                <SelectTrigger className="h-12 rounded-xl bg-white">
+                  <SelectValue placeholder={formData.action ? "Sélectionner premier contact" : "Sélectionner action"} />
+                </SelectTrigger>
+                <SelectContent>
+                  {commercials1.map((commercial) => (
+                    <SelectItem key={commercial.id} value={commercial.id}>
+                      {commercial.firstName} {commercial.lastName}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* 11. Deuxième contact */}
+            <div className="space-y-2">
+              <Label htmlFor={`${mode}-contact2`} className="text-base font-semibold flex items-center gap-2">
+                <Users size={16} className="text-gray-600" />
+                Deuxième contact (Optionnel)
+              </Label>
+              <Select
+                value={formData.secondContactId}
+                onValueChange={(value) => handleInputChange('secondContactId', value)}
+                disabled={!formData.action}
+              >
+                <SelectTrigger className="h-12 rounded-xl bg-white">
+                  <SelectValue placeholder={formData.action ? "Aucun" : "Sélectionner action"} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none">Aucun</SelectItem>
+                  {commercials2.map((commercial) => (
+                    <SelectItem key={commercial.id} value={commercial.id}>
+                      {commercial.firstName} {commercial.lastName}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* 12. Observation */}
+            <div className="space-y-2">
+              <Label htmlFor={`${mode}-observation`} className="text-base font-semibold flex items-center gap-2">
+                <Eye size={16} className="text-gray-600" />
+                Observation *
+              </Label>
+              <Select
+                value={formData.observation}
+                onValueChange={(value) => handleInputChange('observation', value)}
+              >
+                <SelectTrigger className="h-12 rounded-xl bg-white">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="alone">Seul</SelectItem>
+                  <SelectItem value="accompanied">Accompagné</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* 13. Code cadeau */}
             <div className="space-y-2">
               <Label htmlFor={`${mode}-giftCode`} className="text-base font-semibold flex items-center gap-2">
                 <Gift size={16} className="text-gray-600" />
@@ -297,101 +481,19 @@ export default function Prospects() {
               />
             </div>
 
+            {/* 14. Date d'inscription */}
             <div className="space-y-2">
-              <Label htmlFor={`${mode}-observation`} className="text-base font-semibold flex items-center gap-2">
-                <Eye size={16} className="text-gray-650" />
-                Observation *
+              <Label htmlFor={`${mode}-registrationDate`} className="text-base font-semibold flex items-center gap-2">
+                <Calendar size={16} className="text-gray-600" />
+                Date d'inscription
               </Label>
-              <Select
-                value={formData.observation}
-                onValueChange={(value) => handleInputChange('observation', value)}
-              >
-                <SelectTrigger className="h-12 rounded-xl">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="alone">Seul</SelectItem>
-                  <SelectItem value="accompanied">Accompagné</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor={`${mode}-action`} className="text-base font-semibold flex items-center gap-2">
-                <Briefcase size={16} className="text-gray-600" />
-                Action *
-              </Label>
-              <Select
-                value={formData.action}
-                onValueChange={(value) => {
-                  handleInputChange('action', value);
-                  // Clear contact1 and contact2 if they are no longer valid for the new action
-                  const validIds = commercials.filter(c => c.action === value).map(c => c.id);
-                  setFormData(prev => ({
-                    ...prev,
-                    contact1: validIds.includes(prev.contact1) ? prev.contact1 : '',
-                    contact2: validIds.includes(prev.contact2) ? prev.contact2 : 'none'
-                  }));
-                }}
-              >
-                <SelectTrigger className="h-12 rounded-xl">
-                  <SelectValue placeholder="Sélectionner une action" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="action1">Action 1</SelectItem>
-                  <SelectItem value="action2">Action 2</SelectItem>
-                  <SelectItem value="action3">Action 3</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4 col-span-2">
-              <div className="space-y-2">
-                <Label htmlFor={`${mode}-contact1`} className="text-base font-semibold flex items-center gap-2">
-                  <Users size={16} className="text-gray-600" />
-                  Contact 1 *
-                </Label>
-                <Select
-                  value={formData.contact1}
-                  onValueChange={(value) => handleInputChange('contact1', value)}
-                  disabled={!formData.action}
-                >
-                  <SelectTrigger className="h-12 rounded-xl bg-white">
-                    <SelectValue placeholder={formData.action ? "Sélectionner contact 1" : "Sélectionner action"} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {commercials1.map((commercial) => (
-                      <SelectItem key={commercial.id} value={commercial.id}>
-                        {commercial.firstName} {commercial.lastName}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor={`${mode}-contact2`} className="text-base font-semibold flex items-center gap-2">
-                  <Users size={16} className="text-gray-600" />
-                  Contact 2 (Optionnel)
-                </Label>
-                <Select
-                  value={formData.contact2}
-                  onValueChange={(value) => handleInputChange('contact2', value)}
-                  disabled={!formData.action}
-                >
-                  <SelectTrigger className="h-12 rounded-xl bg-white">
-                    <SelectValue placeholder={formData.action ? "Aucun" : "Sélectionner action"} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="none">Aucun</SelectItem>
-                    {commercials2.map((commercial) => (
-                      <SelectItem key={commercial.id} value={commercial.id}>
-                        {commercial.firstName} {commercial.lastName}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+              <Input
+                id={`${mode}-registrationDate`}
+                type="date"
+                value={formData.registrationDate}
+                onChange={(e) => handleInputChange('registrationDate', e.target.value)}
+                className="h-12 rounded-xl"
+              />
             </div>
           </div>
         </div>
@@ -502,7 +604,7 @@ export default function Prospects() {
                   <TableHead className="font-semibold">Nom</TableHead>
                   <TableHead className="font-semibold">Âge</TableHead>
                   <TableHead className="font-semibold">Fonction</TableHead>
-                  <TableHead className="font-semibold">Matière</TableHead>
+                  <TableHead className="font-semibold">N° Adhésion</TableHead>
                   <TableHead className="font-semibold text-center">Séances faites</TableHead>
                   <TableHead className="font-semibold text-center">Absences</TableHead>
                   <TableHead className="font-semibold text-center">Séances restantes</TableHead>
@@ -533,7 +635,7 @@ export default function Prospects() {
                           {prospect.occupation === 'student' ? 'Étudiant' : 'Employé'}
                         </Badge>
                       </TableCell>
-                      <TableCell>{prospect.subject}</TableCell>
+                      <TableCell>{prospect.membershipNumber || '-'}</TableCell>
                       <TableCell className="text-center">
                         <Badge variant={canBeTransformed ? 'default' : 'secondary'} className={canBeTransformed ? 'bg-green-100 text-green-800' : ''}>
                           {prospect.freeSessionsCompleted}/5
@@ -568,16 +670,20 @@ export default function Prospects() {
                             className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
                             onClick={() => {
                               setFormData({
+                                membershipNumber: prospect.membershipNumber || '',
                                 firstName: prospect.firstName,
                                 lastName: prospect.lastName,
                                 age: prospect.age.toString(),
                                 occupation: (prospect.occupation?.toLowerCase() || 'student') as 'student' | 'employee',
-                                subject: prospect.subject,
                                 giftCode: prospect.giftCode || '',
                                 observation: (prospect.observation?.toLowerCase() || 'alone') as 'alone' | 'accompanied',
-                                contact1: prospect.contact?.[0] || '',
-                                contact2: prospect.contact?.[1] || 'none',
-                                action: prospect.action || ''
+                                firstContactId: prospect.firstContactId || '',
+                                secondContactId: prospect.secondContactId || 'none',
+                                action: prospect.action || '',
+                                gender: prospect.gender || '',
+                                email: prospect.email || '',
+                                phone: prospect.phone || '',
+                                registrationDate: prospect.registrationDate ? new Date(prospect.registrationDate).toISOString().substring(0, 10) : ''
                               });
                               setSelectedProspect(prospect.id);
                               setIsEditDialogOpen(true);

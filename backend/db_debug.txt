@@ -1,0 +1,49 @@
+{
+  "triggers": [],
+  "constraints": [
+    {
+      "constraint_name": "Candidate_pkey",
+      "constraint_type": "PRIMARY KEY"
+    },
+    {
+      "constraint_name": "71975_72031_1_not_null",
+      "constraint_type": "CHECK"
+    },
+    {
+      "constraint_name": "71975_72031_2_not_null",
+      "constraint_type": "CHECK"
+    },
+    {
+      "constraint_name": "71975_72031_3_not_null",
+      "constraint_type": "CHECK"
+    },
+    {
+      "constraint_name": "71975_72031_4_not_null",
+      "constraint_type": "CHECK"
+    },
+    {
+      "constraint_name": "71975_72031_7_not_null",
+      "constraint_type": "CHECK"
+    },
+    {
+      "constraint_name": "71975_72031_8_not_null",
+      "constraint_type": "CHECK"
+    },
+    {
+      "constraint_name": "71975_72031_10_not_null",
+      "constraint_type": "CHECK"
+    },
+    {
+      "constraint_name": "71975_72031_14_not_null",
+      "constraint_type": "CHECK"
+    },
+    {
+      "constraint_name": "71975_72031_15_not_null",
+      "constraint_type": "CHECK"
+    },
+    {
+      "constraint_name": "71975_72031_16_not_null",
+      "constraint_type": "CHECK"
+    }
+  ]
+}
