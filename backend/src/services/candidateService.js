@@ -131,6 +131,38 @@ class CandidateService {
     async deleteCandidate(id) {
         return await prisma.candidate.delete({ where: { id } });
     }
+
+    async getCandidateFormations(candidateId) {
+        const inscriptions = await prisma.inscription.findMany({
+            where: {
+                members: {
+                    some: {
+                        candidateId
+                    }
+                },
+                status: { in: ['ACTIVE', 'ASSIGNED', 'WAITING'] }
+            },
+            include: {
+                formation: true
+            }
+        });
+
+        const uniqueFormations = [];
+        const seenIds = new Set();
+        for (const ins of inscriptions) {
+            if (ins.formation && !seenIds.has(ins.formation.id)) {
+                seenIds.add(ins.formation.id);
+                uniqueFormations.push({
+                    id: ins.formation.id,
+                    subject: ins.formation.matiere,
+                    level: ins.formation.niveau
+                });
+            }
+        }
+
+        return uniqueFormations;
+    }
 }
 
 export default new CandidateService();
+

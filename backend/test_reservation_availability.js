@@ -1,6 +1,8 @@
 // Verification script for Reservation Availability Verification using native fetch API
 import prisma from './src/config/prisma.js';
 
+import InscriptionService from './src/services/inscriptionService.js';
+
 async function verifyAvailability() {
     console.log('--- STARTING RESERVATION AVAILABILITY VERIFICATION ---');
 
@@ -20,8 +22,8 @@ async function verifyAvailability() {
 
         f1 = await prisma.formation.create({ data: { matiere: 'TEMP-F1', niveau: 'A1' } });
 
-        i1 = await prisma.inscription.create({ data: { inscriptionCode: 'TEMP-I1', dateInscription: new Date(), remainingHours: 10, learningMode: 'GROUPE', candidateId: c1.id, formationId: f1.id } });
-        i2 = await prisma.inscription.create({ data: { inscriptionCode: 'TEMP-I2', dateInscription: new Date(), remainingHours: 10, learningMode: 'GROUPE', candidateId: c2.id, formationId: f1.id } });
+        i1 = await InscriptionService.createInscription({ inscriptionCode: 'TEMP-I1', remainingHours: 10, learningMode: 'GROUPE', candidateId: c1.id, formationId: f1.id });
+        i2 = await InscriptionService.createInscription({ inscriptionCode: 'TEMP-I2', remainingHours: 10, learningMode: 'GROUPE', candidateId: c2.id, formationId: f1.id });
 
         console.log('Temporary DB components set up successfully:');
         console.log(` - Prof 1: ${p1.prenom} (${p1.id})`);

@@ -6,7 +6,8 @@ import {
     getCandidateById,
     createCandidate,
     updateCandidate,
-    deleteCandidate
+    deleteCandidate,
+    getCandidateFormations
 } from '../controllers/candidateController.js';
 
 const router = express.Router();
@@ -17,9 +18,11 @@ router.use(verifyToken);
 router.get('/export/pdf', exportCandidatesPDF);
 router.get('/', getAllCandidates);
 router.get('/:id', getCandidateById);
+router.get('/:id/formations', getCandidateFormations);
 
 router.post('/', createCandidate);
 router.patch('/:id', updateCandidate);
 router.delete('/:id', deleteCandidate);
 
 export default router;
+

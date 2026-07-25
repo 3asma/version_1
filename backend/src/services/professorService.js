@@ -63,14 +63,14 @@ class ProfessorService {
     async getAllProfessors() {
         return await prisma.professor.findMany({
             orderBy: { createdAt: 'desc' },
-            include: { groups: true }
+            include: { inscriptions: { include: { group: true } } }
         });
     }
 
     async getProfessorById(id) {
         return await prisma.professor.findUnique({
             where: { id },
-            include: { groups: true }
+            include: { inscriptions: { include: { group: true } } }
         });
     }
 
@@ -95,7 +95,7 @@ class ProfessorService {
 
         return await prisma.professor.create({
             data: creationData,
-            include: { groups: true }
+            include: { inscriptions: { include: { group: true } } }
         });
     }
 
@@ -111,7 +111,7 @@ class ProfessorService {
         return await prisma.professor.update({
             where: { id },
             data: normalized,
-            include: { groups: true }
+            include: { inscriptions: { include: { group: true } } }
         });
     }
 

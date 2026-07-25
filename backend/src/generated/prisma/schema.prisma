@@ -35,24 +35,24 @@ model Prospect {
 }
 
 model Candidate {
-  id            String           @id @default(uuid())
-  candidateCode String           @unique
-  firstName     String
-  lastName      String
-  email         String?          @unique
-  phone         String?
-  age           Int
-  occupation    Occupation
-  giftCode      String?
-  observation   Observation
-  contact       String[]
-  inscriptions  Inscription[]
-  groups        GroupCandidate[]
-  payments      Payment[]
-  action        String?
-  status        CandidateStatus  @default(PENDING)
-  createdAt     DateTime         @default(now())
-  updatedAt     DateTime         @updatedAt
+  id                    String                 @id @default(uuid())
+  candidateCode         String                 @unique
+  firstName             String
+  lastName              String
+  email                 String?                @unique
+  phone                 String?
+  age                   Int
+  occupation            Occupation
+  giftCode              String?
+  observation           Observation
+  contact               String[]
+  inscriptions          Inscription[]
+  inscriptionCandidates InscriptionCandidate[]
+  payments              Payment[]
+  action                String?
+  status                CandidateStatus        @default(PENDING)
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
 }
 
 enum Role {
@@ -87,7 +87,6 @@ model Formation {
   volumeHoraire Int           @default(0)
   description   String?
   inscriptions  Inscription[]
-  groups        Group[]
   payments      Payment[]
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
@@ -117,7 +116,7 @@ model Professor {
   maxSessions  Int           @default(25)
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
-  groups       Group[]
+  inscriptions Inscription[]
   reservations Reservation[]
 }
 
@@ -136,27 +135,30 @@ enum InscriptionStatus {
 }
 
 model Inscription {
-  id              String            @id @default(uuid())
-  dateInscription DateTime          @default(now())
-  status          InscriptionStatus @default(WAITING)
+  id              String                 @id @default(uuid())
+  dateInscription DateTime               @default(now())
+  status          InscriptionStatus      @default(WAITING)
   note            String?
   duration        Int?
   price           Float?
   volumeHoraire   Int?
-  remainingHours  Float             @default(0)
-  learningMode    LearningMode      @default(GROUPE)
-  groupId         String?
+  remainingHours  Float                  @default(0)
+  learningMode    LearningMode           @default(GROUPE)
   candidateId     String
-  candidate       Candidate         @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  candidate       Candidate              @relation(fields: [candidateId], references: [id], onDelete: Cascade)
   formationId     String
-  formation       Formation         @relation(fields: [formationId], references: [id], onDelete: Cascade)
-  group           Group?            @relation(fields: [groupId], references: [id], onDelete: SetNull)
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @updatedAt
+  formation       Formation              @relation(fields: [formationId], references: [id], onDelete: Cascade)
+  professorId     String?
+  professor       Professor?             @relation(fields: [professorId], references: [id], onDelete: SetNull)
+  group           Group?
+  members         InscriptionCandidate[]
+  createdAt       DateTime               @default(now())
+  updatedAt       DateTime               @updatedAt
   reservations    Reservation[]
 
   @@index([candidateId])
   @@index([formationId])
+  @@index([professorId])
 }
 
 enum GroupType {
@@ -166,40 +168,24 @@ enum GroupType {
 }
 
 model Group {
-  id          String    @id @default(uuid())
-  nom         String
-  type        GroupType
-  formationId String
-  professorId String?
-
-  effectif Int @default(0)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  formation Formation  @relation(fields: [formationId], references: [id], onDelete: Cascade)
-  professor Professor? @relation(fields: [professorId], references: [id], onDelete: SetNull)
-
-  members      GroupCandidate[]
-  inscriptions Inscription[]
-
-  @@index([formationId])
-  @@index([professorId])
+  id            String      @id @default(uuid())
+  nom           String
+  inscriptionId String      @unique
+  inscription   Inscription @relation(fields: [inscriptionId], references: [id], onDelete: Cascade)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 }
 
-model GroupCandidate {
-  id String @id @default(uuid())
+model InscriptionCandidate {
+  id            String      @id @default(uuid())
+  inscriptionId String
+  candidateId   String
+  inscription   Inscription @relation(fields: [inscriptionId], references: [id], onDelete: Cascade)
+  candidate     Candidate   @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  createdAt     DateTime    @default(now())
 
-  groupId     String
-  candidateId String
-
-  createdAt DateTime @default(now())
-
-  group     Group     @relation(fields: [groupId], references: [id], onDelete: Cascade)
-  candidate Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
-
-  @@unique([groupId, candidateId])
-  @@index([groupId])
+  @@unique([inscriptionId, candidateId])
+  @@index([inscriptionId])
   @@index([candidateId])
 }
 

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
+import api from '../services/api';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
@@ -29,6 +30,10 @@ export default function Payments() {
   const [filterMethod, setFilterMethod] = useState<string>('all');
   const [selectedPaymentId, setSelectedPaymentId] = useState<string | null>(null);
 
+  const [candidateFormations, setCandidateFormations] = useState<any[]>([]);
+  const [isLoadingFormations, setIsLoadingFormations] = useState(false);
+  const [formationsErrorMessage, setFormationsErrorMessage] = useState('');
+
   const [formData, setFormData] = useState({
     candidateId: '',
     formationId: '',
@@ -47,6 +52,32 @@ export default function Payments() {
 
   const handleInputChange = (field: string, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleCandidateChange = async (candidateId: string) => {
+    handleInputChange('formationId', '');
+    if (!candidateId) {
+      setCandidateFormations([]);
+      setFormationsErrorMessage('');
+      return;
+    }
+
+    setIsLoadingFormations(true);
+    setFormationsErrorMessage('');
+    try {
+      const response = await api.get(`/candidates/${candidateId}/formations`);
+      const list = response.data.data || [];
+      setCandidateFormations(list);
+      if (list.length === 0) {
+        setFormationsErrorMessage("Ce candidat n'est inscrit à aucune formation.");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error('Erreur lors du chargement des formations');
+      setCandidateFormations([]);
+    } finally {
+      setIsLoadingFormations(false);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -78,8 +109,23 @@ export default function Payments() {
     }
   };
 
-  const handleEdit = (payment: any) => {
+  const handleEdit = async (payment: any) => {
     setSelectedPaymentId(payment.id);
+    setIsLoadingFormations(true);
+    setFormationsErrorMessage('');
+    try {
+      const response = await api.get(`/candidates/${payment.candidateId}/formations`);
+      const list = response.data.data || [];
+      setCandidateFormations(list);
+      if (list.length === 0) {
+        setFormationsErrorMessage("Ce candidat n'est inscrit à aucune formation.");
+      }
+    } catch (err) {
+      console.error(err);
+      setCandidateFormations([]);
+    } finally {
+      setIsLoadingFormations(false);
+    }
     setFormData({
       candidateId: payment.candidateId,
       formationId: payment.formationId,
@@ -125,6 +171,8 @@ export default function Payments() {
       totalMonths: '1',
       currentMonth: '1'
     });
+    setCandidateFormations([]);
+    setFormationsErrorMessage('');
   };
 
   const handleGenerateInvoice = (paymentId: string) => {
@@ -326,7 +374,14 @@ export default function Payments() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="candidateId">Candidat *</Label>
-                  <Select value={formData.candidateId} onValueChange={(value) => handleInputChange('candidateId', value)} required>
+                  <Select
+                    value={formData.candidateId}
+                    onValueChange={(value) => {
+                      handleInputChange('candidateId', value);
+                      handleCandidateChange(value);
+                    }}
+                    required
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Sélectionner un candidat" />
                     </SelectTrigger>
@@ -342,14 +397,29 @@ export default function Payments() {
 
                 <div className="space-y-2">
                   <Label htmlFor="formationId">Formation *</Label>
-                  <Select value={formData.formationId} onValueChange={(value) => handleInputChange('formationId', value)} required>
+                  <Select
+                    value={formData.formationId}
+                    onValueChange={(value) => handleInputChange('formationId', value)}
+                    disabled={!formData.candidateId || isLoadingFormations || candidateFormations.length === 0}
+                    required
+                  >
                     <SelectTrigger>
-                      <SelectValue placeholder="Sélectionner une formation" />
+                      <SelectValue
+                        placeholder={
+                          !formData.candidateId
+                            ? "Sélectionnez d'abord un candidat"
+                            : isLoadingFormations
+                              ? "Chargement..."
+                              : formationsErrorMessage
+                                ? formationsErrorMessage
+                                : "Sélectionner une formation"
+                        }
+                      />
                     </SelectTrigger>
                     <SelectContent>
-                      {formations.map((formation) => (
+                      {candidateFormations.map((formation) => (
                         <SelectItem key={formation.id} value={formation.id}>
-                          {formation.subject} - {formation.level} ({formation.type})
+                          {formation.subject} - {formation.level}
                         </SelectItem>
                       ))}
                     </SelectContent>

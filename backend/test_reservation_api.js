@@ -63,7 +63,7 @@ async function verifyAPI() {
             reservationDate: reservationDate.toISOString(),
             startTime: startTime.toISOString(),
             endTime: endTime.toISOString(),
-            inscriptionId: firstInscription.id,
+            inscriptionId: firstInscription.inscription?.id || firstInscription.id,
             professorId: firstProfessor.id,
             roomId: firstRoom.id,
             status: 'PENDING'

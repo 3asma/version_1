@@ -214,9 +214,9 @@ exports.Prisma.InscriptionScalarFieldEnum = {
   volumeHoraire: 'volumeHoraire',
   remainingHours: 'remainingHours',
   learningMode: 'learningMode',
-  groupId: 'groupId',
   candidateId: 'candidateId',
   formationId: 'formationId',
+  professorId: 'professorId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -224,17 +224,14 @@ exports.Prisma.InscriptionScalarFieldEnum = {
 exports.Prisma.GroupScalarFieldEnum = {
   id: 'id',
   nom: 'nom',
-  type: 'type',
-  formationId: 'formationId',
-  professorId: 'professorId',
-  effectif: 'effectif',
+  inscriptionId: 'inscriptionId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.GroupCandidateScalarFieldEnum = {
+exports.Prisma.InscriptionCandidateScalarFieldEnum = {
   id: 'id',
-  groupId: 'groupId',
+  inscriptionId: 'inscriptionId',
   candidateId: 'candidateId',
   createdAt: 'createdAt'
 };
@@ -327,12 +324,6 @@ exports.LearningMode = exports.$Enums.LearningMode = {
   GROUPE: 'GROUPE'
 };
 
-exports.GroupType = exports.$Enums.GroupType = {
-  MONOME: 'MONOME',
-  BINOME: 'BINOME',
-  GROUPE: 'GROUPE'
-};
-
 exports.PaymentMethod = exports.$Enums.PaymentMethod = {
   CASH: 'CASH',
   CARD: 'CARD',
@@ -363,7 +354,7 @@ exports.Prisma.ModelName = {
   Professor: 'Professor',
   Inscription: 'Inscription',
   Group: 'Group',
-  GroupCandidate: 'GroupCandidate',
+  InscriptionCandidate: 'InscriptionCandidate',
   Commercial: 'Commercial',
   Payment: 'Payment',
   Reservation: 'Reservation'

@@ -54,10 +54,10 @@ export type Inscription = $Result.DefaultSelection<Prisma.$InscriptionPayload>
  */
 export type Group = $Result.DefaultSelection<Prisma.$GroupPayload>
 /**
- * Model GroupCandidate
+ * Model InscriptionCandidate
  * 
  */
-export type GroupCandidate = $Result.DefaultSelection<Prisma.$GroupCandidatePayload>
+export type InscriptionCandidate = $Result.DefaultSelection<Prisma.$InscriptionCandidatePayload>
 /**
  * Model Commercial
  * 
@@ -410,14 +410,14 @@ export class PrismaClient<
   get group(): Prisma.GroupDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.groupCandidate`: Exposes CRUD operations for the **GroupCandidate** model.
+   * `prisma.inscriptionCandidate`: Exposes CRUD operations for the **InscriptionCandidate** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more GroupCandidates
-    * const groupCandidates = await prisma.groupCandidate.findMany()
+    * // Fetch zero or more InscriptionCandidates
+    * const inscriptionCandidates = await prisma.inscriptionCandidate.findMany()
     * ```
     */
-  get groupCandidate(): Prisma.GroupCandidateDelegate<ExtArgs, ClientOptions>;
+  get inscriptionCandidate(): Prisma.InscriptionCandidateDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.commercial`: Exposes CRUD operations for the **Commercial** model.
@@ -897,7 +897,7 @@ export namespace Prisma {
     Professor: 'Professor',
     Inscription: 'Inscription',
     Group: 'Group',
-    GroupCandidate: 'GroupCandidate',
+    InscriptionCandidate: 'InscriptionCandidate',
     Commercial: 'Commercial',
     Payment: 'Payment',
     Reservation: 'Reservation'
@@ -919,7 +919,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "prospect" | "candidate" | "formation" | "room" | "professor" | "inscription" | "group" | "groupCandidate" | "commercial" | "payment" | "reservation"
+      modelProps: "user" | "prospect" | "candidate" | "formation" | "room" | "professor" | "inscription" | "group" | "inscriptionCandidate" | "commercial" | "payment" | "reservation"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1515,77 +1515,77 @@ export namespace Prisma {
           }
         }
       }
-      GroupCandidate: {
-        payload: Prisma.$GroupCandidatePayload<ExtArgs>
-        fields: Prisma.GroupCandidateFieldRefs
+      InscriptionCandidate: {
+        payload: Prisma.$InscriptionCandidatePayload<ExtArgs>
+        fields: Prisma.InscriptionCandidateFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.GroupCandidateFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$GroupCandidatePayload> | null
+            args: Prisma.InscriptionCandidateFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InscriptionCandidatePayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.GroupCandidateFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$GroupCandidatePayload>
+            args: Prisma.InscriptionCandidateFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InscriptionCandidatePayload>
           }
           findFirst: {
-            args: Prisma.GroupCandidateFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$GroupCandidatePayload> | null
+            args: Prisma.InscriptionCandidateFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InscriptionCandidatePayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.GroupCandidateFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$GroupCandidatePayload>
+            args: Prisma.InscriptionCandidateFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InscriptionCandidatePayload>
           }
           findMany: {
-            args: Prisma.GroupCandidateFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$GroupCandidatePayload>[]
+            args: Prisma.InscriptionCandidateFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InscriptionCandidatePayload>[]
           }
           create: {
-            args: Prisma.GroupCandidateCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$GroupCandidatePayload>
+            args: Prisma.InscriptionCandidateCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InscriptionCandidatePayload>
           }
           createMany: {
-            args: Prisma.GroupCandidateCreateManyArgs<ExtArgs>
+            args: Prisma.InscriptionCandidateCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           createManyAndReturn: {
-            args: Prisma.GroupCandidateCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$GroupCandidatePayload>[]
+            args: Prisma.InscriptionCandidateCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InscriptionCandidatePayload>[]
           }
           delete: {
-            args: Prisma.GroupCandidateDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$GroupCandidatePayload>
+            args: Prisma.InscriptionCandidateDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InscriptionCandidatePayload>
           }
           update: {
-            args: Prisma.GroupCandidateUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$GroupCandidatePayload>
+            args: Prisma.InscriptionCandidateUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InscriptionCandidatePayload>
           }
           deleteMany: {
-            args: Prisma.GroupCandidateDeleteManyArgs<ExtArgs>
+            args: Prisma.InscriptionCandidateDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.GroupCandidateUpdateManyArgs<ExtArgs>
+            args: Prisma.InscriptionCandidateUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateManyAndReturn: {
-            args: Prisma.GroupCandidateUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$GroupCandidatePayload>[]
+            args: Prisma.InscriptionCandidateUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InscriptionCandidatePayload>[]
           }
           upsert: {
-            args: Prisma.GroupCandidateUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$GroupCandidatePayload>
+            args: Prisma.InscriptionCandidateUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InscriptionCandidatePayload>
           }
           aggregate: {
-            args: Prisma.GroupCandidateAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateGroupCandidate>
+            args: Prisma.InscriptionCandidateAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateInscriptionCandidate>
           }
           groupBy: {
-            args: Prisma.GroupCandidateGroupByArgs<ExtArgs>
-            result: $Utils.Optional<GroupCandidateGroupByOutputType>[]
+            args: Prisma.InscriptionCandidateGroupByArgs<ExtArgs>
+            result: $Utils.Optional<InscriptionCandidateGroupByOutputType>[]
           }
           count: {
-            args: Prisma.GroupCandidateCountArgs<ExtArgs>
-            result: $Utils.Optional<GroupCandidateCountAggregateOutputType> | number
+            args: Prisma.InscriptionCandidateCountArgs<ExtArgs>
+            result: $Utils.Optional<InscriptionCandidateCountAggregateOutputType> | number
           }
         }
       }
@@ -1915,7 +1915,7 @@ export namespace Prisma {
     professor?: ProfessorOmit
     inscription?: InscriptionOmit
     group?: GroupOmit
-    groupCandidate?: GroupCandidateOmit
+    inscriptionCandidate?: InscriptionCandidateOmit
     commercial?: CommercialOmit
     payment?: PaymentOmit
     reservation?: ReservationOmit
@@ -2000,13 +2000,13 @@ export namespace Prisma {
 
   export type CandidateCountOutputType = {
     inscriptions: number
-    groups: number
+    inscriptionCandidates: number
     payments: number
   }
 
   export type CandidateCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     inscriptions?: boolean | CandidateCountOutputTypeCountInscriptionsArgs
-    groups?: boolean | CandidateCountOutputTypeCountGroupsArgs
+    inscriptionCandidates?: boolean | CandidateCountOutputTypeCountInscriptionCandidatesArgs
     payments?: boolean | CandidateCountOutputTypeCountPaymentsArgs
   }
 
@@ -2031,8 +2031,8 @@ export namespace Prisma {
   /**
    * CandidateCountOutputType without action
    */
-  export type CandidateCountOutputTypeCountGroupsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: GroupCandidateWhereInput
+  export type CandidateCountOutputTypeCountInscriptionCandidatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InscriptionCandidateWhereInput
   }
 
   /**
@@ -2049,13 +2049,11 @@ export namespace Prisma {
 
   export type FormationCountOutputType = {
     inscriptions: number
-    groups: number
     payments: number
   }
 
   export type FormationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     inscriptions?: boolean | FormationCountOutputTypeCountInscriptionsArgs
-    groups?: boolean | FormationCountOutputTypeCountGroupsArgs
     payments?: boolean | FormationCountOutputTypeCountPaymentsArgs
   }
 
@@ -2075,13 +2073,6 @@ export namespace Prisma {
    */
   export type FormationCountOutputTypeCountInscriptionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: InscriptionWhereInput
-  }
-
-  /**
-   * FormationCountOutputType without action
-   */
-  export type FormationCountOutputTypeCountGroupsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: GroupWhereInput
   }
 
   /**
@@ -2128,12 +2119,12 @@ export namespace Prisma {
    */
 
   export type ProfessorCountOutputType = {
-    groups: number
+    inscriptions: number
     reservations: number
   }
 
   export type ProfessorCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    groups?: boolean | ProfessorCountOutputTypeCountGroupsArgs
+    inscriptions?: boolean | ProfessorCountOutputTypeCountInscriptionsArgs
     reservations?: boolean | ProfessorCountOutputTypeCountReservationsArgs
   }
 
@@ -2151,8 +2142,8 @@ export namespace Prisma {
   /**
    * ProfessorCountOutputType without action
    */
-  export type ProfessorCountOutputTypeCountGroupsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: GroupWhereInput
+  export type ProfessorCountOutputTypeCountInscriptionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InscriptionWhereInput
   }
 
   /**
@@ -2168,10 +2159,12 @@ export namespace Prisma {
    */
 
   export type InscriptionCountOutputType = {
+    members: number
     reservations: number
   }
 
   export type InscriptionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    members?: boolean | InscriptionCountOutputTypeCountMembersArgs
     reservations?: boolean | InscriptionCountOutputTypeCountReservationsArgs
   }
 
@@ -2189,48 +2182,15 @@ export namespace Prisma {
   /**
    * InscriptionCountOutputType without action
    */
+  export type InscriptionCountOutputTypeCountMembersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InscriptionCandidateWhereInput
+  }
+
+  /**
+   * InscriptionCountOutputType without action
+   */
   export type InscriptionCountOutputTypeCountReservationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ReservationWhereInput
-  }
-
-
-  /**
-   * Count Type GroupCountOutputType
-   */
-
-  export type GroupCountOutputType = {
-    members: number
-    inscriptions: number
-  }
-
-  export type GroupCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    members?: boolean | GroupCountOutputTypeCountMembersArgs
-    inscriptions?: boolean | GroupCountOutputTypeCountInscriptionsArgs
-  }
-
-  // Custom InputTypes
-  /**
-   * GroupCountOutputType without action
-   */
-  export type GroupCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the GroupCountOutputType
-     */
-    select?: GroupCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * GroupCountOutputType without action
-   */
-  export type GroupCountOutputTypeCountMembersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: GroupCandidateWhereInput
-  }
-
-  /**
-   * GroupCountOutputType without action
-   */
-  export type GroupCountOutputTypeCountInscriptionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: InscriptionWhereInput
   }
 
 
@@ -4671,7 +4631,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     inscriptions?: boolean | Candidate$inscriptionsArgs<ExtArgs>
-    groups?: boolean | Candidate$groupsArgs<ExtArgs>
+    inscriptionCandidates?: boolean | Candidate$inscriptionCandidatesArgs<ExtArgs>
     payments?: boolean | Candidate$paymentsArgs<ExtArgs>
     _count?: boolean | CandidateCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["candidate"]>
@@ -4733,7 +4693,7 @@ export namespace Prisma {
   export type CandidateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "candidateCode" | "firstName" | "lastName" | "email" | "phone" | "age" | "occupation" | "giftCode" | "observation" | "contact" | "action" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["candidate"]>
   export type CandidateInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     inscriptions?: boolean | Candidate$inscriptionsArgs<ExtArgs>
-    groups?: boolean | Candidate$groupsArgs<ExtArgs>
+    inscriptionCandidates?: boolean | Candidate$inscriptionCandidatesArgs<ExtArgs>
     payments?: boolean | Candidate$paymentsArgs<ExtArgs>
     _count?: boolean | CandidateCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -4744,7 +4704,7 @@ export namespace Prisma {
     name: "Candidate"
     objects: {
       inscriptions: Prisma.$InscriptionPayload<ExtArgs>[]
-      groups: Prisma.$GroupCandidatePayload<ExtArgs>[]
+      inscriptionCandidates: Prisma.$InscriptionCandidatePayload<ExtArgs>[]
       payments: Prisma.$PaymentPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -5158,7 +5118,7 @@ export namespace Prisma {
   export interface Prisma__CandidateClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     inscriptions<T extends Candidate$inscriptionsArgs<ExtArgs> = {}>(args?: Subset<T, Candidate$inscriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    groups<T extends Candidate$groupsArgs<ExtArgs> = {}>(args?: Subset<T, Candidate$groupsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GroupCandidatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    inscriptionCandidates<T extends Candidate$inscriptionCandidatesArgs<ExtArgs> = {}>(args?: Subset<T, Candidate$inscriptionCandidatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InscriptionCandidatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     payments<T extends Candidate$paymentsArgs<ExtArgs> = {}>(args?: Subset<T, Candidate$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -5616,27 +5576,27 @@ export namespace Prisma {
   }
 
   /**
-   * Candidate.groups
+   * Candidate.inscriptionCandidates
    */
-  export type Candidate$groupsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Candidate$inscriptionCandidatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the GroupCandidate
+     * Select specific fields to fetch from the InscriptionCandidate
      */
-    select?: GroupCandidateSelect<ExtArgs> | null
+    select?: InscriptionCandidateSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the GroupCandidate
+     * Omit specific fields from the InscriptionCandidate
      */
-    omit?: GroupCandidateOmit<ExtArgs> | null
+    omit?: InscriptionCandidateOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: GroupCandidateInclude<ExtArgs> | null
-    where?: GroupCandidateWhereInput
-    orderBy?: GroupCandidateOrderByWithRelationInput | GroupCandidateOrderByWithRelationInput[]
-    cursor?: GroupCandidateWhereUniqueInput
+    include?: InscriptionCandidateInclude<ExtArgs> | null
+    where?: InscriptionCandidateWhereInput
+    orderBy?: InscriptionCandidateOrderByWithRelationInput | InscriptionCandidateOrderByWithRelationInput[]
+    cursor?: InscriptionCandidateWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: GroupCandidateScalarFieldEnum | GroupCandidateScalarFieldEnum[]
+    distinct?: InscriptionCandidateScalarFieldEnum | InscriptionCandidateScalarFieldEnum[]
   }
 
   /**
@@ -5941,7 +5901,6 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     inscriptions?: boolean | Formation$inscriptionsArgs<ExtArgs>
-    groups?: boolean | Formation$groupsArgs<ExtArgs>
     payments?: boolean | Formation$paymentsArgs<ExtArgs>
     _count?: boolean | FormationCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["formation"]>
@@ -5991,7 +5950,6 @@ export namespace Prisma {
   export type FormationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "matiere" | "niveau" | "type" | "duration" | "totalSessions" | "prix" | "volumeHoraire" | "description" | "createdAt" | "updatedAt", ExtArgs["result"]["formation"]>
   export type FormationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     inscriptions?: boolean | Formation$inscriptionsArgs<ExtArgs>
-    groups?: boolean | Formation$groupsArgs<ExtArgs>
     payments?: boolean | Formation$paymentsArgs<ExtArgs>
     _count?: boolean | FormationCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -6002,7 +5960,6 @@ export namespace Prisma {
     name: "Formation"
     objects: {
       inscriptions: Prisma.$InscriptionPayload<ExtArgs>[]
-      groups: Prisma.$GroupPayload<ExtArgs>[]
       payments: Prisma.$PaymentPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -6412,7 +6369,6 @@ export namespace Prisma {
   export interface Prisma__FormationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     inscriptions<T extends Formation$inscriptionsArgs<ExtArgs> = {}>(args?: Subset<T, Formation$inscriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    groups<T extends Formation$groupsArgs<ExtArgs> = {}>(args?: Subset<T, Formation$groupsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     payments<T extends Formation$paymentsArgs<ExtArgs> = {}>(args?: Subset<T, Formation$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -6863,30 +6819,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: InscriptionScalarFieldEnum | InscriptionScalarFieldEnum[]
-  }
-
-  /**
-   * Formation.groups
-   */
-  export type Formation$groupsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Group
-     */
-    select?: GroupSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Group
-     */
-    omit?: GroupOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: GroupInclude<ExtArgs> | null
-    where?: GroupWhereInput
-    orderBy?: GroupOrderByWithRelationInput | GroupOrderByWithRelationInput[]
-    cursor?: GroupWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: GroupScalarFieldEnum | GroupScalarFieldEnum[]
   }
 
   /**
@@ -8321,7 +8253,7 @@ export namespace Prisma {
     maxSessions?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    groups?: boolean | Professor$groupsArgs<ExtArgs>
+    inscriptions?: boolean | Professor$inscriptionsArgs<ExtArgs>
     reservations?: boolean | Professor$reservationsArgs<ExtArgs>
     _count?: boolean | ProfessorCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["professor"]>
@@ -8370,7 +8302,7 @@ export namespace Prisma {
 
   export type ProfessorOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nom" | "prenom" | "email" | "telephone" | "adresse" | "type" | "dayOff" | "maxSessions" | "createdAt" | "updatedAt", ExtArgs["result"]["professor"]>
   export type ProfessorInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    groups?: boolean | Professor$groupsArgs<ExtArgs>
+    inscriptions?: boolean | Professor$inscriptionsArgs<ExtArgs>
     reservations?: boolean | Professor$reservationsArgs<ExtArgs>
     _count?: boolean | ProfessorCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -8380,7 +8312,7 @@ export namespace Prisma {
   export type $ProfessorPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Professor"
     objects: {
-      groups: Prisma.$GroupPayload<ExtArgs>[]
+      inscriptions: Prisma.$InscriptionPayload<ExtArgs>[]
       reservations: Prisma.$ReservationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -8789,7 +8721,7 @@ export namespace Prisma {
    */
   export interface Prisma__ProfessorClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    groups<T extends Professor$groupsArgs<ExtArgs> = {}>(args?: Subset<T, Professor$groupsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    inscriptions<T extends Professor$inscriptionsArgs<ExtArgs> = {}>(args?: Subset<T, Professor$inscriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     reservations<T extends Professor$reservationsArgs<ExtArgs> = {}>(args?: Subset<T, Professor$reservationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReservationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -9219,27 +9151,27 @@ export namespace Prisma {
   }
 
   /**
-   * Professor.groups
+   * Professor.inscriptions
    */
-  export type Professor$groupsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Professor$inscriptionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Group
+     * Select specific fields to fetch from the Inscription
      */
-    select?: GroupSelect<ExtArgs> | null
+    select?: InscriptionSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Group
+     * Omit specific fields from the Inscription
      */
-    omit?: GroupOmit<ExtArgs> | null
+    omit?: InscriptionOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: GroupInclude<ExtArgs> | null
-    where?: GroupWhereInput
-    orderBy?: GroupOrderByWithRelationInput | GroupOrderByWithRelationInput[]
-    cursor?: GroupWhereUniqueInput
+    include?: InscriptionInclude<ExtArgs> | null
+    where?: InscriptionWhereInput
+    orderBy?: InscriptionOrderByWithRelationInput | InscriptionOrderByWithRelationInput[]
+    cursor?: InscriptionWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: GroupScalarFieldEnum | GroupScalarFieldEnum[]
+    distinct?: InscriptionScalarFieldEnum | InscriptionScalarFieldEnum[]
   }
 
   /**
@@ -9321,9 +9253,9 @@ export namespace Prisma {
     volumeHoraire: number | null
     remainingHours: number | null
     learningMode: $Enums.LearningMode | null
-    groupId: string | null
     candidateId: string | null
     formationId: string | null
+    professorId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -9338,9 +9270,9 @@ export namespace Prisma {
     volumeHoraire: number | null
     remainingHours: number | null
     learningMode: $Enums.LearningMode | null
-    groupId: string | null
     candidateId: string | null
     formationId: string | null
+    professorId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -9355,9 +9287,9 @@ export namespace Prisma {
     volumeHoraire: number
     remainingHours: number
     learningMode: number
-    groupId: number
     candidateId: number
     formationId: number
+    professorId: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -9388,9 +9320,9 @@ export namespace Prisma {
     volumeHoraire?: true
     remainingHours?: true
     learningMode?: true
-    groupId?: true
     candidateId?: true
     formationId?: true
+    professorId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -9405,9 +9337,9 @@ export namespace Prisma {
     volumeHoraire?: true
     remainingHours?: true
     learningMode?: true
-    groupId?: true
     candidateId?: true
     formationId?: true
+    professorId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -9422,9 +9354,9 @@ export namespace Prisma {
     volumeHoraire?: true
     remainingHours?: true
     learningMode?: true
-    groupId?: true
     candidateId?: true
     formationId?: true
+    professorId?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -9526,9 +9458,9 @@ export namespace Prisma {
     volumeHoraire: number | null
     remainingHours: number
     learningMode: $Enums.LearningMode
-    groupId: string | null
     candidateId: string
     formationId: string
+    professorId: string | null
     createdAt: Date
     updatedAt: Date
     _count: InscriptionCountAggregateOutputType | null
@@ -9562,14 +9494,16 @@ export namespace Prisma {
     volumeHoraire?: boolean
     remainingHours?: boolean
     learningMode?: boolean
-    groupId?: boolean
     candidateId?: boolean
     formationId?: boolean
+    professorId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     candidate?: boolean | CandidateDefaultArgs<ExtArgs>
     formation?: boolean | FormationDefaultArgs<ExtArgs>
+    professor?: boolean | Inscription$professorArgs<ExtArgs>
     group?: boolean | Inscription$groupArgs<ExtArgs>
+    members?: boolean | Inscription$membersArgs<ExtArgs>
     reservations?: boolean | Inscription$reservationsArgs<ExtArgs>
     _count?: boolean | InscriptionCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["inscription"]>
@@ -9584,14 +9518,14 @@ export namespace Prisma {
     volumeHoraire?: boolean
     remainingHours?: boolean
     learningMode?: boolean
-    groupId?: boolean
     candidateId?: boolean
     formationId?: boolean
+    professorId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     candidate?: boolean | CandidateDefaultArgs<ExtArgs>
     formation?: boolean | FormationDefaultArgs<ExtArgs>
-    group?: boolean | Inscription$groupArgs<ExtArgs>
+    professor?: boolean | Inscription$professorArgs<ExtArgs>
   }, ExtArgs["result"]["inscription"]>
 
   export type InscriptionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -9604,14 +9538,14 @@ export namespace Prisma {
     volumeHoraire?: boolean
     remainingHours?: boolean
     learningMode?: boolean
-    groupId?: boolean
     candidateId?: boolean
     formationId?: boolean
+    professorId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     candidate?: boolean | CandidateDefaultArgs<ExtArgs>
     formation?: boolean | FormationDefaultArgs<ExtArgs>
-    group?: boolean | Inscription$groupArgs<ExtArgs>
+    professor?: boolean | Inscription$professorArgs<ExtArgs>
   }, ExtArgs["result"]["inscription"]>
 
   export type InscriptionSelectScalar = {
@@ -9624,30 +9558,32 @@ export namespace Prisma {
     volumeHoraire?: boolean
     remainingHours?: boolean
     learningMode?: boolean
-    groupId?: boolean
     candidateId?: boolean
     formationId?: boolean
+    professorId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type InscriptionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "dateInscription" | "status" | "note" | "duration" | "price" | "volumeHoraire" | "remainingHours" | "learningMode" | "groupId" | "candidateId" | "formationId" | "createdAt" | "updatedAt", ExtArgs["result"]["inscription"]>
+  export type InscriptionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "dateInscription" | "status" | "note" | "duration" | "price" | "volumeHoraire" | "remainingHours" | "learningMode" | "candidateId" | "formationId" | "professorId" | "createdAt" | "updatedAt", ExtArgs["result"]["inscription"]>
   export type InscriptionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     candidate?: boolean | CandidateDefaultArgs<ExtArgs>
     formation?: boolean | FormationDefaultArgs<ExtArgs>
+    professor?: boolean | Inscription$professorArgs<ExtArgs>
     group?: boolean | Inscription$groupArgs<ExtArgs>
+    members?: boolean | Inscription$membersArgs<ExtArgs>
     reservations?: boolean | Inscription$reservationsArgs<ExtArgs>
     _count?: boolean | InscriptionCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type InscriptionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     candidate?: boolean | CandidateDefaultArgs<ExtArgs>
     formation?: boolean | FormationDefaultArgs<ExtArgs>
-    group?: boolean | Inscription$groupArgs<ExtArgs>
+    professor?: boolean | Inscription$professorArgs<ExtArgs>
   }
   export type InscriptionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     candidate?: boolean | CandidateDefaultArgs<ExtArgs>
     formation?: boolean | FormationDefaultArgs<ExtArgs>
-    group?: boolean | Inscription$groupArgs<ExtArgs>
+    professor?: boolean | Inscription$professorArgs<ExtArgs>
   }
 
   export type $InscriptionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9655,7 +9591,9 @@ export namespace Prisma {
     objects: {
       candidate: Prisma.$CandidatePayload<ExtArgs>
       formation: Prisma.$FormationPayload<ExtArgs>
+      professor: Prisma.$ProfessorPayload<ExtArgs> | null
       group: Prisma.$GroupPayload<ExtArgs> | null
+      members: Prisma.$InscriptionCandidatePayload<ExtArgs>[]
       reservations: Prisma.$ReservationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -9668,9 +9606,9 @@ export namespace Prisma {
       volumeHoraire: number | null
       remainingHours: number
       learningMode: $Enums.LearningMode
-      groupId: string | null
       candidateId: string
       formationId: string
+      professorId: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["inscription"]>
@@ -10069,7 +10007,9 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     candidate<T extends CandidateDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CandidateDefaultArgs<ExtArgs>>): Prisma__CandidateClient<$Result.GetResult<Prisma.$CandidatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     formation<T extends FormationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FormationDefaultArgs<ExtArgs>>): Prisma__FormationClient<$Result.GetResult<Prisma.$FormationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    professor<T extends Inscription$professorArgs<ExtArgs> = {}>(args?: Subset<T, Inscription$professorArgs<ExtArgs>>): Prisma__ProfessorClient<$Result.GetResult<Prisma.$ProfessorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     group<T extends Inscription$groupArgs<ExtArgs> = {}>(args?: Subset<T, Inscription$groupArgs<ExtArgs>>): Prisma__GroupClient<$Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    members<T extends Inscription$membersArgs<ExtArgs> = {}>(args?: Subset<T, Inscription$membersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InscriptionCandidatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     reservations<T extends Inscription$reservationsArgs<ExtArgs> = {}>(args?: Subset<T, Inscription$reservationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReservationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -10109,9 +10049,9 @@ export namespace Prisma {
     readonly volumeHoraire: FieldRef<"Inscription", 'Int'>
     readonly remainingHours: FieldRef<"Inscription", 'Float'>
     readonly learningMode: FieldRef<"Inscription", 'LearningMode'>
-    readonly groupId: FieldRef<"Inscription", 'String'>
     readonly candidateId: FieldRef<"Inscription", 'String'>
     readonly formationId: FieldRef<"Inscription", 'String'>
+    readonly professorId: FieldRef<"Inscription", 'String'>
     readonly createdAt: FieldRef<"Inscription", 'DateTime'>
     readonly updatedAt: FieldRef<"Inscription", 'DateTime'>
   }
@@ -10510,6 +10450,25 @@ export namespace Prisma {
   }
 
   /**
+   * Inscription.professor
+   */
+  export type Inscription$professorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Professor
+     */
+    select?: ProfessorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Professor
+     */
+    omit?: ProfessorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProfessorInclude<ExtArgs> | null
+    where?: ProfessorWhereInput
+  }
+
+  /**
    * Inscription.group
    */
   export type Inscription$groupArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -10526,6 +10485,30 @@ export namespace Prisma {
      */
     include?: GroupInclude<ExtArgs> | null
     where?: GroupWhereInput
+  }
+
+  /**
+   * Inscription.members
+   */
+  export type Inscription$membersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InscriptionCandidate
+     */
+    select?: InscriptionCandidateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the InscriptionCandidate
+     */
+    omit?: InscriptionCandidateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InscriptionCandidateInclude<ExtArgs> | null
+    where?: InscriptionCandidateWhereInput
+    orderBy?: InscriptionCandidateOrderByWithRelationInput | InscriptionCandidateOrderByWithRelationInput[]
+    cursor?: InscriptionCandidateWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: InscriptionCandidateScalarFieldEnum | InscriptionCandidateScalarFieldEnum[]
   }
 
   /**
@@ -10577,27 +10560,14 @@ export namespace Prisma {
 
   export type AggregateGroup = {
     _count: GroupCountAggregateOutputType | null
-    _avg: GroupAvgAggregateOutputType | null
-    _sum: GroupSumAggregateOutputType | null
     _min: GroupMinAggregateOutputType | null
     _max: GroupMaxAggregateOutputType | null
-  }
-
-  export type GroupAvgAggregateOutputType = {
-    effectif: number | null
-  }
-
-  export type GroupSumAggregateOutputType = {
-    effectif: number | null
   }
 
   export type GroupMinAggregateOutputType = {
     id: string | null
     nom: string | null
-    type: $Enums.GroupType | null
-    formationId: string | null
-    professorId: string | null
-    effectif: number | null
+    inscriptionId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -10605,10 +10575,7 @@ export namespace Prisma {
   export type GroupMaxAggregateOutputType = {
     id: string | null
     nom: string | null
-    type: $Enums.GroupType | null
-    formationId: string | null
-    professorId: string | null
-    effectif: number | null
+    inscriptionId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -10616,31 +10583,17 @@ export namespace Prisma {
   export type GroupCountAggregateOutputType = {
     id: number
     nom: number
-    type: number
-    formationId: number
-    professorId: number
-    effectif: number
+    inscriptionId: number
     createdAt: number
     updatedAt: number
     _all: number
   }
 
 
-  export type GroupAvgAggregateInputType = {
-    effectif?: true
-  }
-
-  export type GroupSumAggregateInputType = {
-    effectif?: true
-  }
-
   export type GroupMinAggregateInputType = {
     id?: true
     nom?: true
-    type?: true
-    formationId?: true
-    professorId?: true
-    effectif?: true
+    inscriptionId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -10648,10 +10601,7 @@ export namespace Prisma {
   export type GroupMaxAggregateInputType = {
     id?: true
     nom?: true
-    type?: true
-    formationId?: true
-    professorId?: true
-    effectif?: true
+    inscriptionId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -10659,10 +10609,7 @@ export namespace Prisma {
   export type GroupCountAggregateInputType = {
     id?: true
     nom?: true
-    type?: true
-    formationId?: true
-    professorId?: true
-    effectif?: true
+    inscriptionId?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -10706,18 +10653,6 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Select which fields to average
-    **/
-    _avg?: GroupAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: GroupSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
      * Select which fields to find the minimum value
     **/
     _min?: GroupMinAggregateInputType
@@ -10748,8 +10683,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: GroupCountAggregateInputType | true
-    _avg?: GroupAvgAggregateInputType
-    _sum?: GroupSumAggregateInputType
     _min?: GroupMinAggregateInputType
     _max?: GroupMaxAggregateInputType
   }
@@ -10757,15 +10690,10 @@ export namespace Prisma {
   export type GroupGroupByOutputType = {
     id: string
     nom: string
-    type: $Enums.GroupType
-    formationId: string
-    professorId: string | null
-    effectif: number
+    inscriptionId: string
     createdAt: Date
     updatedAt: Date
     _count: GroupCountAggregateOutputType | null
-    _avg: GroupAvgAggregateOutputType | null
-    _sum: GroupSumAggregateOutputType | null
     _min: GroupMinAggregateOutputType | null
     _max: GroupMaxAggregateOutputType | null
   }
@@ -10787,88 +10715,58 @@ export namespace Prisma {
   export type GroupSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     nom?: boolean
-    type?: boolean
-    formationId?: boolean
-    professorId?: boolean
-    effectif?: boolean
+    inscriptionId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    formation?: boolean | FormationDefaultArgs<ExtArgs>
-    professor?: boolean | Group$professorArgs<ExtArgs>
-    members?: boolean | Group$membersArgs<ExtArgs>
-    inscriptions?: boolean | Group$inscriptionsArgs<ExtArgs>
-    _count?: boolean | GroupCountOutputTypeDefaultArgs<ExtArgs>
+    inscription?: boolean | InscriptionDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["group"]>
 
   export type GroupSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     nom?: boolean
-    type?: boolean
-    formationId?: boolean
-    professorId?: boolean
-    effectif?: boolean
+    inscriptionId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    formation?: boolean | FormationDefaultArgs<ExtArgs>
-    professor?: boolean | Group$professorArgs<ExtArgs>
+    inscription?: boolean | InscriptionDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["group"]>
 
   export type GroupSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     nom?: boolean
-    type?: boolean
-    formationId?: boolean
-    professorId?: boolean
-    effectif?: boolean
+    inscriptionId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    formation?: boolean | FormationDefaultArgs<ExtArgs>
-    professor?: boolean | Group$professorArgs<ExtArgs>
+    inscription?: boolean | InscriptionDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["group"]>
 
   export type GroupSelectScalar = {
     id?: boolean
     nom?: boolean
-    type?: boolean
-    formationId?: boolean
-    professorId?: boolean
-    effectif?: boolean
+    inscriptionId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type GroupOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nom" | "type" | "formationId" | "professorId" | "effectif" | "createdAt" | "updatedAt", ExtArgs["result"]["group"]>
+  export type GroupOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nom" | "inscriptionId" | "createdAt" | "updatedAt", ExtArgs["result"]["group"]>
   export type GroupInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    formation?: boolean | FormationDefaultArgs<ExtArgs>
-    professor?: boolean | Group$professorArgs<ExtArgs>
-    members?: boolean | Group$membersArgs<ExtArgs>
-    inscriptions?: boolean | Group$inscriptionsArgs<ExtArgs>
-    _count?: boolean | GroupCountOutputTypeDefaultArgs<ExtArgs>
+    inscription?: boolean | InscriptionDefaultArgs<ExtArgs>
   }
   export type GroupIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    formation?: boolean | FormationDefaultArgs<ExtArgs>
-    professor?: boolean | Group$professorArgs<ExtArgs>
+    inscription?: boolean | InscriptionDefaultArgs<ExtArgs>
   }
   export type GroupIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    formation?: boolean | FormationDefaultArgs<ExtArgs>
-    professor?: boolean | Group$professorArgs<ExtArgs>
+    inscription?: boolean | InscriptionDefaultArgs<ExtArgs>
   }
 
   export type $GroupPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Group"
     objects: {
-      formation: Prisma.$FormationPayload<ExtArgs>
-      professor: Prisma.$ProfessorPayload<ExtArgs> | null
-      members: Prisma.$GroupCandidatePayload<ExtArgs>[]
-      inscriptions: Prisma.$InscriptionPayload<ExtArgs>[]
+      inscription: Prisma.$InscriptionPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       nom: string
-      type: $Enums.GroupType
-      formationId: string
-      professorId: string | null
-      effectif: number
+      inscriptionId: string
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["group"]>
@@ -11265,10 +11163,7 @@ export namespace Prisma {
    */
   export interface Prisma__GroupClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    formation<T extends FormationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FormationDefaultArgs<ExtArgs>>): Prisma__FormationClient<$Result.GetResult<Prisma.$FormationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    professor<T extends Group$professorArgs<ExtArgs> = {}>(args?: Subset<T, Group$professorArgs<ExtArgs>>): Prisma__ProfessorClient<$Result.GetResult<Prisma.$ProfessorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    members<T extends Group$membersArgs<ExtArgs> = {}>(args?: Subset<T, Group$membersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GroupCandidatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    inscriptions<T extends Group$inscriptionsArgs<ExtArgs> = {}>(args?: Subset<T, Group$inscriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    inscription<T extends InscriptionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, InscriptionDefaultArgs<ExtArgs>>): Prisma__InscriptionClient<$Result.GetResult<Prisma.$InscriptionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -11300,10 +11195,7 @@ export namespace Prisma {
   interface GroupFieldRefs {
     readonly id: FieldRef<"Group", 'String'>
     readonly nom: FieldRef<"Group", 'String'>
-    readonly type: FieldRef<"Group", 'GroupType'>
-    readonly formationId: FieldRef<"Group", 'String'>
-    readonly professorId: FieldRef<"Group", 'String'>
-    readonly effectif: FieldRef<"Group", 'Int'>
+    readonly inscriptionId: FieldRef<"Group", 'String'>
     readonly createdAt: FieldRef<"Group", 'DateTime'>
     readonly updatedAt: FieldRef<"Group", 'DateTime'>
   }
@@ -11702,73 +11594,6 @@ export namespace Prisma {
   }
 
   /**
-   * Group.professor
-   */
-  export type Group$professorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Professor
-     */
-    select?: ProfessorSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Professor
-     */
-    omit?: ProfessorOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ProfessorInclude<ExtArgs> | null
-    where?: ProfessorWhereInput
-  }
-
-  /**
-   * Group.members
-   */
-  export type Group$membersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the GroupCandidate
-     */
-    select?: GroupCandidateSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the GroupCandidate
-     */
-    omit?: GroupCandidateOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: GroupCandidateInclude<ExtArgs> | null
-    where?: GroupCandidateWhereInput
-    orderBy?: GroupCandidateOrderByWithRelationInput | GroupCandidateOrderByWithRelationInput[]
-    cursor?: GroupCandidateWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: GroupCandidateScalarFieldEnum | GroupCandidateScalarFieldEnum[]
-  }
-
-  /**
-   * Group.inscriptions
-   */
-  export type Group$inscriptionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Inscription
-     */
-    select?: InscriptionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Inscription
-     */
-    omit?: InscriptionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: InscriptionInclude<ExtArgs> | null
-    where?: InscriptionWhereInput
-    orderBy?: InscriptionOrderByWithRelationInput | InscriptionOrderByWithRelationInput[]
-    cursor?: InscriptionWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: InscriptionScalarFieldEnum | InscriptionScalarFieldEnum[]
-  }
-
-  /**
    * Group without action
    */
   export type GroupDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -11788,345 +11613,345 @@ export namespace Prisma {
 
 
   /**
-   * Model GroupCandidate
+   * Model InscriptionCandidate
    */
 
-  export type AggregateGroupCandidate = {
-    _count: GroupCandidateCountAggregateOutputType | null
-    _min: GroupCandidateMinAggregateOutputType | null
-    _max: GroupCandidateMaxAggregateOutputType | null
+  export type AggregateInscriptionCandidate = {
+    _count: InscriptionCandidateCountAggregateOutputType | null
+    _min: InscriptionCandidateMinAggregateOutputType | null
+    _max: InscriptionCandidateMaxAggregateOutputType | null
   }
 
-  export type GroupCandidateMinAggregateOutputType = {
+  export type InscriptionCandidateMinAggregateOutputType = {
     id: string | null
-    groupId: string | null
+    inscriptionId: string | null
     candidateId: string | null
     createdAt: Date | null
   }
 
-  export type GroupCandidateMaxAggregateOutputType = {
+  export type InscriptionCandidateMaxAggregateOutputType = {
     id: string | null
-    groupId: string | null
+    inscriptionId: string | null
     candidateId: string | null
     createdAt: Date | null
   }
 
-  export type GroupCandidateCountAggregateOutputType = {
+  export type InscriptionCandidateCountAggregateOutputType = {
     id: number
-    groupId: number
+    inscriptionId: number
     candidateId: number
     createdAt: number
     _all: number
   }
 
 
-  export type GroupCandidateMinAggregateInputType = {
+  export type InscriptionCandidateMinAggregateInputType = {
     id?: true
-    groupId?: true
+    inscriptionId?: true
     candidateId?: true
     createdAt?: true
   }
 
-  export type GroupCandidateMaxAggregateInputType = {
+  export type InscriptionCandidateMaxAggregateInputType = {
     id?: true
-    groupId?: true
+    inscriptionId?: true
     candidateId?: true
     createdAt?: true
   }
 
-  export type GroupCandidateCountAggregateInputType = {
+  export type InscriptionCandidateCountAggregateInputType = {
     id?: true
-    groupId?: true
+    inscriptionId?: true
     candidateId?: true
     createdAt?: true
     _all?: true
   }
 
-  export type GroupCandidateAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type InscriptionCandidateAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which GroupCandidate to aggregate.
+     * Filter which InscriptionCandidate to aggregate.
      */
-    where?: GroupCandidateWhereInput
+    where?: InscriptionCandidateWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of GroupCandidates to fetch.
+     * Determine the order of InscriptionCandidates to fetch.
      */
-    orderBy?: GroupCandidateOrderByWithRelationInput | GroupCandidateOrderByWithRelationInput[]
+    orderBy?: InscriptionCandidateOrderByWithRelationInput | InscriptionCandidateOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: GroupCandidateWhereUniqueInput
+    cursor?: InscriptionCandidateWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` GroupCandidates from the position of the cursor.
+     * Take `±n` InscriptionCandidates from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` GroupCandidates.
+     * Skip the first `n` InscriptionCandidates.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned GroupCandidates
+     * Count returned InscriptionCandidates
     **/
-    _count?: true | GroupCandidateCountAggregateInputType
+    _count?: true | InscriptionCandidateCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: GroupCandidateMinAggregateInputType
+    _min?: InscriptionCandidateMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: GroupCandidateMaxAggregateInputType
+    _max?: InscriptionCandidateMaxAggregateInputType
   }
 
-  export type GetGroupCandidateAggregateType<T extends GroupCandidateAggregateArgs> = {
-        [P in keyof T & keyof AggregateGroupCandidate]: P extends '_count' | 'count'
+  export type GetInscriptionCandidateAggregateType<T extends InscriptionCandidateAggregateArgs> = {
+        [P in keyof T & keyof AggregateInscriptionCandidate]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateGroupCandidate[P]>
-      : GetScalarType<T[P], AggregateGroupCandidate[P]>
+        : GetScalarType<T[P], AggregateInscriptionCandidate[P]>
+      : GetScalarType<T[P], AggregateInscriptionCandidate[P]>
   }
 
 
 
 
-  export type GroupCandidateGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: GroupCandidateWhereInput
-    orderBy?: GroupCandidateOrderByWithAggregationInput | GroupCandidateOrderByWithAggregationInput[]
-    by: GroupCandidateScalarFieldEnum[] | GroupCandidateScalarFieldEnum
-    having?: GroupCandidateScalarWhereWithAggregatesInput
+  export type InscriptionCandidateGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InscriptionCandidateWhereInput
+    orderBy?: InscriptionCandidateOrderByWithAggregationInput | InscriptionCandidateOrderByWithAggregationInput[]
+    by: InscriptionCandidateScalarFieldEnum[] | InscriptionCandidateScalarFieldEnum
+    having?: InscriptionCandidateScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: GroupCandidateCountAggregateInputType | true
-    _min?: GroupCandidateMinAggregateInputType
-    _max?: GroupCandidateMaxAggregateInputType
+    _count?: InscriptionCandidateCountAggregateInputType | true
+    _min?: InscriptionCandidateMinAggregateInputType
+    _max?: InscriptionCandidateMaxAggregateInputType
   }
 
-  export type GroupCandidateGroupByOutputType = {
+  export type InscriptionCandidateGroupByOutputType = {
     id: string
-    groupId: string
+    inscriptionId: string
     candidateId: string
     createdAt: Date
-    _count: GroupCandidateCountAggregateOutputType | null
-    _min: GroupCandidateMinAggregateOutputType | null
-    _max: GroupCandidateMaxAggregateOutputType | null
+    _count: InscriptionCandidateCountAggregateOutputType | null
+    _min: InscriptionCandidateMinAggregateOutputType | null
+    _max: InscriptionCandidateMaxAggregateOutputType | null
   }
 
-  type GetGroupCandidateGroupByPayload<T extends GroupCandidateGroupByArgs> = Prisma.PrismaPromise<
+  type GetInscriptionCandidateGroupByPayload<T extends InscriptionCandidateGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<GroupCandidateGroupByOutputType, T['by']> &
+      PickEnumerable<InscriptionCandidateGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof GroupCandidateGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof InscriptionCandidateGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], GroupCandidateGroupByOutputType[P]>
-            : GetScalarType<T[P], GroupCandidateGroupByOutputType[P]>
+              : GetScalarType<T[P], InscriptionCandidateGroupByOutputType[P]>
+            : GetScalarType<T[P], InscriptionCandidateGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type GroupCandidateSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type InscriptionCandidateSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    groupId?: boolean
+    inscriptionId?: boolean
     candidateId?: boolean
     createdAt?: boolean
-    group?: boolean | GroupDefaultArgs<ExtArgs>
+    inscription?: boolean | InscriptionDefaultArgs<ExtArgs>
     candidate?: boolean | CandidateDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["groupCandidate"]>
+  }, ExtArgs["result"]["inscriptionCandidate"]>
 
-  export type GroupCandidateSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type InscriptionCandidateSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    groupId?: boolean
+    inscriptionId?: boolean
     candidateId?: boolean
     createdAt?: boolean
-    group?: boolean | GroupDefaultArgs<ExtArgs>
+    inscription?: boolean | InscriptionDefaultArgs<ExtArgs>
     candidate?: boolean | CandidateDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["groupCandidate"]>
+  }, ExtArgs["result"]["inscriptionCandidate"]>
 
-  export type GroupCandidateSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type InscriptionCandidateSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    groupId?: boolean
+    inscriptionId?: boolean
     candidateId?: boolean
     createdAt?: boolean
-    group?: boolean | GroupDefaultArgs<ExtArgs>
+    inscription?: boolean | InscriptionDefaultArgs<ExtArgs>
     candidate?: boolean | CandidateDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["groupCandidate"]>
+  }, ExtArgs["result"]["inscriptionCandidate"]>
 
-  export type GroupCandidateSelectScalar = {
+  export type InscriptionCandidateSelectScalar = {
     id?: boolean
-    groupId?: boolean
+    inscriptionId?: boolean
     candidateId?: boolean
     createdAt?: boolean
   }
 
-  export type GroupCandidateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "groupId" | "candidateId" | "createdAt", ExtArgs["result"]["groupCandidate"]>
-  export type GroupCandidateInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    group?: boolean | GroupDefaultArgs<ExtArgs>
+  export type InscriptionCandidateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "inscriptionId" | "candidateId" | "createdAt", ExtArgs["result"]["inscriptionCandidate"]>
+  export type InscriptionCandidateInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    inscription?: boolean | InscriptionDefaultArgs<ExtArgs>
     candidate?: boolean | CandidateDefaultArgs<ExtArgs>
   }
-  export type GroupCandidateIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    group?: boolean | GroupDefaultArgs<ExtArgs>
+  export type InscriptionCandidateIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    inscription?: boolean | InscriptionDefaultArgs<ExtArgs>
     candidate?: boolean | CandidateDefaultArgs<ExtArgs>
   }
-  export type GroupCandidateIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    group?: boolean | GroupDefaultArgs<ExtArgs>
+  export type InscriptionCandidateIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    inscription?: boolean | InscriptionDefaultArgs<ExtArgs>
     candidate?: boolean | CandidateDefaultArgs<ExtArgs>
   }
 
-  export type $GroupCandidatePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "GroupCandidate"
+  export type $InscriptionCandidatePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "InscriptionCandidate"
     objects: {
-      group: Prisma.$GroupPayload<ExtArgs>
+      inscription: Prisma.$InscriptionPayload<ExtArgs>
       candidate: Prisma.$CandidatePayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      groupId: string
+      inscriptionId: string
       candidateId: string
       createdAt: Date
-    }, ExtArgs["result"]["groupCandidate"]>
+    }, ExtArgs["result"]["inscriptionCandidate"]>
     composites: {}
   }
 
-  type GroupCandidateGetPayload<S extends boolean | null | undefined | GroupCandidateDefaultArgs> = $Result.GetResult<Prisma.$GroupCandidatePayload, S>
+  type InscriptionCandidateGetPayload<S extends boolean | null | undefined | InscriptionCandidateDefaultArgs> = $Result.GetResult<Prisma.$InscriptionCandidatePayload, S>
 
-  type GroupCandidateCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<GroupCandidateFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: GroupCandidateCountAggregateInputType | true
+  type InscriptionCandidateCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<InscriptionCandidateFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: InscriptionCandidateCountAggregateInputType | true
     }
 
-  export interface GroupCandidateDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['GroupCandidate'], meta: { name: 'GroupCandidate' } }
+  export interface InscriptionCandidateDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['InscriptionCandidate'], meta: { name: 'InscriptionCandidate' } }
     /**
-     * Find zero or one GroupCandidate that matches the filter.
-     * @param {GroupCandidateFindUniqueArgs} args - Arguments to find a GroupCandidate
+     * Find zero or one InscriptionCandidate that matches the filter.
+     * @param {InscriptionCandidateFindUniqueArgs} args - Arguments to find a InscriptionCandidate
      * @example
-     * // Get one GroupCandidate
-     * const groupCandidate = await prisma.groupCandidate.findUnique({
+     * // Get one InscriptionCandidate
+     * const inscriptionCandidate = await prisma.inscriptionCandidate.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends GroupCandidateFindUniqueArgs>(args: SelectSubset<T, GroupCandidateFindUniqueArgs<ExtArgs>>): Prisma__GroupCandidateClient<$Result.GetResult<Prisma.$GroupCandidatePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends InscriptionCandidateFindUniqueArgs>(args: SelectSubset<T, InscriptionCandidateFindUniqueArgs<ExtArgs>>): Prisma__InscriptionCandidateClient<$Result.GetResult<Prisma.$InscriptionCandidatePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one GroupCandidate that matches the filter or throw an error with `error.code='P2025'`
+     * Find one InscriptionCandidate that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
-     * @param {GroupCandidateFindUniqueOrThrowArgs} args - Arguments to find a GroupCandidate
+     * @param {InscriptionCandidateFindUniqueOrThrowArgs} args - Arguments to find a InscriptionCandidate
      * @example
-     * // Get one GroupCandidate
-     * const groupCandidate = await prisma.groupCandidate.findUniqueOrThrow({
+     * // Get one InscriptionCandidate
+     * const inscriptionCandidate = await prisma.inscriptionCandidate.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends GroupCandidateFindUniqueOrThrowArgs>(args: SelectSubset<T, GroupCandidateFindUniqueOrThrowArgs<ExtArgs>>): Prisma__GroupCandidateClient<$Result.GetResult<Prisma.$GroupCandidatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends InscriptionCandidateFindUniqueOrThrowArgs>(args: SelectSubset<T, InscriptionCandidateFindUniqueOrThrowArgs<ExtArgs>>): Prisma__InscriptionCandidateClient<$Result.GetResult<Prisma.$InscriptionCandidatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first GroupCandidate that matches the filter.
+     * Find the first InscriptionCandidate that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {GroupCandidateFindFirstArgs} args - Arguments to find a GroupCandidate
+     * @param {InscriptionCandidateFindFirstArgs} args - Arguments to find a InscriptionCandidate
      * @example
-     * // Get one GroupCandidate
-     * const groupCandidate = await prisma.groupCandidate.findFirst({
+     * // Get one InscriptionCandidate
+     * const inscriptionCandidate = await prisma.inscriptionCandidate.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends GroupCandidateFindFirstArgs>(args?: SelectSubset<T, GroupCandidateFindFirstArgs<ExtArgs>>): Prisma__GroupCandidateClient<$Result.GetResult<Prisma.$GroupCandidatePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends InscriptionCandidateFindFirstArgs>(args?: SelectSubset<T, InscriptionCandidateFindFirstArgs<ExtArgs>>): Prisma__InscriptionCandidateClient<$Result.GetResult<Prisma.$InscriptionCandidatePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first GroupCandidate that matches the filter or
+     * Find the first InscriptionCandidate that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {GroupCandidateFindFirstOrThrowArgs} args - Arguments to find a GroupCandidate
+     * @param {InscriptionCandidateFindFirstOrThrowArgs} args - Arguments to find a InscriptionCandidate
      * @example
-     * // Get one GroupCandidate
-     * const groupCandidate = await prisma.groupCandidate.findFirstOrThrow({
+     * // Get one InscriptionCandidate
+     * const inscriptionCandidate = await prisma.inscriptionCandidate.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends GroupCandidateFindFirstOrThrowArgs>(args?: SelectSubset<T, GroupCandidateFindFirstOrThrowArgs<ExtArgs>>): Prisma__GroupCandidateClient<$Result.GetResult<Prisma.$GroupCandidatePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends InscriptionCandidateFindFirstOrThrowArgs>(args?: SelectSubset<T, InscriptionCandidateFindFirstOrThrowArgs<ExtArgs>>): Prisma__InscriptionCandidateClient<$Result.GetResult<Prisma.$InscriptionCandidatePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find zero or more GroupCandidates that matches the filter.
+     * Find zero or more InscriptionCandidates that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {GroupCandidateFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {InscriptionCandidateFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all GroupCandidates
-     * const groupCandidates = await prisma.groupCandidate.findMany()
+     * // Get all InscriptionCandidates
+     * const inscriptionCandidates = await prisma.inscriptionCandidate.findMany()
      * 
-     * // Get first 10 GroupCandidates
-     * const groupCandidates = await prisma.groupCandidate.findMany({ take: 10 })
+     * // Get first 10 InscriptionCandidates
+     * const inscriptionCandidates = await prisma.inscriptionCandidate.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const groupCandidateWithIdOnly = await prisma.groupCandidate.findMany({ select: { id: true } })
+     * const inscriptionCandidateWithIdOnly = await prisma.inscriptionCandidate.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends GroupCandidateFindManyArgs>(args?: SelectSubset<T, GroupCandidateFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GroupCandidatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends InscriptionCandidateFindManyArgs>(args?: SelectSubset<T, InscriptionCandidateFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InscriptionCandidatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
-     * Create a GroupCandidate.
-     * @param {GroupCandidateCreateArgs} args - Arguments to create a GroupCandidate.
+     * Create a InscriptionCandidate.
+     * @param {InscriptionCandidateCreateArgs} args - Arguments to create a InscriptionCandidate.
      * @example
-     * // Create one GroupCandidate
-     * const GroupCandidate = await prisma.groupCandidate.create({
+     * // Create one InscriptionCandidate
+     * const InscriptionCandidate = await prisma.inscriptionCandidate.create({
      *   data: {
-     *     // ... data to create a GroupCandidate
+     *     // ... data to create a InscriptionCandidate
      *   }
      * })
      * 
      */
-    create<T extends GroupCandidateCreateArgs>(args: SelectSubset<T, GroupCandidateCreateArgs<ExtArgs>>): Prisma__GroupCandidateClient<$Result.GetResult<Prisma.$GroupCandidatePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends InscriptionCandidateCreateArgs>(args: SelectSubset<T, InscriptionCandidateCreateArgs<ExtArgs>>): Prisma__InscriptionCandidateClient<$Result.GetResult<Prisma.$InscriptionCandidatePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Create many GroupCandidates.
-     * @param {GroupCandidateCreateManyArgs} args - Arguments to create many GroupCandidates.
+     * Create many InscriptionCandidates.
+     * @param {InscriptionCandidateCreateManyArgs} args - Arguments to create many InscriptionCandidates.
      * @example
-     * // Create many GroupCandidates
-     * const groupCandidate = await prisma.groupCandidate.createMany({
+     * // Create many InscriptionCandidates
+     * const inscriptionCandidate = await prisma.inscriptionCandidate.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends GroupCandidateCreateManyArgs>(args?: SelectSubset<T, GroupCandidateCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends InscriptionCandidateCreateManyArgs>(args?: SelectSubset<T, InscriptionCandidateCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create many GroupCandidates and returns the data saved in the database.
-     * @param {GroupCandidateCreateManyAndReturnArgs} args - Arguments to create many GroupCandidates.
+     * Create many InscriptionCandidates and returns the data saved in the database.
+     * @param {InscriptionCandidateCreateManyAndReturnArgs} args - Arguments to create many InscriptionCandidates.
      * @example
-     * // Create many GroupCandidates
-     * const groupCandidate = await prisma.groupCandidate.createManyAndReturn({
+     * // Create many InscriptionCandidates
+     * const inscriptionCandidate = await prisma.inscriptionCandidate.createManyAndReturn({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      * 
-     * // Create many GroupCandidates and only return the `id`
-     * const groupCandidateWithIdOnly = await prisma.groupCandidate.createManyAndReturn({
+     * // Create many InscriptionCandidates and only return the `id`
+     * const inscriptionCandidateWithIdOnly = await prisma.inscriptionCandidate.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -12136,28 +11961,28 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends GroupCandidateCreateManyAndReturnArgs>(args?: SelectSubset<T, GroupCandidateCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GroupCandidatePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    createManyAndReturn<T extends InscriptionCandidateCreateManyAndReturnArgs>(args?: SelectSubset<T, InscriptionCandidateCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InscriptionCandidatePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Delete a GroupCandidate.
-     * @param {GroupCandidateDeleteArgs} args - Arguments to delete one GroupCandidate.
+     * Delete a InscriptionCandidate.
+     * @param {InscriptionCandidateDeleteArgs} args - Arguments to delete one InscriptionCandidate.
      * @example
-     * // Delete one GroupCandidate
-     * const GroupCandidate = await prisma.groupCandidate.delete({
+     * // Delete one InscriptionCandidate
+     * const InscriptionCandidate = await prisma.inscriptionCandidate.delete({
      *   where: {
-     *     // ... filter to delete one GroupCandidate
+     *     // ... filter to delete one InscriptionCandidate
      *   }
      * })
      * 
      */
-    delete<T extends GroupCandidateDeleteArgs>(args: SelectSubset<T, GroupCandidateDeleteArgs<ExtArgs>>): Prisma__GroupCandidateClient<$Result.GetResult<Prisma.$GroupCandidatePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends InscriptionCandidateDeleteArgs>(args: SelectSubset<T, InscriptionCandidateDeleteArgs<ExtArgs>>): Prisma__InscriptionCandidateClient<$Result.GetResult<Prisma.$InscriptionCandidatePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Update one GroupCandidate.
-     * @param {GroupCandidateUpdateArgs} args - Arguments to update one GroupCandidate.
+     * Update one InscriptionCandidate.
+     * @param {InscriptionCandidateUpdateArgs} args - Arguments to update one InscriptionCandidate.
      * @example
-     * // Update one GroupCandidate
-     * const groupCandidate = await prisma.groupCandidate.update({
+     * // Update one InscriptionCandidate
+     * const inscriptionCandidate = await prisma.inscriptionCandidate.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -12167,30 +11992,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends GroupCandidateUpdateArgs>(args: SelectSubset<T, GroupCandidateUpdateArgs<ExtArgs>>): Prisma__GroupCandidateClient<$Result.GetResult<Prisma.$GroupCandidatePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends InscriptionCandidateUpdateArgs>(args: SelectSubset<T, InscriptionCandidateUpdateArgs<ExtArgs>>): Prisma__InscriptionCandidateClient<$Result.GetResult<Prisma.$InscriptionCandidatePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Delete zero or more GroupCandidates.
-     * @param {GroupCandidateDeleteManyArgs} args - Arguments to filter GroupCandidates to delete.
+     * Delete zero or more InscriptionCandidates.
+     * @param {InscriptionCandidateDeleteManyArgs} args - Arguments to filter InscriptionCandidates to delete.
      * @example
-     * // Delete a few GroupCandidates
-     * const { count } = await prisma.groupCandidate.deleteMany({
+     * // Delete a few InscriptionCandidates
+     * const { count } = await prisma.inscriptionCandidate.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends GroupCandidateDeleteManyArgs>(args?: SelectSubset<T, GroupCandidateDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends InscriptionCandidateDeleteManyArgs>(args?: SelectSubset<T, InscriptionCandidateDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more GroupCandidates.
+     * Update zero or more InscriptionCandidates.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {GroupCandidateUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {InscriptionCandidateUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many GroupCandidates
-     * const groupCandidate = await prisma.groupCandidate.updateMany({
+     * // Update many InscriptionCandidates
+     * const inscriptionCandidate = await prisma.inscriptionCandidate.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -12200,14 +12025,14 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends GroupCandidateUpdateManyArgs>(args: SelectSubset<T, GroupCandidateUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends InscriptionCandidateUpdateManyArgs>(args: SelectSubset<T, InscriptionCandidateUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more GroupCandidates and returns the data updated in the database.
-     * @param {GroupCandidateUpdateManyAndReturnArgs} args - Arguments to update many GroupCandidates.
+     * Update zero or more InscriptionCandidates and returns the data updated in the database.
+     * @param {InscriptionCandidateUpdateManyAndReturnArgs} args - Arguments to update many InscriptionCandidates.
      * @example
-     * // Update many GroupCandidates
-     * const groupCandidate = await prisma.groupCandidate.updateManyAndReturn({
+     * // Update many InscriptionCandidates
+     * const inscriptionCandidate = await prisma.inscriptionCandidate.updateManyAndReturn({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -12216,8 +12041,8 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more GroupCandidates and only return the `id`
-     * const groupCandidateWithIdOnly = await prisma.groupCandidate.updateManyAndReturn({
+     * // Update zero or more InscriptionCandidates and only return the `id`
+     * const inscriptionCandidateWithIdOnly = await prisma.inscriptionCandidate.updateManyAndReturn({
      *   select: { id: true },
      *   where: {
      *     // ... provide filter here
@@ -12230,56 +12055,56 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    updateManyAndReturn<T extends GroupCandidateUpdateManyAndReturnArgs>(args: SelectSubset<T, GroupCandidateUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GroupCandidatePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+    updateManyAndReturn<T extends InscriptionCandidateUpdateManyAndReturnArgs>(args: SelectSubset<T, InscriptionCandidateUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InscriptionCandidatePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Create or update one GroupCandidate.
-     * @param {GroupCandidateUpsertArgs} args - Arguments to update or create a GroupCandidate.
+     * Create or update one InscriptionCandidate.
+     * @param {InscriptionCandidateUpsertArgs} args - Arguments to update or create a InscriptionCandidate.
      * @example
-     * // Update or create a GroupCandidate
-     * const groupCandidate = await prisma.groupCandidate.upsert({
+     * // Update or create a InscriptionCandidate
+     * const inscriptionCandidate = await prisma.inscriptionCandidate.upsert({
      *   create: {
-     *     // ... data to create a GroupCandidate
+     *     // ... data to create a InscriptionCandidate
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the GroupCandidate we want to update
+     *     // ... the filter for the InscriptionCandidate we want to update
      *   }
      * })
      */
-    upsert<T extends GroupCandidateUpsertArgs>(args: SelectSubset<T, GroupCandidateUpsertArgs<ExtArgs>>): Prisma__GroupCandidateClient<$Result.GetResult<Prisma.$GroupCandidatePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends InscriptionCandidateUpsertArgs>(args: SelectSubset<T, InscriptionCandidateUpsertArgs<ExtArgs>>): Prisma__InscriptionCandidateClient<$Result.GetResult<Prisma.$InscriptionCandidatePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
-     * Count the number of GroupCandidates.
+     * Count the number of InscriptionCandidates.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {GroupCandidateCountArgs} args - Arguments to filter GroupCandidates to count.
+     * @param {InscriptionCandidateCountArgs} args - Arguments to filter InscriptionCandidates to count.
      * @example
-     * // Count the number of GroupCandidates
-     * const count = await prisma.groupCandidate.count({
+     * // Count the number of InscriptionCandidates
+     * const count = await prisma.inscriptionCandidate.count({
      *   where: {
-     *     // ... the filter for the GroupCandidates we want to count
+     *     // ... the filter for the InscriptionCandidates we want to count
      *   }
      * })
     **/
-    count<T extends GroupCandidateCountArgs>(
-      args?: Subset<T, GroupCandidateCountArgs>,
+    count<T extends InscriptionCandidateCountArgs>(
+      args?: Subset<T, InscriptionCandidateCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], GroupCandidateCountAggregateOutputType>
+          : GetScalarType<T['select'], InscriptionCandidateCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a GroupCandidate.
+     * Allows you to perform aggregations operations on a InscriptionCandidate.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {GroupCandidateAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {InscriptionCandidateAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -12299,13 +12124,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends GroupCandidateAggregateArgs>(args: Subset<T, GroupCandidateAggregateArgs>): Prisma.PrismaPromise<GetGroupCandidateAggregateType<T>>
+    aggregate<T extends InscriptionCandidateAggregateArgs>(args: Subset<T, InscriptionCandidateAggregateArgs>): Prisma.PrismaPromise<GetInscriptionCandidateAggregateType<T>>
 
     /**
-     * Group by GroupCandidate.
+     * Group by InscriptionCandidate.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {GroupCandidateGroupByArgs} args - Group by arguments.
+     * @param {InscriptionCandidateGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -12320,14 +12145,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends GroupCandidateGroupByArgs,
+      T extends InscriptionCandidateGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: GroupCandidateGroupByArgs['orderBy'] }
-        : { orderBy?: GroupCandidateGroupByArgs['orderBy'] },
+        ? { orderBy: InscriptionCandidateGroupByArgs['orderBy'] }
+        : { orderBy?: InscriptionCandidateGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -12376,22 +12201,22 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, GroupCandidateGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetGroupCandidateGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, InscriptionCandidateGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetInscriptionCandidateGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the GroupCandidate model
+   * Fields of the InscriptionCandidate model
    */
-  readonly fields: GroupCandidateFieldRefs;
+  readonly fields: InscriptionCandidateFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for GroupCandidate.
+   * The delegate class that acts as a "Promise-like" for InscriptionCandidate.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__GroupCandidateClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__InscriptionCandidateClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    group<T extends GroupDefaultArgs<ExtArgs> = {}>(args?: Subset<T, GroupDefaultArgs<ExtArgs>>): Prisma__GroupClient<$Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    inscription<T extends InscriptionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, InscriptionDefaultArgs<ExtArgs>>): Prisma__InscriptionClient<$Result.GetResult<Prisma.$InscriptionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     candidate<T extends CandidateDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CandidateDefaultArgs<ExtArgs>>): Prisma__CandidateClient<$Result.GetResult<Prisma.$CandidatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -12419,424 +12244,424 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the GroupCandidate model
+   * Fields of the InscriptionCandidate model
    */
-  interface GroupCandidateFieldRefs {
-    readonly id: FieldRef<"GroupCandidate", 'String'>
-    readonly groupId: FieldRef<"GroupCandidate", 'String'>
-    readonly candidateId: FieldRef<"GroupCandidate", 'String'>
-    readonly createdAt: FieldRef<"GroupCandidate", 'DateTime'>
+  interface InscriptionCandidateFieldRefs {
+    readonly id: FieldRef<"InscriptionCandidate", 'String'>
+    readonly inscriptionId: FieldRef<"InscriptionCandidate", 'String'>
+    readonly candidateId: FieldRef<"InscriptionCandidate", 'String'>
+    readonly createdAt: FieldRef<"InscriptionCandidate", 'DateTime'>
   }
     
 
   // Custom InputTypes
   /**
-   * GroupCandidate findUnique
+   * InscriptionCandidate findUnique
    */
-  export type GroupCandidateFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type InscriptionCandidateFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the GroupCandidate
+     * Select specific fields to fetch from the InscriptionCandidate
      */
-    select?: GroupCandidateSelect<ExtArgs> | null
+    select?: InscriptionCandidateSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the GroupCandidate
+     * Omit specific fields from the InscriptionCandidate
      */
-    omit?: GroupCandidateOmit<ExtArgs> | null
+    omit?: InscriptionCandidateOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: GroupCandidateInclude<ExtArgs> | null
+    include?: InscriptionCandidateInclude<ExtArgs> | null
     /**
-     * Filter, which GroupCandidate to fetch.
+     * Filter, which InscriptionCandidate to fetch.
      */
-    where: GroupCandidateWhereUniqueInput
+    where: InscriptionCandidateWhereUniqueInput
   }
 
   /**
-   * GroupCandidate findUniqueOrThrow
+   * InscriptionCandidate findUniqueOrThrow
    */
-  export type GroupCandidateFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type InscriptionCandidateFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the GroupCandidate
+     * Select specific fields to fetch from the InscriptionCandidate
      */
-    select?: GroupCandidateSelect<ExtArgs> | null
+    select?: InscriptionCandidateSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the GroupCandidate
+     * Omit specific fields from the InscriptionCandidate
      */
-    omit?: GroupCandidateOmit<ExtArgs> | null
+    omit?: InscriptionCandidateOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: GroupCandidateInclude<ExtArgs> | null
+    include?: InscriptionCandidateInclude<ExtArgs> | null
     /**
-     * Filter, which GroupCandidate to fetch.
+     * Filter, which InscriptionCandidate to fetch.
      */
-    where: GroupCandidateWhereUniqueInput
+    where: InscriptionCandidateWhereUniqueInput
   }
 
   /**
-   * GroupCandidate findFirst
+   * InscriptionCandidate findFirst
    */
-  export type GroupCandidateFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type InscriptionCandidateFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the GroupCandidate
+     * Select specific fields to fetch from the InscriptionCandidate
      */
-    select?: GroupCandidateSelect<ExtArgs> | null
+    select?: InscriptionCandidateSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the GroupCandidate
+     * Omit specific fields from the InscriptionCandidate
      */
-    omit?: GroupCandidateOmit<ExtArgs> | null
+    omit?: InscriptionCandidateOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: GroupCandidateInclude<ExtArgs> | null
+    include?: InscriptionCandidateInclude<ExtArgs> | null
     /**
-     * Filter, which GroupCandidate to fetch.
+     * Filter, which InscriptionCandidate to fetch.
      */
-    where?: GroupCandidateWhereInput
+    where?: InscriptionCandidateWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of GroupCandidates to fetch.
+     * Determine the order of InscriptionCandidates to fetch.
      */
-    orderBy?: GroupCandidateOrderByWithRelationInput | GroupCandidateOrderByWithRelationInput[]
+    orderBy?: InscriptionCandidateOrderByWithRelationInput | InscriptionCandidateOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for GroupCandidates.
+     * Sets the position for searching for InscriptionCandidates.
      */
-    cursor?: GroupCandidateWhereUniqueInput
+    cursor?: InscriptionCandidateWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` GroupCandidates from the position of the cursor.
+     * Take `±n` InscriptionCandidates from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` GroupCandidates.
+     * Skip the first `n` InscriptionCandidates.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of GroupCandidates.
+     * Filter by unique combinations of InscriptionCandidates.
      */
-    distinct?: GroupCandidateScalarFieldEnum | GroupCandidateScalarFieldEnum[]
+    distinct?: InscriptionCandidateScalarFieldEnum | InscriptionCandidateScalarFieldEnum[]
   }
 
   /**
-   * GroupCandidate findFirstOrThrow
+   * InscriptionCandidate findFirstOrThrow
    */
-  export type GroupCandidateFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type InscriptionCandidateFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the GroupCandidate
+     * Select specific fields to fetch from the InscriptionCandidate
      */
-    select?: GroupCandidateSelect<ExtArgs> | null
+    select?: InscriptionCandidateSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the GroupCandidate
+     * Omit specific fields from the InscriptionCandidate
      */
-    omit?: GroupCandidateOmit<ExtArgs> | null
+    omit?: InscriptionCandidateOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: GroupCandidateInclude<ExtArgs> | null
+    include?: InscriptionCandidateInclude<ExtArgs> | null
     /**
-     * Filter, which GroupCandidate to fetch.
+     * Filter, which InscriptionCandidate to fetch.
      */
-    where?: GroupCandidateWhereInput
+    where?: InscriptionCandidateWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of GroupCandidates to fetch.
+     * Determine the order of InscriptionCandidates to fetch.
      */
-    orderBy?: GroupCandidateOrderByWithRelationInput | GroupCandidateOrderByWithRelationInput[]
+    orderBy?: InscriptionCandidateOrderByWithRelationInput | InscriptionCandidateOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for GroupCandidates.
+     * Sets the position for searching for InscriptionCandidates.
      */
-    cursor?: GroupCandidateWhereUniqueInput
+    cursor?: InscriptionCandidateWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` GroupCandidates from the position of the cursor.
+     * Take `±n` InscriptionCandidates from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` GroupCandidates.
+     * Skip the first `n` InscriptionCandidates.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of GroupCandidates.
+     * Filter by unique combinations of InscriptionCandidates.
      */
-    distinct?: GroupCandidateScalarFieldEnum | GroupCandidateScalarFieldEnum[]
+    distinct?: InscriptionCandidateScalarFieldEnum | InscriptionCandidateScalarFieldEnum[]
   }
 
   /**
-   * GroupCandidate findMany
+   * InscriptionCandidate findMany
    */
-  export type GroupCandidateFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type InscriptionCandidateFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the GroupCandidate
+     * Select specific fields to fetch from the InscriptionCandidate
      */
-    select?: GroupCandidateSelect<ExtArgs> | null
+    select?: InscriptionCandidateSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the GroupCandidate
+     * Omit specific fields from the InscriptionCandidate
      */
-    omit?: GroupCandidateOmit<ExtArgs> | null
+    omit?: InscriptionCandidateOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: GroupCandidateInclude<ExtArgs> | null
+    include?: InscriptionCandidateInclude<ExtArgs> | null
     /**
-     * Filter, which GroupCandidates to fetch.
+     * Filter, which InscriptionCandidates to fetch.
      */
-    where?: GroupCandidateWhereInput
+    where?: InscriptionCandidateWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of GroupCandidates to fetch.
+     * Determine the order of InscriptionCandidates to fetch.
      */
-    orderBy?: GroupCandidateOrderByWithRelationInput | GroupCandidateOrderByWithRelationInput[]
+    orderBy?: InscriptionCandidateOrderByWithRelationInput | InscriptionCandidateOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing GroupCandidates.
+     * Sets the position for listing InscriptionCandidates.
      */
-    cursor?: GroupCandidateWhereUniqueInput
+    cursor?: InscriptionCandidateWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` GroupCandidates from the position of the cursor.
+     * Take `±n` InscriptionCandidates from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` GroupCandidates.
+     * Skip the first `n` InscriptionCandidates.
      */
     skip?: number
-    distinct?: GroupCandidateScalarFieldEnum | GroupCandidateScalarFieldEnum[]
+    distinct?: InscriptionCandidateScalarFieldEnum | InscriptionCandidateScalarFieldEnum[]
   }
 
   /**
-   * GroupCandidate create
+   * InscriptionCandidate create
    */
-  export type GroupCandidateCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type InscriptionCandidateCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the GroupCandidate
+     * Select specific fields to fetch from the InscriptionCandidate
      */
-    select?: GroupCandidateSelect<ExtArgs> | null
+    select?: InscriptionCandidateSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the GroupCandidate
+     * Omit specific fields from the InscriptionCandidate
      */
-    omit?: GroupCandidateOmit<ExtArgs> | null
+    omit?: InscriptionCandidateOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: GroupCandidateInclude<ExtArgs> | null
+    include?: InscriptionCandidateInclude<ExtArgs> | null
     /**
-     * The data needed to create a GroupCandidate.
+     * The data needed to create a InscriptionCandidate.
      */
-    data: XOR<GroupCandidateCreateInput, GroupCandidateUncheckedCreateInput>
+    data: XOR<InscriptionCandidateCreateInput, InscriptionCandidateUncheckedCreateInput>
   }
 
   /**
-   * GroupCandidate createMany
+   * InscriptionCandidate createMany
    */
-  export type GroupCandidateCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type InscriptionCandidateCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many GroupCandidates.
+     * The data used to create many InscriptionCandidates.
      */
-    data: GroupCandidateCreateManyInput | GroupCandidateCreateManyInput[]
+    data: InscriptionCandidateCreateManyInput | InscriptionCandidateCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * GroupCandidate createManyAndReturn
+   * InscriptionCandidate createManyAndReturn
    */
-  export type GroupCandidateCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type InscriptionCandidateCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the GroupCandidate
+     * Select specific fields to fetch from the InscriptionCandidate
      */
-    select?: GroupCandidateSelectCreateManyAndReturn<ExtArgs> | null
+    select?: InscriptionCandidateSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the GroupCandidate
+     * Omit specific fields from the InscriptionCandidate
      */
-    omit?: GroupCandidateOmit<ExtArgs> | null
+    omit?: InscriptionCandidateOmit<ExtArgs> | null
     /**
-     * The data used to create many GroupCandidates.
+     * The data used to create many InscriptionCandidates.
      */
-    data: GroupCandidateCreateManyInput | GroupCandidateCreateManyInput[]
+    data: InscriptionCandidateCreateManyInput | InscriptionCandidateCreateManyInput[]
     skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: GroupCandidateIncludeCreateManyAndReturn<ExtArgs> | null
+    include?: InscriptionCandidateIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * GroupCandidate update
+   * InscriptionCandidate update
    */
-  export type GroupCandidateUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type InscriptionCandidateUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the GroupCandidate
+     * Select specific fields to fetch from the InscriptionCandidate
      */
-    select?: GroupCandidateSelect<ExtArgs> | null
+    select?: InscriptionCandidateSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the GroupCandidate
+     * Omit specific fields from the InscriptionCandidate
      */
-    omit?: GroupCandidateOmit<ExtArgs> | null
+    omit?: InscriptionCandidateOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: GroupCandidateInclude<ExtArgs> | null
+    include?: InscriptionCandidateInclude<ExtArgs> | null
     /**
-     * The data needed to update a GroupCandidate.
+     * The data needed to update a InscriptionCandidate.
      */
-    data: XOR<GroupCandidateUpdateInput, GroupCandidateUncheckedUpdateInput>
+    data: XOR<InscriptionCandidateUpdateInput, InscriptionCandidateUncheckedUpdateInput>
     /**
-     * Choose, which GroupCandidate to update.
+     * Choose, which InscriptionCandidate to update.
      */
-    where: GroupCandidateWhereUniqueInput
+    where: InscriptionCandidateWhereUniqueInput
   }
 
   /**
-   * GroupCandidate updateMany
+   * InscriptionCandidate updateMany
    */
-  export type GroupCandidateUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type InscriptionCandidateUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update GroupCandidates.
+     * The data used to update InscriptionCandidates.
      */
-    data: XOR<GroupCandidateUpdateManyMutationInput, GroupCandidateUncheckedUpdateManyInput>
+    data: XOR<InscriptionCandidateUpdateManyMutationInput, InscriptionCandidateUncheckedUpdateManyInput>
     /**
-     * Filter which GroupCandidates to update
+     * Filter which InscriptionCandidates to update
      */
-    where?: GroupCandidateWhereInput
+    where?: InscriptionCandidateWhereInput
     /**
-     * Limit how many GroupCandidates to update.
+     * Limit how many InscriptionCandidates to update.
      */
     limit?: number
   }
 
   /**
-   * GroupCandidate updateManyAndReturn
+   * InscriptionCandidate updateManyAndReturn
    */
-  export type GroupCandidateUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type InscriptionCandidateUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the GroupCandidate
+     * Select specific fields to fetch from the InscriptionCandidate
      */
-    select?: GroupCandidateSelectUpdateManyAndReturn<ExtArgs> | null
+    select?: InscriptionCandidateSelectUpdateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the GroupCandidate
+     * Omit specific fields from the InscriptionCandidate
      */
-    omit?: GroupCandidateOmit<ExtArgs> | null
+    omit?: InscriptionCandidateOmit<ExtArgs> | null
     /**
-     * The data used to update GroupCandidates.
+     * The data used to update InscriptionCandidates.
      */
-    data: XOR<GroupCandidateUpdateManyMutationInput, GroupCandidateUncheckedUpdateManyInput>
+    data: XOR<InscriptionCandidateUpdateManyMutationInput, InscriptionCandidateUncheckedUpdateManyInput>
     /**
-     * Filter which GroupCandidates to update
+     * Filter which InscriptionCandidates to update
      */
-    where?: GroupCandidateWhereInput
+    where?: InscriptionCandidateWhereInput
     /**
-     * Limit how many GroupCandidates to update.
+     * Limit how many InscriptionCandidates to update.
      */
     limit?: number
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: GroupCandidateIncludeUpdateManyAndReturn<ExtArgs> | null
+    include?: InscriptionCandidateIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * GroupCandidate upsert
+   * InscriptionCandidate upsert
    */
-  export type GroupCandidateUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type InscriptionCandidateUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the GroupCandidate
+     * Select specific fields to fetch from the InscriptionCandidate
      */
-    select?: GroupCandidateSelect<ExtArgs> | null
+    select?: InscriptionCandidateSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the GroupCandidate
+     * Omit specific fields from the InscriptionCandidate
      */
-    omit?: GroupCandidateOmit<ExtArgs> | null
+    omit?: InscriptionCandidateOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: GroupCandidateInclude<ExtArgs> | null
+    include?: InscriptionCandidateInclude<ExtArgs> | null
     /**
-     * The filter to search for the GroupCandidate to update in case it exists.
+     * The filter to search for the InscriptionCandidate to update in case it exists.
      */
-    where: GroupCandidateWhereUniqueInput
+    where: InscriptionCandidateWhereUniqueInput
     /**
-     * In case the GroupCandidate found by the `where` argument doesn't exist, create a new GroupCandidate with this data.
+     * In case the InscriptionCandidate found by the `where` argument doesn't exist, create a new InscriptionCandidate with this data.
      */
-    create: XOR<GroupCandidateCreateInput, GroupCandidateUncheckedCreateInput>
+    create: XOR<InscriptionCandidateCreateInput, InscriptionCandidateUncheckedCreateInput>
     /**
-     * In case the GroupCandidate was found with the provided `where` argument, update it with this data.
+     * In case the InscriptionCandidate was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<GroupCandidateUpdateInput, GroupCandidateUncheckedUpdateInput>
+    update: XOR<InscriptionCandidateUpdateInput, InscriptionCandidateUncheckedUpdateInput>
   }
 
   /**
-   * GroupCandidate delete
+   * InscriptionCandidate delete
    */
-  export type GroupCandidateDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type InscriptionCandidateDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the GroupCandidate
+     * Select specific fields to fetch from the InscriptionCandidate
      */
-    select?: GroupCandidateSelect<ExtArgs> | null
+    select?: InscriptionCandidateSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the GroupCandidate
+     * Omit specific fields from the InscriptionCandidate
      */
-    omit?: GroupCandidateOmit<ExtArgs> | null
+    omit?: InscriptionCandidateOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: GroupCandidateInclude<ExtArgs> | null
+    include?: InscriptionCandidateInclude<ExtArgs> | null
     /**
-     * Filter which GroupCandidate to delete.
+     * Filter which InscriptionCandidate to delete.
      */
-    where: GroupCandidateWhereUniqueInput
+    where: InscriptionCandidateWhereUniqueInput
   }
 
   /**
-   * GroupCandidate deleteMany
+   * InscriptionCandidate deleteMany
    */
-  export type GroupCandidateDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type InscriptionCandidateDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which GroupCandidates to delete
+     * Filter which InscriptionCandidates to delete
      */
-    where?: GroupCandidateWhereInput
+    where?: InscriptionCandidateWhereInput
     /**
-     * Limit how many GroupCandidates to delete.
+     * Limit how many InscriptionCandidates to delete.
      */
     limit?: number
   }
 
   /**
-   * GroupCandidate without action
+   * InscriptionCandidate without action
    */
-  export type GroupCandidateDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type InscriptionCandidateDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the GroupCandidate
+     * Select specific fields to fetch from the InscriptionCandidate
      */
-    select?: GroupCandidateSelect<ExtArgs> | null
+    select?: InscriptionCandidateSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the GroupCandidate
+     * Omit specific fields from the InscriptionCandidate
      */
-    omit?: GroupCandidateOmit<ExtArgs> | null
+    omit?: InscriptionCandidateOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: GroupCandidateInclude<ExtArgs> | null
+    include?: InscriptionCandidateInclude<ExtArgs> | null
   }
 
 
@@ -16329,9 +16154,9 @@ export namespace Prisma {
     volumeHoraire: 'volumeHoraire',
     remainingHours: 'remainingHours',
     learningMode: 'learningMode',
-    groupId: 'groupId',
     candidateId: 'candidateId',
     formationId: 'formationId',
+    professorId: 'professorId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -16342,10 +16167,7 @@ export namespace Prisma {
   export const GroupScalarFieldEnum: {
     id: 'id',
     nom: 'nom',
-    type: 'type',
-    formationId: 'formationId',
-    professorId: 'professorId',
-    effectif: 'effectif',
+    inscriptionId: 'inscriptionId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -16353,14 +16175,14 @@ export namespace Prisma {
   export type GroupScalarFieldEnum = (typeof GroupScalarFieldEnum)[keyof typeof GroupScalarFieldEnum]
 
 
-  export const GroupCandidateScalarFieldEnum: {
+  export const InscriptionCandidateScalarFieldEnum: {
     id: 'id',
-    groupId: 'groupId',
+    inscriptionId: 'inscriptionId',
     candidateId: 'candidateId',
     createdAt: 'createdAt'
   };
 
-  export type GroupCandidateScalarFieldEnum = (typeof GroupCandidateScalarFieldEnum)[keyof typeof GroupCandidateScalarFieldEnum]
+  export type InscriptionCandidateScalarFieldEnum = (typeof InscriptionCandidateScalarFieldEnum)[keyof typeof InscriptionCandidateScalarFieldEnum]
 
 
   export const CommercialScalarFieldEnum: {
@@ -16602,20 +16424,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'GroupType'
-   */
-  export type EnumGroupTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GroupType'>
-    
-
-
-  /**
-   * Reference to a field of type 'GroupType[]'
-   */
-  export type ListEnumGroupTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GroupType[]'>
-    
-
-
-  /**
    * Reference to a field of type 'PaymentMethod'
    */
   export type EnumPaymentMethodFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentMethod'>
@@ -16836,7 +16644,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Candidate"> | Date | string
     updatedAt?: DateTimeFilter<"Candidate"> | Date | string
     inscriptions?: InscriptionListRelationFilter
-    groups?: GroupCandidateListRelationFilter
+    inscriptionCandidates?: InscriptionCandidateListRelationFilter
     payments?: PaymentListRelationFilter
   }
 
@@ -16857,7 +16665,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     inscriptions?: InscriptionOrderByRelationAggregateInput
-    groups?: GroupCandidateOrderByRelationAggregateInput
+    inscriptionCandidates?: InscriptionCandidateOrderByRelationAggregateInput
     payments?: PaymentOrderByRelationAggregateInput
   }
 
@@ -16881,7 +16689,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Candidate"> | Date | string
     updatedAt?: DateTimeFilter<"Candidate"> | Date | string
     inscriptions?: InscriptionListRelationFilter
-    groups?: GroupCandidateListRelationFilter
+    inscriptionCandidates?: InscriptionCandidateListRelationFilter
     payments?: PaymentListRelationFilter
   }, "id" | "candidateCode" | "email">
 
@@ -16945,7 +16753,6 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Formation"> | Date | string
     updatedAt?: DateTimeFilter<"Formation"> | Date | string
     inscriptions?: InscriptionListRelationFilter
-    groups?: GroupListRelationFilter
     payments?: PaymentListRelationFilter
   }
 
@@ -16962,7 +16769,6 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     inscriptions?: InscriptionOrderByRelationAggregateInput
-    groups?: GroupOrderByRelationAggregateInput
     payments?: PaymentOrderByRelationAggregateInput
   }
 
@@ -16982,7 +16788,6 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Formation"> | Date | string
     updatedAt?: DateTimeFilter<"Formation"> | Date | string
     inscriptions?: InscriptionListRelationFilter
-    groups?: GroupListRelationFilter
     payments?: PaymentListRelationFilter
   }, "id">
 
@@ -17109,7 +16914,7 @@ export namespace Prisma {
     maxSessions?: IntFilter<"Professor"> | number
     createdAt?: DateTimeFilter<"Professor"> | Date | string
     updatedAt?: DateTimeFilter<"Professor"> | Date | string
-    groups?: GroupListRelationFilter
+    inscriptions?: InscriptionListRelationFilter
     reservations?: ReservationListRelationFilter
   }
 
@@ -17125,7 +16930,7 @@ export namespace Prisma {
     maxSessions?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    groups?: GroupOrderByRelationAggregateInput
+    inscriptions?: InscriptionOrderByRelationAggregateInput
     reservations?: ReservationOrderByRelationAggregateInput
   }
 
@@ -17144,7 +16949,7 @@ export namespace Prisma {
     maxSessions?: IntFilter<"Professor"> | number
     createdAt?: DateTimeFilter<"Professor"> | Date | string
     updatedAt?: DateTimeFilter<"Professor"> | Date | string
-    groups?: GroupListRelationFilter
+    inscriptions?: InscriptionListRelationFilter
     reservations?: ReservationListRelationFilter
   }, "id" | "email">
 
@@ -17197,14 +17002,16 @@ export namespace Prisma {
     volumeHoraire?: IntNullableFilter<"Inscription"> | number | null
     remainingHours?: FloatFilter<"Inscription"> | number
     learningMode?: EnumLearningModeFilter<"Inscription"> | $Enums.LearningMode
-    groupId?: StringNullableFilter<"Inscription"> | string | null
     candidateId?: StringFilter<"Inscription"> | string
     formationId?: StringFilter<"Inscription"> | string
+    professorId?: StringNullableFilter<"Inscription"> | string | null
     createdAt?: DateTimeFilter<"Inscription"> | Date | string
     updatedAt?: DateTimeFilter<"Inscription"> | Date | string
     candidate?: XOR<CandidateScalarRelationFilter, CandidateWhereInput>
     formation?: XOR<FormationScalarRelationFilter, FormationWhereInput>
+    professor?: XOR<ProfessorNullableScalarRelationFilter, ProfessorWhereInput> | null
     group?: XOR<GroupNullableScalarRelationFilter, GroupWhereInput> | null
+    members?: InscriptionCandidateListRelationFilter
     reservations?: ReservationListRelationFilter
   }
 
@@ -17218,14 +17025,16 @@ export namespace Prisma {
     volumeHoraire?: SortOrderInput | SortOrder
     remainingHours?: SortOrder
     learningMode?: SortOrder
-    groupId?: SortOrderInput | SortOrder
     candidateId?: SortOrder
     formationId?: SortOrder
+    professorId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     candidate?: CandidateOrderByWithRelationInput
     formation?: FormationOrderByWithRelationInput
+    professor?: ProfessorOrderByWithRelationInput
     group?: GroupOrderByWithRelationInput
+    members?: InscriptionCandidateOrderByRelationAggregateInput
     reservations?: ReservationOrderByRelationAggregateInput
   }
 
@@ -17242,14 +17051,16 @@ export namespace Prisma {
     volumeHoraire?: IntNullableFilter<"Inscription"> | number | null
     remainingHours?: FloatFilter<"Inscription"> | number
     learningMode?: EnumLearningModeFilter<"Inscription"> | $Enums.LearningMode
-    groupId?: StringNullableFilter<"Inscription"> | string | null
     candidateId?: StringFilter<"Inscription"> | string
     formationId?: StringFilter<"Inscription"> | string
+    professorId?: StringNullableFilter<"Inscription"> | string | null
     createdAt?: DateTimeFilter<"Inscription"> | Date | string
     updatedAt?: DateTimeFilter<"Inscription"> | Date | string
     candidate?: XOR<CandidateScalarRelationFilter, CandidateWhereInput>
     formation?: XOR<FormationScalarRelationFilter, FormationWhereInput>
+    professor?: XOR<ProfessorNullableScalarRelationFilter, ProfessorWhereInput> | null
     group?: XOR<GroupNullableScalarRelationFilter, GroupWhereInput> | null
+    members?: InscriptionCandidateListRelationFilter
     reservations?: ReservationListRelationFilter
   }, "id">
 
@@ -17263,9 +17074,9 @@ export namespace Prisma {
     volumeHoraire?: SortOrderInput | SortOrder
     remainingHours?: SortOrder
     learningMode?: SortOrder
-    groupId?: SortOrderInput | SortOrder
     candidateId?: SortOrder
     formationId?: SortOrder
+    professorId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: InscriptionCountOrderByAggregateInput
@@ -17288,9 +17099,9 @@ export namespace Prisma {
     volumeHoraire?: IntNullableWithAggregatesFilter<"Inscription"> | number | null
     remainingHours?: FloatWithAggregatesFilter<"Inscription"> | number
     learningMode?: EnumLearningModeWithAggregatesFilter<"Inscription"> | $Enums.LearningMode
-    groupId?: StringNullableWithAggregatesFilter<"Inscription"> | string | null
     candidateId?: StringWithAggregatesFilter<"Inscription"> | string
     formationId?: StringWithAggregatesFilter<"Inscription"> | string
+    professorId?: StringNullableWithAggregatesFilter<"Inscription"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Inscription"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Inscription"> | Date | string
   }
@@ -17301,65 +17112,42 @@ export namespace Prisma {
     NOT?: GroupWhereInput | GroupWhereInput[]
     id?: StringFilter<"Group"> | string
     nom?: StringFilter<"Group"> | string
-    type?: EnumGroupTypeFilter<"Group"> | $Enums.GroupType
-    formationId?: StringFilter<"Group"> | string
-    professorId?: StringNullableFilter<"Group"> | string | null
-    effectif?: IntFilter<"Group"> | number
+    inscriptionId?: StringFilter<"Group"> | string
     createdAt?: DateTimeFilter<"Group"> | Date | string
     updatedAt?: DateTimeFilter<"Group"> | Date | string
-    formation?: XOR<FormationScalarRelationFilter, FormationWhereInput>
-    professor?: XOR<ProfessorNullableScalarRelationFilter, ProfessorWhereInput> | null
-    members?: GroupCandidateListRelationFilter
-    inscriptions?: InscriptionListRelationFilter
+    inscription?: XOR<InscriptionScalarRelationFilter, InscriptionWhereInput>
   }
 
   export type GroupOrderByWithRelationInput = {
     id?: SortOrder
     nom?: SortOrder
-    type?: SortOrder
-    formationId?: SortOrder
-    professorId?: SortOrderInput | SortOrder
-    effectif?: SortOrder
+    inscriptionId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    formation?: FormationOrderByWithRelationInput
-    professor?: ProfessorOrderByWithRelationInput
-    members?: GroupCandidateOrderByRelationAggregateInput
-    inscriptions?: InscriptionOrderByRelationAggregateInput
+    inscription?: InscriptionOrderByWithRelationInput
   }
 
   export type GroupWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    inscriptionId?: string
     AND?: GroupWhereInput | GroupWhereInput[]
     OR?: GroupWhereInput[]
     NOT?: GroupWhereInput | GroupWhereInput[]
     nom?: StringFilter<"Group"> | string
-    type?: EnumGroupTypeFilter<"Group"> | $Enums.GroupType
-    formationId?: StringFilter<"Group"> | string
-    professorId?: StringNullableFilter<"Group"> | string | null
-    effectif?: IntFilter<"Group"> | number
     createdAt?: DateTimeFilter<"Group"> | Date | string
     updatedAt?: DateTimeFilter<"Group"> | Date | string
-    formation?: XOR<FormationScalarRelationFilter, FormationWhereInput>
-    professor?: XOR<ProfessorNullableScalarRelationFilter, ProfessorWhereInput> | null
-    members?: GroupCandidateListRelationFilter
-    inscriptions?: InscriptionListRelationFilter
-  }, "id">
+    inscription?: XOR<InscriptionScalarRelationFilter, InscriptionWhereInput>
+  }, "id" | "inscriptionId">
 
   export type GroupOrderByWithAggregationInput = {
     id?: SortOrder
     nom?: SortOrder
-    type?: SortOrder
-    formationId?: SortOrder
-    professorId?: SortOrderInput | SortOrder
-    effectif?: SortOrder
+    inscriptionId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: GroupCountOrderByAggregateInput
-    _avg?: GroupAvgOrderByAggregateInput
     _max?: GroupMaxOrderByAggregateInput
     _min?: GroupMinOrderByAggregateInput
-    _sum?: GroupSumOrderByAggregateInput
   }
 
   export type GroupScalarWhereWithAggregatesInput = {
@@ -17368,66 +17156,63 @@ export namespace Prisma {
     NOT?: GroupScalarWhereWithAggregatesInput | GroupScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Group"> | string
     nom?: StringWithAggregatesFilter<"Group"> | string
-    type?: EnumGroupTypeWithAggregatesFilter<"Group"> | $Enums.GroupType
-    formationId?: StringWithAggregatesFilter<"Group"> | string
-    professorId?: StringNullableWithAggregatesFilter<"Group"> | string | null
-    effectif?: IntWithAggregatesFilter<"Group"> | number
+    inscriptionId?: StringWithAggregatesFilter<"Group"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Group"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Group"> | Date | string
   }
 
-  export type GroupCandidateWhereInput = {
-    AND?: GroupCandidateWhereInput | GroupCandidateWhereInput[]
-    OR?: GroupCandidateWhereInput[]
-    NOT?: GroupCandidateWhereInput | GroupCandidateWhereInput[]
-    id?: StringFilter<"GroupCandidate"> | string
-    groupId?: StringFilter<"GroupCandidate"> | string
-    candidateId?: StringFilter<"GroupCandidate"> | string
-    createdAt?: DateTimeFilter<"GroupCandidate"> | Date | string
-    group?: XOR<GroupScalarRelationFilter, GroupWhereInput>
+  export type InscriptionCandidateWhereInput = {
+    AND?: InscriptionCandidateWhereInput | InscriptionCandidateWhereInput[]
+    OR?: InscriptionCandidateWhereInput[]
+    NOT?: InscriptionCandidateWhereInput | InscriptionCandidateWhereInput[]
+    id?: StringFilter<"InscriptionCandidate"> | string
+    inscriptionId?: StringFilter<"InscriptionCandidate"> | string
+    candidateId?: StringFilter<"InscriptionCandidate"> | string
+    createdAt?: DateTimeFilter<"InscriptionCandidate"> | Date | string
+    inscription?: XOR<InscriptionScalarRelationFilter, InscriptionWhereInput>
     candidate?: XOR<CandidateScalarRelationFilter, CandidateWhereInput>
   }
 
-  export type GroupCandidateOrderByWithRelationInput = {
+  export type InscriptionCandidateOrderByWithRelationInput = {
     id?: SortOrder
-    groupId?: SortOrder
+    inscriptionId?: SortOrder
     candidateId?: SortOrder
     createdAt?: SortOrder
-    group?: GroupOrderByWithRelationInput
+    inscription?: InscriptionOrderByWithRelationInput
     candidate?: CandidateOrderByWithRelationInput
   }
 
-  export type GroupCandidateWhereUniqueInput = Prisma.AtLeast<{
+  export type InscriptionCandidateWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    groupId_candidateId?: GroupCandidateGroupIdCandidateIdCompoundUniqueInput
-    AND?: GroupCandidateWhereInput | GroupCandidateWhereInput[]
-    OR?: GroupCandidateWhereInput[]
-    NOT?: GroupCandidateWhereInput | GroupCandidateWhereInput[]
-    groupId?: StringFilter<"GroupCandidate"> | string
-    candidateId?: StringFilter<"GroupCandidate"> | string
-    createdAt?: DateTimeFilter<"GroupCandidate"> | Date | string
-    group?: XOR<GroupScalarRelationFilter, GroupWhereInput>
+    inscriptionId_candidateId?: InscriptionCandidateInscriptionIdCandidateIdCompoundUniqueInput
+    AND?: InscriptionCandidateWhereInput | InscriptionCandidateWhereInput[]
+    OR?: InscriptionCandidateWhereInput[]
+    NOT?: InscriptionCandidateWhereInput | InscriptionCandidateWhereInput[]
+    inscriptionId?: StringFilter<"InscriptionCandidate"> | string
+    candidateId?: StringFilter<"InscriptionCandidate"> | string
+    createdAt?: DateTimeFilter<"InscriptionCandidate"> | Date | string
+    inscription?: XOR<InscriptionScalarRelationFilter, InscriptionWhereInput>
     candidate?: XOR<CandidateScalarRelationFilter, CandidateWhereInput>
-  }, "id" | "groupId_candidateId">
+  }, "id" | "inscriptionId_candidateId">
 
-  export type GroupCandidateOrderByWithAggregationInput = {
+  export type InscriptionCandidateOrderByWithAggregationInput = {
     id?: SortOrder
-    groupId?: SortOrder
+    inscriptionId?: SortOrder
     candidateId?: SortOrder
     createdAt?: SortOrder
-    _count?: GroupCandidateCountOrderByAggregateInput
-    _max?: GroupCandidateMaxOrderByAggregateInput
-    _min?: GroupCandidateMinOrderByAggregateInput
+    _count?: InscriptionCandidateCountOrderByAggregateInput
+    _max?: InscriptionCandidateMaxOrderByAggregateInput
+    _min?: InscriptionCandidateMinOrderByAggregateInput
   }
 
-  export type GroupCandidateScalarWhereWithAggregatesInput = {
-    AND?: GroupCandidateScalarWhereWithAggregatesInput | GroupCandidateScalarWhereWithAggregatesInput[]
-    OR?: GroupCandidateScalarWhereWithAggregatesInput[]
-    NOT?: GroupCandidateScalarWhereWithAggregatesInput | GroupCandidateScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"GroupCandidate"> | string
-    groupId?: StringWithAggregatesFilter<"GroupCandidate"> | string
-    candidateId?: StringWithAggregatesFilter<"GroupCandidate"> | string
-    createdAt?: DateTimeWithAggregatesFilter<"GroupCandidate"> | Date | string
+  export type InscriptionCandidateScalarWhereWithAggregatesInput = {
+    AND?: InscriptionCandidateScalarWhereWithAggregatesInput | InscriptionCandidateScalarWhereWithAggregatesInput[]
+    OR?: InscriptionCandidateScalarWhereWithAggregatesInput[]
+    NOT?: InscriptionCandidateScalarWhereWithAggregatesInput | InscriptionCandidateScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"InscriptionCandidate"> | string
+    inscriptionId?: StringWithAggregatesFilter<"InscriptionCandidate"> | string
+    candidateId?: StringWithAggregatesFilter<"InscriptionCandidate"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"InscriptionCandidate"> | Date | string
   }
 
   export type CommercialWhereInput = {
@@ -17878,7 +17663,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     inscriptions?: InscriptionCreateNestedManyWithoutCandidateInput
-    groups?: GroupCandidateCreateNestedManyWithoutCandidateInput
+    inscriptionCandidates?: InscriptionCandidateCreateNestedManyWithoutCandidateInput
     payments?: PaymentCreateNestedManyWithoutCandidateInput
   }
 
@@ -17899,7 +17684,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     inscriptions?: InscriptionUncheckedCreateNestedManyWithoutCandidateInput
-    groups?: GroupCandidateUncheckedCreateNestedManyWithoutCandidateInput
+    inscriptionCandidates?: InscriptionCandidateUncheckedCreateNestedManyWithoutCandidateInput
     payments?: PaymentUncheckedCreateNestedManyWithoutCandidateInput
   }
 
@@ -17920,7 +17705,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     inscriptions?: InscriptionUpdateManyWithoutCandidateNestedInput
-    groups?: GroupCandidateUpdateManyWithoutCandidateNestedInput
+    inscriptionCandidates?: InscriptionCandidateUpdateManyWithoutCandidateNestedInput
     payments?: PaymentUpdateManyWithoutCandidateNestedInput
   }
 
@@ -17941,7 +17726,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     inscriptions?: InscriptionUncheckedUpdateManyWithoutCandidateNestedInput
-    groups?: GroupCandidateUncheckedUpdateManyWithoutCandidateNestedInput
+    inscriptionCandidates?: InscriptionCandidateUncheckedUpdateManyWithoutCandidateNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutCandidateNestedInput
   }
 
@@ -18012,7 +17797,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     inscriptions?: InscriptionCreateNestedManyWithoutFormationInput
-    groups?: GroupCreateNestedManyWithoutFormationInput
     payments?: PaymentCreateNestedManyWithoutFormationInput
   }
 
@@ -18029,7 +17813,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     inscriptions?: InscriptionUncheckedCreateNestedManyWithoutFormationInput
-    groups?: GroupUncheckedCreateNestedManyWithoutFormationInput
     payments?: PaymentUncheckedCreateNestedManyWithoutFormationInput
   }
 
@@ -18046,7 +17829,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     inscriptions?: InscriptionUpdateManyWithoutFormationNestedInput
-    groups?: GroupUpdateManyWithoutFormationNestedInput
     payments?: PaymentUpdateManyWithoutFormationNestedInput
   }
 
@@ -18063,7 +17845,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     inscriptions?: InscriptionUncheckedUpdateManyWithoutFormationNestedInput
-    groups?: GroupUncheckedUpdateManyWithoutFormationNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutFormationNestedInput
   }
 
@@ -18202,7 +17983,7 @@ export namespace Prisma {
     maxSessions?: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    groups?: GroupCreateNestedManyWithoutProfessorInput
+    inscriptions?: InscriptionCreateNestedManyWithoutProfessorInput
     reservations?: ReservationCreateNestedManyWithoutProfessorInput
   }
 
@@ -18218,7 +17999,7 @@ export namespace Prisma {
     maxSessions?: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    groups?: GroupUncheckedCreateNestedManyWithoutProfessorInput
+    inscriptions?: InscriptionUncheckedCreateNestedManyWithoutProfessorInput
     reservations?: ReservationUncheckedCreateNestedManyWithoutProfessorInput
   }
 
@@ -18234,7 +18015,7 @@ export namespace Prisma {
     maxSessions?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    groups?: GroupUpdateManyWithoutProfessorNestedInput
+    inscriptions?: InscriptionUpdateManyWithoutProfessorNestedInput
     reservations?: ReservationUpdateManyWithoutProfessorNestedInput
   }
 
@@ -18250,7 +18031,7 @@ export namespace Prisma {
     maxSessions?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    groups?: GroupUncheckedUpdateManyWithoutProfessorNestedInput
+    inscriptions?: InscriptionUncheckedUpdateManyWithoutProfessorNestedInput
     reservations?: ReservationUncheckedUpdateManyWithoutProfessorNestedInput
   }
 
@@ -18310,7 +18091,9 @@ export namespace Prisma {
     updatedAt?: Date | string
     candidate: CandidateCreateNestedOneWithoutInscriptionsInput
     formation: FormationCreateNestedOneWithoutInscriptionsInput
-    group?: GroupCreateNestedOneWithoutInscriptionsInput
+    professor?: ProfessorCreateNestedOneWithoutInscriptionsInput
+    group?: GroupCreateNestedOneWithoutInscriptionInput
+    members?: InscriptionCandidateCreateNestedManyWithoutInscriptionInput
     reservations?: ReservationCreateNestedManyWithoutInscriptionInput
   }
 
@@ -18324,11 +18107,13 @@ export namespace Prisma {
     volumeHoraire?: number | null
     remainingHours?: number
     learningMode?: $Enums.LearningMode
-    groupId?: string | null
     candidateId: string
     formationId: string
+    professorId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    group?: GroupUncheckedCreateNestedOneWithoutInscriptionInput
+    members?: InscriptionCandidateUncheckedCreateNestedManyWithoutInscriptionInput
     reservations?: ReservationUncheckedCreateNestedManyWithoutInscriptionInput
   }
 
@@ -18346,7 +18131,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     candidate?: CandidateUpdateOneRequiredWithoutInscriptionsNestedInput
     formation?: FormationUpdateOneRequiredWithoutInscriptionsNestedInput
-    group?: GroupUpdateOneWithoutInscriptionsNestedInput
+    professor?: ProfessorUpdateOneWithoutInscriptionsNestedInput
+    group?: GroupUpdateOneWithoutInscriptionNestedInput
+    members?: InscriptionCandidateUpdateManyWithoutInscriptionNestedInput
     reservations?: ReservationUpdateManyWithoutInscriptionNestedInput
   }
 
@@ -18360,11 +18147,13 @@ export namespace Prisma {
     volumeHoraire?: NullableIntFieldUpdateOperationsInput | number | null
     remainingHours?: FloatFieldUpdateOperationsInput | number
     learningMode?: EnumLearningModeFieldUpdateOperationsInput | $Enums.LearningMode
-    groupId?: NullableStringFieldUpdateOperationsInput | string | null
     candidateId?: StringFieldUpdateOperationsInput | string
     formationId?: StringFieldUpdateOperationsInput | string
+    professorId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    group?: GroupUncheckedUpdateOneWithoutInscriptionNestedInput
+    members?: InscriptionCandidateUncheckedUpdateManyWithoutInscriptionNestedInput
     reservations?: ReservationUncheckedUpdateManyWithoutInscriptionNestedInput
   }
 
@@ -18378,9 +18167,9 @@ export namespace Prisma {
     volumeHoraire?: number | null
     remainingHours?: number
     learningMode?: $Enums.LearningMode
-    groupId?: string | null
     candidateId: string
     formationId: string
+    professorId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -18409,9 +18198,9 @@ export namespace Prisma {
     volumeHoraire?: NullableIntFieldUpdateOperationsInput | number | null
     remainingHours?: FloatFieldUpdateOperationsInput | number
     learningMode?: EnumLearningModeFieldUpdateOperationsInput | $Enums.LearningMode
-    groupId?: NullableStringFieldUpdateOperationsInput | string | null
     candidateId?: StringFieldUpdateOperationsInput | string
     formationId?: StringFieldUpdateOperationsInput | string
+    professorId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -18419,62 +18208,39 @@ export namespace Prisma {
   export type GroupCreateInput = {
     id?: string
     nom: string
-    type: $Enums.GroupType
-    effectif?: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    formation: FormationCreateNestedOneWithoutGroupsInput
-    professor?: ProfessorCreateNestedOneWithoutGroupsInput
-    members?: GroupCandidateCreateNestedManyWithoutGroupInput
-    inscriptions?: InscriptionCreateNestedManyWithoutGroupInput
+    inscription: InscriptionCreateNestedOneWithoutGroupInput
   }
 
   export type GroupUncheckedCreateInput = {
     id?: string
     nom: string
-    type: $Enums.GroupType
-    formationId: string
-    professorId?: string | null
-    effectif?: number
+    inscriptionId: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    members?: GroupCandidateUncheckedCreateNestedManyWithoutGroupInput
-    inscriptions?: InscriptionUncheckedCreateNestedManyWithoutGroupInput
   }
 
   export type GroupUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     nom?: StringFieldUpdateOperationsInput | string
-    type?: EnumGroupTypeFieldUpdateOperationsInput | $Enums.GroupType
-    effectif?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    formation?: FormationUpdateOneRequiredWithoutGroupsNestedInput
-    professor?: ProfessorUpdateOneWithoutGroupsNestedInput
-    members?: GroupCandidateUpdateManyWithoutGroupNestedInput
-    inscriptions?: InscriptionUpdateManyWithoutGroupNestedInput
+    inscription?: InscriptionUpdateOneRequiredWithoutGroupNestedInput
   }
 
   export type GroupUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     nom?: StringFieldUpdateOperationsInput | string
-    type?: EnumGroupTypeFieldUpdateOperationsInput | $Enums.GroupType
-    formationId?: StringFieldUpdateOperationsInput | string
-    professorId?: NullableStringFieldUpdateOperationsInput | string | null
-    effectif?: IntFieldUpdateOperationsInput | number
+    inscriptionId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    members?: GroupCandidateUncheckedUpdateManyWithoutGroupNestedInput
-    inscriptions?: InscriptionUncheckedUpdateManyWithoutGroupNestedInput
   }
 
   export type GroupCreateManyInput = {
     id?: string
     nom: string
-    type: $Enums.GroupType
-    formationId: string
-    professorId?: string | null
-    effectif?: number
+    inscriptionId: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -18482,8 +18248,6 @@ export namespace Prisma {
   export type GroupUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     nom?: StringFieldUpdateOperationsInput | string
-    type?: EnumGroupTypeFieldUpdateOperationsInput | $Enums.GroupType
-    effectif?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -18491,57 +18255,54 @@ export namespace Prisma {
   export type GroupUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     nom?: StringFieldUpdateOperationsInput | string
-    type?: EnumGroupTypeFieldUpdateOperationsInput | $Enums.GroupType
-    formationId?: StringFieldUpdateOperationsInput | string
-    professorId?: NullableStringFieldUpdateOperationsInput | string | null
-    effectif?: IntFieldUpdateOperationsInput | number
+    inscriptionId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type GroupCandidateCreateInput = {
+  export type InscriptionCandidateCreateInput = {
     id?: string
     createdAt?: Date | string
-    group: GroupCreateNestedOneWithoutMembersInput
-    candidate: CandidateCreateNestedOneWithoutGroupsInput
+    inscription: InscriptionCreateNestedOneWithoutMembersInput
+    candidate: CandidateCreateNestedOneWithoutInscriptionCandidatesInput
   }
 
-  export type GroupCandidateUncheckedCreateInput = {
+  export type InscriptionCandidateUncheckedCreateInput = {
     id?: string
-    groupId: string
+    inscriptionId: string
     candidateId: string
     createdAt?: Date | string
   }
 
-  export type GroupCandidateUpdateInput = {
+  export type InscriptionCandidateUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    group?: GroupUpdateOneRequiredWithoutMembersNestedInput
-    candidate?: CandidateUpdateOneRequiredWithoutGroupsNestedInput
+    inscription?: InscriptionUpdateOneRequiredWithoutMembersNestedInput
+    candidate?: CandidateUpdateOneRequiredWithoutInscriptionCandidatesNestedInput
   }
 
-  export type GroupCandidateUncheckedUpdateInput = {
+  export type InscriptionCandidateUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    groupId?: StringFieldUpdateOperationsInput | string
+    inscriptionId?: StringFieldUpdateOperationsInput | string
     candidateId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type GroupCandidateCreateManyInput = {
+  export type InscriptionCandidateCreateManyInput = {
     id?: string
-    groupId: string
+    inscriptionId: string
     candidateId: string
     createdAt?: Date | string
   }
 
-  export type GroupCandidateUpdateManyMutationInput = {
+  export type InscriptionCandidateUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type GroupCandidateUncheckedUpdateManyInput = {
+  export type InscriptionCandidateUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    groupId?: StringFieldUpdateOperationsInput | string
+    inscriptionId?: StringFieldUpdateOperationsInput | string
     candidateId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -19097,10 +18858,10 @@ export namespace Prisma {
     none?: InscriptionWhereInput
   }
 
-  export type GroupCandidateListRelationFilter = {
-    every?: GroupCandidateWhereInput
-    some?: GroupCandidateWhereInput
-    none?: GroupCandidateWhereInput
+  export type InscriptionCandidateListRelationFilter = {
+    every?: InscriptionCandidateWhereInput
+    some?: InscriptionCandidateWhereInput
+    none?: InscriptionCandidateWhereInput
   }
 
   export type PaymentListRelationFilter = {
@@ -19113,7 +18874,7 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
-  export type GroupCandidateOrderByRelationAggregateInput = {
+  export type InscriptionCandidateOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -19200,16 +18961,6 @@ export namespace Prisma {
     gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
-  }
-
-  export type GroupListRelationFilter = {
-    every?: GroupWhereInput
-    some?: GroupWhereInput
-    none?: GroupWhereInput
-  }
-
-  export type GroupOrderByRelationAggregateInput = {
-    _count?: SortOrder
   }
 
   export type FormationCountOrderByAggregateInput = {
@@ -19455,6 +19206,11 @@ export namespace Prisma {
     isNot?: FormationWhereInput
   }
 
+  export type ProfessorNullableScalarRelationFilter = {
+    is?: ProfessorWhereInput | null
+    isNot?: ProfessorWhereInput | null
+  }
+
   export type GroupNullableScalarRelationFilter = {
     is?: GroupWhereInput | null
     isNot?: GroupWhereInput | null
@@ -19470,9 +19226,9 @@ export namespace Prisma {
     volumeHoraire?: SortOrder
     remainingHours?: SortOrder
     learningMode?: SortOrder
-    groupId?: SortOrder
     candidateId?: SortOrder
     formationId?: SortOrder
+    professorId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -19494,9 +19250,9 @@ export namespace Prisma {
     volumeHoraire?: SortOrder
     remainingHours?: SortOrder
     learningMode?: SortOrder
-    groupId?: SortOrder
     candidateId?: SortOrder
     formationId?: SortOrder
+    professorId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -19511,9 +19267,9 @@ export namespace Prisma {
     volumeHoraire?: SortOrder
     remainingHours?: SortOrder
     learningMode?: SortOrder
-    groupId?: SortOrder
     candidateId?: SortOrder
     formationId?: SortOrder
+    professorId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -19593,40 +19349,23 @@ export namespace Prisma {
     _max?: NestedEnumLearningModeFilter<$PrismaModel>
   }
 
-  export type EnumGroupTypeFilter<$PrismaModel = never> = {
-    equals?: $Enums.GroupType | EnumGroupTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.GroupType[] | ListEnumGroupTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.GroupType[] | ListEnumGroupTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumGroupTypeFilter<$PrismaModel> | $Enums.GroupType
-  }
-
-  export type ProfessorNullableScalarRelationFilter = {
-    is?: ProfessorWhereInput | null
-    isNot?: ProfessorWhereInput | null
+  export type InscriptionScalarRelationFilter = {
+    is?: InscriptionWhereInput
+    isNot?: InscriptionWhereInput
   }
 
   export type GroupCountOrderByAggregateInput = {
     id?: SortOrder
     nom?: SortOrder
-    type?: SortOrder
-    formationId?: SortOrder
-    professorId?: SortOrder
-    effectif?: SortOrder
+    inscriptionId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-  }
-
-  export type GroupAvgOrderByAggregateInput = {
-    effectif?: SortOrder
   }
 
   export type GroupMaxOrderByAggregateInput = {
     id?: SortOrder
     nom?: SortOrder
-    type?: SortOrder
-    formationId?: SortOrder
-    professorId?: SortOrder
-    effectif?: SortOrder
+    inscriptionId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -19634,55 +19373,33 @@ export namespace Prisma {
   export type GroupMinOrderByAggregateInput = {
     id?: SortOrder
     nom?: SortOrder
-    type?: SortOrder
-    formationId?: SortOrder
-    professorId?: SortOrder
-    effectif?: SortOrder
+    inscriptionId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
-  export type GroupSumOrderByAggregateInput = {
-    effectif?: SortOrder
-  }
-
-  export type EnumGroupTypeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.GroupType | EnumGroupTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.GroupType[] | ListEnumGroupTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.GroupType[] | ListEnumGroupTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumGroupTypeWithAggregatesFilter<$PrismaModel> | $Enums.GroupType
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumGroupTypeFilter<$PrismaModel>
-    _max?: NestedEnumGroupTypeFilter<$PrismaModel>
-  }
-
-  export type GroupScalarRelationFilter = {
-    is?: GroupWhereInput
-    isNot?: GroupWhereInput
-  }
-
-  export type GroupCandidateGroupIdCandidateIdCompoundUniqueInput = {
-    groupId: string
+  export type InscriptionCandidateInscriptionIdCandidateIdCompoundUniqueInput = {
+    inscriptionId: string
     candidateId: string
   }
 
-  export type GroupCandidateCountOrderByAggregateInput = {
+  export type InscriptionCandidateCountOrderByAggregateInput = {
     id?: SortOrder
-    groupId?: SortOrder
+    inscriptionId?: SortOrder
     candidateId?: SortOrder
     createdAt?: SortOrder
   }
 
-  export type GroupCandidateMaxOrderByAggregateInput = {
+  export type InscriptionCandidateMaxOrderByAggregateInput = {
     id?: SortOrder
-    groupId?: SortOrder
+    inscriptionId?: SortOrder
     candidateId?: SortOrder
     createdAt?: SortOrder
   }
 
-  export type GroupCandidateMinOrderByAggregateInput = {
+  export type InscriptionCandidateMinOrderByAggregateInput = {
     id?: SortOrder
-    groupId?: SortOrder
+    inscriptionId?: SortOrder
     candidateId?: SortOrder
     createdAt?: SortOrder
   }
@@ -19811,11 +19528,6 @@ export namespace Prisma {
     not?: NestedEnumReservationStatusFilter<$PrismaModel> | $Enums.ReservationStatus
   }
 
-  export type InscriptionScalarRelationFilter = {
-    is?: InscriptionWhereInput
-    isNot?: InscriptionWhereInput
-  }
-
   export type ProfessorScalarRelationFilter = {
     is?: ProfessorWhereInput
     isNot?: ProfessorWhereInput
@@ -19936,11 +19648,11 @@ export namespace Prisma {
     connect?: InscriptionWhereUniqueInput | InscriptionWhereUniqueInput[]
   }
 
-  export type GroupCandidateCreateNestedManyWithoutCandidateInput = {
-    create?: XOR<GroupCandidateCreateWithoutCandidateInput, GroupCandidateUncheckedCreateWithoutCandidateInput> | GroupCandidateCreateWithoutCandidateInput[] | GroupCandidateUncheckedCreateWithoutCandidateInput[]
-    connectOrCreate?: GroupCandidateCreateOrConnectWithoutCandidateInput | GroupCandidateCreateOrConnectWithoutCandidateInput[]
-    createMany?: GroupCandidateCreateManyCandidateInputEnvelope
-    connect?: GroupCandidateWhereUniqueInput | GroupCandidateWhereUniqueInput[]
+  export type InscriptionCandidateCreateNestedManyWithoutCandidateInput = {
+    create?: XOR<InscriptionCandidateCreateWithoutCandidateInput, InscriptionCandidateUncheckedCreateWithoutCandidateInput> | InscriptionCandidateCreateWithoutCandidateInput[] | InscriptionCandidateUncheckedCreateWithoutCandidateInput[]
+    connectOrCreate?: InscriptionCandidateCreateOrConnectWithoutCandidateInput | InscriptionCandidateCreateOrConnectWithoutCandidateInput[]
+    createMany?: InscriptionCandidateCreateManyCandidateInputEnvelope
+    connect?: InscriptionCandidateWhereUniqueInput | InscriptionCandidateWhereUniqueInput[]
   }
 
   export type PaymentCreateNestedManyWithoutCandidateInput = {
@@ -19957,11 +19669,11 @@ export namespace Prisma {
     connect?: InscriptionWhereUniqueInput | InscriptionWhereUniqueInput[]
   }
 
-  export type GroupCandidateUncheckedCreateNestedManyWithoutCandidateInput = {
-    create?: XOR<GroupCandidateCreateWithoutCandidateInput, GroupCandidateUncheckedCreateWithoutCandidateInput> | GroupCandidateCreateWithoutCandidateInput[] | GroupCandidateUncheckedCreateWithoutCandidateInput[]
-    connectOrCreate?: GroupCandidateCreateOrConnectWithoutCandidateInput | GroupCandidateCreateOrConnectWithoutCandidateInput[]
-    createMany?: GroupCandidateCreateManyCandidateInputEnvelope
-    connect?: GroupCandidateWhereUniqueInput | GroupCandidateWhereUniqueInput[]
+  export type InscriptionCandidateUncheckedCreateNestedManyWithoutCandidateInput = {
+    create?: XOR<InscriptionCandidateCreateWithoutCandidateInput, InscriptionCandidateUncheckedCreateWithoutCandidateInput> | InscriptionCandidateCreateWithoutCandidateInput[] | InscriptionCandidateUncheckedCreateWithoutCandidateInput[]
+    connectOrCreate?: InscriptionCandidateCreateOrConnectWithoutCandidateInput | InscriptionCandidateCreateOrConnectWithoutCandidateInput[]
+    createMany?: InscriptionCandidateCreateManyCandidateInputEnvelope
+    connect?: InscriptionCandidateWhereUniqueInput | InscriptionCandidateWhereUniqueInput[]
   }
 
   export type PaymentUncheckedCreateNestedManyWithoutCandidateInput = {
@@ -19994,18 +19706,18 @@ export namespace Prisma {
     deleteMany?: InscriptionScalarWhereInput | InscriptionScalarWhereInput[]
   }
 
-  export type GroupCandidateUpdateManyWithoutCandidateNestedInput = {
-    create?: XOR<GroupCandidateCreateWithoutCandidateInput, GroupCandidateUncheckedCreateWithoutCandidateInput> | GroupCandidateCreateWithoutCandidateInput[] | GroupCandidateUncheckedCreateWithoutCandidateInput[]
-    connectOrCreate?: GroupCandidateCreateOrConnectWithoutCandidateInput | GroupCandidateCreateOrConnectWithoutCandidateInput[]
-    upsert?: GroupCandidateUpsertWithWhereUniqueWithoutCandidateInput | GroupCandidateUpsertWithWhereUniqueWithoutCandidateInput[]
-    createMany?: GroupCandidateCreateManyCandidateInputEnvelope
-    set?: GroupCandidateWhereUniqueInput | GroupCandidateWhereUniqueInput[]
-    disconnect?: GroupCandidateWhereUniqueInput | GroupCandidateWhereUniqueInput[]
-    delete?: GroupCandidateWhereUniqueInput | GroupCandidateWhereUniqueInput[]
-    connect?: GroupCandidateWhereUniqueInput | GroupCandidateWhereUniqueInput[]
-    update?: GroupCandidateUpdateWithWhereUniqueWithoutCandidateInput | GroupCandidateUpdateWithWhereUniqueWithoutCandidateInput[]
-    updateMany?: GroupCandidateUpdateManyWithWhereWithoutCandidateInput | GroupCandidateUpdateManyWithWhereWithoutCandidateInput[]
-    deleteMany?: GroupCandidateScalarWhereInput | GroupCandidateScalarWhereInput[]
+  export type InscriptionCandidateUpdateManyWithoutCandidateNestedInput = {
+    create?: XOR<InscriptionCandidateCreateWithoutCandidateInput, InscriptionCandidateUncheckedCreateWithoutCandidateInput> | InscriptionCandidateCreateWithoutCandidateInput[] | InscriptionCandidateUncheckedCreateWithoutCandidateInput[]
+    connectOrCreate?: InscriptionCandidateCreateOrConnectWithoutCandidateInput | InscriptionCandidateCreateOrConnectWithoutCandidateInput[]
+    upsert?: InscriptionCandidateUpsertWithWhereUniqueWithoutCandidateInput | InscriptionCandidateUpsertWithWhereUniqueWithoutCandidateInput[]
+    createMany?: InscriptionCandidateCreateManyCandidateInputEnvelope
+    set?: InscriptionCandidateWhereUniqueInput | InscriptionCandidateWhereUniqueInput[]
+    disconnect?: InscriptionCandidateWhereUniqueInput | InscriptionCandidateWhereUniqueInput[]
+    delete?: InscriptionCandidateWhereUniqueInput | InscriptionCandidateWhereUniqueInput[]
+    connect?: InscriptionCandidateWhereUniqueInput | InscriptionCandidateWhereUniqueInput[]
+    update?: InscriptionCandidateUpdateWithWhereUniqueWithoutCandidateInput | InscriptionCandidateUpdateWithWhereUniqueWithoutCandidateInput[]
+    updateMany?: InscriptionCandidateUpdateManyWithWhereWithoutCandidateInput | InscriptionCandidateUpdateManyWithWhereWithoutCandidateInput[]
+    deleteMany?: InscriptionCandidateScalarWhereInput | InscriptionCandidateScalarWhereInput[]
   }
 
   export type PaymentUpdateManyWithoutCandidateNestedInput = {
@@ -20036,18 +19748,18 @@ export namespace Prisma {
     deleteMany?: InscriptionScalarWhereInput | InscriptionScalarWhereInput[]
   }
 
-  export type GroupCandidateUncheckedUpdateManyWithoutCandidateNestedInput = {
-    create?: XOR<GroupCandidateCreateWithoutCandidateInput, GroupCandidateUncheckedCreateWithoutCandidateInput> | GroupCandidateCreateWithoutCandidateInput[] | GroupCandidateUncheckedCreateWithoutCandidateInput[]
-    connectOrCreate?: GroupCandidateCreateOrConnectWithoutCandidateInput | GroupCandidateCreateOrConnectWithoutCandidateInput[]
-    upsert?: GroupCandidateUpsertWithWhereUniqueWithoutCandidateInput | GroupCandidateUpsertWithWhereUniqueWithoutCandidateInput[]
-    createMany?: GroupCandidateCreateManyCandidateInputEnvelope
-    set?: GroupCandidateWhereUniqueInput | GroupCandidateWhereUniqueInput[]
-    disconnect?: GroupCandidateWhereUniqueInput | GroupCandidateWhereUniqueInput[]
-    delete?: GroupCandidateWhereUniqueInput | GroupCandidateWhereUniqueInput[]
-    connect?: GroupCandidateWhereUniqueInput | GroupCandidateWhereUniqueInput[]
-    update?: GroupCandidateUpdateWithWhereUniqueWithoutCandidateInput | GroupCandidateUpdateWithWhereUniqueWithoutCandidateInput[]
-    updateMany?: GroupCandidateUpdateManyWithWhereWithoutCandidateInput | GroupCandidateUpdateManyWithWhereWithoutCandidateInput[]
-    deleteMany?: GroupCandidateScalarWhereInput | GroupCandidateScalarWhereInput[]
+  export type InscriptionCandidateUncheckedUpdateManyWithoutCandidateNestedInput = {
+    create?: XOR<InscriptionCandidateCreateWithoutCandidateInput, InscriptionCandidateUncheckedCreateWithoutCandidateInput> | InscriptionCandidateCreateWithoutCandidateInput[] | InscriptionCandidateUncheckedCreateWithoutCandidateInput[]
+    connectOrCreate?: InscriptionCandidateCreateOrConnectWithoutCandidateInput | InscriptionCandidateCreateOrConnectWithoutCandidateInput[]
+    upsert?: InscriptionCandidateUpsertWithWhereUniqueWithoutCandidateInput | InscriptionCandidateUpsertWithWhereUniqueWithoutCandidateInput[]
+    createMany?: InscriptionCandidateCreateManyCandidateInputEnvelope
+    set?: InscriptionCandidateWhereUniqueInput | InscriptionCandidateWhereUniqueInput[]
+    disconnect?: InscriptionCandidateWhereUniqueInput | InscriptionCandidateWhereUniqueInput[]
+    delete?: InscriptionCandidateWhereUniqueInput | InscriptionCandidateWhereUniqueInput[]
+    connect?: InscriptionCandidateWhereUniqueInput | InscriptionCandidateWhereUniqueInput[]
+    update?: InscriptionCandidateUpdateWithWhereUniqueWithoutCandidateInput | InscriptionCandidateUpdateWithWhereUniqueWithoutCandidateInput[]
+    updateMany?: InscriptionCandidateUpdateManyWithWhereWithoutCandidateInput | InscriptionCandidateUpdateManyWithWhereWithoutCandidateInput[]
+    deleteMany?: InscriptionCandidateScalarWhereInput | InscriptionCandidateScalarWhereInput[]
   }
 
   export type PaymentUncheckedUpdateManyWithoutCandidateNestedInput = {
@@ -20071,13 +19783,6 @@ export namespace Prisma {
     connect?: InscriptionWhereUniqueInput | InscriptionWhereUniqueInput[]
   }
 
-  export type GroupCreateNestedManyWithoutFormationInput = {
-    create?: XOR<GroupCreateWithoutFormationInput, GroupUncheckedCreateWithoutFormationInput> | GroupCreateWithoutFormationInput[] | GroupUncheckedCreateWithoutFormationInput[]
-    connectOrCreate?: GroupCreateOrConnectWithoutFormationInput | GroupCreateOrConnectWithoutFormationInput[]
-    createMany?: GroupCreateManyFormationInputEnvelope
-    connect?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
-  }
-
   export type PaymentCreateNestedManyWithoutFormationInput = {
     create?: XOR<PaymentCreateWithoutFormationInput, PaymentUncheckedCreateWithoutFormationInput> | PaymentCreateWithoutFormationInput[] | PaymentUncheckedCreateWithoutFormationInput[]
     connectOrCreate?: PaymentCreateOrConnectWithoutFormationInput | PaymentCreateOrConnectWithoutFormationInput[]
@@ -20090,13 +19795,6 @@ export namespace Prisma {
     connectOrCreate?: InscriptionCreateOrConnectWithoutFormationInput | InscriptionCreateOrConnectWithoutFormationInput[]
     createMany?: InscriptionCreateManyFormationInputEnvelope
     connect?: InscriptionWhereUniqueInput | InscriptionWhereUniqueInput[]
-  }
-
-  export type GroupUncheckedCreateNestedManyWithoutFormationInput = {
-    create?: XOR<GroupCreateWithoutFormationInput, GroupUncheckedCreateWithoutFormationInput> | GroupCreateWithoutFormationInput[] | GroupUncheckedCreateWithoutFormationInput[]
-    connectOrCreate?: GroupCreateOrConnectWithoutFormationInput | GroupCreateOrConnectWithoutFormationInput[]
-    createMany?: GroupCreateManyFormationInputEnvelope
-    connect?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
   }
 
   export type PaymentUncheckedCreateNestedManyWithoutFormationInput = {
@@ -20128,20 +19826,6 @@ export namespace Prisma {
     deleteMany?: InscriptionScalarWhereInput | InscriptionScalarWhereInput[]
   }
 
-  export type GroupUpdateManyWithoutFormationNestedInput = {
-    create?: XOR<GroupCreateWithoutFormationInput, GroupUncheckedCreateWithoutFormationInput> | GroupCreateWithoutFormationInput[] | GroupUncheckedCreateWithoutFormationInput[]
-    connectOrCreate?: GroupCreateOrConnectWithoutFormationInput | GroupCreateOrConnectWithoutFormationInput[]
-    upsert?: GroupUpsertWithWhereUniqueWithoutFormationInput | GroupUpsertWithWhereUniqueWithoutFormationInput[]
-    createMany?: GroupCreateManyFormationInputEnvelope
-    set?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
-    disconnect?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
-    delete?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
-    connect?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
-    update?: GroupUpdateWithWhereUniqueWithoutFormationInput | GroupUpdateWithWhereUniqueWithoutFormationInput[]
-    updateMany?: GroupUpdateManyWithWhereWithoutFormationInput | GroupUpdateManyWithWhereWithoutFormationInput[]
-    deleteMany?: GroupScalarWhereInput | GroupScalarWhereInput[]
-  }
-
   export type PaymentUpdateManyWithoutFormationNestedInput = {
     create?: XOR<PaymentCreateWithoutFormationInput, PaymentUncheckedCreateWithoutFormationInput> | PaymentCreateWithoutFormationInput[] | PaymentUncheckedCreateWithoutFormationInput[]
     connectOrCreate?: PaymentCreateOrConnectWithoutFormationInput | PaymentCreateOrConnectWithoutFormationInput[]
@@ -20168,20 +19852,6 @@ export namespace Prisma {
     update?: InscriptionUpdateWithWhereUniqueWithoutFormationInput | InscriptionUpdateWithWhereUniqueWithoutFormationInput[]
     updateMany?: InscriptionUpdateManyWithWhereWithoutFormationInput | InscriptionUpdateManyWithWhereWithoutFormationInput[]
     deleteMany?: InscriptionScalarWhereInput | InscriptionScalarWhereInput[]
-  }
-
-  export type GroupUncheckedUpdateManyWithoutFormationNestedInput = {
-    create?: XOR<GroupCreateWithoutFormationInput, GroupUncheckedCreateWithoutFormationInput> | GroupCreateWithoutFormationInput[] | GroupUncheckedCreateWithoutFormationInput[]
-    connectOrCreate?: GroupCreateOrConnectWithoutFormationInput | GroupCreateOrConnectWithoutFormationInput[]
-    upsert?: GroupUpsertWithWhereUniqueWithoutFormationInput | GroupUpsertWithWhereUniqueWithoutFormationInput[]
-    createMany?: GroupCreateManyFormationInputEnvelope
-    set?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
-    disconnect?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
-    delete?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
-    connect?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
-    update?: GroupUpdateWithWhereUniqueWithoutFormationInput | GroupUpdateWithWhereUniqueWithoutFormationInput[]
-    updateMany?: GroupUpdateManyWithWhereWithoutFormationInput | GroupUpdateManyWithWhereWithoutFormationInput[]
-    deleteMany?: GroupScalarWhereInput | GroupScalarWhereInput[]
   }
 
   export type PaymentUncheckedUpdateManyWithoutFormationNestedInput = {
@@ -20244,11 +19914,11 @@ export namespace Prisma {
     deleteMany?: ReservationScalarWhereInput | ReservationScalarWhereInput[]
   }
 
-  export type GroupCreateNestedManyWithoutProfessorInput = {
-    create?: XOR<GroupCreateWithoutProfessorInput, GroupUncheckedCreateWithoutProfessorInput> | GroupCreateWithoutProfessorInput[] | GroupUncheckedCreateWithoutProfessorInput[]
-    connectOrCreate?: GroupCreateOrConnectWithoutProfessorInput | GroupCreateOrConnectWithoutProfessorInput[]
-    createMany?: GroupCreateManyProfessorInputEnvelope
-    connect?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
+  export type InscriptionCreateNestedManyWithoutProfessorInput = {
+    create?: XOR<InscriptionCreateWithoutProfessorInput, InscriptionUncheckedCreateWithoutProfessorInput> | InscriptionCreateWithoutProfessorInput[] | InscriptionUncheckedCreateWithoutProfessorInput[]
+    connectOrCreate?: InscriptionCreateOrConnectWithoutProfessorInput | InscriptionCreateOrConnectWithoutProfessorInput[]
+    createMany?: InscriptionCreateManyProfessorInputEnvelope
+    connect?: InscriptionWhereUniqueInput | InscriptionWhereUniqueInput[]
   }
 
   export type ReservationCreateNestedManyWithoutProfessorInput = {
@@ -20258,11 +19928,11 @@ export namespace Prisma {
     connect?: ReservationWhereUniqueInput | ReservationWhereUniqueInput[]
   }
 
-  export type GroupUncheckedCreateNestedManyWithoutProfessorInput = {
-    create?: XOR<GroupCreateWithoutProfessorInput, GroupUncheckedCreateWithoutProfessorInput> | GroupCreateWithoutProfessorInput[] | GroupUncheckedCreateWithoutProfessorInput[]
-    connectOrCreate?: GroupCreateOrConnectWithoutProfessorInput | GroupCreateOrConnectWithoutProfessorInput[]
-    createMany?: GroupCreateManyProfessorInputEnvelope
-    connect?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
+  export type InscriptionUncheckedCreateNestedManyWithoutProfessorInput = {
+    create?: XOR<InscriptionCreateWithoutProfessorInput, InscriptionUncheckedCreateWithoutProfessorInput> | InscriptionCreateWithoutProfessorInput[] | InscriptionUncheckedCreateWithoutProfessorInput[]
+    connectOrCreate?: InscriptionCreateOrConnectWithoutProfessorInput | InscriptionCreateOrConnectWithoutProfessorInput[]
+    createMany?: InscriptionCreateManyProfessorInputEnvelope
+    connect?: InscriptionWhereUniqueInput | InscriptionWhereUniqueInput[]
   }
 
   export type ReservationUncheckedCreateNestedManyWithoutProfessorInput = {
@@ -20272,18 +19942,18 @@ export namespace Prisma {
     connect?: ReservationWhereUniqueInput | ReservationWhereUniqueInput[]
   }
 
-  export type GroupUpdateManyWithoutProfessorNestedInput = {
-    create?: XOR<GroupCreateWithoutProfessorInput, GroupUncheckedCreateWithoutProfessorInput> | GroupCreateWithoutProfessorInput[] | GroupUncheckedCreateWithoutProfessorInput[]
-    connectOrCreate?: GroupCreateOrConnectWithoutProfessorInput | GroupCreateOrConnectWithoutProfessorInput[]
-    upsert?: GroupUpsertWithWhereUniqueWithoutProfessorInput | GroupUpsertWithWhereUniqueWithoutProfessorInput[]
-    createMany?: GroupCreateManyProfessorInputEnvelope
-    set?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
-    disconnect?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
-    delete?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
-    connect?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
-    update?: GroupUpdateWithWhereUniqueWithoutProfessorInput | GroupUpdateWithWhereUniqueWithoutProfessorInput[]
-    updateMany?: GroupUpdateManyWithWhereWithoutProfessorInput | GroupUpdateManyWithWhereWithoutProfessorInput[]
-    deleteMany?: GroupScalarWhereInput | GroupScalarWhereInput[]
+  export type InscriptionUpdateManyWithoutProfessorNestedInput = {
+    create?: XOR<InscriptionCreateWithoutProfessorInput, InscriptionUncheckedCreateWithoutProfessorInput> | InscriptionCreateWithoutProfessorInput[] | InscriptionUncheckedCreateWithoutProfessorInput[]
+    connectOrCreate?: InscriptionCreateOrConnectWithoutProfessorInput | InscriptionCreateOrConnectWithoutProfessorInput[]
+    upsert?: InscriptionUpsertWithWhereUniqueWithoutProfessorInput | InscriptionUpsertWithWhereUniqueWithoutProfessorInput[]
+    createMany?: InscriptionCreateManyProfessorInputEnvelope
+    set?: InscriptionWhereUniqueInput | InscriptionWhereUniqueInput[]
+    disconnect?: InscriptionWhereUniqueInput | InscriptionWhereUniqueInput[]
+    delete?: InscriptionWhereUniqueInput | InscriptionWhereUniqueInput[]
+    connect?: InscriptionWhereUniqueInput | InscriptionWhereUniqueInput[]
+    update?: InscriptionUpdateWithWhereUniqueWithoutProfessorInput | InscriptionUpdateWithWhereUniqueWithoutProfessorInput[]
+    updateMany?: InscriptionUpdateManyWithWhereWithoutProfessorInput | InscriptionUpdateManyWithWhereWithoutProfessorInput[]
+    deleteMany?: InscriptionScalarWhereInput | InscriptionScalarWhereInput[]
   }
 
   export type ReservationUpdateManyWithoutProfessorNestedInput = {
@@ -20300,18 +19970,18 @@ export namespace Prisma {
     deleteMany?: ReservationScalarWhereInput | ReservationScalarWhereInput[]
   }
 
-  export type GroupUncheckedUpdateManyWithoutProfessorNestedInput = {
-    create?: XOR<GroupCreateWithoutProfessorInput, GroupUncheckedCreateWithoutProfessorInput> | GroupCreateWithoutProfessorInput[] | GroupUncheckedCreateWithoutProfessorInput[]
-    connectOrCreate?: GroupCreateOrConnectWithoutProfessorInput | GroupCreateOrConnectWithoutProfessorInput[]
-    upsert?: GroupUpsertWithWhereUniqueWithoutProfessorInput | GroupUpsertWithWhereUniqueWithoutProfessorInput[]
-    createMany?: GroupCreateManyProfessorInputEnvelope
-    set?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
-    disconnect?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
-    delete?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
-    connect?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
-    update?: GroupUpdateWithWhereUniqueWithoutProfessorInput | GroupUpdateWithWhereUniqueWithoutProfessorInput[]
-    updateMany?: GroupUpdateManyWithWhereWithoutProfessorInput | GroupUpdateManyWithWhereWithoutProfessorInput[]
-    deleteMany?: GroupScalarWhereInput | GroupScalarWhereInput[]
+  export type InscriptionUncheckedUpdateManyWithoutProfessorNestedInput = {
+    create?: XOR<InscriptionCreateWithoutProfessorInput, InscriptionUncheckedCreateWithoutProfessorInput> | InscriptionCreateWithoutProfessorInput[] | InscriptionUncheckedCreateWithoutProfessorInput[]
+    connectOrCreate?: InscriptionCreateOrConnectWithoutProfessorInput | InscriptionCreateOrConnectWithoutProfessorInput[]
+    upsert?: InscriptionUpsertWithWhereUniqueWithoutProfessorInput | InscriptionUpsertWithWhereUniqueWithoutProfessorInput[]
+    createMany?: InscriptionCreateManyProfessorInputEnvelope
+    set?: InscriptionWhereUniqueInput | InscriptionWhereUniqueInput[]
+    disconnect?: InscriptionWhereUniqueInput | InscriptionWhereUniqueInput[]
+    delete?: InscriptionWhereUniqueInput | InscriptionWhereUniqueInput[]
+    connect?: InscriptionWhereUniqueInput | InscriptionWhereUniqueInput[]
+    update?: InscriptionUpdateWithWhereUniqueWithoutProfessorInput | InscriptionUpdateWithWhereUniqueWithoutProfessorInput[]
+    updateMany?: InscriptionUpdateManyWithWhereWithoutProfessorInput | InscriptionUpdateManyWithWhereWithoutProfessorInput[]
+    deleteMany?: InscriptionScalarWhereInput | InscriptionScalarWhereInput[]
   }
 
   export type ReservationUncheckedUpdateManyWithoutProfessorNestedInput = {
@@ -20340,10 +20010,23 @@ export namespace Prisma {
     connect?: FormationWhereUniqueInput
   }
 
-  export type GroupCreateNestedOneWithoutInscriptionsInput = {
-    create?: XOR<GroupCreateWithoutInscriptionsInput, GroupUncheckedCreateWithoutInscriptionsInput>
-    connectOrCreate?: GroupCreateOrConnectWithoutInscriptionsInput
+  export type ProfessorCreateNestedOneWithoutInscriptionsInput = {
+    create?: XOR<ProfessorCreateWithoutInscriptionsInput, ProfessorUncheckedCreateWithoutInscriptionsInput>
+    connectOrCreate?: ProfessorCreateOrConnectWithoutInscriptionsInput
+    connect?: ProfessorWhereUniqueInput
+  }
+
+  export type GroupCreateNestedOneWithoutInscriptionInput = {
+    create?: XOR<GroupCreateWithoutInscriptionInput, GroupUncheckedCreateWithoutInscriptionInput>
+    connectOrCreate?: GroupCreateOrConnectWithoutInscriptionInput
     connect?: GroupWhereUniqueInput
+  }
+
+  export type InscriptionCandidateCreateNestedManyWithoutInscriptionInput = {
+    create?: XOR<InscriptionCandidateCreateWithoutInscriptionInput, InscriptionCandidateUncheckedCreateWithoutInscriptionInput> | InscriptionCandidateCreateWithoutInscriptionInput[] | InscriptionCandidateUncheckedCreateWithoutInscriptionInput[]
+    connectOrCreate?: InscriptionCandidateCreateOrConnectWithoutInscriptionInput | InscriptionCandidateCreateOrConnectWithoutInscriptionInput[]
+    createMany?: InscriptionCandidateCreateManyInscriptionInputEnvelope
+    connect?: InscriptionCandidateWhereUniqueInput | InscriptionCandidateWhereUniqueInput[]
   }
 
   export type ReservationCreateNestedManyWithoutInscriptionInput = {
@@ -20351,6 +20034,19 @@ export namespace Prisma {
     connectOrCreate?: ReservationCreateOrConnectWithoutInscriptionInput | ReservationCreateOrConnectWithoutInscriptionInput[]
     createMany?: ReservationCreateManyInscriptionInputEnvelope
     connect?: ReservationWhereUniqueInput | ReservationWhereUniqueInput[]
+  }
+
+  export type GroupUncheckedCreateNestedOneWithoutInscriptionInput = {
+    create?: XOR<GroupCreateWithoutInscriptionInput, GroupUncheckedCreateWithoutInscriptionInput>
+    connectOrCreate?: GroupCreateOrConnectWithoutInscriptionInput
+    connect?: GroupWhereUniqueInput
+  }
+
+  export type InscriptionCandidateUncheckedCreateNestedManyWithoutInscriptionInput = {
+    create?: XOR<InscriptionCandidateCreateWithoutInscriptionInput, InscriptionCandidateUncheckedCreateWithoutInscriptionInput> | InscriptionCandidateCreateWithoutInscriptionInput[] | InscriptionCandidateUncheckedCreateWithoutInscriptionInput[]
+    connectOrCreate?: InscriptionCandidateCreateOrConnectWithoutInscriptionInput | InscriptionCandidateCreateOrConnectWithoutInscriptionInput[]
+    createMany?: InscriptionCandidateCreateManyInscriptionInputEnvelope
+    connect?: InscriptionCandidateWhereUniqueInput | InscriptionCandidateWhereUniqueInput[]
   }
 
   export type ReservationUncheckedCreateNestedManyWithoutInscriptionInput = {
@@ -20408,14 +20104,38 @@ export namespace Prisma {
     update?: XOR<XOR<FormationUpdateToOneWithWhereWithoutInscriptionsInput, FormationUpdateWithoutInscriptionsInput>, FormationUncheckedUpdateWithoutInscriptionsInput>
   }
 
-  export type GroupUpdateOneWithoutInscriptionsNestedInput = {
-    create?: XOR<GroupCreateWithoutInscriptionsInput, GroupUncheckedCreateWithoutInscriptionsInput>
-    connectOrCreate?: GroupCreateOrConnectWithoutInscriptionsInput
-    upsert?: GroupUpsertWithoutInscriptionsInput
+  export type ProfessorUpdateOneWithoutInscriptionsNestedInput = {
+    create?: XOR<ProfessorCreateWithoutInscriptionsInput, ProfessorUncheckedCreateWithoutInscriptionsInput>
+    connectOrCreate?: ProfessorCreateOrConnectWithoutInscriptionsInput
+    upsert?: ProfessorUpsertWithoutInscriptionsInput
+    disconnect?: ProfessorWhereInput | boolean
+    delete?: ProfessorWhereInput | boolean
+    connect?: ProfessorWhereUniqueInput
+    update?: XOR<XOR<ProfessorUpdateToOneWithWhereWithoutInscriptionsInput, ProfessorUpdateWithoutInscriptionsInput>, ProfessorUncheckedUpdateWithoutInscriptionsInput>
+  }
+
+  export type GroupUpdateOneWithoutInscriptionNestedInput = {
+    create?: XOR<GroupCreateWithoutInscriptionInput, GroupUncheckedCreateWithoutInscriptionInput>
+    connectOrCreate?: GroupCreateOrConnectWithoutInscriptionInput
+    upsert?: GroupUpsertWithoutInscriptionInput
     disconnect?: GroupWhereInput | boolean
     delete?: GroupWhereInput | boolean
     connect?: GroupWhereUniqueInput
-    update?: XOR<XOR<GroupUpdateToOneWithWhereWithoutInscriptionsInput, GroupUpdateWithoutInscriptionsInput>, GroupUncheckedUpdateWithoutInscriptionsInput>
+    update?: XOR<XOR<GroupUpdateToOneWithWhereWithoutInscriptionInput, GroupUpdateWithoutInscriptionInput>, GroupUncheckedUpdateWithoutInscriptionInput>
+  }
+
+  export type InscriptionCandidateUpdateManyWithoutInscriptionNestedInput = {
+    create?: XOR<InscriptionCandidateCreateWithoutInscriptionInput, InscriptionCandidateUncheckedCreateWithoutInscriptionInput> | InscriptionCandidateCreateWithoutInscriptionInput[] | InscriptionCandidateUncheckedCreateWithoutInscriptionInput[]
+    connectOrCreate?: InscriptionCandidateCreateOrConnectWithoutInscriptionInput | InscriptionCandidateCreateOrConnectWithoutInscriptionInput[]
+    upsert?: InscriptionCandidateUpsertWithWhereUniqueWithoutInscriptionInput | InscriptionCandidateUpsertWithWhereUniqueWithoutInscriptionInput[]
+    createMany?: InscriptionCandidateCreateManyInscriptionInputEnvelope
+    set?: InscriptionCandidateWhereUniqueInput | InscriptionCandidateWhereUniqueInput[]
+    disconnect?: InscriptionCandidateWhereUniqueInput | InscriptionCandidateWhereUniqueInput[]
+    delete?: InscriptionCandidateWhereUniqueInput | InscriptionCandidateWhereUniqueInput[]
+    connect?: InscriptionCandidateWhereUniqueInput | InscriptionCandidateWhereUniqueInput[]
+    update?: InscriptionCandidateUpdateWithWhereUniqueWithoutInscriptionInput | InscriptionCandidateUpdateWithWhereUniqueWithoutInscriptionInput[]
+    updateMany?: InscriptionCandidateUpdateManyWithWhereWithoutInscriptionInput | InscriptionCandidateUpdateManyWithWhereWithoutInscriptionInput[]
+    deleteMany?: InscriptionCandidateScalarWhereInput | InscriptionCandidateScalarWhereInput[]
   }
 
   export type ReservationUpdateManyWithoutInscriptionNestedInput = {
@@ -20432,6 +20152,30 @@ export namespace Prisma {
     deleteMany?: ReservationScalarWhereInput | ReservationScalarWhereInput[]
   }
 
+  export type GroupUncheckedUpdateOneWithoutInscriptionNestedInput = {
+    create?: XOR<GroupCreateWithoutInscriptionInput, GroupUncheckedCreateWithoutInscriptionInput>
+    connectOrCreate?: GroupCreateOrConnectWithoutInscriptionInput
+    upsert?: GroupUpsertWithoutInscriptionInput
+    disconnect?: GroupWhereInput | boolean
+    delete?: GroupWhereInput | boolean
+    connect?: GroupWhereUniqueInput
+    update?: XOR<XOR<GroupUpdateToOneWithWhereWithoutInscriptionInput, GroupUpdateWithoutInscriptionInput>, GroupUncheckedUpdateWithoutInscriptionInput>
+  }
+
+  export type InscriptionCandidateUncheckedUpdateManyWithoutInscriptionNestedInput = {
+    create?: XOR<InscriptionCandidateCreateWithoutInscriptionInput, InscriptionCandidateUncheckedCreateWithoutInscriptionInput> | InscriptionCandidateCreateWithoutInscriptionInput[] | InscriptionCandidateUncheckedCreateWithoutInscriptionInput[]
+    connectOrCreate?: InscriptionCandidateCreateOrConnectWithoutInscriptionInput | InscriptionCandidateCreateOrConnectWithoutInscriptionInput[]
+    upsert?: InscriptionCandidateUpsertWithWhereUniqueWithoutInscriptionInput | InscriptionCandidateUpsertWithWhereUniqueWithoutInscriptionInput[]
+    createMany?: InscriptionCandidateCreateManyInscriptionInputEnvelope
+    set?: InscriptionCandidateWhereUniqueInput | InscriptionCandidateWhereUniqueInput[]
+    disconnect?: InscriptionCandidateWhereUniqueInput | InscriptionCandidateWhereUniqueInput[]
+    delete?: InscriptionCandidateWhereUniqueInput | InscriptionCandidateWhereUniqueInput[]
+    connect?: InscriptionCandidateWhereUniqueInput | InscriptionCandidateWhereUniqueInput[]
+    update?: InscriptionCandidateUpdateWithWhereUniqueWithoutInscriptionInput | InscriptionCandidateUpdateWithWhereUniqueWithoutInscriptionInput[]
+    updateMany?: InscriptionCandidateUpdateManyWithWhereWithoutInscriptionInput | InscriptionCandidateUpdateManyWithWhereWithoutInscriptionInput[]
+    deleteMany?: InscriptionCandidateScalarWhereInput | InscriptionCandidateScalarWhereInput[]
+  }
+
   export type ReservationUncheckedUpdateManyWithoutInscriptionNestedInput = {
     create?: XOR<ReservationCreateWithoutInscriptionInput, ReservationUncheckedCreateWithoutInscriptionInput> | ReservationCreateWithoutInscriptionInput[] | ReservationUncheckedCreateWithoutInscriptionInput[]
     connectOrCreate?: ReservationCreateOrConnectWithoutInscriptionInput | ReservationCreateOrConnectWithoutInscriptionInput[]
@@ -20446,150 +20190,46 @@ export namespace Prisma {
     deleteMany?: ReservationScalarWhereInput | ReservationScalarWhereInput[]
   }
 
-  export type FormationCreateNestedOneWithoutGroupsInput = {
-    create?: XOR<FormationCreateWithoutGroupsInput, FormationUncheckedCreateWithoutGroupsInput>
-    connectOrCreate?: FormationCreateOrConnectWithoutGroupsInput
-    connect?: FormationWhereUniqueInput
+  export type InscriptionCreateNestedOneWithoutGroupInput = {
+    create?: XOR<InscriptionCreateWithoutGroupInput, InscriptionUncheckedCreateWithoutGroupInput>
+    connectOrCreate?: InscriptionCreateOrConnectWithoutGroupInput
+    connect?: InscriptionWhereUniqueInput
   }
 
-  export type ProfessorCreateNestedOneWithoutGroupsInput = {
-    create?: XOR<ProfessorCreateWithoutGroupsInput, ProfessorUncheckedCreateWithoutGroupsInput>
-    connectOrCreate?: ProfessorCreateOrConnectWithoutGroupsInput
-    connect?: ProfessorWhereUniqueInput
+  export type InscriptionUpdateOneRequiredWithoutGroupNestedInput = {
+    create?: XOR<InscriptionCreateWithoutGroupInput, InscriptionUncheckedCreateWithoutGroupInput>
+    connectOrCreate?: InscriptionCreateOrConnectWithoutGroupInput
+    upsert?: InscriptionUpsertWithoutGroupInput
+    connect?: InscriptionWhereUniqueInput
+    update?: XOR<XOR<InscriptionUpdateToOneWithWhereWithoutGroupInput, InscriptionUpdateWithoutGroupInput>, InscriptionUncheckedUpdateWithoutGroupInput>
   }
 
-  export type GroupCandidateCreateNestedManyWithoutGroupInput = {
-    create?: XOR<GroupCandidateCreateWithoutGroupInput, GroupCandidateUncheckedCreateWithoutGroupInput> | GroupCandidateCreateWithoutGroupInput[] | GroupCandidateUncheckedCreateWithoutGroupInput[]
-    connectOrCreate?: GroupCandidateCreateOrConnectWithoutGroupInput | GroupCandidateCreateOrConnectWithoutGroupInput[]
-    createMany?: GroupCandidateCreateManyGroupInputEnvelope
-    connect?: GroupCandidateWhereUniqueInput | GroupCandidateWhereUniqueInput[]
+  export type InscriptionCreateNestedOneWithoutMembersInput = {
+    create?: XOR<InscriptionCreateWithoutMembersInput, InscriptionUncheckedCreateWithoutMembersInput>
+    connectOrCreate?: InscriptionCreateOrConnectWithoutMembersInput
+    connect?: InscriptionWhereUniqueInput
   }
 
-  export type InscriptionCreateNestedManyWithoutGroupInput = {
-    create?: XOR<InscriptionCreateWithoutGroupInput, InscriptionUncheckedCreateWithoutGroupInput> | InscriptionCreateWithoutGroupInput[] | InscriptionUncheckedCreateWithoutGroupInput[]
-    connectOrCreate?: InscriptionCreateOrConnectWithoutGroupInput | InscriptionCreateOrConnectWithoutGroupInput[]
-    createMany?: InscriptionCreateManyGroupInputEnvelope
-    connect?: InscriptionWhereUniqueInput | InscriptionWhereUniqueInput[]
-  }
-
-  export type GroupCandidateUncheckedCreateNestedManyWithoutGroupInput = {
-    create?: XOR<GroupCandidateCreateWithoutGroupInput, GroupCandidateUncheckedCreateWithoutGroupInput> | GroupCandidateCreateWithoutGroupInput[] | GroupCandidateUncheckedCreateWithoutGroupInput[]
-    connectOrCreate?: GroupCandidateCreateOrConnectWithoutGroupInput | GroupCandidateCreateOrConnectWithoutGroupInput[]
-    createMany?: GroupCandidateCreateManyGroupInputEnvelope
-    connect?: GroupCandidateWhereUniqueInput | GroupCandidateWhereUniqueInput[]
-  }
-
-  export type InscriptionUncheckedCreateNestedManyWithoutGroupInput = {
-    create?: XOR<InscriptionCreateWithoutGroupInput, InscriptionUncheckedCreateWithoutGroupInput> | InscriptionCreateWithoutGroupInput[] | InscriptionUncheckedCreateWithoutGroupInput[]
-    connectOrCreate?: InscriptionCreateOrConnectWithoutGroupInput | InscriptionCreateOrConnectWithoutGroupInput[]
-    createMany?: InscriptionCreateManyGroupInputEnvelope
-    connect?: InscriptionWhereUniqueInput | InscriptionWhereUniqueInput[]
-  }
-
-  export type EnumGroupTypeFieldUpdateOperationsInput = {
-    set?: $Enums.GroupType
-  }
-
-  export type FormationUpdateOneRequiredWithoutGroupsNestedInput = {
-    create?: XOR<FormationCreateWithoutGroupsInput, FormationUncheckedCreateWithoutGroupsInput>
-    connectOrCreate?: FormationCreateOrConnectWithoutGroupsInput
-    upsert?: FormationUpsertWithoutGroupsInput
-    connect?: FormationWhereUniqueInput
-    update?: XOR<XOR<FormationUpdateToOneWithWhereWithoutGroupsInput, FormationUpdateWithoutGroupsInput>, FormationUncheckedUpdateWithoutGroupsInput>
-  }
-
-  export type ProfessorUpdateOneWithoutGroupsNestedInput = {
-    create?: XOR<ProfessorCreateWithoutGroupsInput, ProfessorUncheckedCreateWithoutGroupsInput>
-    connectOrCreate?: ProfessorCreateOrConnectWithoutGroupsInput
-    upsert?: ProfessorUpsertWithoutGroupsInput
-    disconnect?: ProfessorWhereInput | boolean
-    delete?: ProfessorWhereInput | boolean
-    connect?: ProfessorWhereUniqueInput
-    update?: XOR<XOR<ProfessorUpdateToOneWithWhereWithoutGroupsInput, ProfessorUpdateWithoutGroupsInput>, ProfessorUncheckedUpdateWithoutGroupsInput>
-  }
-
-  export type GroupCandidateUpdateManyWithoutGroupNestedInput = {
-    create?: XOR<GroupCandidateCreateWithoutGroupInput, GroupCandidateUncheckedCreateWithoutGroupInput> | GroupCandidateCreateWithoutGroupInput[] | GroupCandidateUncheckedCreateWithoutGroupInput[]
-    connectOrCreate?: GroupCandidateCreateOrConnectWithoutGroupInput | GroupCandidateCreateOrConnectWithoutGroupInput[]
-    upsert?: GroupCandidateUpsertWithWhereUniqueWithoutGroupInput | GroupCandidateUpsertWithWhereUniqueWithoutGroupInput[]
-    createMany?: GroupCandidateCreateManyGroupInputEnvelope
-    set?: GroupCandidateWhereUniqueInput | GroupCandidateWhereUniqueInput[]
-    disconnect?: GroupCandidateWhereUniqueInput | GroupCandidateWhereUniqueInput[]
-    delete?: GroupCandidateWhereUniqueInput | GroupCandidateWhereUniqueInput[]
-    connect?: GroupCandidateWhereUniqueInput | GroupCandidateWhereUniqueInput[]
-    update?: GroupCandidateUpdateWithWhereUniqueWithoutGroupInput | GroupCandidateUpdateWithWhereUniqueWithoutGroupInput[]
-    updateMany?: GroupCandidateUpdateManyWithWhereWithoutGroupInput | GroupCandidateUpdateManyWithWhereWithoutGroupInput[]
-    deleteMany?: GroupCandidateScalarWhereInput | GroupCandidateScalarWhereInput[]
-  }
-
-  export type InscriptionUpdateManyWithoutGroupNestedInput = {
-    create?: XOR<InscriptionCreateWithoutGroupInput, InscriptionUncheckedCreateWithoutGroupInput> | InscriptionCreateWithoutGroupInput[] | InscriptionUncheckedCreateWithoutGroupInput[]
-    connectOrCreate?: InscriptionCreateOrConnectWithoutGroupInput | InscriptionCreateOrConnectWithoutGroupInput[]
-    upsert?: InscriptionUpsertWithWhereUniqueWithoutGroupInput | InscriptionUpsertWithWhereUniqueWithoutGroupInput[]
-    createMany?: InscriptionCreateManyGroupInputEnvelope
-    set?: InscriptionWhereUniqueInput | InscriptionWhereUniqueInput[]
-    disconnect?: InscriptionWhereUniqueInput | InscriptionWhereUniqueInput[]
-    delete?: InscriptionWhereUniqueInput | InscriptionWhereUniqueInput[]
-    connect?: InscriptionWhereUniqueInput | InscriptionWhereUniqueInput[]
-    update?: InscriptionUpdateWithWhereUniqueWithoutGroupInput | InscriptionUpdateWithWhereUniqueWithoutGroupInput[]
-    updateMany?: InscriptionUpdateManyWithWhereWithoutGroupInput | InscriptionUpdateManyWithWhereWithoutGroupInput[]
-    deleteMany?: InscriptionScalarWhereInput | InscriptionScalarWhereInput[]
-  }
-
-  export type GroupCandidateUncheckedUpdateManyWithoutGroupNestedInput = {
-    create?: XOR<GroupCandidateCreateWithoutGroupInput, GroupCandidateUncheckedCreateWithoutGroupInput> | GroupCandidateCreateWithoutGroupInput[] | GroupCandidateUncheckedCreateWithoutGroupInput[]
-    connectOrCreate?: GroupCandidateCreateOrConnectWithoutGroupInput | GroupCandidateCreateOrConnectWithoutGroupInput[]
-    upsert?: GroupCandidateUpsertWithWhereUniqueWithoutGroupInput | GroupCandidateUpsertWithWhereUniqueWithoutGroupInput[]
-    createMany?: GroupCandidateCreateManyGroupInputEnvelope
-    set?: GroupCandidateWhereUniqueInput | GroupCandidateWhereUniqueInput[]
-    disconnect?: GroupCandidateWhereUniqueInput | GroupCandidateWhereUniqueInput[]
-    delete?: GroupCandidateWhereUniqueInput | GroupCandidateWhereUniqueInput[]
-    connect?: GroupCandidateWhereUniqueInput | GroupCandidateWhereUniqueInput[]
-    update?: GroupCandidateUpdateWithWhereUniqueWithoutGroupInput | GroupCandidateUpdateWithWhereUniqueWithoutGroupInput[]
-    updateMany?: GroupCandidateUpdateManyWithWhereWithoutGroupInput | GroupCandidateUpdateManyWithWhereWithoutGroupInput[]
-    deleteMany?: GroupCandidateScalarWhereInput | GroupCandidateScalarWhereInput[]
-  }
-
-  export type InscriptionUncheckedUpdateManyWithoutGroupNestedInput = {
-    create?: XOR<InscriptionCreateWithoutGroupInput, InscriptionUncheckedCreateWithoutGroupInput> | InscriptionCreateWithoutGroupInput[] | InscriptionUncheckedCreateWithoutGroupInput[]
-    connectOrCreate?: InscriptionCreateOrConnectWithoutGroupInput | InscriptionCreateOrConnectWithoutGroupInput[]
-    upsert?: InscriptionUpsertWithWhereUniqueWithoutGroupInput | InscriptionUpsertWithWhereUniqueWithoutGroupInput[]
-    createMany?: InscriptionCreateManyGroupInputEnvelope
-    set?: InscriptionWhereUniqueInput | InscriptionWhereUniqueInput[]
-    disconnect?: InscriptionWhereUniqueInput | InscriptionWhereUniqueInput[]
-    delete?: InscriptionWhereUniqueInput | InscriptionWhereUniqueInput[]
-    connect?: InscriptionWhereUniqueInput | InscriptionWhereUniqueInput[]
-    update?: InscriptionUpdateWithWhereUniqueWithoutGroupInput | InscriptionUpdateWithWhereUniqueWithoutGroupInput[]
-    updateMany?: InscriptionUpdateManyWithWhereWithoutGroupInput | InscriptionUpdateManyWithWhereWithoutGroupInput[]
-    deleteMany?: InscriptionScalarWhereInput | InscriptionScalarWhereInput[]
-  }
-
-  export type GroupCreateNestedOneWithoutMembersInput = {
-    create?: XOR<GroupCreateWithoutMembersInput, GroupUncheckedCreateWithoutMembersInput>
-    connectOrCreate?: GroupCreateOrConnectWithoutMembersInput
-    connect?: GroupWhereUniqueInput
-  }
-
-  export type CandidateCreateNestedOneWithoutGroupsInput = {
-    create?: XOR<CandidateCreateWithoutGroupsInput, CandidateUncheckedCreateWithoutGroupsInput>
-    connectOrCreate?: CandidateCreateOrConnectWithoutGroupsInput
+  export type CandidateCreateNestedOneWithoutInscriptionCandidatesInput = {
+    create?: XOR<CandidateCreateWithoutInscriptionCandidatesInput, CandidateUncheckedCreateWithoutInscriptionCandidatesInput>
+    connectOrCreate?: CandidateCreateOrConnectWithoutInscriptionCandidatesInput
     connect?: CandidateWhereUniqueInput
   }
 
-  export type GroupUpdateOneRequiredWithoutMembersNestedInput = {
-    create?: XOR<GroupCreateWithoutMembersInput, GroupUncheckedCreateWithoutMembersInput>
-    connectOrCreate?: GroupCreateOrConnectWithoutMembersInput
-    upsert?: GroupUpsertWithoutMembersInput
-    connect?: GroupWhereUniqueInput
-    update?: XOR<XOR<GroupUpdateToOneWithWhereWithoutMembersInput, GroupUpdateWithoutMembersInput>, GroupUncheckedUpdateWithoutMembersInput>
+  export type InscriptionUpdateOneRequiredWithoutMembersNestedInput = {
+    create?: XOR<InscriptionCreateWithoutMembersInput, InscriptionUncheckedCreateWithoutMembersInput>
+    connectOrCreate?: InscriptionCreateOrConnectWithoutMembersInput
+    upsert?: InscriptionUpsertWithoutMembersInput
+    connect?: InscriptionWhereUniqueInput
+    update?: XOR<XOR<InscriptionUpdateToOneWithWhereWithoutMembersInput, InscriptionUpdateWithoutMembersInput>, InscriptionUncheckedUpdateWithoutMembersInput>
   }
 
-  export type CandidateUpdateOneRequiredWithoutGroupsNestedInput = {
-    create?: XOR<CandidateCreateWithoutGroupsInput, CandidateUncheckedCreateWithoutGroupsInput>
-    connectOrCreate?: CandidateCreateOrConnectWithoutGroupsInput
-    upsert?: CandidateUpsertWithoutGroupsInput
+  export type CandidateUpdateOneRequiredWithoutInscriptionCandidatesNestedInput = {
+    create?: XOR<CandidateCreateWithoutInscriptionCandidatesInput, CandidateUncheckedCreateWithoutInscriptionCandidatesInput>
+    connectOrCreate?: CandidateCreateOrConnectWithoutInscriptionCandidatesInput
+    upsert?: CandidateUpsertWithoutInscriptionCandidatesInput
     connect?: CandidateWhereUniqueInput
-    update?: XOR<XOR<CandidateUpdateToOneWithWhereWithoutGroupsInput, CandidateUpdateWithoutGroupsInput>, CandidateUncheckedUpdateWithoutGroupsInput>
+    update?: XOR<XOR<CandidateUpdateToOneWithWhereWithoutInscriptionCandidatesInput, CandidateUpdateWithoutInscriptionCandidatesInput>, CandidateUncheckedUpdateWithoutInscriptionCandidatesInput>
   }
 
   export type CandidateCreateNestedOneWithoutPaymentsInput = {
@@ -21011,23 +20651,6 @@ export namespace Prisma {
     _max?: NestedEnumLearningModeFilter<$PrismaModel>
   }
 
-  export type NestedEnumGroupTypeFilter<$PrismaModel = never> = {
-    equals?: $Enums.GroupType | EnumGroupTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.GroupType[] | ListEnumGroupTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.GroupType[] | ListEnumGroupTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumGroupTypeFilter<$PrismaModel> | $Enums.GroupType
-  }
-
-  export type NestedEnumGroupTypeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.GroupType | EnumGroupTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.GroupType[] | ListEnumGroupTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.GroupType[] | ListEnumGroupTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumGroupTypeWithAggregatesFilter<$PrismaModel> | $Enums.GroupType
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumGroupTypeFilter<$PrismaModel>
-    _max?: NestedEnumGroupTypeFilter<$PrismaModel>
-  }
-
   export type NestedEnumPaymentMethodFilter<$PrismaModel = never> = {
     equals?: $Enums.PaymentMethod | EnumPaymentMethodFieldRefInput<$PrismaModel>
     in?: $Enums.PaymentMethod[] | ListEnumPaymentMethodFieldRefInput<$PrismaModel>
@@ -21092,7 +20715,9 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     formation: FormationCreateNestedOneWithoutInscriptionsInput
-    group?: GroupCreateNestedOneWithoutInscriptionsInput
+    professor?: ProfessorCreateNestedOneWithoutInscriptionsInput
+    group?: GroupCreateNestedOneWithoutInscriptionInput
+    members?: InscriptionCandidateCreateNestedManyWithoutInscriptionInput
     reservations?: ReservationCreateNestedManyWithoutInscriptionInput
   }
 
@@ -21106,10 +20731,12 @@ export namespace Prisma {
     volumeHoraire?: number | null
     remainingHours?: number
     learningMode?: $Enums.LearningMode
-    groupId?: string | null
     formationId: string
+    professorId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    group?: GroupUncheckedCreateNestedOneWithoutInscriptionInput
+    members?: InscriptionCandidateUncheckedCreateNestedManyWithoutInscriptionInput
     reservations?: ReservationUncheckedCreateNestedManyWithoutInscriptionInput
   }
 
@@ -21123,25 +20750,25 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type GroupCandidateCreateWithoutCandidateInput = {
+  export type InscriptionCandidateCreateWithoutCandidateInput = {
     id?: string
     createdAt?: Date | string
-    group: GroupCreateNestedOneWithoutMembersInput
+    inscription: InscriptionCreateNestedOneWithoutMembersInput
   }
 
-  export type GroupCandidateUncheckedCreateWithoutCandidateInput = {
+  export type InscriptionCandidateUncheckedCreateWithoutCandidateInput = {
     id?: string
-    groupId: string
+    inscriptionId: string
     createdAt?: Date | string
   }
 
-  export type GroupCandidateCreateOrConnectWithoutCandidateInput = {
-    where: GroupCandidateWhereUniqueInput
-    create: XOR<GroupCandidateCreateWithoutCandidateInput, GroupCandidateUncheckedCreateWithoutCandidateInput>
+  export type InscriptionCandidateCreateOrConnectWithoutCandidateInput = {
+    where: InscriptionCandidateWhereUniqueInput
+    create: XOR<InscriptionCandidateCreateWithoutCandidateInput, InscriptionCandidateUncheckedCreateWithoutCandidateInput>
   }
 
-  export type GroupCandidateCreateManyCandidateInputEnvelope = {
-    data: GroupCandidateCreateManyCandidateInput | GroupCandidateCreateManyCandidateInput[]
+  export type InscriptionCandidateCreateManyCandidateInputEnvelope = {
+    data: InscriptionCandidateCreateManyCandidateInput | InscriptionCandidateCreateManyCandidateInput[]
     skipDuplicates?: boolean
   }
 
@@ -21210,37 +20837,37 @@ export namespace Prisma {
     volumeHoraire?: IntNullableFilter<"Inscription"> | number | null
     remainingHours?: FloatFilter<"Inscription"> | number
     learningMode?: EnumLearningModeFilter<"Inscription"> | $Enums.LearningMode
-    groupId?: StringNullableFilter<"Inscription"> | string | null
     candidateId?: StringFilter<"Inscription"> | string
     formationId?: StringFilter<"Inscription"> | string
+    professorId?: StringNullableFilter<"Inscription"> | string | null
     createdAt?: DateTimeFilter<"Inscription"> | Date | string
     updatedAt?: DateTimeFilter<"Inscription"> | Date | string
   }
 
-  export type GroupCandidateUpsertWithWhereUniqueWithoutCandidateInput = {
-    where: GroupCandidateWhereUniqueInput
-    update: XOR<GroupCandidateUpdateWithoutCandidateInput, GroupCandidateUncheckedUpdateWithoutCandidateInput>
-    create: XOR<GroupCandidateCreateWithoutCandidateInput, GroupCandidateUncheckedCreateWithoutCandidateInput>
+  export type InscriptionCandidateUpsertWithWhereUniqueWithoutCandidateInput = {
+    where: InscriptionCandidateWhereUniqueInput
+    update: XOR<InscriptionCandidateUpdateWithoutCandidateInput, InscriptionCandidateUncheckedUpdateWithoutCandidateInput>
+    create: XOR<InscriptionCandidateCreateWithoutCandidateInput, InscriptionCandidateUncheckedCreateWithoutCandidateInput>
   }
 
-  export type GroupCandidateUpdateWithWhereUniqueWithoutCandidateInput = {
-    where: GroupCandidateWhereUniqueInput
-    data: XOR<GroupCandidateUpdateWithoutCandidateInput, GroupCandidateUncheckedUpdateWithoutCandidateInput>
+  export type InscriptionCandidateUpdateWithWhereUniqueWithoutCandidateInput = {
+    where: InscriptionCandidateWhereUniqueInput
+    data: XOR<InscriptionCandidateUpdateWithoutCandidateInput, InscriptionCandidateUncheckedUpdateWithoutCandidateInput>
   }
 
-  export type GroupCandidateUpdateManyWithWhereWithoutCandidateInput = {
-    where: GroupCandidateScalarWhereInput
-    data: XOR<GroupCandidateUpdateManyMutationInput, GroupCandidateUncheckedUpdateManyWithoutCandidateInput>
+  export type InscriptionCandidateUpdateManyWithWhereWithoutCandidateInput = {
+    where: InscriptionCandidateScalarWhereInput
+    data: XOR<InscriptionCandidateUpdateManyMutationInput, InscriptionCandidateUncheckedUpdateManyWithoutCandidateInput>
   }
 
-  export type GroupCandidateScalarWhereInput = {
-    AND?: GroupCandidateScalarWhereInput | GroupCandidateScalarWhereInput[]
-    OR?: GroupCandidateScalarWhereInput[]
-    NOT?: GroupCandidateScalarWhereInput | GroupCandidateScalarWhereInput[]
-    id?: StringFilter<"GroupCandidate"> | string
-    groupId?: StringFilter<"GroupCandidate"> | string
-    candidateId?: StringFilter<"GroupCandidate"> | string
-    createdAt?: DateTimeFilter<"GroupCandidate"> | Date | string
+  export type InscriptionCandidateScalarWhereInput = {
+    AND?: InscriptionCandidateScalarWhereInput | InscriptionCandidateScalarWhereInput[]
+    OR?: InscriptionCandidateScalarWhereInput[]
+    NOT?: InscriptionCandidateScalarWhereInput | InscriptionCandidateScalarWhereInput[]
+    id?: StringFilter<"InscriptionCandidate"> | string
+    inscriptionId?: StringFilter<"InscriptionCandidate"> | string
+    candidateId?: StringFilter<"InscriptionCandidate"> | string
+    createdAt?: DateTimeFilter<"InscriptionCandidate"> | Date | string
   }
 
   export type PaymentUpsertWithWhereUniqueWithoutCandidateInput = {
@@ -21289,7 +20916,9 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     candidate: CandidateCreateNestedOneWithoutInscriptionsInput
-    group?: GroupCreateNestedOneWithoutInscriptionsInput
+    professor?: ProfessorCreateNestedOneWithoutInscriptionsInput
+    group?: GroupCreateNestedOneWithoutInscriptionInput
+    members?: InscriptionCandidateCreateNestedManyWithoutInscriptionInput
     reservations?: ReservationCreateNestedManyWithoutInscriptionInput
   }
 
@@ -21303,10 +20932,12 @@ export namespace Prisma {
     volumeHoraire?: number | null
     remainingHours?: number
     learningMode?: $Enums.LearningMode
-    groupId?: string | null
     candidateId: string
+    professorId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    group?: GroupUncheckedCreateNestedOneWithoutInscriptionInput
+    members?: InscriptionCandidateUncheckedCreateNestedManyWithoutInscriptionInput
     reservations?: ReservationUncheckedCreateNestedManyWithoutInscriptionInput
   }
 
@@ -21317,40 +20948,6 @@ export namespace Prisma {
 
   export type InscriptionCreateManyFormationInputEnvelope = {
     data: InscriptionCreateManyFormationInput | InscriptionCreateManyFormationInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type GroupCreateWithoutFormationInput = {
-    id?: string
-    nom: string
-    type: $Enums.GroupType
-    effectif?: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    professor?: ProfessorCreateNestedOneWithoutGroupsInput
-    members?: GroupCandidateCreateNestedManyWithoutGroupInput
-    inscriptions?: InscriptionCreateNestedManyWithoutGroupInput
-  }
-
-  export type GroupUncheckedCreateWithoutFormationInput = {
-    id?: string
-    nom: string
-    type: $Enums.GroupType
-    professorId?: string | null
-    effectif?: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    members?: GroupCandidateUncheckedCreateNestedManyWithoutGroupInput
-    inscriptions?: InscriptionUncheckedCreateNestedManyWithoutGroupInput
-  }
-
-  export type GroupCreateOrConnectWithoutFormationInput = {
-    where: GroupWhereUniqueInput
-    create: XOR<GroupCreateWithoutFormationInput, GroupUncheckedCreateWithoutFormationInput>
-  }
-
-  export type GroupCreateManyFormationInputEnvelope = {
-    data: GroupCreateManyFormationInput | GroupCreateManyFormationInput[]
     skipDuplicates?: boolean
   }
 
@@ -21404,36 +21001,6 @@ export namespace Prisma {
   export type InscriptionUpdateManyWithWhereWithoutFormationInput = {
     where: InscriptionScalarWhereInput
     data: XOR<InscriptionUpdateManyMutationInput, InscriptionUncheckedUpdateManyWithoutFormationInput>
-  }
-
-  export type GroupUpsertWithWhereUniqueWithoutFormationInput = {
-    where: GroupWhereUniqueInput
-    update: XOR<GroupUpdateWithoutFormationInput, GroupUncheckedUpdateWithoutFormationInput>
-    create: XOR<GroupCreateWithoutFormationInput, GroupUncheckedCreateWithoutFormationInput>
-  }
-
-  export type GroupUpdateWithWhereUniqueWithoutFormationInput = {
-    where: GroupWhereUniqueInput
-    data: XOR<GroupUpdateWithoutFormationInput, GroupUncheckedUpdateWithoutFormationInput>
-  }
-
-  export type GroupUpdateManyWithWhereWithoutFormationInput = {
-    where: GroupScalarWhereInput
-    data: XOR<GroupUpdateManyMutationInput, GroupUncheckedUpdateManyWithoutFormationInput>
-  }
-
-  export type GroupScalarWhereInput = {
-    AND?: GroupScalarWhereInput | GroupScalarWhereInput[]
-    OR?: GroupScalarWhereInput[]
-    NOT?: GroupScalarWhereInput | GroupScalarWhereInput[]
-    id?: StringFilter<"Group"> | string
-    nom?: StringFilter<"Group"> | string
-    type?: EnumGroupTypeFilter<"Group"> | $Enums.GroupType
-    formationId?: StringFilter<"Group"> | string
-    professorId?: StringNullableFilter<"Group"> | string | null
-    effectif?: IntFilter<"Group"> | number
-    createdAt?: DateTimeFilter<"Group"> | Date | string
-    updatedAt?: DateTimeFilter<"Group"> | Date | string
   }
 
   export type PaymentUpsertWithWhereUniqueWithoutFormationInput = {
@@ -21521,37 +21088,51 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Reservation"> | Date | string
   }
 
-  export type GroupCreateWithoutProfessorInput = {
+  export type InscriptionCreateWithoutProfessorInput = {
     id?: string
-    nom: string
-    type: $Enums.GroupType
-    effectif?: number
+    dateInscription?: Date | string
+    status?: $Enums.InscriptionStatus
+    note?: string | null
+    duration?: number | null
+    price?: number | null
+    volumeHoraire?: number | null
+    remainingHours?: number
+    learningMode?: $Enums.LearningMode
     createdAt?: Date | string
     updatedAt?: Date | string
-    formation: FormationCreateNestedOneWithoutGroupsInput
-    members?: GroupCandidateCreateNestedManyWithoutGroupInput
-    inscriptions?: InscriptionCreateNestedManyWithoutGroupInput
+    candidate: CandidateCreateNestedOneWithoutInscriptionsInput
+    formation: FormationCreateNestedOneWithoutInscriptionsInput
+    group?: GroupCreateNestedOneWithoutInscriptionInput
+    members?: InscriptionCandidateCreateNestedManyWithoutInscriptionInput
+    reservations?: ReservationCreateNestedManyWithoutInscriptionInput
   }
 
-  export type GroupUncheckedCreateWithoutProfessorInput = {
+  export type InscriptionUncheckedCreateWithoutProfessorInput = {
     id?: string
-    nom: string
-    type: $Enums.GroupType
+    dateInscription?: Date | string
+    status?: $Enums.InscriptionStatus
+    note?: string | null
+    duration?: number | null
+    price?: number | null
+    volumeHoraire?: number | null
+    remainingHours?: number
+    learningMode?: $Enums.LearningMode
+    candidateId: string
     formationId: string
-    effectif?: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    members?: GroupCandidateUncheckedCreateNestedManyWithoutGroupInput
-    inscriptions?: InscriptionUncheckedCreateNestedManyWithoutGroupInput
+    group?: GroupUncheckedCreateNestedOneWithoutInscriptionInput
+    members?: InscriptionCandidateUncheckedCreateNestedManyWithoutInscriptionInput
+    reservations?: ReservationUncheckedCreateNestedManyWithoutInscriptionInput
   }
 
-  export type GroupCreateOrConnectWithoutProfessorInput = {
-    where: GroupWhereUniqueInput
-    create: XOR<GroupCreateWithoutProfessorInput, GroupUncheckedCreateWithoutProfessorInput>
+  export type InscriptionCreateOrConnectWithoutProfessorInput = {
+    where: InscriptionWhereUniqueInput
+    create: XOR<InscriptionCreateWithoutProfessorInput, InscriptionUncheckedCreateWithoutProfessorInput>
   }
 
-  export type GroupCreateManyProfessorInputEnvelope = {
-    data: GroupCreateManyProfessorInput | GroupCreateManyProfessorInput[]
+  export type InscriptionCreateManyProfessorInputEnvelope = {
+    data: InscriptionCreateManyProfessorInput | InscriptionCreateManyProfessorInput[]
     skipDuplicates?: boolean
   }
 
@@ -21591,20 +21172,20 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type GroupUpsertWithWhereUniqueWithoutProfessorInput = {
-    where: GroupWhereUniqueInput
-    update: XOR<GroupUpdateWithoutProfessorInput, GroupUncheckedUpdateWithoutProfessorInput>
-    create: XOR<GroupCreateWithoutProfessorInput, GroupUncheckedCreateWithoutProfessorInput>
+  export type InscriptionUpsertWithWhereUniqueWithoutProfessorInput = {
+    where: InscriptionWhereUniqueInput
+    update: XOR<InscriptionUpdateWithoutProfessorInput, InscriptionUncheckedUpdateWithoutProfessorInput>
+    create: XOR<InscriptionCreateWithoutProfessorInput, InscriptionUncheckedCreateWithoutProfessorInput>
   }
 
-  export type GroupUpdateWithWhereUniqueWithoutProfessorInput = {
-    where: GroupWhereUniqueInput
-    data: XOR<GroupUpdateWithoutProfessorInput, GroupUncheckedUpdateWithoutProfessorInput>
+  export type InscriptionUpdateWithWhereUniqueWithoutProfessorInput = {
+    where: InscriptionWhereUniqueInput
+    data: XOR<InscriptionUpdateWithoutProfessorInput, InscriptionUncheckedUpdateWithoutProfessorInput>
   }
 
-  export type GroupUpdateManyWithWhereWithoutProfessorInput = {
-    where: GroupScalarWhereInput
-    data: XOR<GroupUpdateManyMutationInput, GroupUncheckedUpdateManyWithoutProfessorInput>
+  export type InscriptionUpdateManyWithWhereWithoutProfessorInput = {
+    where: InscriptionScalarWhereInput
+    data: XOR<InscriptionUpdateManyMutationInput, InscriptionUncheckedUpdateManyWithoutProfessorInput>
   }
 
   export type ReservationUpsertWithWhereUniqueWithoutProfessorInput = {
@@ -21639,7 +21220,7 @@ export namespace Prisma {
     status?: $Enums.CandidateStatus
     createdAt?: Date | string
     updatedAt?: Date | string
-    groups?: GroupCandidateCreateNestedManyWithoutCandidateInput
+    inscriptionCandidates?: InscriptionCandidateCreateNestedManyWithoutCandidateInput
     payments?: PaymentCreateNestedManyWithoutCandidateInput
   }
 
@@ -21659,7 +21240,7 @@ export namespace Prisma {
     status?: $Enums.CandidateStatus
     createdAt?: Date | string
     updatedAt?: Date | string
-    groups?: GroupCandidateUncheckedCreateNestedManyWithoutCandidateInput
+    inscriptionCandidates?: InscriptionCandidateUncheckedCreateNestedManyWithoutCandidateInput
     payments?: PaymentUncheckedCreateNestedManyWithoutCandidateInput
   }
 
@@ -21680,7 +21261,6 @@ export namespace Prisma {
     description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    groups?: GroupCreateNestedManyWithoutFormationInput
     payments?: PaymentCreateNestedManyWithoutFormationInput
   }
 
@@ -21696,7 +21276,6 @@ export namespace Prisma {
     description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    groups?: GroupUncheckedCreateNestedManyWithoutFormationInput
     payments?: PaymentUncheckedCreateNestedManyWithoutFormationInput
   }
 
@@ -21705,33 +21284,80 @@ export namespace Prisma {
     create: XOR<FormationCreateWithoutInscriptionsInput, FormationUncheckedCreateWithoutInscriptionsInput>
   }
 
-  export type GroupCreateWithoutInscriptionsInput = {
+  export type ProfessorCreateWithoutInscriptionsInput = {
     id?: string
     nom: string
-    type: $Enums.GroupType
-    effectif?: number
+    prenom: string
+    email?: string | null
+    telephone?: string | null
+    adresse?: string | null
+    type?: string
+    dayOff?: string
+    maxSessions?: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    formation: FormationCreateNestedOneWithoutGroupsInput
-    professor?: ProfessorCreateNestedOneWithoutGroupsInput
-    members?: GroupCandidateCreateNestedManyWithoutGroupInput
+    reservations?: ReservationCreateNestedManyWithoutProfessorInput
   }
 
-  export type GroupUncheckedCreateWithoutInscriptionsInput = {
+  export type ProfessorUncheckedCreateWithoutInscriptionsInput = {
     id?: string
     nom: string
-    type: $Enums.GroupType
-    formationId: string
-    professorId?: string | null
-    effectif?: number
+    prenom: string
+    email?: string | null
+    telephone?: string | null
+    adresse?: string | null
+    type?: string
+    dayOff?: string
+    maxSessions?: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    members?: GroupCandidateUncheckedCreateNestedManyWithoutGroupInput
+    reservations?: ReservationUncheckedCreateNestedManyWithoutProfessorInput
   }
 
-  export type GroupCreateOrConnectWithoutInscriptionsInput = {
+  export type ProfessorCreateOrConnectWithoutInscriptionsInput = {
+    where: ProfessorWhereUniqueInput
+    create: XOR<ProfessorCreateWithoutInscriptionsInput, ProfessorUncheckedCreateWithoutInscriptionsInput>
+  }
+
+  export type GroupCreateWithoutInscriptionInput = {
+    id?: string
+    nom: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GroupUncheckedCreateWithoutInscriptionInput = {
+    id?: string
+    nom: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GroupCreateOrConnectWithoutInscriptionInput = {
     where: GroupWhereUniqueInput
-    create: XOR<GroupCreateWithoutInscriptionsInput, GroupUncheckedCreateWithoutInscriptionsInput>
+    create: XOR<GroupCreateWithoutInscriptionInput, GroupUncheckedCreateWithoutInscriptionInput>
+  }
+
+  export type InscriptionCandidateCreateWithoutInscriptionInput = {
+    id?: string
+    createdAt?: Date | string
+    candidate: CandidateCreateNestedOneWithoutInscriptionCandidatesInput
+  }
+
+  export type InscriptionCandidateUncheckedCreateWithoutInscriptionInput = {
+    id?: string
+    candidateId: string
+    createdAt?: Date | string
+  }
+
+  export type InscriptionCandidateCreateOrConnectWithoutInscriptionInput = {
+    where: InscriptionCandidateWhereUniqueInput
+    create: XOR<InscriptionCandidateCreateWithoutInscriptionInput, InscriptionCandidateUncheckedCreateWithoutInscriptionInput>
+  }
+
+  export type InscriptionCandidateCreateManyInscriptionInputEnvelope = {
+    data: InscriptionCandidateCreateManyInscriptionInput | InscriptionCandidateCreateManyInscriptionInput[]
+    skipDuplicates?: boolean
   }
 
   export type ReservationCreateWithoutInscriptionInput = {
@@ -21797,7 +21423,7 @@ export namespace Prisma {
     status?: EnumCandidateStatusFieldUpdateOperationsInput | $Enums.CandidateStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    groups?: GroupCandidateUpdateManyWithoutCandidateNestedInput
+    inscriptionCandidates?: InscriptionCandidateUpdateManyWithoutCandidateNestedInput
     payments?: PaymentUpdateManyWithoutCandidateNestedInput
   }
 
@@ -21817,7 +21443,7 @@ export namespace Prisma {
     status?: EnumCandidateStatusFieldUpdateOperationsInput | $Enums.CandidateStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    groups?: GroupCandidateUncheckedUpdateManyWithoutCandidateNestedInput
+    inscriptionCandidates?: InscriptionCandidateUncheckedUpdateManyWithoutCandidateNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutCandidateNestedInput
   }
 
@@ -21844,7 +21470,6 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    groups?: GroupUpdateManyWithoutFormationNestedInput
     payments?: PaymentUpdateManyWithoutFormationNestedInput
   }
 
@@ -21860,43 +21485,89 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    groups?: GroupUncheckedUpdateManyWithoutFormationNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutFormationNestedInput
   }
 
-  export type GroupUpsertWithoutInscriptionsInput = {
-    update: XOR<GroupUpdateWithoutInscriptionsInput, GroupUncheckedUpdateWithoutInscriptionsInput>
-    create: XOR<GroupCreateWithoutInscriptionsInput, GroupUncheckedCreateWithoutInscriptionsInput>
+  export type ProfessorUpsertWithoutInscriptionsInput = {
+    update: XOR<ProfessorUpdateWithoutInscriptionsInput, ProfessorUncheckedUpdateWithoutInscriptionsInput>
+    create: XOR<ProfessorCreateWithoutInscriptionsInput, ProfessorUncheckedCreateWithoutInscriptionsInput>
+    where?: ProfessorWhereInput
+  }
+
+  export type ProfessorUpdateToOneWithWhereWithoutInscriptionsInput = {
+    where?: ProfessorWhereInput
+    data: XOR<ProfessorUpdateWithoutInscriptionsInput, ProfessorUncheckedUpdateWithoutInscriptionsInput>
+  }
+
+  export type ProfessorUpdateWithoutInscriptionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nom?: StringFieldUpdateOperationsInput | string
+    prenom?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    telephone?: NullableStringFieldUpdateOperationsInput | string | null
+    adresse?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    dayOff?: StringFieldUpdateOperationsInput | string
+    maxSessions?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reservations?: ReservationUpdateManyWithoutProfessorNestedInput
+  }
+
+  export type ProfessorUncheckedUpdateWithoutInscriptionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nom?: StringFieldUpdateOperationsInput | string
+    prenom?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    telephone?: NullableStringFieldUpdateOperationsInput | string | null
+    adresse?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    dayOff?: StringFieldUpdateOperationsInput | string
+    maxSessions?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reservations?: ReservationUncheckedUpdateManyWithoutProfessorNestedInput
+  }
+
+  export type GroupUpsertWithoutInscriptionInput = {
+    update: XOR<GroupUpdateWithoutInscriptionInput, GroupUncheckedUpdateWithoutInscriptionInput>
+    create: XOR<GroupCreateWithoutInscriptionInput, GroupUncheckedCreateWithoutInscriptionInput>
     where?: GroupWhereInput
   }
 
-  export type GroupUpdateToOneWithWhereWithoutInscriptionsInput = {
+  export type GroupUpdateToOneWithWhereWithoutInscriptionInput = {
     where?: GroupWhereInput
-    data: XOR<GroupUpdateWithoutInscriptionsInput, GroupUncheckedUpdateWithoutInscriptionsInput>
+    data: XOR<GroupUpdateWithoutInscriptionInput, GroupUncheckedUpdateWithoutInscriptionInput>
   }
 
-  export type GroupUpdateWithoutInscriptionsInput = {
+  export type GroupUpdateWithoutInscriptionInput = {
     id?: StringFieldUpdateOperationsInput | string
     nom?: StringFieldUpdateOperationsInput | string
-    type?: EnumGroupTypeFieldUpdateOperationsInput | $Enums.GroupType
-    effectif?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    formation?: FormationUpdateOneRequiredWithoutGroupsNestedInput
-    professor?: ProfessorUpdateOneWithoutGroupsNestedInput
-    members?: GroupCandidateUpdateManyWithoutGroupNestedInput
   }
 
-  export type GroupUncheckedUpdateWithoutInscriptionsInput = {
+  export type GroupUncheckedUpdateWithoutInscriptionInput = {
     id?: StringFieldUpdateOperationsInput | string
     nom?: StringFieldUpdateOperationsInput | string
-    type?: EnumGroupTypeFieldUpdateOperationsInput | $Enums.GroupType
-    formationId?: StringFieldUpdateOperationsInput | string
-    professorId?: NullableStringFieldUpdateOperationsInput | string | null
-    effectif?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    members?: GroupCandidateUncheckedUpdateManyWithoutGroupNestedInput
+  }
+
+  export type InscriptionCandidateUpsertWithWhereUniqueWithoutInscriptionInput = {
+    where: InscriptionCandidateWhereUniqueInput
+    update: XOR<InscriptionCandidateUpdateWithoutInscriptionInput, InscriptionCandidateUncheckedUpdateWithoutInscriptionInput>
+    create: XOR<InscriptionCandidateCreateWithoutInscriptionInput, InscriptionCandidateUncheckedCreateWithoutInscriptionInput>
+  }
+
+  export type InscriptionCandidateUpdateWithWhereUniqueWithoutInscriptionInput = {
+    where: InscriptionCandidateWhereUniqueInput
+    data: XOR<InscriptionCandidateUpdateWithoutInscriptionInput, InscriptionCandidateUncheckedUpdateWithoutInscriptionInput>
+  }
+
+  export type InscriptionCandidateUpdateManyWithWhereWithoutInscriptionInput = {
+    where: InscriptionCandidateScalarWhereInput
+    data: XOR<InscriptionCandidateUpdateManyMutationInput, InscriptionCandidateUncheckedUpdateManyWithoutInscriptionInput>
   }
 
   export type ReservationUpsertWithWhereUniqueWithoutInscriptionInput = {
@@ -21915,100 +21586,6 @@ export namespace Prisma {
     data: XOR<ReservationUpdateManyMutationInput, ReservationUncheckedUpdateManyWithoutInscriptionInput>
   }
 
-  export type FormationCreateWithoutGroupsInput = {
-    id?: string
-    matiere: string
-    niveau: string
-    type?: string
-    duration?: number
-    totalSessions?: number
-    prix?: Decimal | DecimalJsLike | number | string
-    volumeHoraire?: number
-    description?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    inscriptions?: InscriptionCreateNestedManyWithoutFormationInput
-    payments?: PaymentCreateNestedManyWithoutFormationInput
-  }
-
-  export type FormationUncheckedCreateWithoutGroupsInput = {
-    id?: string
-    matiere: string
-    niveau: string
-    type?: string
-    duration?: number
-    totalSessions?: number
-    prix?: Decimal | DecimalJsLike | number | string
-    volumeHoraire?: number
-    description?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    inscriptions?: InscriptionUncheckedCreateNestedManyWithoutFormationInput
-    payments?: PaymentUncheckedCreateNestedManyWithoutFormationInput
-  }
-
-  export type FormationCreateOrConnectWithoutGroupsInput = {
-    where: FormationWhereUniqueInput
-    create: XOR<FormationCreateWithoutGroupsInput, FormationUncheckedCreateWithoutGroupsInput>
-  }
-
-  export type ProfessorCreateWithoutGroupsInput = {
-    id?: string
-    nom: string
-    prenom: string
-    email?: string | null
-    telephone?: string | null
-    adresse?: string | null
-    type?: string
-    dayOff?: string
-    maxSessions?: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    reservations?: ReservationCreateNestedManyWithoutProfessorInput
-  }
-
-  export type ProfessorUncheckedCreateWithoutGroupsInput = {
-    id?: string
-    nom: string
-    prenom: string
-    email?: string | null
-    telephone?: string | null
-    adresse?: string | null
-    type?: string
-    dayOff?: string
-    maxSessions?: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    reservations?: ReservationUncheckedCreateNestedManyWithoutProfessorInput
-  }
-
-  export type ProfessorCreateOrConnectWithoutGroupsInput = {
-    where: ProfessorWhereUniqueInput
-    create: XOR<ProfessorCreateWithoutGroupsInput, ProfessorUncheckedCreateWithoutGroupsInput>
-  }
-
-  export type GroupCandidateCreateWithoutGroupInput = {
-    id?: string
-    createdAt?: Date | string
-    candidate: CandidateCreateNestedOneWithoutGroupsInput
-  }
-
-  export type GroupCandidateUncheckedCreateWithoutGroupInput = {
-    id?: string
-    candidateId: string
-    createdAt?: Date | string
-  }
-
-  export type GroupCandidateCreateOrConnectWithoutGroupInput = {
-    where: GroupCandidateWhereUniqueInput
-    create: XOR<GroupCandidateCreateWithoutGroupInput, GroupCandidateUncheckedCreateWithoutGroupInput>
-  }
-
-  export type GroupCandidateCreateManyGroupInputEnvelope = {
-    data: GroupCandidateCreateManyGroupInput | GroupCandidateCreateManyGroupInput[]
-    skipDuplicates?: boolean
-  }
-
   export type InscriptionCreateWithoutGroupInput = {
     id?: string
     dateInscription?: Date | string
@@ -22023,6 +21600,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     candidate: CandidateCreateNestedOneWithoutInscriptionsInput
     formation: FormationCreateNestedOneWithoutInscriptionsInput
+    professor?: ProfessorCreateNestedOneWithoutInscriptionsInput
+    members?: InscriptionCandidateCreateNestedManyWithoutInscriptionInput
     reservations?: ReservationCreateNestedManyWithoutInscriptionInput
   }
 
@@ -22038,8 +21617,10 @@ export namespace Prisma {
     learningMode?: $Enums.LearningMode
     candidateId: string
     formationId: string
+    professorId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    members?: InscriptionCandidateUncheckedCreateNestedManyWithoutInscriptionInput
     reservations?: ReservationUncheckedCreateNestedManyWithoutInscriptionInput
   }
 
@@ -22048,157 +21629,99 @@ export namespace Prisma {
     create: XOR<InscriptionCreateWithoutGroupInput, InscriptionUncheckedCreateWithoutGroupInput>
   }
 
-  export type InscriptionCreateManyGroupInputEnvelope = {
-    data: InscriptionCreateManyGroupInput | InscriptionCreateManyGroupInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type FormationUpsertWithoutGroupsInput = {
-    update: XOR<FormationUpdateWithoutGroupsInput, FormationUncheckedUpdateWithoutGroupsInput>
-    create: XOR<FormationCreateWithoutGroupsInput, FormationUncheckedCreateWithoutGroupsInput>
-    where?: FormationWhereInput
-  }
-
-  export type FormationUpdateToOneWithWhereWithoutGroupsInput = {
-    where?: FormationWhereInput
-    data: XOR<FormationUpdateWithoutGroupsInput, FormationUncheckedUpdateWithoutGroupsInput>
-  }
-
-  export type FormationUpdateWithoutGroupsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    matiere?: StringFieldUpdateOperationsInput | string
-    niveau?: StringFieldUpdateOperationsInput | string
-    type?: StringFieldUpdateOperationsInput | string
-    duration?: IntFieldUpdateOperationsInput | number
-    totalSessions?: IntFieldUpdateOperationsInput | number
-    prix?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    volumeHoraire?: IntFieldUpdateOperationsInput | number
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    inscriptions?: InscriptionUpdateManyWithoutFormationNestedInput
-    payments?: PaymentUpdateManyWithoutFormationNestedInput
-  }
-
-  export type FormationUncheckedUpdateWithoutGroupsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    matiere?: StringFieldUpdateOperationsInput | string
-    niveau?: StringFieldUpdateOperationsInput | string
-    type?: StringFieldUpdateOperationsInput | string
-    duration?: IntFieldUpdateOperationsInput | number
-    totalSessions?: IntFieldUpdateOperationsInput | number
-    prix?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    volumeHoraire?: IntFieldUpdateOperationsInput | number
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    inscriptions?: InscriptionUncheckedUpdateManyWithoutFormationNestedInput
-    payments?: PaymentUncheckedUpdateManyWithoutFormationNestedInput
-  }
-
-  export type ProfessorUpsertWithoutGroupsInput = {
-    update: XOR<ProfessorUpdateWithoutGroupsInput, ProfessorUncheckedUpdateWithoutGroupsInput>
-    create: XOR<ProfessorCreateWithoutGroupsInput, ProfessorUncheckedCreateWithoutGroupsInput>
-    where?: ProfessorWhereInput
-  }
-
-  export type ProfessorUpdateToOneWithWhereWithoutGroupsInput = {
-    where?: ProfessorWhereInput
-    data: XOR<ProfessorUpdateWithoutGroupsInput, ProfessorUncheckedUpdateWithoutGroupsInput>
-  }
-
-  export type ProfessorUpdateWithoutGroupsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nom?: StringFieldUpdateOperationsInput | string
-    prenom?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    telephone?: NullableStringFieldUpdateOperationsInput | string | null
-    adresse?: NullableStringFieldUpdateOperationsInput | string | null
-    type?: StringFieldUpdateOperationsInput | string
-    dayOff?: StringFieldUpdateOperationsInput | string
-    maxSessions?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    reservations?: ReservationUpdateManyWithoutProfessorNestedInput
-  }
-
-  export type ProfessorUncheckedUpdateWithoutGroupsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nom?: StringFieldUpdateOperationsInput | string
-    prenom?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    telephone?: NullableStringFieldUpdateOperationsInput | string | null
-    adresse?: NullableStringFieldUpdateOperationsInput | string | null
-    type?: StringFieldUpdateOperationsInput | string
-    dayOff?: StringFieldUpdateOperationsInput | string
-    maxSessions?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    reservations?: ReservationUncheckedUpdateManyWithoutProfessorNestedInput
-  }
-
-  export type GroupCandidateUpsertWithWhereUniqueWithoutGroupInput = {
-    where: GroupCandidateWhereUniqueInput
-    update: XOR<GroupCandidateUpdateWithoutGroupInput, GroupCandidateUncheckedUpdateWithoutGroupInput>
-    create: XOR<GroupCandidateCreateWithoutGroupInput, GroupCandidateUncheckedCreateWithoutGroupInput>
-  }
-
-  export type GroupCandidateUpdateWithWhereUniqueWithoutGroupInput = {
-    where: GroupCandidateWhereUniqueInput
-    data: XOR<GroupCandidateUpdateWithoutGroupInput, GroupCandidateUncheckedUpdateWithoutGroupInput>
-  }
-
-  export type GroupCandidateUpdateManyWithWhereWithoutGroupInput = {
-    where: GroupCandidateScalarWhereInput
-    data: XOR<GroupCandidateUpdateManyMutationInput, GroupCandidateUncheckedUpdateManyWithoutGroupInput>
-  }
-
-  export type InscriptionUpsertWithWhereUniqueWithoutGroupInput = {
-    where: InscriptionWhereUniqueInput
+  export type InscriptionUpsertWithoutGroupInput = {
     update: XOR<InscriptionUpdateWithoutGroupInput, InscriptionUncheckedUpdateWithoutGroupInput>
     create: XOR<InscriptionCreateWithoutGroupInput, InscriptionUncheckedCreateWithoutGroupInput>
+    where?: InscriptionWhereInput
   }
 
-  export type InscriptionUpdateWithWhereUniqueWithoutGroupInput = {
-    where: InscriptionWhereUniqueInput
+  export type InscriptionUpdateToOneWithWhereWithoutGroupInput = {
+    where?: InscriptionWhereInput
     data: XOR<InscriptionUpdateWithoutGroupInput, InscriptionUncheckedUpdateWithoutGroupInput>
   }
 
-  export type InscriptionUpdateManyWithWhereWithoutGroupInput = {
-    where: InscriptionScalarWhereInput
-    data: XOR<InscriptionUpdateManyMutationInput, InscriptionUncheckedUpdateManyWithoutGroupInput>
+  export type InscriptionUpdateWithoutGroupInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    dateInscription?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumInscriptionStatusFieldUpdateOperationsInput | $Enums.InscriptionStatus
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    volumeHoraire?: NullableIntFieldUpdateOperationsInput | number | null
+    remainingHours?: FloatFieldUpdateOperationsInput | number
+    learningMode?: EnumLearningModeFieldUpdateOperationsInput | $Enums.LearningMode
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    candidate?: CandidateUpdateOneRequiredWithoutInscriptionsNestedInput
+    formation?: FormationUpdateOneRequiredWithoutInscriptionsNestedInput
+    professor?: ProfessorUpdateOneWithoutInscriptionsNestedInput
+    members?: InscriptionCandidateUpdateManyWithoutInscriptionNestedInput
+    reservations?: ReservationUpdateManyWithoutInscriptionNestedInput
   }
 
-  export type GroupCreateWithoutMembersInput = {
+  export type InscriptionUncheckedUpdateWithoutGroupInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    dateInscription?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumInscriptionStatusFieldUpdateOperationsInput | $Enums.InscriptionStatus
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    volumeHoraire?: NullableIntFieldUpdateOperationsInput | number | null
+    remainingHours?: FloatFieldUpdateOperationsInput | number
+    learningMode?: EnumLearningModeFieldUpdateOperationsInput | $Enums.LearningMode
+    candidateId?: StringFieldUpdateOperationsInput | string
+    formationId?: StringFieldUpdateOperationsInput | string
+    professorId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: InscriptionCandidateUncheckedUpdateManyWithoutInscriptionNestedInput
+    reservations?: ReservationUncheckedUpdateManyWithoutInscriptionNestedInput
+  }
+
+  export type InscriptionCreateWithoutMembersInput = {
     id?: string
-    nom: string
-    type: $Enums.GroupType
-    effectif?: number
+    dateInscription?: Date | string
+    status?: $Enums.InscriptionStatus
+    note?: string | null
+    duration?: number | null
+    price?: number | null
+    volumeHoraire?: number | null
+    remainingHours?: number
+    learningMode?: $Enums.LearningMode
     createdAt?: Date | string
     updatedAt?: Date | string
-    formation: FormationCreateNestedOneWithoutGroupsInput
-    professor?: ProfessorCreateNestedOneWithoutGroupsInput
-    inscriptions?: InscriptionCreateNestedManyWithoutGroupInput
+    candidate: CandidateCreateNestedOneWithoutInscriptionsInput
+    formation: FormationCreateNestedOneWithoutInscriptionsInput
+    professor?: ProfessorCreateNestedOneWithoutInscriptionsInput
+    group?: GroupCreateNestedOneWithoutInscriptionInput
+    reservations?: ReservationCreateNestedManyWithoutInscriptionInput
   }
 
-  export type GroupUncheckedCreateWithoutMembersInput = {
+  export type InscriptionUncheckedCreateWithoutMembersInput = {
     id?: string
-    nom: string
-    type: $Enums.GroupType
+    dateInscription?: Date | string
+    status?: $Enums.InscriptionStatus
+    note?: string | null
+    duration?: number | null
+    price?: number | null
+    volumeHoraire?: number | null
+    remainingHours?: number
+    learningMode?: $Enums.LearningMode
+    candidateId: string
     formationId: string
     professorId?: string | null
-    effectif?: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    inscriptions?: InscriptionUncheckedCreateNestedManyWithoutGroupInput
+    group?: GroupUncheckedCreateNestedOneWithoutInscriptionInput
+    reservations?: ReservationUncheckedCreateNestedManyWithoutInscriptionInput
   }
 
-  export type GroupCreateOrConnectWithoutMembersInput = {
-    where: GroupWhereUniqueInput
-    create: XOR<GroupCreateWithoutMembersInput, GroupUncheckedCreateWithoutMembersInput>
+  export type InscriptionCreateOrConnectWithoutMembersInput = {
+    where: InscriptionWhereUniqueInput
+    create: XOR<InscriptionCreateWithoutMembersInput, InscriptionUncheckedCreateWithoutMembersInput>
   }
 
-  export type CandidateCreateWithoutGroupsInput = {
+  export type CandidateCreateWithoutInscriptionCandidatesInput = {
     id?: string
     candidateCode: string
     firstName: string
@@ -22218,7 +21741,7 @@ export namespace Prisma {
     payments?: PaymentCreateNestedManyWithoutCandidateInput
   }
 
-  export type CandidateUncheckedCreateWithoutGroupsInput = {
+  export type CandidateUncheckedCreateWithoutInscriptionCandidatesInput = {
     id?: string
     candidateCode: string
     firstName: string
@@ -22238,58 +21761,72 @@ export namespace Prisma {
     payments?: PaymentUncheckedCreateNestedManyWithoutCandidateInput
   }
 
-  export type CandidateCreateOrConnectWithoutGroupsInput = {
+  export type CandidateCreateOrConnectWithoutInscriptionCandidatesInput = {
     where: CandidateWhereUniqueInput
-    create: XOR<CandidateCreateWithoutGroupsInput, CandidateUncheckedCreateWithoutGroupsInput>
+    create: XOR<CandidateCreateWithoutInscriptionCandidatesInput, CandidateUncheckedCreateWithoutInscriptionCandidatesInput>
   }
 
-  export type GroupUpsertWithoutMembersInput = {
-    update: XOR<GroupUpdateWithoutMembersInput, GroupUncheckedUpdateWithoutMembersInput>
-    create: XOR<GroupCreateWithoutMembersInput, GroupUncheckedCreateWithoutMembersInput>
-    where?: GroupWhereInput
+  export type InscriptionUpsertWithoutMembersInput = {
+    update: XOR<InscriptionUpdateWithoutMembersInput, InscriptionUncheckedUpdateWithoutMembersInput>
+    create: XOR<InscriptionCreateWithoutMembersInput, InscriptionUncheckedCreateWithoutMembersInput>
+    where?: InscriptionWhereInput
   }
 
-  export type GroupUpdateToOneWithWhereWithoutMembersInput = {
-    where?: GroupWhereInput
-    data: XOR<GroupUpdateWithoutMembersInput, GroupUncheckedUpdateWithoutMembersInput>
+  export type InscriptionUpdateToOneWithWhereWithoutMembersInput = {
+    where?: InscriptionWhereInput
+    data: XOR<InscriptionUpdateWithoutMembersInput, InscriptionUncheckedUpdateWithoutMembersInput>
   }
 
-  export type GroupUpdateWithoutMembersInput = {
+  export type InscriptionUpdateWithoutMembersInput = {
     id?: StringFieldUpdateOperationsInput | string
-    nom?: StringFieldUpdateOperationsInput | string
-    type?: EnumGroupTypeFieldUpdateOperationsInput | $Enums.GroupType
-    effectif?: IntFieldUpdateOperationsInput | number
+    dateInscription?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumInscriptionStatusFieldUpdateOperationsInput | $Enums.InscriptionStatus
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    volumeHoraire?: NullableIntFieldUpdateOperationsInput | number | null
+    remainingHours?: FloatFieldUpdateOperationsInput | number
+    learningMode?: EnumLearningModeFieldUpdateOperationsInput | $Enums.LearningMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    formation?: FormationUpdateOneRequiredWithoutGroupsNestedInput
-    professor?: ProfessorUpdateOneWithoutGroupsNestedInput
-    inscriptions?: InscriptionUpdateManyWithoutGroupNestedInput
+    candidate?: CandidateUpdateOneRequiredWithoutInscriptionsNestedInput
+    formation?: FormationUpdateOneRequiredWithoutInscriptionsNestedInput
+    professor?: ProfessorUpdateOneWithoutInscriptionsNestedInput
+    group?: GroupUpdateOneWithoutInscriptionNestedInput
+    reservations?: ReservationUpdateManyWithoutInscriptionNestedInput
   }
 
-  export type GroupUncheckedUpdateWithoutMembersInput = {
+  export type InscriptionUncheckedUpdateWithoutMembersInput = {
     id?: StringFieldUpdateOperationsInput | string
-    nom?: StringFieldUpdateOperationsInput | string
-    type?: EnumGroupTypeFieldUpdateOperationsInput | $Enums.GroupType
+    dateInscription?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumInscriptionStatusFieldUpdateOperationsInput | $Enums.InscriptionStatus
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    volumeHoraire?: NullableIntFieldUpdateOperationsInput | number | null
+    remainingHours?: FloatFieldUpdateOperationsInput | number
+    learningMode?: EnumLearningModeFieldUpdateOperationsInput | $Enums.LearningMode
+    candidateId?: StringFieldUpdateOperationsInput | string
     formationId?: StringFieldUpdateOperationsInput | string
     professorId?: NullableStringFieldUpdateOperationsInput | string | null
-    effectif?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    inscriptions?: InscriptionUncheckedUpdateManyWithoutGroupNestedInput
+    group?: GroupUncheckedUpdateOneWithoutInscriptionNestedInput
+    reservations?: ReservationUncheckedUpdateManyWithoutInscriptionNestedInput
   }
 
-  export type CandidateUpsertWithoutGroupsInput = {
-    update: XOR<CandidateUpdateWithoutGroupsInput, CandidateUncheckedUpdateWithoutGroupsInput>
-    create: XOR<CandidateCreateWithoutGroupsInput, CandidateUncheckedCreateWithoutGroupsInput>
+  export type CandidateUpsertWithoutInscriptionCandidatesInput = {
+    update: XOR<CandidateUpdateWithoutInscriptionCandidatesInput, CandidateUncheckedUpdateWithoutInscriptionCandidatesInput>
+    create: XOR<CandidateCreateWithoutInscriptionCandidatesInput, CandidateUncheckedCreateWithoutInscriptionCandidatesInput>
     where?: CandidateWhereInput
   }
 
-  export type CandidateUpdateToOneWithWhereWithoutGroupsInput = {
+  export type CandidateUpdateToOneWithWhereWithoutInscriptionCandidatesInput = {
     where?: CandidateWhereInput
-    data: XOR<CandidateUpdateWithoutGroupsInput, CandidateUncheckedUpdateWithoutGroupsInput>
+    data: XOR<CandidateUpdateWithoutInscriptionCandidatesInput, CandidateUncheckedUpdateWithoutInscriptionCandidatesInput>
   }
 
-  export type CandidateUpdateWithoutGroupsInput = {
+  export type CandidateUpdateWithoutInscriptionCandidatesInput = {
     id?: StringFieldUpdateOperationsInput | string
     candidateCode?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
@@ -22309,7 +21846,7 @@ export namespace Prisma {
     payments?: PaymentUpdateManyWithoutCandidateNestedInput
   }
 
-  export type CandidateUncheckedUpdateWithoutGroupsInput = {
+  export type CandidateUncheckedUpdateWithoutInscriptionCandidatesInput = {
     id?: StringFieldUpdateOperationsInput | string
     candidateCode?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
@@ -22346,7 +21883,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     inscriptions?: InscriptionCreateNestedManyWithoutCandidateInput
-    groups?: GroupCandidateCreateNestedManyWithoutCandidateInput
+    inscriptionCandidates?: InscriptionCandidateCreateNestedManyWithoutCandidateInput
   }
 
   export type CandidateUncheckedCreateWithoutPaymentsInput = {
@@ -22366,7 +21903,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     inscriptions?: InscriptionUncheckedCreateNestedManyWithoutCandidateInput
-    groups?: GroupCandidateUncheckedCreateNestedManyWithoutCandidateInput
+    inscriptionCandidates?: InscriptionCandidateUncheckedCreateNestedManyWithoutCandidateInput
   }
 
   export type CandidateCreateOrConnectWithoutPaymentsInput = {
@@ -22387,7 +21924,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     inscriptions?: InscriptionCreateNestedManyWithoutFormationInput
-    groups?: GroupCreateNestedManyWithoutFormationInput
   }
 
   export type FormationUncheckedCreateWithoutPaymentsInput = {
@@ -22403,7 +21939,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     inscriptions?: InscriptionUncheckedCreateNestedManyWithoutFormationInput
-    groups?: GroupUncheckedCreateNestedManyWithoutFormationInput
   }
 
   export type FormationCreateOrConnectWithoutPaymentsInput = {
@@ -22439,7 +21974,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     inscriptions?: InscriptionUpdateManyWithoutCandidateNestedInput
-    groups?: GroupCandidateUpdateManyWithoutCandidateNestedInput
+    inscriptionCandidates?: InscriptionCandidateUpdateManyWithoutCandidateNestedInput
   }
 
   export type CandidateUncheckedUpdateWithoutPaymentsInput = {
@@ -22459,7 +21994,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     inscriptions?: InscriptionUncheckedUpdateManyWithoutCandidateNestedInput
-    groups?: GroupCandidateUncheckedUpdateManyWithoutCandidateNestedInput
+    inscriptionCandidates?: InscriptionCandidateUncheckedUpdateManyWithoutCandidateNestedInput
   }
 
   export type FormationUpsertWithoutPaymentsInput = {
@@ -22486,7 +22021,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     inscriptions?: InscriptionUpdateManyWithoutFormationNestedInput
-    groups?: GroupUpdateManyWithoutFormationNestedInput
   }
 
   export type FormationUncheckedUpdateWithoutPaymentsInput = {
@@ -22502,7 +22036,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     inscriptions?: InscriptionUncheckedUpdateManyWithoutFormationNestedInput
-    groups?: GroupUncheckedUpdateManyWithoutFormationNestedInput
   }
 
   export type InscriptionCreateWithoutReservationsInput = {
@@ -22519,7 +22052,9 @@ export namespace Prisma {
     updatedAt?: Date | string
     candidate: CandidateCreateNestedOneWithoutInscriptionsInput
     formation: FormationCreateNestedOneWithoutInscriptionsInput
-    group?: GroupCreateNestedOneWithoutInscriptionsInput
+    professor?: ProfessorCreateNestedOneWithoutInscriptionsInput
+    group?: GroupCreateNestedOneWithoutInscriptionInput
+    members?: InscriptionCandidateCreateNestedManyWithoutInscriptionInput
   }
 
   export type InscriptionUncheckedCreateWithoutReservationsInput = {
@@ -22532,11 +22067,13 @@ export namespace Prisma {
     volumeHoraire?: number | null
     remainingHours?: number
     learningMode?: $Enums.LearningMode
-    groupId?: string | null
     candidateId: string
     formationId: string
+    professorId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    group?: GroupUncheckedCreateNestedOneWithoutInscriptionInput
+    members?: InscriptionCandidateUncheckedCreateNestedManyWithoutInscriptionInput
   }
 
   export type InscriptionCreateOrConnectWithoutReservationsInput = {
@@ -22556,7 +22093,7 @@ export namespace Prisma {
     maxSessions?: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    groups?: GroupCreateNestedManyWithoutProfessorInput
+    inscriptions?: InscriptionCreateNestedManyWithoutProfessorInput
   }
 
   export type ProfessorUncheckedCreateWithoutReservationsInput = {
@@ -22571,7 +22108,7 @@ export namespace Prisma {
     maxSessions?: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    groups?: GroupUncheckedCreateNestedManyWithoutProfessorInput
+    inscriptions?: InscriptionUncheckedCreateNestedManyWithoutProfessorInput
   }
 
   export type ProfessorCreateOrConnectWithoutReservationsInput = {
@@ -22631,7 +22168,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     candidate?: CandidateUpdateOneRequiredWithoutInscriptionsNestedInput
     formation?: FormationUpdateOneRequiredWithoutInscriptionsNestedInput
-    group?: GroupUpdateOneWithoutInscriptionsNestedInput
+    professor?: ProfessorUpdateOneWithoutInscriptionsNestedInput
+    group?: GroupUpdateOneWithoutInscriptionNestedInput
+    members?: InscriptionCandidateUpdateManyWithoutInscriptionNestedInput
   }
 
   export type InscriptionUncheckedUpdateWithoutReservationsInput = {
@@ -22644,11 +22183,13 @@ export namespace Prisma {
     volumeHoraire?: NullableIntFieldUpdateOperationsInput | number | null
     remainingHours?: FloatFieldUpdateOperationsInput | number
     learningMode?: EnumLearningModeFieldUpdateOperationsInput | $Enums.LearningMode
-    groupId?: NullableStringFieldUpdateOperationsInput | string | null
     candidateId?: StringFieldUpdateOperationsInput | string
     formationId?: StringFieldUpdateOperationsInput | string
+    professorId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    group?: GroupUncheckedUpdateOneWithoutInscriptionNestedInput
+    members?: InscriptionCandidateUncheckedUpdateManyWithoutInscriptionNestedInput
   }
 
   export type ProfessorUpsertWithoutReservationsInput = {
@@ -22674,7 +22215,7 @@ export namespace Prisma {
     maxSessions?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    groups?: GroupUpdateManyWithoutProfessorNestedInput
+    inscriptions?: InscriptionUpdateManyWithoutProfessorNestedInput
   }
 
   export type ProfessorUncheckedUpdateWithoutReservationsInput = {
@@ -22689,7 +22230,7 @@ export namespace Prisma {
     maxSessions?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    groups?: GroupUncheckedUpdateManyWithoutProfessorNestedInput
+    inscriptions?: InscriptionUncheckedUpdateManyWithoutProfessorNestedInput
   }
 
   export type RoomUpsertWithoutReservationsInput = {
@@ -22735,15 +22276,15 @@ export namespace Prisma {
     volumeHoraire?: number | null
     remainingHours?: number
     learningMode?: $Enums.LearningMode
-    groupId?: string | null
     formationId: string
+    professorId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
-  export type GroupCandidateCreateManyCandidateInput = {
+  export type InscriptionCandidateCreateManyCandidateInput = {
     id?: string
-    groupId: string
+    inscriptionId: string
     createdAt?: Date | string
   }
 
@@ -22773,7 +22314,9 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     formation?: FormationUpdateOneRequiredWithoutInscriptionsNestedInput
-    group?: GroupUpdateOneWithoutInscriptionsNestedInput
+    professor?: ProfessorUpdateOneWithoutInscriptionsNestedInput
+    group?: GroupUpdateOneWithoutInscriptionNestedInput
+    members?: InscriptionCandidateUpdateManyWithoutInscriptionNestedInput
     reservations?: ReservationUpdateManyWithoutInscriptionNestedInput
   }
 
@@ -22787,10 +22330,12 @@ export namespace Prisma {
     volumeHoraire?: NullableIntFieldUpdateOperationsInput | number | null
     remainingHours?: FloatFieldUpdateOperationsInput | number
     learningMode?: EnumLearningModeFieldUpdateOperationsInput | $Enums.LearningMode
-    groupId?: NullableStringFieldUpdateOperationsInput | string | null
     formationId?: StringFieldUpdateOperationsInput | string
+    professorId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    group?: GroupUncheckedUpdateOneWithoutInscriptionNestedInput
+    members?: InscriptionCandidateUncheckedUpdateManyWithoutInscriptionNestedInput
     reservations?: ReservationUncheckedUpdateManyWithoutInscriptionNestedInput
   }
 
@@ -22804,27 +22349,27 @@ export namespace Prisma {
     volumeHoraire?: NullableIntFieldUpdateOperationsInput | number | null
     remainingHours?: FloatFieldUpdateOperationsInput | number
     learningMode?: EnumLearningModeFieldUpdateOperationsInput | $Enums.LearningMode
-    groupId?: NullableStringFieldUpdateOperationsInput | string | null
     formationId?: StringFieldUpdateOperationsInput | string
+    professorId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type GroupCandidateUpdateWithoutCandidateInput = {
+  export type InscriptionCandidateUpdateWithoutCandidateInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    group?: GroupUpdateOneRequiredWithoutMembersNestedInput
+    inscription?: InscriptionUpdateOneRequiredWithoutMembersNestedInput
   }
 
-  export type GroupCandidateUncheckedUpdateWithoutCandidateInput = {
+  export type InscriptionCandidateUncheckedUpdateWithoutCandidateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    groupId?: StringFieldUpdateOperationsInput | string
+    inscriptionId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type GroupCandidateUncheckedUpdateManyWithoutCandidateInput = {
+  export type InscriptionCandidateUncheckedUpdateManyWithoutCandidateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    groupId?: StringFieldUpdateOperationsInput | string
+    inscriptionId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -22877,18 +22422,8 @@ export namespace Prisma {
     volumeHoraire?: number | null
     remainingHours?: number
     learningMode?: $Enums.LearningMode
-    groupId?: string | null
     candidateId: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type GroupCreateManyFormationInput = {
-    id?: string
-    nom: string
-    type: $Enums.GroupType
     professorId?: string | null
-    effectif?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -22919,7 +22454,9 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     candidate?: CandidateUpdateOneRequiredWithoutInscriptionsNestedInput
-    group?: GroupUpdateOneWithoutInscriptionsNestedInput
+    professor?: ProfessorUpdateOneWithoutInscriptionsNestedInput
+    group?: GroupUpdateOneWithoutInscriptionNestedInput
+    members?: InscriptionCandidateUpdateManyWithoutInscriptionNestedInput
     reservations?: ReservationUpdateManyWithoutInscriptionNestedInput
   }
 
@@ -22933,10 +22470,12 @@ export namespace Prisma {
     volumeHoraire?: NullableIntFieldUpdateOperationsInput | number | null
     remainingHours?: FloatFieldUpdateOperationsInput | number
     learningMode?: EnumLearningModeFieldUpdateOperationsInput | $Enums.LearningMode
-    groupId?: NullableStringFieldUpdateOperationsInput | string | null
     candidateId?: StringFieldUpdateOperationsInput | string
+    professorId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    group?: GroupUncheckedUpdateOneWithoutInscriptionNestedInput
+    members?: InscriptionCandidateUncheckedUpdateManyWithoutInscriptionNestedInput
     reservations?: ReservationUncheckedUpdateManyWithoutInscriptionNestedInput
   }
 
@@ -22950,42 +22489,8 @@ export namespace Prisma {
     volumeHoraire?: NullableIntFieldUpdateOperationsInput | number | null
     remainingHours?: FloatFieldUpdateOperationsInput | number
     learningMode?: EnumLearningModeFieldUpdateOperationsInput | $Enums.LearningMode
-    groupId?: NullableStringFieldUpdateOperationsInput | string | null
     candidateId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type GroupUpdateWithoutFormationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nom?: StringFieldUpdateOperationsInput | string
-    type?: EnumGroupTypeFieldUpdateOperationsInput | $Enums.GroupType
-    effectif?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    professor?: ProfessorUpdateOneWithoutGroupsNestedInput
-    members?: GroupCandidateUpdateManyWithoutGroupNestedInput
-    inscriptions?: InscriptionUpdateManyWithoutGroupNestedInput
-  }
-
-  export type GroupUncheckedUpdateWithoutFormationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nom?: StringFieldUpdateOperationsInput | string
-    type?: EnumGroupTypeFieldUpdateOperationsInput | $Enums.GroupType
     professorId?: NullableStringFieldUpdateOperationsInput | string | null
-    effectif?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    members?: GroupCandidateUncheckedUpdateManyWithoutGroupNestedInput
-    inscriptions?: InscriptionUncheckedUpdateManyWithoutGroupNestedInput
-  }
-
-  export type GroupUncheckedUpdateManyWithoutFormationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nom?: StringFieldUpdateOperationsInput | string
-    type?: EnumGroupTypeFieldUpdateOperationsInput | $Enums.GroupType
-    professorId?: NullableStringFieldUpdateOperationsInput | string | null
-    effectif?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -23081,12 +22586,18 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type GroupCreateManyProfessorInput = {
+  export type InscriptionCreateManyProfessorInput = {
     id?: string
-    nom: string
-    type: $Enums.GroupType
+    dateInscription?: Date | string
+    status?: $Enums.InscriptionStatus
+    note?: string | null
+    duration?: number | null
+    price?: number | null
+    volumeHoraire?: number | null
+    remainingHours?: number
+    learningMode?: $Enums.LearningMode
+    candidateId: string
     formationId: string
-    effectif?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -23104,36 +22615,56 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type GroupUpdateWithoutProfessorInput = {
+  export type InscriptionUpdateWithoutProfessorInput = {
     id?: StringFieldUpdateOperationsInput | string
-    nom?: StringFieldUpdateOperationsInput | string
-    type?: EnumGroupTypeFieldUpdateOperationsInput | $Enums.GroupType
-    effectif?: IntFieldUpdateOperationsInput | number
+    dateInscription?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumInscriptionStatusFieldUpdateOperationsInput | $Enums.InscriptionStatus
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    volumeHoraire?: NullableIntFieldUpdateOperationsInput | number | null
+    remainingHours?: FloatFieldUpdateOperationsInput | number
+    learningMode?: EnumLearningModeFieldUpdateOperationsInput | $Enums.LearningMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    formation?: FormationUpdateOneRequiredWithoutGroupsNestedInput
-    members?: GroupCandidateUpdateManyWithoutGroupNestedInput
-    inscriptions?: InscriptionUpdateManyWithoutGroupNestedInput
+    candidate?: CandidateUpdateOneRequiredWithoutInscriptionsNestedInput
+    formation?: FormationUpdateOneRequiredWithoutInscriptionsNestedInput
+    group?: GroupUpdateOneWithoutInscriptionNestedInput
+    members?: InscriptionCandidateUpdateManyWithoutInscriptionNestedInput
+    reservations?: ReservationUpdateManyWithoutInscriptionNestedInput
   }
 
-  export type GroupUncheckedUpdateWithoutProfessorInput = {
+  export type InscriptionUncheckedUpdateWithoutProfessorInput = {
     id?: StringFieldUpdateOperationsInput | string
-    nom?: StringFieldUpdateOperationsInput | string
-    type?: EnumGroupTypeFieldUpdateOperationsInput | $Enums.GroupType
+    dateInscription?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumInscriptionStatusFieldUpdateOperationsInput | $Enums.InscriptionStatus
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    volumeHoraire?: NullableIntFieldUpdateOperationsInput | number | null
+    remainingHours?: FloatFieldUpdateOperationsInput | number
+    learningMode?: EnumLearningModeFieldUpdateOperationsInput | $Enums.LearningMode
+    candidateId?: StringFieldUpdateOperationsInput | string
     formationId?: StringFieldUpdateOperationsInput | string
-    effectif?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    members?: GroupCandidateUncheckedUpdateManyWithoutGroupNestedInput
-    inscriptions?: InscriptionUncheckedUpdateManyWithoutGroupNestedInput
+    group?: GroupUncheckedUpdateOneWithoutInscriptionNestedInput
+    members?: InscriptionCandidateUncheckedUpdateManyWithoutInscriptionNestedInput
+    reservations?: ReservationUncheckedUpdateManyWithoutInscriptionNestedInput
   }
 
-  export type GroupUncheckedUpdateManyWithoutProfessorInput = {
+  export type InscriptionUncheckedUpdateManyWithoutProfessorInput = {
     id?: StringFieldUpdateOperationsInput | string
-    nom?: StringFieldUpdateOperationsInput | string
-    type?: EnumGroupTypeFieldUpdateOperationsInput | $Enums.GroupType
+    dateInscription?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumInscriptionStatusFieldUpdateOperationsInput | $Enums.InscriptionStatus
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    volumeHoraire?: NullableIntFieldUpdateOperationsInput | number | null
+    remainingHours?: FloatFieldUpdateOperationsInput | number
+    learningMode?: EnumLearningModeFieldUpdateOperationsInput | $Enums.LearningMode
+    candidateId?: StringFieldUpdateOperationsInput | string
     formationId?: StringFieldUpdateOperationsInput | string
-    effectif?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -23177,6 +22708,12 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type InscriptionCandidateCreateManyInscriptionInput = {
+    id?: string
+    candidateId: string
+    createdAt?: Date | string
+  }
+
   export type ReservationCreateManyInscriptionInput = {
     id?: string
     reservationCode: string
@@ -23188,6 +22725,24 @@ export namespace Prisma {
     roomId: string
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type InscriptionCandidateUpdateWithoutInscriptionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    candidate?: CandidateUpdateOneRequiredWithoutInscriptionCandidatesNestedInput
+  }
+
+  export type InscriptionCandidateUncheckedUpdateWithoutInscriptionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    candidateId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InscriptionCandidateUncheckedUpdateManyWithoutInscriptionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    candidateId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ReservationUpdateWithoutInscriptionInput = {
@@ -23225,96 +22780,6 @@ export namespace Prisma {
     status?: EnumReservationStatusFieldUpdateOperationsInput | $Enums.ReservationStatus
     professorId?: StringFieldUpdateOperationsInput | string
     roomId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type GroupCandidateCreateManyGroupInput = {
-    id?: string
-    candidateId: string
-    createdAt?: Date | string
-  }
-
-  export type InscriptionCreateManyGroupInput = {
-    id?: string
-    dateInscription?: Date | string
-    status?: $Enums.InscriptionStatus
-    note?: string | null
-    duration?: number | null
-    price?: number | null
-    volumeHoraire?: number | null
-    remainingHours?: number
-    learningMode?: $Enums.LearningMode
-    candidateId: string
-    formationId: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type GroupCandidateUpdateWithoutGroupInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    candidate?: CandidateUpdateOneRequiredWithoutGroupsNestedInput
-  }
-
-  export type GroupCandidateUncheckedUpdateWithoutGroupInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    candidateId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type GroupCandidateUncheckedUpdateManyWithoutGroupInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    candidateId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type InscriptionUpdateWithoutGroupInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    dateInscription?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumInscriptionStatusFieldUpdateOperationsInput | $Enums.InscriptionStatus
-    note?: NullableStringFieldUpdateOperationsInput | string | null
-    duration?: NullableIntFieldUpdateOperationsInput | number | null
-    price?: NullableFloatFieldUpdateOperationsInput | number | null
-    volumeHoraire?: NullableIntFieldUpdateOperationsInput | number | null
-    remainingHours?: FloatFieldUpdateOperationsInput | number
-    learningMode?: EnumLearningModeFieldUpdateOperationsInput | $Enums.LearningMode
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    candidate?: CandidateUpdateOneRequiredWithoutInscriptionsNestedInput
-    formation?: FormationUpdateOneRequiredWithoutInscriptionsNestedInput
-    reservations?: ReservationUpdateManyWithoutInscriptionNestedInput
-  }
-
-  export type InscriptionUncheckedUpdateWithoutGroupInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    dateInscription?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumInscriptionStatusFieldUpdateOperationsInput | $Enums.InscriptionStatus
-    note?: NullableStringFieldUpdateOperationsInput | string | null
-    duration?: NullableIntFieldUpdateOperationsInput | number | null
-    price?: NullableFloatFieldUpdateOperationsInput | number | null
-    volumeHoraire?: NullableIntFieldUpdateOperationsInput | number | null
-    remainingHours?: FloatFieldUpdateOperationsInput | number
-    learningMode?: EnumLearningModeFieldUpdateOperationsInput | $Enums.LearningMode
-    candidateId?: StringFieldUpdateOperationsInput | string
-    formationId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    reservations?: ReservationUncheckedUpdateManyWithoutInscriptionNestedInput
-  }
-
-  export type InscriptionUncheckedUpdateManyWithoutGroupInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    dateInscription?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumInscriptionStatusFieldUpdateOperationsInput | $Enums.InscriptionStatus
-    note?: NullableStringFieldUpdateOperationsInput | string | null
-    duration?: NullableIntFieldUpdateOperationsInput | number | null
-    price?: NullableFloatFieldUpdateOperationsInput | number | null
-    volumeHoraire?: NullableIntFieldUpdateOperationsInput | number | null
-    remainingHours?: FloatFieldUpdateOperationsInput | number
-    learningMode?: EnumLearningModeFieldUpdateOperationsInput | $Enums.LearningMode
-    candidateId?: StringFieldUpdateOperationsInput | string
-    formationId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

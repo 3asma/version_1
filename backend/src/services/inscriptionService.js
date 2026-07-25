@@ -12,7 +12,7 @@ const extractInscriptionCode = (groupNom) => {
 const mapInscriptionToFrontend = (ins) => {
     if (!ins) return null;
     const mapped = { ...ins };
-    mapped.learningGroupId = ins.groupId;
+    mapped.learningGroupId = ins.group?.id || null;
 
     let codeVal = '';
     if (ins.group) {
@@ -21,16 +21,27 @@ const mapInscriptionToFrontend = (ins) => {
     mapped.inscriptionCode = codeVal;
 
     if (ins.group) {
+        const mappedGroupInscriptions = (ins.members || []).map(m => ({
+            id: m.id,
+            candidateId: m.candidateId,
+            candidate: m.candidate,
+            formationId: ins.formationId,
+            professorId: ins.professorId,
+            status: ins.status,
+            learningGroupId: ins.group.id,
+            inscriptionCode: codeVal
+        }));
+
         mapped.learningGroup = {
             id: ins.group.id,
             groupName: ins.group.nom,
             inscriptionCode: codeVal,
-            learningMode: ins.group.type,
+            learningMode: ins.learningMode || 'GROUPE',
             dateInscription: ins.dateInscription || ins.group.createdAt,
             note: ins.note || null,
-            formation: ins.group.formation || ins.formation,
-            professor: ins.group.professor || ins.professor,
-            inscriptions: ins.group.inscriptions || []
+            formation: ins.formation || null,
+            professor: ins.professor || null,
+            inscriptions: mappedGroupInscriptions
         };
     } else {
         mapped.learningGroup = null;
@@ -52,6 +63,7 @@ class InscriptionService {
             'remainingHours',
             'learningMode',
             'candidateId',
+            'candidateIds',
             'formationId',
             'professorId',
             'groupId'
@@ -70,6 +82,9 @@ class InscriptionService {
             n.inscriptionCode = String(raw.inscriptionCode).trim();
         }
         if (raw.candidateId !== undefined) n.candidateId = String(raw.candidateId).trim();
+        if (raw.candidateIds !== undefined && Array.isArray(raw.candidateIds)) {
+            n.candidateIds = raw.candidateIds.map(x => String(x).trim());
+        }
         if (raw.formationId !== undefined) n.formationId = String(raw.formationId).trim();
         if (raw.groupId !== undefined) n.groupId = raw.groupId ? String(raw.groupId).trim() : null;
         if (raw.professorId !== undefined && raw.professorId !== null) {
@@ -145,24 +160,31 @@ class InscriptionService {
                 nom: { contains: inscriptionCode, mode: 'insensitive' }
             },
             include: {
-                inscriptions: true
+                inscription: {
+                    include: {
+                        members: true
+                    }
+                }
             }
         });
 
         if (existingGroups.length > 0) {
             for (const group of existingGroups) {
-                if (effectiveMode === 'MONOME' || group.type === 'MONOME') {
+                const insMode = group.inscription?.learningMode || 'GROUPE';
+                const insFormationId = group.inscription?.formationId;
+
+                if (effectiveMode === 'MONOME' || insMode === 'MONOME') {
                     throw new Error('INSCRIPTION_CODE_EXISTS');
                 }
 
                 if (effectiveMode === 'BINOME') {
-                    if (group.type !== 'BINOME' || group.formationId !== formationId) {
+                    if (insMode !== 'BINOME' || insFormationId !== formationId) {
                         throw new Error('INSCRIPTION_CODE_EXISTS');
                     }
                 }
 
                 if (effectiveMode === 'GROUPE') {
-                    if (group.type !== 'GROUPE' || group.formationId !== formationId) {
+                    if (insMode !== 'GROUPE' || insFormationId !== formationId) {
                         throw new Error('INSCRIPTION_CODE_EXISTS');
                     }
                 }
@@ -173,6 +195,10 @@ class InscriptionService {
     async createInscription(data) {
         const normalized = this.normalizeData(data);
 
+        if (normalized.candidateIds && normalized.candidateIds.length > 0 && !normalized.candidateId) {
+            normalized.candidateId = normalized.candidateIds[0];
+        }
+
         if (!normalized.candidateId) throw new Error('CANDIDATE_ID_REQUIRED');
         if (!normalized.formationId) throw new Error('FORMATION_ID_REQUIRED');
 
@@ -182,8 +208,16 @@ class InscriptionService {
 
         await this.checkInscriptionCodeConflict(null, normalized.inscriptionCode, normalized.learningMode, normalized.formationId);
 
+        const candidateIdsToLink = (normalized.candidateIds && normalized.candidateIds.length > 0)
+            ? normalized.candidateIds
+            : [normalized.candidateId];
+
+        for (const cid of candidateIdsToLink) {
+            const cand = await prisma.candidate.findUnique({ where: { id: cid } });
+            if (!cand) throw new Error('CANDIDATE_NOT_FOUND');
+        }
+
         const candidate = await prisma.candidate.findUnique({ where: { id: normalized.candidateId } });
-        if (!candidate) throw new Error('CANDIDATE_NOT_FOUND');
 
         const formation = await prisma.formation.findUnique({ where: { id: normalized.formationId } });
         if (!formation) throw new Error('FORMATION_NOT_FOUND');
@@ -209,22 +243,32 @@ class InscriptionService {
         const volumeHoraireVal = normalized.volumeHoraire !== undefined ? normalized.volumeHoraire : null;
         const remainingHoursVal = normalized.remainingHours !== undefined ? normalized.remainingHours : (volumeHoraireVal !== null ? parseFloat(volumeHoraireVal) : 0);
 
-        let groupId = null;
-        if (normalized.inscriptionCode) {
-            const groupMode = normalized.learningMode === 'SPECIFIQUE' ? 'GROUPE' : (normalized.learningMode || 'GROUPE');
-            if (groupMode !== 'MONOME') {
-                const existingGroup = await prisma.group.findFirst({
-                    where: {
-                        nom: { contains: normalized.inscriptionCode, mode: 'insensitive' },
-                        formationId: normalized.formationId
-                    }
-                });
-                if (existingGroup) {
-                    groupId = existingGroup.id;
-                }
-            }
+        const groupMode = normalized.learningMode === 'SPECIFIQUE' ? 'GROUPE' : (normalized.learningMode || 'GROUPE');
 
-            if (!groupId) {
+        return await prisma.$transaction(async (tx) => {
+            const created = await tx.inscription.create({
+                data: {
+                    candidateId: normalized.candidateId,
+                    formationId: normalized.formationId,
+                    professorId: normalized.professorId || null,
+                    learningMode: groupMode,
+                    status: statusVal,
+                    note: normalized.note || null,
+                    duration: normalized.duration !== undefined ? normalized.duration : null,
+                    price: normalized.price !== undefined ? normalized.price : null,
+                    volumeHoraire: volumeHoraireVal,
+                    remainingHours: remainingHoursVal
+                }
+            });
+
+            await tx.inscriptionCandidate.createMany({
+                data: candidateIdsToLink.map(cid => ({
+                    inscriptionId: created.id,
+                    candidateId: cid
+                }))
+            });
+
+            if (normalized.inscriptionCode) {
                 let defaultGroupName = `Groupe - ${normalized.inscriptionCode}`;
                 if (groupMode === 'MONOME') {
                     defaultGroupName = `Monôme ${candidate.firstName} ${candidate.lastName}`;
@@ -238,80 +282,89 @@ class InscriptionService {
 
                 const groupName = data.groupName || defaultGroupName;
 
-                const newGroup = await prisma.group.create({
+                await tx.group.create({
                     data: {
                         nom: groupName,
-                        type: groupMode,
-                        formationId: normalized.formationId,
-                        professorId: normalized.professorId || null
+                        inscriptionId: created.id
                     }
                 });
-                groupId = newGroup.id;
             }
-        }
 
-        const creationData = {
-            candidateId: normalized.candidateId,
-            formationId: normalized.formationId,
-            learningMode: normalized.learningMode === 'SPECIFIQUE' ? 'GROUPE' : (normalized.learningMode || 'GROUPE'),
-            status: statusVal,
-            note: normalized.note || null,
-            duration: normalized.duration !== undefined ? normalized.duration : null,
-            price: normalized.price !== undefined ? normalized.price : null,
-            volumeHoraire: volumeHoraireVal,
-            remainingHours: remainingHoursVal,
-            groupId: groupId
-        };
-
-        const created = await prisma.inscription.create({
-            data: creationData,
-            include: {
-                candidate: true,
-                formation: true,
-                group: {
-                    include: {
-                        formation: true,
-                        professor: true,
-                        inscriptions: {
-                            include: { candidate: true }
-                        }
+            const finalInscription = await tx.inscription.findUnique({
+                where: { id: created.id },
+                include: {
+                    candidate: true,
+                    formation: true,
+                    professor: true,
+                    group: true,
+                    members: {
+                        include: { candidate: true }
                     }
                 }
-            }
+            });
+
+            return mapInscriptionToFrontend(finalInscription);
         });
-        return mapInscriptionToFrontend(created);
     }
 
     async getAllInscriptions() {
         const groups = await prisma.group.findMany({
             include: {
-                formation: true,
-                professor: true,
-                inscriptions: {
+                inscription: {
                     include: {
-                        candidate: true
+                        formation: true,
+                        professor: true,
+                        members: {
+                            include: {
+                                candidate: true
+                            }
+                        }
                     }
                 }
             },
             orderBy: { createdAt: 'desc' }
         });
+
         return groups.map(g => {
-            const firstInscription = g.inscriptions[0] || {};
+            const ins = g.inscription || {};
             const codeVal = extractInscriptionCode(g.nom);
+
+            const mappedInscriptions = (ins.members || []).map(m => ({
+                id: ins.id,
+                dateInscription: ins.dateInscription,
+                status: ins.status,
+                note: ins.note,
+                duration: ins.duration,
+                price: ins.price,
+                volumeHoraire: ins.volumeHoraire,
+                remainingHours: ins.remainingHours,
+                learningMode: ins.learningMode,
+                candidateId: m.candidateId,
+                candidate: m.candidate,
+                formationId: ins.formationId,
+                professorId: ins.professorId,
+                createdAt: ins.createdAt,
+                updatedAt: ins.updatedAt,
+                inscriptionCode: codeVal,
+                learningGroupId: g.id
+            }));
+
             return {
                 id: g.id,
                 groupName: g.nom,
                 inscriptionCode: codeVal,
-                learningMode: g.type,
-                dateInscription: firstInscription.dateInscription || g.createdAt,
-                note: firstInscription.note || null,
-                formation: g.formation,
-                professor: g.professor,
-                inscriptions: g.inscriptions.map(ins => ({
-                    ...ins,
-                    inscriptionCode: codeVal,
-                    learningGroupId: g.id
-                }))
+                learningMode: ins.learningMode || 'GROUPE',
+                dateInscription: ins.dateInscription || g.createdAt,
+                note: ins.note || null,
+                formation: ins.formation || null,
+                professor: ins.professor || null,
+                inscriptions: mappedInscriptions,
+                inscription: {
+                    id: ins.id,
+                    status: ins.status,
+                    learningMode: ins.learningMode,
+                    members: ins.members || []
+                }
             };
         }).filter(g => g.inscriptions && g.inscriptions.length > 0);
     }
@@ -322,14 +375,10 @@ class InscriptionService {
             include: {
                 candidate: true,
                 formation: true,
-                group: {
-                    include: {
-                        formation: true,
-                        professor: true,
-                        inscriptions: {
-                            include: { candidate: true }
-                        }
-                    }
+                professor: true,
+                group: true,
+                members: {
+                    include: { candidate: true }
                 }
             }
         });
@@ -381,26 +430,81 @@ class InscriptionService {
         }
 
         const dataToUpdate = { ...normalized };
-        delete dataToUpdate.inscriptionCode; // do not try to write non-existent column
+        delete dataToUpdate.inscriptionCode;
 
-        const updated = await prisma.inscription.update({
-            where: { id },
-            data: dataToUpdate,
-            include: {
-                candidate: true,
-                formation: true,
-                group: {
-                    include: {
-                        formation: true,
-                        professor: true,
-                        inscriptions: {
-                            include: { candidate: true }
-                        }
+        return await prisma.$transaction(async (tx) => {
+            const updated = await tx.inscription.update({
+                where: { id },
+                data: dataToUpdate,
+                include: {
+                    candidate: true,
+                    formation: true,
+                    professor: true,
+                    group: true,
+                    members: {
+                        include: { candidate: true }
                     }
                 }
+            });
+
+            if (normalized.inscriptionCode && updated.group) {
+                let defaultGroupName = `Groupe - ${normalized.inscriptionCode}`;
+                const groupMode = updated.learningMode || 'GROUPE';
+                const candidate = updated.candidate || {};
+                const formation = updated.formation || {};
+
+                if (groupMode === 'MONOME') {
+                    defaultGroupName = `Monôme ${candidate.firstName} ${candidate.lastName}`;
+                } else if (groupMode === 'BINOME') {
+                    defaultGroupName = `Binôme - ${normalized.inscriptionCode}`;
+                } else if (normalized.learningMode === 'SPECIFIQUE') {
+                    defaultGroupName = `Spécifique ${formation.matiere} - ${normalized.inscriptionCode}`;
+                } else if (groupMode === 'GROUPE') {
+                    defaultGroupName = `Groupe ${formation.matiere} - ${normalized.inscriptionCode}`;
+                }
+
+                await tx.group.update({
+                    where: { id: updated.group.id },
+                    data: { nom: defaultGroupName }
+                });
+            } else if (normalized.inscriptionCode && !updated.group) {
+                let defaultGroupName = `Groupe - ${normalized.inscriptionCode}`;
+                const groupMode = updated.learningMode || 'GROUPE';
+                const candidate = updated.candidate || {};
+                const formation = updated.formation || {};
+
+                if (groupMode === 'MONOME') {
+                    defaultGroupName = `Monôme ${candidate.firstName} ${candidate.lastName}`;
+                } else if (groupMode === 'BINOME') {
+                    defaultGroupName = `Binôme - ${normalized.inscriptionCode}`;
+                } else if (normalized.learningMode === 'SPECIFIQUE') {
+                    defaultGroupName = `Spécifique ${formation.matiere} - ${normalized.inscriptionCode}`;
+                } else if (groupMode === 'GROUPE') {
+                    defaultGroupName = `Groupe ${formation.matiere} - ${normalized.inscriptionCode}`;
+                }
+
+                await tx.group.create({
+                    data: {
+                        nom: defaultGroupName,
+                        inscriptionId: id
+                    }
+                });
             }
+
+            const finalInscription = await tx.inscription.findUnique({
+                where: { id },
+                include: {
+                    candidate: true,
+                    formation: true,
+                    professor: true,
+                    group: true,
+                    members: {
+                        include: { candidate: true }
+                    }
+                }
+            });
+            return mapInscriptionToFrontend(finalInscription);
         });
-        return mapInscriptionToFrontend(updated);
     }
 
     async deleteInscription(id) {
@@ -409,21 +513,13 @@ class InscriptionService {
 
     async deleteLearningGroup(id) {
         const group = await prisma.group.findUnique({
-            where: { id },
-            include: { inscriptions: true }
+            where: { id }
         });
         if (!group) throw new Error('LEARNING_GROUP_NOT_FOUND');
 
-        const inscriptionIds = group.inscriptions.map(ins => ins.id);
-
-        await prisma.$transaction([
-            prisma.inscription.deleteMany({
-                where: { id: { in: inscriptionIds } }
-            }),
-            prisma.group.delete({
-                where: { id }
-            })
-        ]);
+        await prisma.inscription.delete({
+            where: { id: group.inscriptionId }
+        });
         return true;
     }
 
@@ -437,14 +533,10 @@ class InscriptionService {
             include: {
                 candidate: true,
                 formation: true,
-                group: {
-                    include: {
-                        formation: true,
-                        professor: true,
-                        inscriptions: {
-                            include: { candidate: true }
-                        }
-                    }
+                professor: true,
+                group: true,
+                members: {
+                    include: { candidate: true }
                 }
             }
         });
@@ -456,47 +548,46 @@ class InscriptionService {
 
         const group = await prisma.group.findUnique({
             where: { id: groupId },
-            include: { inscriptions: true }
-        });
-        if (!group) throw new Error('LEARNING_GROUP_NOT_FOUND');
-
-        const dbLearningMode = learningMode === 'SPECIFIQUE' ? 'GROUPE' : (learningMode || 'GROUPE');
-
-        const existingGroupIns = await prisma.inscription.findFirst({
-            where: {
-                groupId: { not: groupId, not: null },
-                group: {
-                    nom: { contains: inscriptionCode, mode: 'insensitive' }
+            include: {
+                inscription: {
+                    include: {
+                        members: true
+                    }
                 }
             }
         });
-        if (existingGroupIns) {
+        if (!group) throw new Error('LEARNING_GROUP_NOT_FOUND');
+
+        const inscription = group.inscription;
+        if (!inscription) throw new Error('ASSOCIATED_INSCRIPTION_NOT_FOUND');
+
+        const dbLearningMode = learningMode === 'SPECIFIQUE' ? 'GROUPE' : (learningMode || 'GROUPE');
+
+        const existingGroup = await prisma.group.findFirst({
+            where: {
+                id: { not: groupId },
+                nom: { contains: inscriptionCode, mode: 'insensitive' }
+            }
+        });
+        if (existingGroup) {
             throw new Error('INSCRIPTION_CODE_EXISTS');
         }
 
-        await prisma.group.update({
-            where: { id: groupId },
-            data: {
-                nom: groupName,
-                type: dbLearningMode,
-                formationId,
-                professorId: professorId || null
-            }
-        });
-
-        const currentMemberCandidateIds = group.inscriptions.map(ins => ins.candidateId);
-
-        const candidatesToRemove = group.inscriptions.filter(ins => !candidateIds.includes(ins.candidateId));
-        const candidateIdsToAdd = candidateIds.filter(cid => !currentMemberCandidateIds.includes(cid));
-        const inscriptionsToUpdate = group.inscriptions.filter(ins => candidateIds.includes(ins.candidateId));
-
-        for (const ins of candidatesToRemove) {
-            await prisma.inscription.delete({ where: { id: ins.id } });
+        if (dbLearningMode === 'MONOME' && candidateIds.length > 1) {
+            throw new Error('MONOME_LIMIT_EXCEEDED');
+        }
+        if (dbLearningMode === 'BINOME' && candidateIds.length > 2) {
+            throw new Error('BINOME_LIMIT_EXCEEDED');
         }
 
-        for (const ins of inscriptionsToUpdate) {
-            await prisma.inscription.update({
-                where: { id: ins.id },
+        return await prisma.$transaction(async (tx) => {
+            await tx.group.update({
+                where: { id: groupId },
+                data: { nom: groupName }
+            });
+
+            await tx.inscription.update({
+                where: { id: inscription.id },
                 data: {
                     formationId,
                     professorId: professorId || null,
@@ -505,62 +596,76 @@ class InscriptionService {
                     note
                 }
             });
-        }
 
-        const baseIns = group.inscriptions[0] || {};
-        const basePrice = baseIns.price || 0;
-        const baseVolume = baseIns.volumeHoraire || 72;
-        const baseDuration = baseIns.duration || 6;
+            const currentMemberCandidateIds = inscription.members.map(m => m.candidateId);
+            const candidatesToRemove = inscription.members.filter(m => !candidateIds.includes(m.candidateId));
+            const candidateIdsToAdd = candidateIds.filter(cid => !currentMemberCandidateIds.includes(cid));
 
-        for (const cid of candidateIdsToAdd) {
-            await prisma.inscription.create({
-                data: {
-                    candidateId: cid,
-                    formationId,
-                    professorId: professorId || null,
-                    learningMode: dbLearningMode,
-                    dateInscription: new Date(dateInscription),
-                    note,
-                    status: 'ACTIVE',
-                    price: basePrice,
-                    duration: baseDuration,
-                    volumeHoraire: baseVolume,
-                    remainingHours: baseVolume,
-                    groupId: groupId
+            for (const member of candidatesToRemove) {
+                await tx.inscriptionCandidate.delete({ where: { id: member.id } });
+            }
+
+            if (candidateIdsToAdd.length > 0) {
+                await tx.inscriptionCandidate.createMany({
+                    data: candidateIdsToAdd.map(cid => ({
+                        inscriptionId: inscription.id,
+                        candidateId: cid
+                    }))
+                });
+            }
+
+            const updatedGroup = await tx.group.findUnique({
+                where: { id: groupId },
+                include: {
+                    inscription: {
+                        include: {
+                            formation: true,
+                            professor: true,
+                            members: {
+                                include: { candidate: true }
+                            }
+                        }
+                    }
                 }
             });
-        }
 
-        const updatedGroup = await prisma.group.findUnique({
-            where: { id: groupId },
-            include: {
-                formation: true,
-                professor: true,
-                inscriptions: {
-                    include: { candidate: true }
-                }
-            }
-        });
+            if (!updatedGroup) return null;
 
-        if (!updatedGroup) return null;
+            const updatedIns = updatedGroup.inscription || {};
+            const codeVal = extractInscriptionCode(updatedGroup.nom);
 
-        const firstInscription = updatedGroup.inscriptions[0] || {};
-        const codeVal = extractInscriptionCode(updatedGroup.nom);
-        return {
-            id: updatedGroup.id,
-            groupName: updatedGroup.nom,
-            inscriptionCode: codeVal,
-            learningMode: updatedGroup.type,
-            dateInscription: firstInscription.dateInscription || updatedGroup.createdAt,
-            note: firstInscription.note || null,
-            formation: updatedGroup.formation,
-            professor: updatedGroup.professor,
-            inscriptions: updatedGroup.inscriptions.map(ins => ({
-                ...ins,
+            const mappedInscriptions = (updatedIns.members || []).map(m => ({
+                id: updatedIns.id,
+                dateInscription: updatedIns.dateInscription,
+                status: updatedIns.status,
+                note: updatedIns.note,
+                duration: updatedIns.duration,
+                price: updatedIns.price,
+                volumeHoraire: updatedIns.volumeHoraire,
+                remainingHours: updatedIns.remainingHours,
+                learningMode: updatedIns.learningMode,
+                candidateId: m.candidateId,
+                candidate: m.candidate,
+                formationId: updatedIns.formationId,
+                professorId: updatedIns.professorId,
+                createdAt: updatedIns.createdAt,
+                updatedAt: updatedIns.updatedAt,
                 inscriptionCode: codeVal,
                 learningGroupId: updatedGroup.id
-            }))
-        };
+            }));
+
+            return {
+                id: updatedGroup.id,
+                groupName: updatedGroup.nom,
+                inscriptionCode: codeVal,
+                learningMode: updatedIns.learningMode || 'GROUPE',
+                dateInscription: updatedIns.dateInscription || updatedGroup.createdAt,
+                note: updatedIns.note || null,
+                formation: updatedGroup.inscription?.formation || null,
+                professor: updatedGroup.inscription?.professor || null,
+                inscriptions: mappedInscriptions
+            };
+        });
     }
 }
 

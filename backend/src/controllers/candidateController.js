@@ -174,3 +174,13 @@ export const deleteCandidate = async (req, res) => {
         res.status(status).json({ message: 'error', error: msg });
     }
 };
+
+export const getCandidateFormations = async (req, res) => {
+    try {
+        const formations = await candidateService.getCandidateFormations(req.params.id);
+        res.json({ message: 'success', data: formations });
+    } catch (error) {
+        res.status(500).json({ message: 'error', error: error.message });
+    }
+};
+

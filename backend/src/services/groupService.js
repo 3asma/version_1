@@ -1,32 +1,75 @@
 import prisma from '../config/prisma.js';
 
+const mapGroupFromDb = (dbGroup) => {
+    if (!dbGroup) return null;
+    const ins = dbGroup.inscription || {};
+
+    const members = (ins.members || []).map(m => ({
+        id: m.id,
+        groupId: dbGroup.id,
+        candidateId: m.candidateId,
+        createdAt: m.createdAt,
+        candidate: m.candidate
+    }));
+
+    return {
+        id: dbGroup.id,
+        nom: dbGroup.nom,
+        type: ins.learningMode || 'GROUPE',
+        formationId: ins.formationId || '',
+        professorId: ins.professorId || null,
+        effectif: members.length,
+        createdAt: dbGroup.createdAt,
+        updatedAt: dbGroup.updatedAt,
+        formation: ins.formation || null,
+        professor: ins.professor || null,
+        members: members,
+        inscriptionId: dbGroup.inscriptionId,
+        inscription: {
+            id: ins.id,
+            status: ins.status,
+            learningMode: ins.learningMode,
+            members: ins.members || []
+        }
+    };
+};
+
 class GroupService {
     async getAllGroups() {
-        return await prisma.group.findMany({
+        const groups = await prisma.group.findMany({
             include: {
-                formation: true,
-                professor: true,
-                members: {
-                    include: { candidate: true }
+                inscription: {
+                    include: {
+                        formation: true,
+                        professor: true,
+                        members: {
+                            include: { candidate: true }
+                        }
+                    }
                 }
             },
             orderBy: { createdAt: 'desc' }
         });
+        return groups.map(mapGroupFromDb);
     }
 
     async getGroupById(id) {
         const group = await prisma.group.findUnique({
             where: { id },
             include: {
-                formation: true,
-                professor: true,
-                members: {
-                    include: { candidate: true }
+                inscription: {
+                    include: {
+                        formation: true,
+                        professor: true,
+                        members: {
+                            include: { candidate: true }
+                        }
+                    }
                 }
             }
         });
         if (!group) throw new Error('GROUP_NOT_FOUND');
-        return group;
+        return mapGroupFromDb(group);
     }
 
     async createGroup(data) {
@@ -39,6 +82,11 @@ class GroupService {
         }
         if (!formationId) throw new Error('FORMATION_ID_REQUIRED');
 
+        if (candidateIds.length === 0) {
+            throw new Error('CANDIDATE_IDS_REQUIRED');
+        }
+        const mainCandidateId = candidateIds[0];
+
         // Verify Formation exists
         const formation = await prisma.formation.findUnique({ where: { id: formationId } });
         if (!formation) throw new Error('FORMATION_NOT_FOUND');
@@ -49,7 +97,7 @@ class GroupService {
             if (!professor) throw new Error('PROFESSOR_NOT_FOUND');
         }
 
-        // Validate candidate list limits according to type
+        // Validate limits
         if (type === 'MONOME' && candidateIds.length > 1) {
             throw new Error('MONOME_LIMIT_EXCEEDED');
         }
@@ -62,7 +110,6 @@ class GroupService {
             const candidate = await prisma.candidate.findUnique({ where: { id: candidateId } });
             if (!candidate) throw new Error(`CANDIDATE_NOT_FOUND_${candidateId}`);
 
-            // Validation 2: Verify candidate has a valid Inscription for the Group's Formation
             const inscription = await prisma.inscription.findFirst({
                 where: {
                     formationId,
@@ -75,101 +122,121 @@ class GroupService {
             }
         }
 
-        // Ensure array uniqueness
         const uniqueCandidateIds = [...new Set(candidateIds)];
 
-        const group = await prisma.group.create({
-            data: {
-                nom: nom.trim(),
-                type,
-                formationId,
-                professorId: professorId || null,
-                effectif: uniqueCandidateIds.length,
-                members: {
-                    create: uniqueCandidateIds.map(id => ({ candidateId: id }))
-                }
-            },
-            include: {
-                formation: true,
-                professor: true,
-                members: { include: { candidate: true } }
-            }
-        });
-
-        // After successfully creating the Affectation, automatically update the matching WAITING inscriptions: WAITING -> ASSIGNED
-        for (const candidateId of uniqueCandidateIds) {
-            const inscription = await prisma.inscription.findFirst({
-                where: {
+        return await prisma.$transaction(async (tx) => {
+            const inscription = await tx.inscription.create({
+                data: {
+                    candidateId: mainCandidateId,
                     formationId,
-                    status: 'WAITING',
-                    candidateId
+                    professorId: professorId || null,
+                    learningMode: type === 'SPECIFIQUE' ? 'GROUPE' : type,
+                    status: 'ASSIGNED'
                 }
             });
-            if (inscription) {
-                await prisma.inscription.update({
-                    where: { id: inscription.id },
-                    data: { status: 'ASSIGNED' }
-                });
-            }
-        }
 
-        return group;
+            await tx.inscriptionCandidate.createMany({
+                data: uniqueCandidateIds.map(cid => ({
+                    inscriptionId: inscription.id,
+                    candidateId: cid
+                }))
+            });
+
+            const dbGroup = await tx.group.create({
+                data: {
+                    nom: nom.trim(),
+                    inscriptionId: inscription.id
+                },
+                include: {
+                    inscription: {
+                        include: {
+                            formation: true,
+                            professor: true,
+                            members: { include: { candidate: true } }
+                        }
+                    }
+                }
+            });
+
+            // After successfully creating the Group, automatically update the matching WAITING inscriptions: WAITING -> ASSIGNED
+            for (const candidateId of uniqueCandidateIds) {
+                const pendingInscription = await tx.inscription.findFirst({
+                    where: {
+                        formationId,
+                        status: 'WAITING',
+                        candidateId
+                    }
+                });
+                if (pendingInscription) {
+                    await tx.inscription.update({
+                        where: { id: pendingInscription.id },
+                        data: { status: 'ASSIGNED' }
+                    });
+                }
+            }
+
+            return mapGroupFromDb(dbGroup);
+        });
     }
 
     async updateGroup(id, data) {
         const { nom, type, formationId, professorId } = data;
 
-        // Verify group exists
         const group = await prisma.group.findUnique({
             where: { id },
-            include: { members: true }
+            include: {
+                inscription: {
+                    include: {
+                        members: true
+                    }
+                }
+            }
         });
         if (!group) throw new Error('GROUP_NOT_FOUND');
 
         const updateData = {};
-
         if (nom !== undefined) {
             if (nom.trim() === '') throw new Error('GROUP_NAME_REQUIRED');
             updateData.nom = nom.trim();
         }
 
-        const newType = type !== undefined ? type : group.type;
+        const insUpdateData = {};
+        const newType = type !== undefined ? type : (group.inscription?.learningMode || 'GROUPE');
         if (type !== undefined) {
             if (!['MONOME', 'BINOME', 'GROUPE', 'SPECIFIQUE'].includes(type)) {
                 throw new Error('INVALID_GROUP_TYPE');
             }
-            updateData.type = type;
+            insUpdateData.learningMode = type === 'SPECIFIQUE' ? 'GROUPE' : type;
         }
 
-        const newFormationId = formationId !== undefined ? formationId : group.formationId;
+        const newFormationId = formationId !== undefined ? formationId : (group.inscription?.formationId);
         if (formationId !== undefined) {
             const formation = await prisma.formation.findUnique({ where: { id: formationId } });
             if (!formation) throw new Error('FORMATION_NOT_FOUND');
-            updateData.formationId = formationId;
+            insUpdateData.formationId = formationId;
         }
 
         if (professorId !== undefined) {
             if (professorId) {
                 const professor = await prisma.professor.findUnique({ where: { id: professorId } });
                 if (!professor) throw new Error('PROFESSOR_NOT_FOUND');
-                updateData.professorId = professorId;
+                insUpdateData.professorId = professorId;
             } else {
-                updateData.professorId = null;
+                insUpdateData.professorId = null;
             }
         }
 
-        // Capacity check: if type or formation changes, ensure current members still fit
-        if (group.members.length > 0) {
-            if (newType === 'MONOME' && group.members.length > 1) {
+        const currentMembers = group.inscription?.members || [];
+        if (currentMembers.length > 0) {
+            if (newType === 'MONOME' && currentMembers.length > 1) {
                 throw new Error('MONOME_LIMIT_EXCEEDED');
             }
-            if (newType === 'BINOME' && group.members.length > 2) {
+            if (newType === 'BINOME' && currentMembers.length > 2) {
                 throw new Error('BINOME_LIMIT_EXCEEDED');
             }
 
-            // If formation changed, check if existing candidates have active Inscription for the new Formation
-            if (formationId !== undefined && formationId !== group.formationId) {
-                for (const member of group.members) {
+            if (formationId !== undefined && formationId !== group.inscription?.formationId) {
+                for (const member of currentMembers) {
                     const inscription = await prisma.inscription.findFirst({
                         where: {
                             formationId: newFormationId,
@@ -180,7 +247,6 @@ class GroupService {
                     if (!inscription) {
                         throw new Error(`CANDIDATE_NO_ACTIVE_INSCRIPTION_${member.candidateId}`);
                     }
-
                     if (inscription.status === 'WAITING') {
                         await prisma.inscription.update({
                             where: { id: inscription.id },
@@ -191,65 +257,89 @@ class GroupService {
             }
         }
 
-        return await prisma.group.update({
-            where: { id },
-            data: updateData,
-            include: {
-                formation: true,
-                professor: true,
-                members: { include: { candidate: true } }
+        return await prisma.$transaction(async (tx) => {
+            const updated = await tx.group.update({
+                where: { id },
+                data: updateData
+            });
+
+            if (Object.keys(insUpdateData).length > 0) {
+                await tx.inscription.update({
+                    where: { id: group.inscriptionId },
+                    data: insUpdateData
+                });
             }
+
+            const dbGroup = await tx.group.findUnique({
+                where: { id },
+                include: {
+                    inscription: {
+                        include: {
+                            formation: true,
+                            professor: true,
+                            members: {
+                                include: { candidate: true }
+                            }
+                        }
+                    }
+                }
+            });
+            return mapGroupFromDb(dbGroup);
         });
     }
 
     async deleteGroup(id) {
-        // Verify group exists
         const group = await prisma.group.findUnique({ where: { id } });
         if (!group) throw new Error('GROUP_NOT_FOUND');
         return await prisma.group.delete({ where: { id } });
     }
 
     async addCandidateToGroup(groupId, candidateId) {
-        // 1. Verify group exists
         const group = await prisma.group.findUnique({
             where: { id: groupId },
-            include: { members: true }
+            include: {
+                inscription: {
+                    include: {
+                        members: true
+                    }
+                }
+            }
         });
         if (!group) throw new Error('GROUP_NOT_FOUND');
 
-        // 2. Verify candidate exists
         const candidate = await prisma.candidate.findUnique({ where: { id: candidateId } });
         if (!candidate) throw new Error('CANDIDATE_NOT_FOUND');
 
-        // 3. Verify candidate has a valid Inscription for the Group's Formation
+        const groupIns = group.inscription;
+        if (!groupIns) throw new Error('GROUP_INSCRIPTION_NOT_FOUND');
+
         const inscription = await prisma.inscription.findFirst({
             where: {
-                formationId: group.formationId,
+                formationId: groupIns.formationId,
                 status: { in: ['WAITING', 'ASSIGNED', 'ACTIVE'] },
                 candidateId
             }
         });
         if (!inscription) throw new Error('CANDIDATE_NO_ACTIVE_INSCRIPTION');
 
-        // 4. Prevent duplicate membership
-        const isAlreadyMember = group.members.some(m => m.candidateId === candidateId);
+        const isAlreadyMember = groupIns.members.some(m => m.candidateId === candidateId);
         if (isAlreadyMember) throw new Error('CANDIDATE_ALREADY_IN_GROUP');
 
-        // 5. Verify membership limits according to GroupType
-        if (group.type === 'MONOME' && group.members.length >= 1) {
+        if (groupIns.learningMode === 'MONOME' && groupIns.members.length >= 1) {
             throw new Error('MONOME_LIMIT_EXCEEDED');
         }
-        if (group.type === 'BINOME' && group.members.length >= 2) {
+        if (groupIns.learningMode === 'BINOME' && groupIns.members.length >= 2) {
             throw new Error('BINOME_LIMIT_EXCEEDED');
         }
 
-        // Create membership and update effectif
         return await prisma.$transaction(async (tx) => {
-            await tx.groupCandidate.create({
-                data: { groupId, candidateId }
+            await tx.inscriptionCandidate.create({
+                data: {
+                    inscriptionId: groupIns.id,
+                    candidateId
+                }
             });
 
-            // Automatically update the corresponding inscription: WAITING -> ASSIGNED
             if (inscription.status === 'WAITING') {
                 await tx.inscription.update({
                     where: { id: inscription.id },
@@ -257,82 +347,109 @@ class GroupService {
                 });
             }
 
-            return await tx.group.update({
+            const dbGroup = await tx.group.findUnique({
                 where: { id: groupId },
-                data: { effectif: { increment: 1 } },
                 include: {
-                    formation: true,
-                    professor: true,
-                    members: { include: { candidate: true } }
+                    inscription: {
+                        include: {
+                            formation: true,
+                            professor: true,
+                            members: { include: { candidate: true } }
+                        }
+                    }
                 }
             });
+            return mapGroupFromDb(dbGroup);
         });
     }
 
     async removeCandidateFromGroup(groupId, candidateId) {
-        // Verify group exists
-        const group = await prisma.group.findUnique({ where: { id: groupId } });
+        const group = await prisma.group.findUnique({
+            where: { id: groupId }
+        });
         if (!group) throw new Error('GROUP_NOT_FOUND');
 
-        const membership = await prisma.groupCandidate.findUnique({
+        const membership = await prisma.inscriptionCandidate.findFirst({
             where: {
-                groupId_candidateId: { groupId, candidateId }
+                inscriptionId: group.inscriptionId,
+                candidateId
             }
         });
         if (!membership) throw new Error('MEMBERSHIP_NOT_FOUND');
 
         return await prisma.$transaction(async (tx) => {
-            await tx.groupCandidate.delete({
-                where: {
-                    groupId_candidateId: { groupId, candidateId }
-                }
+            await tx.inscriptionCandidate.delete({
+                where: { id: membership.id }
             });
 
-            return await tx.group.update({
+            const dbGroup = await tx.group.findUnique({
                 where: { id: groupId },
-                data: { effectif: { decrement: 1 } },
                 include: {
-                    formation: true,
-                    professor: true,
-                    members: { include: { candidate: true } }
+                    inscription: {
+                        include: {
+                            formation: true,
+                            professor: true,
+                            members: { include: { candidate: true } }
+                        }
+                    }
                 }
             });
+            return mapGroupFromDb(dbGroup);
         });
     }
 
     async assignProfessorToGroup(groupId, professorId) {
-        // 1. Verify group exists
         const group = await prisma.group.findUnique({ where: { id: groupId } });
         if (!group) throw new Error('GROUP_NOT_FOUND');
 
-        // 2. Verify professor exists
         const professor = await prisma.professor.findUnique({ where: { id: professorId } });
         if (!professor) throw new Error('PROFESSOR_NOT_FOUND');
 
-        return await prisma.group.update({
-            where: { id: groupId },
-            data: { professorId },
-            include: {
-                formation: true,
-                professor: true,
-                members: { include: { candidate: true } }
-            }
+        return await prisma.$transaction(async (tx) => {
+            await tx.inscription.update({
+                where: { id: group.inscriptionId },
+                data: { professorId }
+            });
+
+            const dbGroup = await tx.group.findUnique({
+                where: { id: groupId },
+                include: {
+                    inscription: {
+                        include: {
+                            formation: true,
+                            professor: true,
+                            members: { include: { candidate: true } }
+                        }
+                    }
+                }
+            });
+            return mapGroupFromDb(dbGroup);
         });
     }
 
     async removeProfessorFromGroup(groupId) {
-        // Verify group exists
         const group = await prisma.group.findUnique({ where: { id: groupId } });
         if (!group) throw new Error('GROUP_NOT_FOUND');
 
-        return await prisma.group.update({
-            where: { id: groupId },
-            data: { professorId: null },
-            include: {
-                formation: true,
-                professor: true,
-                members: { include: { candidate: true } }
-            }
+        return await prisma.$transaction(async (tx) => {
+            await tx.inscription.update({
+                where: { id: group.inscriptionId },
+                data: { professorId: null }
+            });
+
+            const dbGroup = await tx.group.findUnique({
+                where: { id: groupId },
+                include: {
+                    inscription: {
+                        include: {
+                            formation: true,
+                            professor: true,
+                            members: { include: { candidate: true } }
+                        }
+                    }
+                }
+            });
+            return mapGroupFromDb(dbGroup);
         });
     }
 }

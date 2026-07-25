@@ -55,12 +55,12 @@ export const getInscriptionById = async (req, res) => {
 };
 
 export const createInscription = async (req, res) => {
-    const { inscriptionCode, candidateId, formationId, professorId, learningMode, status, duration, price, volumeHoraire, remainingHours, note } = req.body;
+    const { inscriptionCode, candidateId, candidateIds, formationId, professorId, learningMode, status, duration, price, volumeHoraire, remainingHours, note } = req.body;
 
     if (!inscriptionCode || typeof inscriptionCode !== 'string' || inscriptionCode.trim() === '') {
         return res.status(400).json({ message: 'error', error: 'INSCRIPTION_CODE_REQUIRED' });
     }
-    if (!candidateId || typeof candidateId !== 'string' || candidateId.trim() === '') {
+    if ((!candidateId || typeof candidateId !== 'string' || candidateId.trim() === '') && (!candidateIds || !Array.isArray(candidateIds) || candidateIds.length === 0)) {
         return res.status(400).json({ message: 'error', error: 'CANDIDATE_ID_REQUIRED' });
     }
     if (!formationId || typeof formationId !== 'string' || formationId.trim() === '') {

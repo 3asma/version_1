@@ -311,21 +311,20 @@ export function GestionInscriptionsDialog({
                 }
             } else {
                 // Creating new inscriptions
-                for (let i = 0; i < candidateIds.length; i++) {
-                    await addInscription({
-                        inscriptionCode: trimmedCode,
-                        candidateId: candidateIds[i],
-                        formationId,
-                        status: 'ACTIVE',
-                        duration: Number(duration),
-                        price: Number(price),
-                        volumeHoraire: Number(volumeHoraire),
-                        remainingHours: Number(volumeHoraire),
-                        learningMode: type === 'SPECIFIQUE' ? 'GROUPE' : type,
-                        professorId: professorId || undefined,
-                        note: note || `Créé via Gestion Inscriptions`
-                    });
-                }
+                await addInscription({
+                    inscriptionCode: trimmedCode,
+                    candidateId: candidateIds[0] || '',
+                    candidateIds: candidateIds,
+                    formationId,
+                    status: 'ACTIVE',
+                    duration: Number(duration),
+                    price: Number(price),
+                    volumeHoraire: Number(volumeHoraire),
+                    remainingHours: Number(volumeHoraire),
+                    learningMode: type,
+                    professorId: professorId || undefined,
+                    note: note || `Créé via Gestion Inscriptions`
+                } as any);
             }
 
             toast.success(inscriptionId ? 'Inscription mise à jour avec succès.' : 'Inscription créée avec succès.');

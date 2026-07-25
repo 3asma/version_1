@@ -336,7 +336,7 @@ interface AppContextType {
   // Inscriptions
   inscriptions: Inscription[];
   learningGroups: any[];
-  addInscription: (inscription: Omit<Inscription, 'id' | 'dateInscription' | 'createdAt' | 'updatedAt'>) => Promise<void>;
+  addInscription: (inscription: Omit<Inscription, 'id' | 'dateInscription' | 'createdAt' | 'updatedAt'> & { candidateIds?: string[] }) => Promise<void>;
   updateInscriptionStatus: (id: string, statut: Inscription['status']) => Promise<void>;
   updateInscription: (id: string, updates: Partial<Inscription>) => Promise<void>;
   updateLearningGroup: (groupId: string, data: any) => Promise<void>;
@@ -1008,11 +1008,12 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   };
 
   // Inscription functions
-  const addInscription = async (inscription: Omit<Inscription, 'id' | 'dateInscription' | 'createdAt' | 'updatedAt'>) => {
+  const addInscription = async (inscription: Omit<Inscription, 'id' | 'dateInscription' | 'createdAt' | 'updatedAt'> & { candidateIds?: string[] }) => {
     try {
       const response = await api.post('/inscriptions', {
         inscriptionCode: inscription.inscriptionCode,
         candidateId: inscription.candidateId,
+        candidateIds: inscription.candidateIds,
         formationId: inscription.formationId,
         status: inscription.status,
         note: inscription.note || null,

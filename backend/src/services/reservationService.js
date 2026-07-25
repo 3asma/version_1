@@ -106,27 +106,57 @@ class ReservationService {
                 const dbGroup = await prisma.group.findUnique({
                     where: { id: inscription.groupId },
                     include: {
-                        formation: true,
-                        professor: true,
-                        inscriptions: {
+                        inscription: {
                             include: {
-                                candidate: true
+                                formation: true,
+                                professor: true,
+                                members: {
+                                    include: {
+                                        candidate: true
+                                    }
+                                }
                             }
                         }
                     }
                 });
-                if (dbGroup) {
+                if (dbGroup && dbGroup.inscription) {
+                    const ins = dbGroup.inscription;
                     const codeVal = extractInscriptionCode(dbGroup.nom);
+                    const mappedInscriptions = (ins.members || []).map(m => ({
+                        id: ins.id,
+                        dateInscription: ins.dateInscription,
+                        status: ins.status,
+                        note: ins.note,
+                        duration: ins.duration,
+                        price: ins.price,
+                        volumeHoraire: ins.volumeHoraire,
+                        remainingHours: ins.remainingHours,
+                        learningMode: ins.learningMode,
+                        candidateId: m.candidateId,
+                        candidate: m.candidate,
+                        formationId: ins.formationId,
+                        professorId: ins.professorId,
+                        createdAt: ins.createdAt,
+                        updatedAt: ins.updatedAt,
+                        inscriptionCode: codeVal,
+                        learningGroupId: dbGroup.id
+                    }));
                     group = {
                         id: dbGroup.id,
                         groupName: dbGroup.nom,
                         inscriptionCode: codeVal,
-                        learningMode: dbGroup.type,
-                        dateInscription: dbGroup.createdAt,
-                        note: null,
-                        formation: dbGroup.formation,
-                        professor: dbGroup.professor,
-                        inscriptions: dbGroup.inscriptions
+                        learningMode: ins.learningMode || 'GROUPE',
+                        dateInscription: ins.dateInscription || dbGroup.createdAt,
+                        note: ins.note || null,
+                        formation: ins.formation || null,
+                        professor: ins.professor || null,
+                        inscriptions: mappedInscriptions,
+                        inscription: {
+                            id: ins.id,
+                            status: ins.status,
+                            learningMode: ins.learningMode,
+                            members: ins.members
+                        }
                     };
                 }
             }
@@ -157,27 +187,57 @@ class ReservationService {
                 const dbGroup = await prisma.group.findUnique({
                     where: { id: inscription.groupId },
                     include: {
-                        formation: true,
-                        professor: true,
-                        inscriptions: {
+                        inscription: {
                             include: {
-                                candidate: true
+                                formation: true,
+                                professor: true,
+                                members: {
+                                    include: {
+                                        candidate: true
+                                    }
+                                }
                             }
                         }
                     }
                 });
-                if (dbGroup) {
+                if (dbGroup && dbGroup.inscription) {
+                    const ins = dbGroup.inscription;
                     const codeVal = extractInscriptionCode(dbGroup.nom);
+                    const mappedInscriptions = (ins.members || []).map(m => ({
+                        id: ins.id,
+                        dateInscription: ins.dateInscription,
+                        status: ins.status,
+                        note: ins.note,
+                        duration: ins.duration,
+                        price: ins.price,
+                        volumeHoraire: ins.volumeHoraire,
+                        remainingHours: ins.remainingHours,
+                        learningMode: ins.learningMode,
+                        candidateId: m.candidateId,
+                        candidate: m.candidate,
+                        formationId: ins.formationId,
+                        professorId: ins.professorId,
+                        createdAt: ins.createdAt,
+                        updatedAt: ins.updatedAt,
+                        inscriptionCode: codeVal,
+                        learningGroupId: dbGroup.id
+                    }));
                     group = {
                         id: dbGroup.id,
                         groupName: dbGroup.nom,
                         inscriptionCode: codeVal,
-                        learningMode: dbGroup.type,
-                        dateInscription: dbGroup.createdAt,
-                        note: null,
-                        formation: dbGroup.formation,
-                        professor: dbGroup.professor,
-                        inscriptions: dbGroup.inscriptions
+                        learningMode: ins.learningMode || 'GROUPE',
+                        dateInscription: ins.dateInscription || dbGroup.createdAt,
+                        note: ins.note || null,
+                        formation: ins.formation || null,
+                        professor: ins.professor || null,
+                        inscriptions: mappedInscriptions,
+                        inscription: {
+                            id: ins.id,
+                            status: ins.status,
+                            learningMode: ins.learningMode,
+                            members: ins.members
+                        }
                     };
                 }
             }
@@ -203,11 +263,15 @@ class ReservationService {
             include: {
                 group: {
                     include: {
-                        formation: true,
-                        professor: true,
-                        inscriptions: {
+                        inscription: {
                             include: {
-                                candidate: true
+                                formation: true,
+                                professor: true,
+                                members: {
+                                    include: {
+                                        candidate: true
+                                    }
+                                }
                             }
                         }
                     }
@@ -215,20 +279,45 @@ class ReservationService {
             }
         });
 
-        if (directIns && directIns.group) {
+        if (directIns && directIns.group && directIns.group.inscription) {
             const dbGroup = directIns.group;
-            const firstIns = dbGroup.inscriptions[0] || {};
+            const ins = dbGroup.inscription;
             const codeVal = extractInscriptionCode(dbGroup.nom);
+            const mappedInscriptions = (ins.members || []).map(m => ({
+                id: ins.id,
+                dateInscription: ins.dateInscription,
+                status: ins.status,
+                note: ins.note,
+                duration: ins.duration,
+                price: ins.price,
+                volumeHoraire: ins.volumeHoraire,
+                remainingHours: ins.remainingHours,
+                learningMode: ins.learningMode,
+                candidateId: m.candidateId,
+                candidate: m.candidate,
+                formationId: ins.formationId,
+                professorId: ins.professorId,
+                createdAt: ins.createdAt,
+                updatedAt: ins.updatedAt,
+                inscriptionCode: codeVal,
+                learningGroupId: dbGroup.id
+            }));
             const group = {
                 id: dbGroup.id,
                 groupName: dbGroup.nom,
                 inscriptionCode: codeVal,
-                learningMode: dbGroup.type,
-                dateInscription: dbGroup.createdAt,
-                note: null,
-                formation: dbGroup.formation,
-                professor: dbGroup.professor,
-                inscriptions: dbGroup.inscriptions
+                learningMode: ins.learningMode || 'GROUPE',
+                dateInscription: ins.dateInscription || dbGroup.createdAt,
+                note: ins.note || null,
+                formation: ins.formation || null,
+                professor: ins.professor || null,
+                inscriptions: mappedInscriptions,
+                inscription: {
+                    id: ins.id,
+                    status: ins.status,
+                    learningMode: ins.learningMode,
+                    members: ins.members
+                }
             };
 
             return {
@@ -435,6 +524,80 @@ class ReservationService {
         return await prisma.reservation.delete({
             where: { id }
         });
+    }
+
+    async checkAvailability(data) {
+        const reservationDate = new Date(data.reservationDate);
+        const startTime = new Date(data.startTime);
+        const endTime = new Date(data.endTime);
+        const { professorId, candidateId } = data;
+
+        // 1. Candidate Availability
+        const candidateInscriptions = await prisma.inscription.findMany({
+            where: { candidateId }
+        });
+        const memberInscriptions = await prisma.inscriptionCandidate.findMany({
+            where: { candidateId },
+            select: { inscriptionId: true }
+        });
+        const inscriptionIds = [
+            ...candidateInscriptions.map(ins => ins.id),
+            ...memberInscriptions.map(m => m.inscriptionId)
+        ];
+
+        const candidateConflict = await prisma.reservation.findFirst({
+            where: {
+                inscriptionId: { in: inscriptionIds },
+                reservationDate,
+                OR: [
+                    { startTime: { gte: startTime, lt: endTime } },
+                    { endTime: { gt: startTime, lte: endTime } }
+                ]
+            }
+        });
+        const candidateAvailable = !candidateConflict;
+
+        // 2. Professor Availability
+        const professorConflict = await prisma.reservation.findFirst({
+            where: {
+                professorId,
+                reservationDate,
+                OR: [
+                    { startTime: { gte: startTime, lt: endTime } },
+                    { endTime: { gt: startTime, lte: endTime } }
+                ]
+            }
+        });
+
+        const profObj = await prisma.professor.findUnique({
+            where: { id: professorId }
+        });
+        const dateDay = reservationDate.getUTCDay();
+        const weekdays = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
+        const currentDayName = weekdays[dateDay];
+        const isDayOff = profObj && profObj.dayOff && profObj.dayOff.toUpperCase() === currentDayName;
+
+        const professorAvailable = !professorConflict && !isDayOff;
+
+        // 3. Room Availability
+        const allRooms = await prisma.room.findMany();
+        const activeReservations = await prisma.reservation.findMany({
+            where: {
+                reservationDate,
+                OR: [
+                    { startTime: { gte: startTime, lt: endTime } },
+                    { endTime: { gt: startTime, lte: endTime } }
+                ]
+            }
+        });
+        const reservedRoomIds = activeReservations.map(r => r.roomId).filter(Boolean);
+        const availableRooms = allRooms.filter(room => !reservedRoomIds.includes(room.id) && room.available !== false);
+
+        return {
+            professorAvailable,
+            candidateAvailable,
+            availableRooms
+        };
     }
 }
 

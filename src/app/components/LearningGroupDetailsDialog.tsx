@@ -80,9 +80,9 @@ export function LearningGroupDetailsDialog({ isOpen, onClose, group }: LearningG
                                 </span>
                                 <div>
                                     <Badge variant="outline" className={`mt-1 font-semibold text-xs px-2.5 py-1 ${group.learningMode === 'MONOME' ? 'bg-orange-50 text-orange-700 border-orange-200' :
-                                            group.learningMode === 'BINOME' ? 'bg-purple-50 text-purple-700 border-purple-200' :
-                                                isSpecific ? 'bg-green-50 text-green-700 border-green-200' :
-                                                    'bg-blue-50 text-blue-700 border-blue-200'
+                                        group.learningMode === 'BINOME' ? 'bg-purple-50 text-purple-700 border-purple-200' :
+                                            isSpecific ? 'bg-green-50 text-green-700 border-green-200' :
+                                                'bg-blue-50 text-blue-700 border-blue-200'
                                         }`}>
                                         {displayMode}
                                     </Badge>
@@ -147,16 +147,16 @@ export function LearningGroupDetailsDialog({ isOpen, onClose, group }: LearningG
                     <div>
                         <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-2 px-1">
                             <Users size={14} className="text-gray-400" />
-                            Membres ({group.inscriptions ? group.inscriptions.length : 0})
+                            Membres ({group.inscription?.members ? group.inscription.members.length : 0})
                         </h3>
 
                         <div className="space-y-2 max-h-[220px] overflow-y-auto pr-1">
-                            {group.inscriptions && group.inscriptions.length > 0 ? (
-                                group.inscriptions.map((ins: any) => {
-                                    const candidate = ins.candidate || {};
+                            {group.inscription?.members && group.inscription.members.length > 0 ? (
+                                group.inscription.members.map((m: any) => {
+                                    const candidate = m.candidate || {};
                                     return (
                                         <div
-                                            key={ins.id}
+                                            key={m.id}
                                             className="flex justify-between items-center bg-white p-3 rounded-xl border border-gray-200/80 shadow-xs hover:border-indigo-100 hover:bg-indigo-50/10 transition-all"
                                         >
                                             <div className="flex items-center gap-3">
