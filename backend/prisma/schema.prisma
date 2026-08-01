@@ -49,6 +49,7 @@ model Candidate {
   inscriptions          Inscription[]
   inscriptionCandidates InscriptionCandidate[]
   payments              Payment[]
+  paymentPlans          PaymentPlan[]
   action        String?
   status        CandidateStatus @default(PENDING)
   createdAt     DateTime        @default(now())
@@ -88,6 +89,7 @@ model Formation {
   description   String?
   inscriptions  Inscription[]
   payments      Payment[]
+  paymentPlans  PaymentPlan[]
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 }
@@ -113,7 +115,7 @@ model Professor {
   adresse     String?
   type        String   @default("permanent")
   dayOff      String   @default("Sunday")
-  maxSessions Int      @default(25)
+maxSessions Int      @default(25)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   inscriptions Inscription[]
@@ -265,3 +267,20 @@ model Reservation {
   @@index([inscriptionId])
   @@unique([inscriptionId, reservationDate, startTime])
 }
+
+model PaymentPlan {
+  id          String   @id @default(uuid())
+  candidateId String
+  formationId String
+  totalAmount Float
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  candidate Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  formation Formation @relation(fields: [formationId], references: [id], onDelete: Cascade)
+
+  @@unique([candidateId, formationId])
+  @@index([candidateId])
+  @@index([formationId])
+}
+

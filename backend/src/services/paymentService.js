@@ -32,8 +32,20 @@ async function generatePaymentCode() {
 }
 
 class PaymentService {
-    async getAllPayments() {
+    async getAllPayments(candidateId) {
+        if (candidateId) {
+            const candidateExists = await prisma.candidate.findUnique({
+                where: { id: candidateId }
+            });
+            if (!candidateExists) {
+                return [];
+            }
+        }
+
+        const where = candidateId ? { candidateId } : {};
+
         return await prisma.payment.findMany({
+            where,
             orderBy: { createdAt: 'desc' },
             include: {
                 candidate: true,
@@ -62,6 +74,30 @@ class PaymentService {
         if (!data.formationId) throw new Error('FORMATION_NOT_FOUND');
         const formation = await prisma.formation.findUnique({ where: { id: data.formationId } });
         if (!formation) throw new Error('FORMATION_NOT_FOUND');
+
+        // Check if PaymentPlan already exists
+        const existingPlan = await prisma.paymentPlan.findUnique({
+            where: {
+                candidateId_formationId: {
+                    candidateId: data.candidateId,
+                    formationId: data.formationId
+                }
+            }
+        });
+
+        if (!existingPlan && data.totalAmount !== undefined && data.totalAmount !== null) {
+            const ta = parseFloat(data.totalAmount);
+            if (isNaN(ta) || ta <= 0) {
+                throw new Error('INVALID_TOTAL_AMOUNT');
+            }
+            await prisma.paymentPlan.create({
+                data: {
+                    candidateId: data.candidateId,
+                    formationId: data.formationId,
+                    totalAmount: ta
+                }
+            });
+        }
 
         // Validation for amount
         if (data.amount === undefined || data.amount === null || typeof data.amount !== 'number' || data.amount <= 0) {
@@ -174,6 +210,109 @@ class PaymentService {
         return await prisma.payment.delete({
             where: { id }
         });
+    }
+
+    async getPaymentPlan(candidateId, formationId) {
+        return await prisma.paymentPlan.findUnique({
+            where: {
+                candidateId_formationId: {
+                    candidateId,
+                    formationId
+                }
+            },
+            include: {
+                candidate: true,
+                formation: true
+            }
+        });
+    }
+
+    async createPaymentPlan(candidateId, formationId, totalAmount) {
+        if (!candidateId) throw new Error('CANDIDATE_NOT_FOUND');
+        const candidate = await prisma.candidate.findUnique({ where: { id: candidateId } });
+        if (!candidate) throw new Error('CANDIDATE_NOT_FOUND');
+
+        if (!formationId) throw new Error('FORMATION_NOT_FOUND');
+        const formation = await prisma.formation.findUnique({ where: { id: formationId } });
+        if (!formation) throw new Error('FORMATION_NOT_FOUND');
+
+        if (totalAmount === undefined || totalAmount === null || typeof totalAmount !== 'number' || totalAmount <= 0) {
+            throw new Error('INVALID_TOTAL_AMOUNT');
+        }
+
+        return await prisma.paymentPlan.create({
+            data: {
+                candidateId,
+                formationId,
+                totalAmount
+            },
+            include: {
+                candidate: true,
+                formation: true
+            }
+        });
+    }
+
+    async updatePaymentPlan(candidateId, formationId, totalAmount) {
+        if (totalAmount === undefined || totalAmount === null || typeof totalAmount !== 'number' || totalAmount <= 0) {
+            throw new Error('INVALID_TOTAL_AMOUNT');
+        }
+
+        // Check if plan exists
+        const planExists = await prisma.paymentPlan.findUnique({
+            where: {
+                candidateId_formationId: {
+                    candidateId,
+                    formationId
+                }
+            }
+        });
+        if (!planExists) throw new Error('PAYMENT_PLAN_NOT_FOUND');
+
+        return await prisma.paymentPlan.update({
+            where: {
+                candidateId_formationId: {
+                    candidateId,
+                    formationId
+                }
+            },
+            data: {
+                totalAmount
+            },
+            include: {
+                candidate: true,
+                formation: true
+            }
+        });
+    }
+
+    async calculateRemainingAmount(candidateId, formationId) {
+        const plan = await prisma.paymentPlan.findUnique({
+            where: {
+                candidateId_formationId: {
+                    candidateId,
+                    formationId
+                }
+            }
+        });
+
+        if (!plan) {
+            return null;
+        }
+
+        const aggregate = await prisma.payment.aggregate({
+            _sum: {
+                amount: true
+            },
+            where: {
+                candidateId,
+                formationId,
+                status: 'COMPLETED'
+            }
+        });
+
+        const paidAmount = aggregate._sum.amount || 0;
+        return plan.totalAmount - paidAmount;
     }
 }
 

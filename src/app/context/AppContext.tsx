@@ -1504,15 +1504,19 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       validated: 'COMPLETED'
     };
 
-    const payload = {
+    const payload: any = {
       candidateId: payment.candidateId,
       formationId: payment.formationId,
       amount: Number(payment.amount),
+      totalAmount: (payment as any).totalAmount,
       paymentMethod: paymentMethodMap[payment.paymentMethod] || 'CASH',
-      status: statusMap[payment.status] || 'PENDING',
       paymentDate: payment.paymentDate ? new Date(payment.paymentDate).toISOString() : new Date().toISOString(),
       note: (payment as any).note || ''
     };
+
+    if (payment.paymentMethod === 'check') {
+      payload.checkDueDate = (payment as any).checkDueDate ? new Date((payment as any).checkDueDate).toISOString() : undefined;
+    }
 
     try {
       const response = await api.post('/payments', payload);

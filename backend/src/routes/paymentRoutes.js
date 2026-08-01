@@ -5,7 +5,11 @@ import {
     getPaymentById,
     createPayment,
     updatePayment,
-    deletePayment
+    deletePayment,
+    getPaymentPlan,
+    createPaymentPlan,
+    updatePaymentPlan,
+    getPaymentPlanQuery
 } from '../controllers/paymentController.js';
 
 const router = express.Router();
@@ -13,6 +17,14 @@ const router = express.Router();
 // Protect all endpoints using verifyToken
 router.use(verifyToken);
 
+router.get('/plan', getPaymentPlanQuery);
+
+// PaymentPlan routes
+router.get('/payment-plan/:candidateId/:formationId', getPaymentPlan);
+router.post('/payment-plan', createPaymentPlan);
+router.put('/payment-plan/:candidateId/:formationId', updatePaymentPlan);
+
+// Payment routes
 router.get('/', getAllPayments);
 router.get('/:id', getPaymentById);
 router.post('/', createPayment);

@@ -49,7 +49,7 @@ async function testPlanning() {
             reservationDate: new Date(testDate).toISOString(),
             startTime: startResTime,
             endTime: endResTime,
-            inscriptionId: inscriptions[0].id,
+            inscriptionId: inscriptions[0].inscription?.id || inscriptions[0].id,
             professorId: professors[0].id,
             roomId: rooms[0].id
         };

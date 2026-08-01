@@ -275,6 +275,15 @@ exports.Prisma.ReservationScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.PaymentPlanScalarFieldEnum = {
+  id: 'id',
+  candidateId: 'candidateId',
+  formationId: 'formationId',
+  totalAmount: 'totalAmount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -357,7 +366,8 @@ exports.Prisma.ModelName = {
   InscriptionCandidate: 'InscriptionCandidate',
   Commercial: 'Commercial',
   Payment: 'Payment',
-  Reservation: 'Reservation'
+  Reservation: 'Reservation',
+  PaymentPlan: 'PaymentPlan'
 };
 
 /**

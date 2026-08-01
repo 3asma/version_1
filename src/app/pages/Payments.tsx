@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useApp } from '../context/AppContext';
+import { useApp, mapPaymentFromBackend } from '../context/AppContext';
 import api from '../services/api';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../components/ui/table';
 import { Badge } from '../components/ui/badge';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '../components/ui/dialog';
-import { DollarSign, CreditCard, TrendingUp, AlertCircle, Plus, FileText, Download, Printer, Upload, Calendar, CheckCircle, Eye, XCircle, Clock, Pencil, Trash2 } from 'lucide-react';
+import { DollarSign, CreditCard, TrendingUp, AlertCircle, Plus, FileText, Download, Printer, Upload, Calendar, CheckCircle, Eye, XCircle, Clock, Pencil, Trash2, Search } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function Payments() {
@@ -19,20 +19,22 @@ export default function Payments() {
     inscriptions.some(
       ins =>
         ins.candidateId === candidateId &&
-        (ins.status || ins.statut) !== 'CANCELLED'
+        ins.status !== 'CANCELLED'
     );
 
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState<any>(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [filterStatus, setFilterStatus] = useState<string>('all');
-  const [filterMethod, setFilterMethod] = useState<string>('all');
   const [selectedPaymentId, setSelectedPaymentId] = useState<string | null>(null);
+
 
   const [candidateFormations, setCandidateFormations] = useState<any[]>([]);
   const [isLoadingFormations, setIsLoadingFormations] = useState(false);
   const [formationsErrorMessage, setFormationsErrorMessage] = useState('');
+  const [paymentPlan, setPaymentPlan] = useState<any>(null);
+  const [customTotalAmount, setCustomTotalAmount] = useState('');
+  const [isLoadingPaymentPlan, setIsLoadingPaymentPlan] = useState(false);
 
   const [formData, setFormData] = useState({
     candidateId: '',
@@ -53,6 +55,47 @@ export default function Payments() {
   const handleInputChange = (field: string, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
+
+  useEffect(() => {
+    // Only fetch for payment creation workflow (when not editing)
+    if (selectedPaymentId) {
+      setPaymentPlan(null);
+      setCustomTotalAmount('');
+      return;
+    }
+
+    const fetchPaymentPlan = async () => {
+      if (!formData.candidateId || !formData.formationId) {
+        setPaymentPlan(null);
+        setCustomTotalAmount('');
+        return;
+      }
+      setIsLoadingPaymentPlan(true);
+      try {
+        const response = await api.get('/payments/plan', {
+          params: {
+            candidateId: formData.candidateId,
+            formationId: formData.formationId
+          }
+        });
+        if (response.data.exists && response.data.plan) {
+          setPaymentPlan(response.data.plan);
+          setCustomTotalAmount(String(response.data.plan.totalAmount));
+        } else {
+          setPaymentPlan(null);
+          setCustomTotalAmount('');
+        }
+      } catch (err: any) {
+        setPaymentPlan(null);
+        setCustomTotalAmount('');
+        console.error('Failed to fetch payment plan status:', err);
+      } finally {
+        setIsLoadingPaymentPlan(false);
+      }
+    };
+
+    fetchPaymentPlan();
+  }, [formData.candidateId, formData.formationId, selectedPaymentId, payments]);
 
   const handleCandidateChange = async (candidateId: string) => {
     handleInputChange('formationId', '');
@@ -92,6 +135,26 @@ export default function Payments() {
       status: formData.status,
       note: formData.note
     };
+
+    if (formData.paymentMethod === 'check') {
+      if (!formData.checkDueDate) {
+        toast.error("La date d'échéance du chèque est obligatoire");
+        return;
+      }
+      const payDate = new Date(formData.paymentDate);
+      const dueDate = new Date(formData.checkDueDate);
+      payDate.setHours(0, 0, 0, 0);
+      dueDate.setHours(0, 0, 0, 0);
+      if (dueDate.getTime() < payDate.getTime()) {
+        toast.error("La date d'échéance ne peut pas être antérieure à la date de paiement");
+        return;
+      }
+      paymentData.checkDueDate = formData.checkDueDate;
+    }
+
+    if (!selectedPaymentId && customTotalAmount) {
+      paymentData.totalAmount = parseFloat(customTotalAmount);
+    }
 
     try {
       if (selectedPaymentId) {
@@ -134,9 +197,9 @@ export default function Payments() {
       paymentMethod: payment.paymentMethod,
       status: payment.status,
       note: payment.note || '',
-      checkType: 'bank_check',
-      checkDueDate: '',
-      checkScan: '',
+      checkType: payment.checkDetails?.type || 'bank_check',
+      checkDueDate: payment.checkDetails?.dueDate || '',
+      checkScan: payment.checkDetails?.scanScan || payment.checkDetails?.scanUrl || '',
       isMonthlyPayment: false,
       totalMonths: '1',
       currentMonth: '1'
@@ -173,6 +236,8 @@ export default function Payments() {
     });
     setCandidateFormations([]);
     setFormationsErrorMessage('');
+    setPaymentPlan(null);
+    setCustomTotalAmount('');
   };
 
   const handleGenerateInvoice = (paymentId: string) => {
@@ -298,17 +363,78 @@ export default function Payments() {
   const validatedPayments = payments.filter(p => p.status === 'validated').length;
   const paymentRate = payments.length > 0 ? ((validatedPayments / payments.length) * 100).toFixed(1) : '0';
 
+  const getStatusSearchTerms = (status: string) => {
+    switch (status) {
+      case 'reservation':
+        return ['reservation', 'reservation'];
+      case 'paid':
+        return ['paid', 'paye', 'completed'];
+      case 'validated':
+        return ['validated', 'valide', 'completed', 'encaisse', 'cheque encaisse'];
+      case 'late':
+        return ['late', 'en retard', 'retard'];
+      case 'pending':
+        return ['pending', 'en attente', 'attente'];
+      default:
+        return [];
+    }
+  };
+
+  const getMethodSearchTerms = (method: string) => {
+    switch (method) {
+      case 'cash':
+        return ['cash', 'especes', 'espece'];
+      case 'bank_transfer':
+        return ['bank_transfer', 'virement', 'virement bancaire', 'transfert'];
+      case 'check':
+        return ['check', 'cheque', 'cheques'];
+      default:
+        return [];
+    }
+  };
+
+  const normalizeStr = (str: string) => {
+    return str
+      .trim()
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
+  };
+
   // Filter payments
   const filteredPayments = payments.filter(payment => {
+    const searchNormalized = normalizeStr(searchQuery);
+    if (searchNormalized === '') return true;
+
     const candidate = getCandidate(payment.candidateId);
-    const matchesSearch = searchQuery === '' ||
-      payment.reference.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (candidate && `${candidate.firstName} ${candidate.lastName}`.toLowerCase().includes(searchQuery.toLowerCase()));
+    const formation = getFormation(payment.formationId);
 
-    const matchesStatus = filterStatus === 'all' || payment.status === filterStatus;
-    const matchesMethod = filterMethod === 'all' || payment.paymentMethod === filterMethod;
+    const candidateCodeNormalized = candidate ? normalizeStr(candidate.candidateCode || '') : '';
+    const firstNameNormalized = candidate ? normalizeStr(candidate.firstName || '') : '';
+    const lastNameNormalized = candidate ? normalizeStr(candidate.lastName || '') : '';
+    const fullNameNormalized = candidate ? normalizeStr(`${candidate.firstName || ''} ${candidate.lastName || ''}`) : '';
+    const paymentRefNormalized = normalizeStr(payment.reference || '');
 
-    return matchesSearch && matchesStatus && matchesMethod;
+    const formationSubjectNormalized = formation ? normalizeStr(formation.subject || '') : '';
+    const formationLevelNormalized = formation ? normalizeStr(formation.level || '') : '';
+    const formationFullNormalized = formation ? normalizeStr(`${formation.subject || ''} ${formation.level || ''}`) : '';
+
+    const statusSearchTerms = getStatusSearchTerms(payment.status);
+    const matchesStatus = statusSearchTerms.some(term => term.includes(searchNormalized));
+
+    const methodSearchTerms = getMethodSearchTerms(payment.paymentMethod);
+    const matchesMethod = methodSearchTerms.some(term => term.includes(searchNormalized));
+
+    return candidateCodeNormalized.includes(searchNormalized) ||
+      firstNameNormalized.includes(searchNormalized) ||
+      lastNameNormalized.includes(searchNormalized) ||
+      fullNameNormalized.includes(searchNormalized) ||
+      paymentRefNormalized.includes(searchNormalized) ||
+      formationSubjectNormalized.includes(searchNormalized) ||
+      formationLevelNormalized.includes(searchNormalized) ||
+      formationFullNormalized.includes(searchNormalized) ||
+      matchesStatus ||
+      matchesMethod;
   });
 
   // Check for late payments (5 days past due date)
@@ -426,6 +552,63 @@ export default function Payments() {
                   </Select>
                 </div>
 
+                {/* Payment Plan Details / Total Amount */}
+                {!selectedPaymentId && formData.candidateId && formData.formationId && (
+                  <div className="col-span-2">
+                    {paymentPlan ? (
+                      <div className="grid grid-cols-3 gap-4 bg-blue-50/50 p-4 rounded-lg border border-blue-100">
+                        <div className="space-y-1.5">
+                          <Label className="text-blue-900 font-medium">Montant Global (DH)</Label>
+                          <Input
+                            type="text"
+                            value={`${paymentPlan.totalAmount.toLocaleString()} DH`}
+                            disabled
+                            className="bg-blue-50 border-blue-200 text-blue-900 font-semibold"
+                          />
+                        </div>
+                        <div className="space-y-1.5">
+                          <Label className="text-blue-900 font-medium">Déjà réglé (DH)</Label>
+                          <Input
+                            type="text"
+                            value={`${paymentPlan.paidAmount.toLocaleString()} DH`}
+                            disabled
+                            className="bg-blue-50 border-blue-200 text-blue-900 font-semibold"
+                          />
+                        </div>
+                        <div className="space-y-1.5">
+                          <Label className="text-blue-900 font-medium">Montant Restant (DH)</Label>
+                          <Input
+                            type="text"
+                            value={`${paymentPlan.remainingAmount.toLocaleString()} DH`}
+                            disabled
+                            className={`bg-blue-50 border-blue-200 font-semibold ${paymentPlan.remainingAmount <= 0 ? 'text-green-700' : 'text-amber-800'
+                              }`}
+                          />
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-2 gap-4 bg-gray-50/50 p-4 rounded-lg border border-gray-150 w-full">
+                        <div className="space-y-2">
+                          <Label htmlFor="customTotalAmount">Montant Global de la formation (DH)</Label>
+                          <Input
+                            id="customTotalAmount"
+                            type="number"
+                            step="0.01"
+                            value={customTotalAmount}
+                            onChange={(e) => setCustomTotalAmount(e.target.value)}
+                            placeholder="Saisir montant global"
+                            className="bg-white border-gray-300"
+                          />
+                        </div>
+                        <div className="flex items-center text-xs text-gray-500 pt-6">
+                          <AlertCircle size={14} className="mr-1 text-gray-400" />
+                          Aucun plan de paiement trouvé pour cette formation. Saisissez le montant global manuellement.
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
                 <div className="space-y-2">
                   <Label htmlFor="amount">Montant (DH) *</Label>
                   <Input
@@ -464,20 +647,22 @@ export default function Payments() {
                   </Select>
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="status">Statut *</Label>
-                  <Select value={formData.status} onValueChange={(value: any) => handleInputChange('status', value)}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="reservation">Réservation</SelectItem>
-                      <SelectItem value="paid">Payé</SelectItem>
-                      <SelectItem value="validated">Validé</SelectItem>
-                      <SelectItem value="pending">En attente</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+                {selectedPaymentId && (
+                  <div className="space-y-2">
+                    <Label htmlFor="status">Statut *</Label>
+                    <Select value={formData.status} onValueChange={(value: any) => handleInputChange('status', value)}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="reservation">Réservation</SelectItem>
+                        <SelectItem value="paid">Payé</SelectItem>
+                        <SelectItem value="validated">Validé</SelectItem>
+                        <SelectItem value="pending">En attente</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
                 <div className="space-y-2 col-span-2">
                   <Label htmlFor="note">Note</Label>
                   <Input
@@ -687,46 +872,17 @@ export default function Payments() {
       {/* Filters and Search */}
       <Card>
         <CardContent className="p-6">
-          <div className="grid grid-cols-3 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="search" className="font-semibold">Rechercher</Label>
+          <div className="space-y-2 w-full">
+            <Label htmlFor="search" className="font-semibold">Rechercher</Label>
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
               <Input
                 id="search"
-                placeholder="Nom du candidat, référence..."
+                placeholder="Rechercher un paiement (code candidat, nom, formation, référence, méthode, statut...)"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="h-11"
+                className="h-11 pl-10 w-full"
               />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="filterStatus" className="font-semibold">Statut</Label>
-              <Select value={filterStatus} onValueChange={setFilterStatus}>
-                <SelectTrigger className="h-11">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Tous les statuts</SelectItem>
-                  <SelectItem value="reservation">Réservation</SelectItem>
-                  <SelectItem value="paid">Payé</SelectItem>
-                  <SelectItem value="validated">Validé</SelectItem>
-                  <SelectItem value="late">En retard</SelectItem>
-                  <SelectItem value="pending">En attente</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="filterMethod" className="font-semibold">Mode de paiement</Label>
-              <Select value={filterMethod} onValueChange={setFilterMethod}>
-                <SelectTrigger className="h-11">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Tous les modes</SelectItem>
-                  <SelectItem value="cash">Cash</SelectItem>
-                  <SelectItem value="bank_transfer">Virement</SelectItem>
-                  <SelectItem value="check">Chèque</SelectItem>
-                </SelectContent>
-              </Select>
             </div>
           </div>
         </CardContent>
@@ -956,8 +1112,14 @@ export default function Payments() {
                     .filter(p => p.paymentMethod === 'check')
                     .map((payment) => {
                       const candidate = getCandidate(payment.candidateId);
-                      const daysUntilDue = payment.checkDetails ?
-                        Math.ceil((new Date(payment.checkDetails.dueDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)) : 0;
+                      const today = new Date();
+                      today.setHours(0, 0, 0, 0);
+                      const due = payment.checkDetails ? new Date(payment.checkDetails.dueDate) : null;
+                      if (due) {
+                        due.setHours(0, 0, 0, 0);
+                      }
+                      const diffTime = due ? due.getTime() - today.getTime() : 0;
+                      const daysUntilDue = Math.round(diffTime / (1000 * 60 * 60 * 24));
 
                       return (
                         <TableRow key={payment.id} className="hover:bg-gray-50">
@@ -977,17 +1139,31 @@ export default function Payments() {
                                 <p className="text-sm font-medium">
                                   {payment.checkDetails && new Date(payment.checkDetails.dueDate).toLocaleDateString('fr-FR')}
                                 </p>
-                                {daysUntilDue < 0 ? (
-                                  <Badge variant="destructive" className="mt-1">
-                                    <Clock size={12} className="mr-1" />
-                                    {Math.abs(daysUntilDue)} jours de retard
+                                {payment.status === 'validated' ? (
+                                  <Badge className="mt-1 bg-green-100 text-green-850">
+                                    <CheckCircle size={12} className="mr-1 text-green-600" />
+                                    Chèque encaissé
                                   </Badge>
-                                ) : daysUntilDue <= 5 ? (
-                                  <Badge className="mt-1 bg-orange-100 text-orange-800">
-                                    <Clock size={12} className="mr-1" />
-                                    Dans {daysUntilDue} jours
-                                  </Badge>
-                                ) : null}
+                                ) : (
+                                  payment.checkDetails && (
+                                    daysUntilDue < 0 ? (
+                                      <Badge variant="destructive" className="mt-1">
+                                        <Clock size={12} className="mr-1" />
+                                        En retard de {Math.abs(daysUntilDue)} {Math.abs(daysUntilDue) > 1 ? 'jours' : 'jour'}
+                                      </Badge>
+                                    ) : daysUntilDue === 0 ? (
+                                      <Badge className="mt-1 bg-amber-100 text-amber-800">
+                                        <Clock size={12} className="mr-1" />
+                                        Aujourd'hui
+                                      </Badge>
+                                    ) : (
+                                      <Badge className="mt-1 bg-orange-100 text-orange-850">
+                                        <Clock size={12} className="mr-1" />
+                                        Dans {daysUntilDue} {daysUntilDue > 1 ? 'jours' : 'jour'}
+                                      </Badge>
+                                    )
+                                  )
+                                )}
                               </div>
                             </div>
                           </TableCell>

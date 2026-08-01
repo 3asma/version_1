@@ -102,63 +102,61 @@ class ReservationService {
             }
 
             let group = null;
-            if (inscription.groupId) {
-                const dbGroup = await prisma.group.findUnique({
-                    where: { id: inscription.groupId },
-                    include: {
-                        inscription: {
-                            include: {
-                                formation: true,
-                                professor: true,
-                                members: {
-                                    include: {
-                                        candidate: true
-                                    }
+            const dbGroup = await prisma.group.findUnique({
+                where: { inscriptionId: inscription.id },
+                include: {
+                    inscription: {
+                        include: {
+                            formation: true,
+                            professor: true,
+                            members: {
+                                include: {
+                                    candidate: true
                                 }
                             }
                         }
                     }
-                });
-                if (dbGroup && dbGroup.inscription) {
-                    const ins = dbGroup.inscription;
-                    const codeVal = extractInscriptionCode(dbGroup.nom);
-                    const mappedInscriptions = (ins.members || []).map(m => ({
-                        id: ins.id,
-                        dateInscription: ins.dateInscription,
-                        status: ins.status,
-                        note: ins.note,
-                        duration: ins.duration,
-                        price: ins.price,
-                        volumeHoraire: ins.volumeHoraire,
-                        remainingHours: ins.remainingHours,
-                        learningMode: ins.learningMode,
-                        candidateId: m.candidateId,
-                        candidate: m.candidate,
-                        formationId: ins.formationId,
-                        professorId: ins.professorId,
-                        createdAt: ins.createdAt,
-                        updatedAt: ins.updatedAt,
-                        inscriptionCode: codeVal,
-                        learningGroupId: dbGroup.id
-                    }));
-                    group = {
-                        id: dbGroup.id,
-                        groupName: dbGroup.nom,
-                        inscriptionCode: codeVal,
-                        learningMode: ins.learningMode || 'GROUPE',
-                        dateInscription: ins.dateInscription || dbGroup.createdAt,
-                        note: ins.note || null,
-                        formation: ins.formation || null,
-                        professor: ins.professor || null,
-                        inscriptions: mappedInscriptions,
-                        inscription: {
-                            id: ins.id,
-                            status: ins.status,
-                            learningMode: ins.learningMode,
-                            members: ins.members
-                        }
-                    };
                 }
+            });
+            if (dbGroup && dbGroup.inscription) {
+                const ins = dbGroup.inscription;
+                const codeVal = extractInscriptionCode(dbGroup.nom);
+                const mappedInscriptions = (ins.members || []).map(m => ({
+                    id: ins.id,
+                    dateInscription: ins.dateInscription,
+                    status: ins.status,
+                    note: ins.note,
+                    duration: ins.duration,
+                    price: ins.price,
+                    volumeHoraire: ins.volumeHoraire,
+                    remainingHours: ins.remainingHours,
+                    learningMode: ins.learningMode,
+                    candidateId: m.candidateId,
+                    candidate: m.candidate,
+                    formationId: ins.formationId,
+                    professorId: ins.professorId,
+                    createdAt: ins.createdAt,
+                    updatedAt: ins.updatedAt,
+                    inscriptionCode: codeVal,
+                    learningGroupId: dbGroup.id
+                }));
+                group = {
+                    id: dbGroup.id,
+                    groupName: dbGroup.nom,
+                    inscriptionCode: codeVal,
+                    learningMode: ins.learningMode || 'GROUPE',
+                    dateInscription: ins.dateInscription || dbGroup.createdAt,
+                    note: ins.note || null,
+                    formation: ins.formation || null,
+                    professor: ins.professor || null,
+                    inscriptions: mappedInscriptions,
+                    inscription: {
+                        id: ins.id,
+                        status: ins.status,
+                        learningMode: ins.learningMode,
+                        members: ins.members
+                    }
+                };
             }
 
             return {
@@ -183,63 +181,61 @@ class ReservationService {
 
         if (inscription) {
             let group = null;
-            if (inscription.groupId) {
-                const dbGroup = await prisma.group.findUnique({
-                    where: { id: inscription.groupId },
-                    include: {
-                        inscription: {
-                            include: {
-                                formation: true,
-                                professor: true,
-                                members: {
-                                    include: {
-                                        candidate: true
-                                    }
+            const dbGroup = await prisma.group.findUnique({
+                where: { inscriptionId: inscription.id },
+                include: {
+                    inscription: {
+                        include: {
+                            formation: true,
+                            professor: true,
+                            members: {
+                                include: {
+                                    candidate: true
                                 }
                             }
                         }
                     }
-                });
-                if (dbGroup && dbGroup.inscription) {
-                    const ins = dbGroup.inscription;
-                    const codeVal = extractInscriptionCode(dbGroup.nom);
-                    const mappedInscriptions = (ins.members || []).map(m => ({
-                        id: ins.id,
-                        dateInscription: ins.dateInscription,
-                        status: ins.status,
-                        note: ins.note,
-                        duration: ins.duration,
-                        price: ins.price,
-                        volumeHoraire: ins.volumeHoraire,
-                        remainingHours: ins.remainingHours,
-                        learningMode: ins.learningMode,
-                        candidateId: m.candidateId,
-                        candidate: m.candidate,
-                        formationId: ins.formationId,
-                        professorId: ins.professorId,
-                        createdAt: ins.createdAt,
-                        updatedAt: ins.updatedAt,
-                        inscriptionCode: codeVal,
-                        learningGroupId: dbGroup.id
-                    }));
-                    group = {
-                        id: dbGroup.id,
-                        groupName: dbGroup.nom,
-                        inscriptionCode: codeVal,
-                        learningMode: ins.learningMode || 'GROUPE',
-                        dateInscription: ins.dateInscription || dbGroup.createdAt,
-                        note: ins.note || null,
-                        formation: ins.formation || null,
-                        professor: ins.professor || null,
-                        inscriptions: mappedInscriptions,
-                        inscription: {
-                            id: ins.id,
-                            status: ins.status,
-                            learningMode: ins.learningMode,
-                            members: ins.members
-                        }
-                    };
                 }
+            });
+            if (dbGroup && dbGroup.inscription) {
+                const ins = dbGroup.inscription;
+                const codeVal = extractInscriptionCode(dbGroup.nom);
+                const mappedInscriptions = (ins.members || []).map(m => ({
+                    id: ins.id,
+                    dateInscription: ins.dateInscription,
+                    status: ins.status,
+                    note: ins.note,
+                    duration: ins.duration,
+                    price: ins.price,
+                    volumeHoraire: ins.volumeHoraire,
+                    remainingHours: ins.remainingHours,
+                    learningMode: ins.learningMode,
+                    candidateId: m.candidateId,
+                    candidate: m.candidate,
+                    formationId: ins.formationId,
+                    professorId: ins.professorId,
+                    createdAt: ins.createdAt,
+                    updatedAt: ins.updatedAt,
+                    inscriptionCode: codeVal,
+                    learningGroupId: dbGroup.id
+                }));
+                group = {
+                    id: dbGroup.id,
+                    groupName: dbGroup.nom,
+                    inscriptionCode: codeVal,
+                    learningMode: ins.learningMode || 'GROUPE',
+                    dateInscription: ins.dateInscription || dbGroup.createdAt,
+                    note: ins.note || null,
+                    formation: ins.formation || null,
+                    professor: ins.professor || null,
+                    inscriptions: mappedInscriptions,
+                    inscription: {
+                        id: ins.id,
+                        status: ins.status,
+                        learningMode: ins.learningMode,
+                        members: ins.members
+                    }
+                };
             }
 
             return {

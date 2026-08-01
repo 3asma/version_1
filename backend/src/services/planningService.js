@@ -63,9 +63,9 @@ class PlanningService {
             professor: r.professor ? {
                 firstName: r.professor.prenom,
                 lastName: r.professor.nom
-            } : (r.inscription.group?.professor ? {
-                firstName: r.inscription.group.professor.prenom,
-                lastName: r.inscription.group.professor.nom
+            } : (r.inscription.professor ? {
+                firstName: r.inscription.professor.prenom,
+                lastName: r.inscription.professor.nom
             } : null),
             room: r.room ? {
                 roomNumber: r.room.numero
@@ -89,11 +89,8 @@ class PlanningService {
                     include: {
                         candidate: true,
                         formation: true,
-                        group: {
-                            include: {
-                                professor: true
-                            }
-                        }
+                        group: true,
+                        professor: true
                     }
                 },
                 professor: true,
@@ -122,11 +119,8 @@ class PlanningService {
                     include: {
                         candidate: true,
                         formation: true,
-                        group: {
-                            include: {
-                                professor: true
-                            }
-                        }
+                        group: true,
+                        professor: true
                     }
                 },
                 professor: true,
