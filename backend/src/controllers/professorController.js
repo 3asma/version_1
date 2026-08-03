@@ -1,8 +1,12 @@
 import professorService from '../services/professorService.js';
 import { streamPDF } from '../services/pdfService.js';
+import prisma from '../config/prisma.js';
 
 export const exportProfessorsPDF = async (req, res) => {
     try {
+        if (req.user && req.user.role === 'PROFESSOR') {
+            return res.status(403).json({ message: 'error', error: 'Forbidden' });
+        }
         const data = await professorService.getAllProfessors();
         const headers = [
             { label: 'Nom', key: 'nom', width: 110 },
@@ -25,7 +29,15 @@ export const exportProfessorsPDF = async (req, res) => {
 export const getAllProfessors = async (req, res) => {
 
     try {
-        const professors = await professorService.getAllProfessors();
+        let professors;
+        if (req.user && req.user.role === 'PROFESSOR') {
+            const prof = await prisma.professor.findUnique({
+                where: { id: req.user.professorId }
+            });
+            professors = prof ? [prof] : [];
+        } else {
+            professors = await professorService.getAllProfessors();
+        }
         res.json({ message: 'success', data: professors });
     } catch (error) {
         res.status(500).json({ message: 'error', error: error.message });

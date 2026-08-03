@@ -9,6 +9,19 @@ export interface User {
   email: string;
   name: string;
   role: UserRole;
+  status?: 'active' | 'inactive';
+  createdAt?: string;
+  professorId?: string;
+}
+
+export interface RoleData {
+  id: string;
+  name: string;
+  displayName: string;
+  description: string;
+  permissions: string[];
+  userCount: number;
+  color: string;
 }
 
 export interface Prospect {
@@ -229,9 +242,11 @@ export const mapPaymentFromBackend = (p: any): Payment => {
     checkDetails: p.paymentMethod?.toUpperCase() === 'CHEQUE' ? {
       type: 'bank_check',
       dueDate: p.paymentDate?.split('T')[0] || p.paymentDate || '',
-      checkStatus: (p.status === 'COMPLETED' ? 'validated' : 'pending')
+      checkStatus: (p.status === 'COMPLETED' ? 'validated' : 'pending'),
+      scanUrl: p.chequeFile ? `${(import.meta as any).env?.VITE_API_URL || 'http://localhost:5000'}/${p.chequeFile}` : undefined
     } : undefined,
     isMonthlyPayment: false,
+    chequeFile: p.chequeFile || undefined,
     createdAt: p.createdAt
   };
 };
@@ -268,6 +283,7 @@ export interface Payment {
     checkStatus: 'pending' | 'validated' | 'rejected' | 'late';
   };
   isMonthlyPayment: boolean;
+  chequeFile?: string;
   monthlySchedule?: {
     totalMonths: number;
     currentMonth: number;
@@ -384,23 +400,51 @@ interface AppContextType {
   generateInvoice: (paymentId: string) => string | null;
   isLoadingSession: boolean;
 
+  // Users CRUD
+  users: User[];
+  fetchUsers: () => Promise<void>;
+  addUser: (user: Omit<User, 'id' | 'createdAt'> & { password?: string; status: 'active' | 'inactive' }) => Promise<void>;
+  updateUser: (id: string, updates: Partial<User> & { password?: string }) => Promise<void>;
+  deleteUser: (id: string) => Promise<boolean>;
+
+  // Roles Management
+  roles: RoleData[];
+  fetchRoles: () => Promise<void>;
+  updateRolePermissions: (roleId: string, permissions: string[], description?: string, displayName?: string) => Promise<boolean>;
+  deleteRole: (roleId: string) => Promise<boolean>;
+
   // Keep compatibility for destructured but unused route prop
   addCandidateAssignment?: any;
 }
 
 export const AppContext = createContext<AppContextType | undefined>(undefined);
 
-const mockUsers: User[] = [
-  { id: '1', email: 'reception@formation.com', name: 'Agent Réception', role: 'agent_reception' },
-  { id: '2', email: 'reservation@formation.com', name: 'Agent Réservation', role: 'agent_reservation' },
-  { id: '3', email: 'prof@formation.com', name: 'Marie Dupont', role: 'professor' },
-  { id: '4', email: 'candidat@formation.com', name: 'Jean Martin', role: 'candidate' },
-  { id: '5', email: 'admin@formation.com', name: 'Administrateur', role: 'admin' },
-];
+export const mapBackendRole = (roleStr: string): UserRole => {
+  if (!roleStr) return 'candidate';
+  const normalized = roleStr.toLowerCase();
+  switch (normalized) {
+    case 'admin':
+      return 'admin';
+    case 'professor':
+    case 'prof':
+      return 'professor';
+    case 'agent_reception':
+    case 'reception':
+      return 'agent_reception';
+    case 'agent_reservation':
+    case 'reservation':
+      return 'agent_reservation';
+    case 'candidate':
+    default:
+      return 'candidate';
+  }
+};
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [isLoadingSession, setIsLoadingSession] = useState(true);
+  const [users, setUsers] = useState<User[]>([]);
+  const [roles, setRoles] = useState<RoleData[]>([]);
 
   // Data states
   const [commercials, setCommercials] = useState<Commercial[]>([]);
@@ -520,12 +564,12 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
           const response = await api.get('/auth/me');
           if (response.data.message === 'success') {
             const { user } = response.data;
-            const mockUser = mockUsers.find(mu => mu.email === user.email);
             setCurrentUser({
               id: user.id,
               email: user.email,
-              name: mockUser ? mockUser.name : user.email.split('@')[0],
-              role: mockUser ? mockUser.role : (user.role.toLowerCase() as UserRole)
+              name: user.name || user.email.split('@')[0],
+              role: mapBackendRole(user.role),
+              professorId: user.professorId
             });
           }
         } catch (error) {
@@ -736,6 +780,23 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         } else {
           console.error('Failed to load payments:', paymentsRes.status === 'rejected' ? paymentsRes.reason : 'Invalid data format');
         }
+
+        if (currentUser.role === 'admin') {
+          try {
+            const [usersRes, rolesRes] = await Promise.all([
+              api.get('/users'),
+              api.get('/roles')
+            ]);
+            if (usersRes.data.message === 'success') {
+              setUsers(usersRes.data.data);
+            }
+            if (rolesRes.data.message === 'success') {
+              setRoles(rolesRes.data.data);
+            }
+          } catch (uErr) {
+            console.error('Failed to fetch initial admin data:', uErr);
+          }
+        }
       } catch (error) {
         console.error('Failed to fetch initial application data:', error);
       }
@@ -750,12 +811,12 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       if (response.data.message === 'success') {
         const { token, user } = response.data;
         localStorage.setItem('token', token);
-        const mockUser = mockUsers.find(mu => mu.email === user.email);
         setCurrentUser({
           id: user.id,
           email: user.email,
-          name: mockUser ? mockUser.name : user.email.split('@')[0],
-          role: mockUser ? mockUser.role : (user.role.toLowerCase() as UserRole)
+          name: user.name || user.email.split('@')[0],
+          role: mapBackendRole(user.role),
+          professorId: user.professorId
         });
         return true;
       }
@@ -769,6 +830,92 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const logout = () => {
     localStorage.removeItem('token');
     setCurrentUser(null);
+  };
+
+  const fetchUsers = async () => {
+    try {
+      const response = await api.get('/users');
+      if (response.data.message === 'success') {
+        setUsers(response.data.data);
+      }
+    } catch (error) {
+      console.error('Failed to fetch users:', error);
+    }
+  };
+
+  const addUser = async (user: Omit<User, 'id' | 'createdAt'> & { password?: string; status: 'active' | 'inactive' }) => {
+    try {
+      const response = await api.post('/users', user);
+      if (response.data.message === 'success') {
+        setUsers(prev => [response.data.data, ...prev]);
+      }
+    } catch (error) {
+      console.error('Failed to add user:', error);
+      throw error;
+    }
+  };
+
+  const updateUser = async (id: string, updates: Partial<User> & { password?: string; status?: 'active' | 'inactive' }) => {
+    try {
+      const response = await api.patch(`/users/${id}`, updates);
+      if (response.data.message === 'success') {
+        setUsers(prev => prev.map(u => u.id === id ? response.data.data : u));
+      }
+    } catch (error) {
+      console.error('Failed to update user:', error);
+      throw error;
+    }
+  };
+
+  const deleteUser = async (id: string) => {
+    try {
+      const response = await api.delete(`/users/${id}`);
+      if (response.data.message === 'success') {
+        setUsers(prev => prev.filter(u => u.id !== id));
+        return true;
+      }
+    } catch (error) {
+      console.error('Failed to delete user:', error);
+      throw error;
+    }
+    return false;
+  };
+
+  const fetchRoles = async () => {
+    try {
+      const res = await api.get('/roles');
+      if (res.data.message === 'success') {
+        setRoles(res.data.data);
+      }
+    } catch (err) {
+      console.error('Failed to fetch roles:', err);
+    }
+  };
+
+  const updateRolePermissions = async (roleId: string, permissions: string[], description?: string, displayName?: string): Promise<boolean> => {
+    try {
+      const res = await api.patch(`/roles/${roleId}`, { permissions, description, displayName });
+      if (res.data.message === 'success') {
+        await fetchRoles();
+        return true;
+      }
+    } catch (err) {
+      console.error('Failed to update role permissions:', err);
+    }
+    return false;
+  };
+
+  const deleteRole = async (roleId: string): Promise<boolean> => {
+    try {
+      const res = await api.delete(`/roles/${roleId}`);
+      if (res.data.message === 'success') {
+        await fetchRoles();
+        return true;
+      }
+    } catch (err) {
+      console.error('Failed to delete role:', err);
+    }
+    return false;
   };
 
   // Commercial functions
@@ -1504,22 +1651,42 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       validated: 'COMPLETED'
     };
 
-    const payload: any = {
-      candidateId: payment.candidateId,
-      formationId: payment.formationId,
-      amount: Number(payment.amount),
-      totalAmount: (payment as any).totalAmount,
-      paymentMethod: paymentMethodMap[payment.paymentMethod] || 'CASH',
-      paymentDate: payment.paymentDate ? new Date(payment.paymentDate).toISOString() : new Date().toISOString(),
-      note: (payment as any).note || ''
-    };
+    let payload: any;
+    let headers: any = {};
 
-    if (payment.paymentMethod === 'check') {
-      payload.checkDueDate = (payment as any).checkDueDate ? new Date((payment as any).checkDueDate).toISOString() : undefined;
+    if (payment.paymentMethod === 'check' && (payment as any).chequeFile) {
+      payload = new FormData();
+      payload.append('candidateId', payment.candidateId);
+      payload.append('formationId', payment.formationId);
+      payload.append('amount', String(payment.amount));
+      if ((payment as any).totalAmount !== undefined && (payment as any).totalAmount !== null) {
+        payload.append('totalAmount', String((payment as any).totalAmount));
+      }
+      payload.append('paymentMethod', 'CHEQUE');
+      payload.append('paymentDate', payment.paymentDate ? new Date(payment.paymentDate).toISOString() : new Date().toISOString());
+      payload.append('note', (payment as any).note || '');
+      if ((payment as any).checkDueDate) {
+        payload.append('checkDueDate', new Date((payment as any).checkDueDate).toISOString());
+      }
+      payload.append('chequeFile', (payment as any).chequeFile);
+      headers = { 'Content-Type': 'multipart/form-data' };
+    } else {
+      payload = {
+        candidateId: payment.candidateId,
+        formationId: payment.formationId,
+        amount: Number(payment.amount),
+        totalAmount: (payment as any).totalAmount,
+        paymentMethod: paymentMethodMap[payment.paymentMethod] || 'CASH',
+        paymentDate: payment.paymentDate ? new Date(payment.paymentDate).toISOString() : new Date().toISOString(),
+        note: (payment as any).note || ''
+      };
+      if (payment.paymentMethod === 'check') {
+        payload.checkDueDate = (payment as any).checkDueDate ? new Date((payment as any).checkDueDate).toISOString() : undefined;
+      }
     }
 
     try {
-      const response = await api.post('/payments', payload);
+      const response = await api.post('/payments', payload, { headers });
       if (response.data.message === 'success') {
         await refreshPayments();
       }
@@ -1654,7 +1821,16 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     deletePayment,
     invoices,
     generateInvoice,
-    isLoadingSession
+    isLoadingSession,
+    users,
+    fetchUsers,
+    addUser,
+    updateUser,
+    deleteUser,
+    roles,
+    fetchRoles,
+    updateRolePermissions,
+    deleteRole
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

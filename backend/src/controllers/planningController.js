@@ -7,7 +7,11 @@ export const getWeeklyPlanning = async (req, res) => {
     }
 
     try {
-        const planning = await planningService.getWeeklyPlanning(date);
+        let professorId = req.query.professorId;
+        if (req.user && req.user.role === 'PROFESSOR') {
+            professorId = req.user.professorId;
+        }
+        const planning = await planningService.getWeeklyPlanning(date, professorId);
         res.status(200).json({ message: 'success', data: planning });
     } catch (error) {
         if (error.message === 'INVALID_DATE') {
@@ -24,7 +28,11 @@ export const getDailyPlanning = async (req, res) => {
     }
 
     try {
-        const planning = await planningService.getDailyPlanning(date);
+        let professorId = req.query.professorId;
+        if (req.user && req.user.role === 'PROFESSOR') {
+            professorId = req.user.professorId;
+        }
+        const planning = await planningService.getDailyPlanning(date, professorId);
         res.status(200).json({ message: 'success', data: planning });
     } catch (error) {
         if (error.message === 'INVALID_DATE') {

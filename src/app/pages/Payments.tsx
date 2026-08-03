@@ -8,7 +8,7 @@ import { Label } from '../components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../components/ui/table';
 import { Badge } from '../components/ui/badge';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '../components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '../components/ui/dialog';
 import { DollarSign, CreditCard, TrendingUp, AlertCircle, Plus, FileText, Download, Printer, Upload, Calendar, CheckCircle, Eye, XCircle, Clock, Pencil, Trash2, Search } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -35,6 +35,11 @@ export default function Payments() {
   const [paymentPlan, setPaymentPlan] = useState<any>(null);
   const [customTotalAmount, setCustomTotalAmount] = useState('');
   const [isLoadingPaymentPlan, setIsLoadingPaymentPlan] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isPreviewDialogOpen, setIsPreviewDialogOpen] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState('');
+  const [isLoadingPreview, setIsLoadingPreview] = useState(false);
+  const [hasPreviewError, setHasPreviewError] = useState(false);
 
   const [formData, setFormData] = useState({
     candidateId: '',
@@ -150,6 +155,15 @@ export default function Payments() {
         return;
       }
       paymentData.checkDueDate = formData.checkDueDate;
+
+      // PDF is required for new cheque payments
+      if (!selectedPaymentId && !selectedFile) {
+        toast.error("Le fichier PDF du chèque est obligatoire");
+        return;
+      }
+      if (selectedFile) {
+        paymentData.chequeFile = selectedFile;
+      }
     }
 
     if (!selectedPaymentId && customTotalAmount) {
@@ -238,6 +252,29 @@ export default function Payments() {
     setFormationsErrorMessage('');
     setPaymentPlan(null);
     setCustomTotalAmount('');
+    setSelectedFile(null);
+  };
+
+  const handleOpenPreview = async (url: string) => {
+    setPreviewUrl(url);
+    setIsLoadingPreview(true);
+    setHasPreviewError(false);
+    setIsPreviewDialogOpen(true);
+
+    try {
+      const response = await fetch(url, { method: 'HEAD' });
+      if (!response.ok) {
+        setHasPreviewError(true);
+        setIsLoadingPreview(false);
+      }
+    } catch (e) {
+      setHasPreviewError(true);
+      setIsLoadingPreview(false);
+    }
+  };
+
+  const handlePreviewLoad = () => {
+    setIsLoadingPreview(false);
   };
 
   const handleGenerateInvoice = (paymentId: string) => {
@@ -705,22 +742,68 @@ export default function Payments() {
                       />
                     </div>
 
-                    <div className="space-y-2 col-span-2">
-                      <Label htmlFor="checkScan">Scan du chèque (URL)</Label>
-                      <div className="flex gap-2">
-                        <Input
-                          id="checkScan"
-                          value={formData.checkScan}
-                          onChange={(e) => handleInputChange('checkScan', e.target.value)}
-                          placeholder="https://example.com/scan-cheque.pdf"
-                        />
-                        <Button type="button" variant="outline">
-                          <Upload size={18} className="mr-2" />
-                          Importer
-                        </Button>
+                    {selectedPaymentId ? (
+                      <div className="space-y-2 col-span-2">
+                        <Label>Scan du chèque</Label>
+                        <div>
+                          {formData.checkScan || payments.find(p => p.id === selectedPaymentId)?.checkDetails?.scanUrl ? (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const url = formData.checkScan || payments.find(p => p.id === selectedPaymentId)?.checkDetails?.scanUrl;
+                                if (url) handleOpenPreview(url);
+                              }}
+                              className="inline-flex items-center text-sm font-medium text-purple-605 hover:underline bg-purple-50 px-3 py-2 rounded-md border border-purple-100 cursor-pointer"
+                            >
+                              📄 Voir le chèque
+                            </button>
+                          ) : (
+                            <span className="text-sm text-gray-400">Aucun chèque joint</span>
+                          )}
+                        </div>
                       </div>
-                      <p className="text-xs text-gray-500">Format accepté: PDF, JPG, PNG</p>
-                    </div>
+                    ) : (
+                      <div className="space-y-2 col-span-2">
+                        <Label htmlFor="chequeFileInput">Joindre le chèque (PDF) *</Label>
+                        {selectedFile ? (
+                          <div className="flex items-center justify-between border p-2 rounded bg-white">
+                            <span className="text-sm truncate max-w-[85%] font-medium">{selectedFile.name}</span>
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => setSelectedFile(null)}
+                              className="text-red-500 hover:text-red-700 p-1 h-auto"
+                            >
+                              <XCircle size={18} />
+                            </Button>
+                          </div>
+                        ) : (
+                          <div className="flex gap-2">
+                            <Input
+                              id="chequeFileInput"
+                              type="file"
+                              accept="application/pdf"
+                              onChange={(e) => {
+                                const file = e.target.files?.[0];
+                                if (file) {
+                                  if (file.type !== 'application/pdf') {
+                                    toast.error("Le fichier doit être au format PDF");
+                                    return;
+                                  }
+                                  if (file.size > 10 * 1024 * 1024) {
+                                    toast.error("Le fichier ne doit pas dépasser 10 Mo");
+                                    return;
+                                  }
+                                  setSelectedFile(file);
+                                }
+                              }}
+                            />
+                          </div>
+                        )}
+                        <p className="text-xs text-gray-500">Format accepté: PDF uniquement (Max 10 Mo)</p>
+                      </div>
+                    )}
                   </div>
 
                   <div className="space-y-3 pt-2">
@@ -1189,7 +1272,7 @@ export default function Payments() {
                           </TableCell>
                           <TableCell>
                             {payment.checkDetails?.scanUrl ? (
-                              <Button size="sm" variant="outline" onClick={() => window.open(payment.checkDetails?.scanUrl, '_blank')}>
+                              <Button size="sm" variant="outline" onClick={() => handleOpenPreview(payment.checkDetails.scanUrl!)}>
                                 <Eye size={16} className="mr-1" />
                                 Voir scan
                               </Button>
@@ -1291,12 +1374,13 @@ export default function Payments() {
                       <div>{getCheckStatusBadge(selectedPayment.checkDetails.checkStatus)}</div>
                     </div>
                     <div className="space-y-1">
-                      <Label className="text-sm text-gray-600">Scan</Label>
+                      <Label className="text-sm text-gray-650">Scan</Label>
                       {selectedPayment.checkDetails.scanUrl ? (
-                        <Button size="sm" variant="outline" onClick={() => window.open(selectedPayment.checkDetails.scanUrl, '_blank')}>
-                          <Eye size={16} className="mr-1" />
-                          Voir le scan
-                        </Button>
+                        <div>
+                          <Button size="sm" variant="outline" onClick={() => handleOpenPreview(selectedPayment.checkDetails.scanUrl!)}>
+                            📄 Voir le chèque
+                          </Button>
+                        </div>
                       ) : (
                         <p className="text-sm text-gray-400">Non disponible</p>
                       )}
@@ -1352,6 +1436,73 @@ export default function Payments() {
               </div>
             </div>
           )}
+        </DialogContent>
+      </Dialog>
+
+      {/* PDF Scan Preview Dialog */}
+      <Dialog open={isPreviewDialogOpen} onOpenChange={setIsPreviewDialogOpen}>
+        <DialogContent className="max-w-none w-screen h-screen md:max-w-4xl md:w-[60vw] md:h-[80vh] flex flex-col p-6">
+          <DialogHeader className="flex-none">
+            <DialogTitle className="text-xl font-bold flex items-center gap-2">
+              <FileText className="text-purple-600" size={20} />
+              Aperçu du chèque
+            </DialogTitle>
+          </DialogHeader>
+
+          {/* Body containing iframe or loading/error fallbacks */}
+          <div className="flex-1 w-full bg-gray-100 rounded-lg overflow-hidden border relative flex items-center justify-center my-4 min-h-[300px]">
+            {isLoadingPreview && (
+              <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-50/80 z-10">
+                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-purple-600 mb-2"></div>
+                <p className="text-sm font-medium text-gray-700">Chargement du document...</p>
+              </div>
+            )}
+
+            {hasPreviewError ? (
+              <div className="flex flex-col items-center justify-center p-8 text-center">
+                <XCircle className="text-red-500 w-12 h-12 mb-2" />
+                <p className="text-sm font-medium text-gray-750">Impossible de charger le document.</p>
+              </div>
+            ) : (
+              previewUrl && (
+                <iframe
+                  src={previewUrl}
+                  title="Document Preview"
+                  className="w-full h-full border-none"
+                  onLoad={handlePreviewLoad}
+                />
+              )
+            )}
+          </div>
+
+          <DialogFooter className="flex-none flex flex-row justify-end gap-2 mt-auto">
+            {previewUrl && (
+              <Button
+                type="button"
+                variant="outline"
+                className="flex items-center gap-2"
+                onClick={() => {
+                  const link = document.createElement('a');
+                  link.href = previewUrl;
+                  link.setAttribute('download', previewUrl.split('/').pop() || 'cheque.pdf');
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                }}
+              >
+                <Download size={16} />
+                Télécharger
+              </Button>
+            )}
+            <Button
+              type="button"
+              variant="default"
+              className="bg-gray-800 hover:bg-gray-900 text-white"
+              onClick={() => setIsPreviewDialogOpen(false)}
+            >
+              Fermer
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>

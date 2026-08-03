@@ -1,5 +1,6 @@
 import express from 'express';
-import { verifyToken } from '../middlewares/authMiddleware.js';
+import { verifyToken, requireRole } from '../middlewares/authMiddleware.js';
+import { upload } from '../middlewares/uploadMiddleware.js';
 import {
     getAllPayments,
     getPaymentById,
@@ -16,6 +17,7 @@ const router = express.Router();
 
 // Protect all endpoints using verifyToken
 router.use(verifyToken);
+router.use(requireRole(['admin', 'agent_reservation']));
 
 router.get('/plan', getPaymentPlanQuery);
 
@@ -24,10 +26,27 @@ router.get('/payment-plan/:candidateId/:formationId', getPaymentPlan);
 router.post('/payment-plan', createPaymentPlan);
 router.put('/payment-plan/:candidateId/:formationId', updatePaymentPlan);
 
+// Helper middleware for upload parsing and errors
+const handleUpload = (req, res, next) => {
+    upload.single('chequeFile')(req, res, (err) => {
+        if (err) {
+            let errorMsg = err.message;
+            if (err.code === 'LIMIT_FILE_SIZE') {
+                errorMsg = 'File too large. Maximum size allowed is 10 MB.';
+            }
+            return res.status(400).json({
+                message: 'error',
+                error: errorMsg
+            });
+        }
+        next();
+    });
+};
+
 // Payment routes
 router.get('/', getAllPayments);
 router.get('/:id', getPaymentById);
-router.post('/', createPayment);
+router.post('/', handleUpload, createPayment);
 router.patch('/:id', updatePayment);
 router.delete('/:id', deletePayment);
 

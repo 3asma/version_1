@@ -59,7 +59,7 @@ export function Navigation() {
 
     const items = [];
 
-    // Common items
+    // 1. Dashboard (All users)
     items.push({
       path: '/dashboard',
       icon: LayoutDashboard,
@@ -68,8 +68,8 @@ export function Navigation() {
       category: 'main'
     });
 
-    // Agent de réception
-    if (role === 'agent_reception' || role === 'admin') {
+    // 2. Prospects (Admin, Agent Reception)
+    if (role === 'admin' || role === 'agent_reception') {
       items.push({
         path: '/prospects',
         icon: UserPlus,
@@ -79,8 +79,8 @@ export function Navigation() {
       });
     }
 
-    // Agent de réservation + Admin
-    if (role === 'agent_reservation' || role === 'admin') {
+    // 3. Candidates (Admin, Agent Reception)
+    if (role === 'admin' || role === 'agent_reception') {
       items.push({
         path: '/candidates',
         icon: Users,
@@ -88,6 +88,10 @@ export function Navigation() {
         badge: null,
         category: 'gestion'
       });
+    }
+
+    // 4. Formations (Admin only)
+    if (role === 'admin') {
       items.push({
         path: '/formations',
         icon: BookOpen,
@@ -95,6 +99,10 @@ export function Navigation() {
         badge: null,
         category: 'gestion'
       });
+    }
+
+    // 5. Professors (Admin only)
+    if (role === 'admin') {
       items.push({
         path: '/professors',
         icon: GraduationCap,
@@ -102,6 +110,10 @@ export function Navigation() {
         badge: null,
         category: 'gestion'
       });
+    }
+
+    // 6. Inscriptions (Admin, Agent Reception, Agent Reservation)
+    if (role === 'admin' || role === 'agent_reception' || role === 'agent_reservation') {
       items.push({
         path: '/inscriptions',
         icon: Users,
@@ -109,6 +121,10 @@ export function Navigation() {
         badge: null,
         category: 'gestion'
       });
+    }
+
+    // 7. Rooms (Admin only)
+    if (role === 'admin') {
       items.push({
         path: '/rooms',
         icon: DoorOpen,
@@ -116,6 +132,10 @@ export function Navigation() {
         badge: null,
         category: 'gestion'
       });
+    }
+
+    // 8. Commercials (Admin, Agent Reception)
+    if (role === 'admin' || role === 'agent_reception') {
       items.push({
         path: '/commercials',
         icon: Briefcase,
@@ -123,6 +143,10 @@ export function Navigation() {
         badge: null,
         category: 'gestion'
       });
+    }
+
+    // 9. Payments (Admin, Agent Reservation)
+    if (role === 'admin' || role === 'agent_reservation') {
       items.push({
         path: '/payments',
         icon: CreditCard,
@@ -130,6 +154,10 @@ export function Navigation() {
         badge: '3',
         category: 'finances'
       });
+    }
+
+    // 10. Reservations (Admin, Agent Reservation)
+    if (role === 'admin' || role === 'agent_reservation') {
       items.push({
         path: '/reservations',
         icon: Calendar,
@@ -139,16 +167,18 @@ export function Navigation() {
       });
     }
 
-    // Planning (tous utilisateurs)
-    items.push({
-      path: '/planning',
-      icon: CalendarCheck,
-      label: 'Planning',
-      badge: null,
-      category: 'planning'
-    });
+    // 11. Planning (Admin, Agent Reservation, Professor)
+    if (role === 'admin' || role === 'agent_reservation' || role === 'professor') {
+      items.push({
+        path: '/planning',
+        icon: CalendarCheck,
+        label: 'Planning',
+        badge: null,
+        category: 'planning'
+      });
+    }
 
-    // Mes réservations (candidat uniquement)
+    // 12. Candidate Reservations (Candidate only)
     if (role === 'candidate') {
       items.push({
         path: '/candidate-reservations',
@@ -159,19 +189,8 @@ export function Navigation() {
       });
     }
 
-    // Planning des profs (professeur uniquement)
-    if (role === 'professor') {
-      items.push({
-        path: '/professor-schedule',
-        icon: CalendarClock,
-        label: 'Planning des profs',
-        badge: null,
-        category: 'planning'
-      });
-    }
-
-    // Présences (professeur + admin)
-    if (role === 'professor' || role === 'admin') {
+    // 13. Attendance (Admin, Professor)
+    if (role === 'admin' || role === 'professor') {
       items.push({
         path: '/attendance',
         icon: UserCircle,
@@ -181,7 +200,7 @@ export function Navigation() {
       });
     }
 
-    // Statistiques (admin only)
+    // 14. Statistics (Admin only)
     if (role === 'admin') {
       items.push({
         path: '/statistics',
@@ -192,7 +211,7 @@ export function Navigation() {
       });
     }
 
-    // Administration (admin only)
+    // 15. Admin Roles (Admin only)
     if (role === 'admin') {
       items.push({
         path: '/admin-roles',
@@ -201,6 +220,10 @@ export function Navigation() {
         badge: null,
         category: 'admin'
       });
+    }
+
+    // 16. User Profiles Management (Admin only)
+    if (role === 'admin') {
       items.push({
         path: '/profile-management',
         icon: UserCog,

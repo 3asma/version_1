@@ -75,14 +75,15 @@ class PlanningService {
         };
     }
 
-    async getWeeklyPlanning(referenceDate) {
+    async getWeeklyPlanning(referenceDate, professorId = null) {
         const { start, end } = this.getDates(referenceDate, 'week');
         const reservations = await prisma.reservation.findMany({
             where: {
                 reservationDate: {
                     gte: start,
                     lte: end
-                }
+                },
+                ...(professorId ? { professorId } : {})
             },
             include: {
                 inscription: {
@@ -105,14 +106,15 @@ class PlanningService {
         return reservations.map(r => this.mapReservationToSession(r));
     }
 
-    async getDailyPlanning(referenceDate) {
+    async getDailyPlanning(referenceDate, professorId = null) {
         const { start, end } = this.getDates(referenceDate, 'day');
         const reservations = await prisma.reservation.findMany({
             where: {
                 reservationDate: {
                     gte: start,
                     lte: end
-                }
+                },
+                ...(professorId ? { professorId } : {})
             },
             include: {
                 inscription: {

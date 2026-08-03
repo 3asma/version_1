@@ -1,7 +1,11 @@
+import fs from 'fs';
 import paymentService from '../services/paymentService.js';
 
 export const getAllPayments = async (req, res) => {
     try {
+        if (req.user && req.user.role === 'PROFESSOR') {
+            return res.status(200).json({ message: 'success', data: [] });
+        }
         const { candidateId } = req.query;
         const payments = await paymentService.getAllPayments(candidateId);
         res.status(200).json({ message: 'success', data: payments });
@@ -23,16 +27,32 @@ export const getPaymentById = async (req, res) => {
 };
 
 export const createPayment = async (req, res) => {
+    if (req.user && req.user.role === 'PROFESSOR') {
+        if (req.file) {
+            try { fs.unlinkSync(req.file.path); } catch (e) { }
+        }
+        return res.status(403).json({ message: 'error', error: 'Forbidden' });
+    }
     const { candidateId, formationId, amount, paymentMethod, status, paymentDate, note, totalAmount, checkDueDate } = req.body;
 
     if (!candidateId || !formationId || amount === undefined || !paymentMethod) {
+        // If file was uploaded temporarily, cleanup
+        if (req.file) {
+            try { fs.unlinkSync(req.file.path); } catch (e) { }
+        }
         return res.status(400).json({
             message: 'error',
             error: 'Missing required fields: candidateId, formationId, amount, paymentMethod'
         });
     }
 
-    if (typeof amount !== 'number' || amount <= 0) {
+    const parsedAmount = typeof amount === 'string' ? parseFloat(amount) : amount;
+    const parsedTotalAmount = typeof totalAmount === 'string' && totalAmount !== '' ? parseFloat(totalAmount) : totalAmount;
+
+    if (typeof parsedAmount !== 'number' || isNaN(parsedAmount) || parsedAmount <= 0) {
+        if (req.file) {
+            try { fs.unlinkSync(req.file.path); } catch (e) { }
+        }
         return res.status(400).json({
             message: 'error',
             error: 'Amount must be a positive number'
@@ -41,15 +61,37 @@ export const createPayment = async (req, res) => {
 
     const pm = paymentMethod.toUpperCase();
     if (!['CASH', 'CARD', 'BANK_TRANSFER', 'CHEQUE'].includes(pm)) {
+        if (req.file) {
+            try { fs.unlinkSync(req.file.path); } catch (e) { }
+        }
         return res.status(400).json({
             message: 'error',
             error: 'Invalid paymentMethod. Use CASH, CARD, BANK_TRANSFER, or CHEQUE'
         });
     }
 
+    // Enforce cheque file upload validation
+    if (pm === 'CHEQUE' && !req.file) {
+        return res.status(400).json({
+            message: 'error',
+            error: 'Cheque PDF file is required'
+        });
+    }
+
+    // Ignore file for other methods
+    let chequeFileRelativePath = null;
+    if (pm !== 'CHEQUE' && req.file) {
+        try { fs.unlinkSync(req.file.path); } catch (e) { }
+    } else if (pm === 'CHEQUE' && req.file) {
+        chequeFileRelativePath = req.file.path.replace(/\\/g, '/');
+    }
+
     const defaultStatus = pm === 'CHEQUE' ? 'PENDING' : 'COMPLETED';
     const pst = (status || defaultStatus).toUpperCase();
     if (!['PENDING', 'COMPLETED', 'FAILED', 'REFUNDED'].includes(pst)) {
+        if (req.file) {
+            try { fs.unlinkSync(req.file.path); } catch (e) { }
+        }
         return res.status(400).json({
             message: 'error',
             error: 'Invalid status. Use PENDING, COMPLETED, FAILED, or REFUNDED'
@@ -86,12 +128,13 @@ export const createPayment = async (req, res) => {
         const payment = await paymentService.createPayment({
             candidateId,
             formationId,
-            amount,
+            amount: parsedAmount,
             paymentMethod: pm,
             status: pst,
             paymentDate: resolvedPaymentDate,
             note,
-            totalAmount
+            totalAmount: parsedTotalAmount,
+            chequeFile: chequeFileRelativePath
         });
         res.status(201).json({ message: 'success', data: payment });
     } catch (error) {
@@ -126,6 +169,12 @@ export const createPayment = async (req, res) => {
 };
 
 export const updatePayment = async (req, res) => {
+    if (req.user && req.user.role === 'PROFESSOR') {
+        if (req.file) {
+            try { fs.unlinkSync(req.file.path); } catch (e) { }
+        }
+        return res.status(403).json({ message: 'error', error: 'Forbidden' });
+    }
     const { candidateId, formationId, amount, paymentMethod, status } = req.body;
 
     if (amount !== undefined && (typeof amount !== 'number' || amount <= 0)) {
@@ -194,6 +243,9 @@ export const updatePayment = async (req, res) => {
 
 export const deletePayment = async (req, res) => {
     try {
+        if (req.user && req.user.role === 'PROFESSOR') {
+            return res.status(403).json({ message: 'error', error: 'Forbidden' });
+        }
         await paymentService.deletePayment(req.params.id);
         res.status(204).end();
     } catch (error) {
@@ -206,6 +258,9 @@ export const deletePayment = async (req, res) => {
 export const getPaymentPlan = async (req, res) => {
     const { candidateId, formationId } = req.params;
     try {
+        if (req.user && req.user.role === 'PROFESSOR') {
+            return res.status(403).json({ message: 'error', error: 'Forbidden' });
+        }
         const remainingAmount = await paymentService.calculateRemainingAmount(candidateId, formationId);
         if (remainingAmount === null) {
             return res.status(404).json({ message: 'error', error: 'Payment plan not found' });
@@ -230,6 +285,9 @@ export const getPaymentPlan = async (req, res) => {
 };
 
 export const createPaymentPlan = async (req, res) => {
+    if (req.user && req.user.role === 'PROFESSOR') {
+        return res.status(403).json({ message: 'error', error: 'Forbidden' });
+    }
     const { candidateId, formationId, totalAmount } = req.body;
 
     if (!candidateId || !formationId || totalAmount === undefined) {
@@ -278,6 +336,9 @@ export const createPaymentPlan = async (req, res) => {
 };
 
 export const updatePaymentPlan = async (req, res) => {
+    if (req.user && req.user.role === 'PROFESSOR') {
+        return res.status(403).json({ message: 'error', error: 'Forbidden' });
+    }
     const { candidateId, formationId } = req.params;
     const { totalAmount } = req.body;
 
@@ -308,6 +369,9 @@ export const updatePaymentPlan = async (req, res) => {
 };
 
 export const getPaymentPlanQuery = async (req, res) => {
+    if (req.user && req.user.role === 'PROFESSOR') {
+        return res.status(403).json({ message: 'error', error: 'Forbidden' });
+    }
     const { candidateId, formationId } = req.query;
 
     if (!candidateId || !formationId) {

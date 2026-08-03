@@ -1,0 +1,71 @@
+{
+  "admin": {
+    "displayName": "Administrateur",
+    "description": "Accès complet au système",
+    "permissions": [
+      "view_prospects",
+      "manage_prospects",
+      "view_candidates",
+      "manage_candidates",
+      "transform_prospect",
+      "view_professors",
+      "manage_professors",
+      "view_formations",
+      "manage_formations",
+      "view_payments",
+      "manage_payments",
+      "view_reservations",
+      "manage_reservations",
+      "manage_attendance",
+      "view_statistics",
+      "manage_roles",
+      "manage_users",
+      "view_own_schedule",
+      "view_own_reservations",
+      "view_own_info"
+    ]
+  },
+  "agent_reservation": {
+    "displayName": "Agent de réservation",
+    "description": "Gestion des candidats, formations et paiements",
+    "permissions": [
+      "view_prospects",
+      "view_candidates",
+      "manage_candidates",
+      "transform_prospect",
+      "view_professors",
+      "manage_professors",
+      "view_formations",
+      "manage_formations",
+      "view_payments",
+      "manage_payments",
+      "view_reservations",
+      "manage_reservations"
+    ]
+  },
+  "agent_reception": {
+    "displayName": "Agent de réception",
+    "description": "Gestion des prospects uniquement",
+    "permissions": [
+      "view_prospects",
+      "manage_prospects"
+    ]
+  },
+  "professor": {
+    "displayName": "Professeur",
+    "description": "Consultation planning et gestion présences",
+    "permissions": [
+      "view_reservations",
+      "manage_attendance",
+      "view_own_schedule"
+    ]
+  },
+  "candidate": {
+    "displayName": "Candidat",
+    "description": "Consultation de ses propres informations",
+    "permissions": [
+      "view_own_reservations",
+      "view_own_info"
+    ]
+  }
+}

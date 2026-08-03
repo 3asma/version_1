@@ -2,11 +2,43 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import prisma from '../config/prisma.js';
 import dotenv from 'dotenv';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET || 'fallback_secret_for_development_only';
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '24h';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const METADATA_PATH = path.join(__dirname, '../config/users_metadata.json');
+
+const getUserMetadata = (email) => {
+    try {
+        if (fs.existsSync(METADATA_PATH)) {
+            const metadata = JSON.parse(fs.readFileSync(METADATA_PATH, 'utf-8'));
+            return metadata[email];
+        }
+    } catch (e) {
+        console.error('Error reading metadata file:', e);
+    }
+    return null;
+};
+
+const writeUserMetadata = (email, data) => {
+    try {
+        let metadata = {};
+        if (fs.existsSync(METADATA_PATH)) {
+            metadata = JSON.parse(fs.readFileSync(METADATA_PATH, 'utf-8'));
+        }
+        metadata[email] = data;
+        fs.writeFileSync(METADATA_PATH, JSON.stringify(metadata, null, 2), 'utf-8');
+    } catch (e) {
+        console.error('Error writing metadata file:', e);
+    }
+};
 
 export const register = async (req, res) => {
     try {
@@ -41,17 +73,26 @@ export const register = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, salt);
 
         // Create user
+        const requestedRole = role || 'candidate';
+        const dbRole = requestedRole === 'admin' ? 'ADMIN' : 'USER';
         const user = await prisma.user.create({
             data: {
                 email,
                 password: hashedPassword,
-                role: role || 'USER'
+                role: dbRole
             }
+        });
+
+        // Write metadata
+        writeUserMetadata(email, {
+            name: email.split('@')[0],
+            status: 'active',
+            role: requestedRole
         });
 
         // Generate token
         const token = jwt.sign(
-            { userId: user.id, role: user.role },
+            { userId: user.id, role: requestedRole },
             JWT_SECRET,
             { expiresIn: JWT_EXPIRES_IN }
         );
@@ -63,7 +104,7 @@ export const register = async (req, res) => {
             user: {
                 id: user.id,
                 email: user.email,
-                role: user.role
+                role: requestedRole
             }
         });
     } catch (error) {
@@ -103,9 +144,30 @@ export const login = async (req, res) => {
             });
         }
 
+        // Check user status in metadata
+        const userMeta = getUserMetadata(user.email);
+        if (userMeta && userMeta.status === 'inactive') {
+            return res.status(403).json({
+                message: 'error',
+                error: 'Account disabled. Please contact your administrator.'
+            });
+        }
+
+        let resolvedRole = userMeta ? userMeta.role : (user.role === 'ADMIN' ? 'admin' : 'candidate');
+        let professorId = null;
+
+        if (resolvedRole === 'professor') {
+            const professor = await prisma.professor.findFirst({
+                where: { email: user.email }
+            });
+            if (professor) {
+                professorId = professor.id;
+            }
+        }
+
         // Generate token
         const token = jwt.sign(
-            { userId: user.id, role: user.role },
+            { userId: user.id, role: resolvedRole },
             JWT_SECRET,
             { expiresIn: JWT_EXPIRES_IN }
         );
@@ -117,7 +179,9 @@ export const login = async (req, res) => {
             user: {
                 id: user.id,
                 email: user.email,
-                role: user.role
+                role: resolvedRole,
+                name: userMeta ? userMeta.name : user.email.split('@')[0],
+                ...(professorId ? { professorId } : {})
             }
         });
     } catch (error) {
@@ -130,13 +194,18 @@ export const login = async (req, res) => {
 
 export const getMe = async (req, res) => {
     try {
-        // req.user is already populated by verifyToken middleware
+        // req.user is populated by verifyToken middleware (using uppercase role)
+        const userMeta = getUserMetadata(req.user.email);
+        const resolvedRole = userMeta ? userMeta.role : req.user.role.toLowerCase();
+
         return res.status(200).json({
             message: 'success',
             user: {
                 id: req.user.id,
                 email: req.user.email,
-                role: req.user.role
+                role: resolvedRole,
+                name: userMeta ? userMeta.name : req.user.email.split('@')[0],
+                ...(req.user.professorId ? { professorId: req.user.professorId } : {})
             }
         });
     } catch (error) {
@@ -146,4 +215,3 @@ export const getMe = async (req, res) => {
         });
     }
 };
-

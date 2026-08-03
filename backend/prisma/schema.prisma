@@ -50,6 +50,7 @@ model Candidate {
   inscriptionCandidates InscriptionCandidate[]
   payments              Payment[]
   paymentPlans          PaymentPlan[]
+  attendances           Attendance[]
   action        String?
   status        CandidateStatus @default(PENDING)
   createdAt     DateTime        @default(now())
@@ -226,6 +227,7 @@ model Payment {
   status        PaymentStatus
   paymentDate   DateTime      @default(now())
   note          String?
+  chequeFile    String?
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
 
@@ -260,6 +262,7 @@ model Reservation {
   inscription     Inscription       @relation(fields: [inscriptionId], references: [id], onDelete: Cascade)
   professor       Professor         @relation(fields: [professorId], references: [id], onDelete: Cascade)
   room            Room              @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  attendances     Attendance[]
 
   @@index([reservationDate])
   @@index([professorId])
@@ -283,4 +286,32 @@ model PaymentPlan {
   @@index([candidateId])
   @@index([formationId])
 }
+
+model Attendance {
+  id            String   @id @default(uuid())
+
+  reservationId String
+  candidateId   String
+
+  status        AttendanceStatus
+
+  note          String?
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  reservation Reservation @relation(fields: [reservationId], references: [id], onDelete: Cascade)
+  candidate   Candidate   @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+
+  @@unique([reservationId, candidateId])
+
+  @@index([reservationId])
+  @@index([candidateId])
+}
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+}
+
 

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useApp } from '../context/AppContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
@@ -29,53 +30,7 @@ interface Role {
 }
 
 export default function AdminRoles() {
-  const [roles, setRoles] = useState<Role[]>([
-    {
-      id: 'admin',
-      name: 'admin',
-      displayName: 'Administrateur',
-      description: 'Accès complet au système',
-      permissions: ['view_prospects', 'manage_prospects', 'view_candidates', 'manage_candidates', 'transform_prospect', 'view_professors', 'manage_professors', 'view_formations', 'manage_formations', 'view_payments', 'manage_payments', 'view_reservations', 'manage_reservations', 'view_statistics', 'manage_roles', 'manage_users'],
-      userCount: 2,
-      color: 'bg-red-100 text-red-800 border-red-200'
-    },
-    {
-      id: 'agent_reservation',
-      name: 'agent_reservation',
-      displayName: 'Agent de réservation',
-      description: 'Gestion des candidats, formations et paiements',
-      permissions: ['view_prospects', 'view_candidates', 'manage_candidates', 'transform_prospect', 'view_professors', 'manage_professors', 'view_formations', 'manage_formations', 'view_payments', 'manage_payments', 'view_reservations', 'manage_reservations'],
-      userCount: 5,
-      color: 'bg-blue-100 text-blue-800 border-blue-200'
-    },
-    {
-      id: 'agent_reception',
-      name: 'agent_reception',
-      displayName: 'Agent de réception',
-      description: 'Gestion des prospects uniquement',
-      permissions: ['view_prospects', 'manage_prospects'],
-      userCount: 3,
-      color: 'bg-green-100 text-green-800 border-green-200'
-    },
-    {
-      id: 'professor',
-      name: 'professor',
-      displayName: 'Professeur',
-      description: 'Consultation planning et gestion présences',
-      permissions: ['view_reservations', 'manage_attendance', 'view_own_schedule'],
-      userCount: 12,
-      color: 'bg-purple-100 text-purple-800 border-purple-200'
-    },
-    {
-      id: 'candidate',
-      name: 'candidate',
-      displayName: 'Candidat',
-      description: 'Consultation de ses propres informations',
-      permissions: ['view_own_reservations', 'view_own_info'],
-      userCount: 45,
-      color: 'bg-yellow-100 text-yellow-800 border-yellow-200'
-    }
-  ]);
+  const { roles, updateRolePermissions, deleteRole } = useApp();
 
   const [permissions] = useState<Permission[]>([
     // Prospects
@@ -139,20 +94,17 @@ export default function AdminRoles() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const newRole: Role = {
-      id: formData.displayName.toLowerCase().replace(/\s+/g, '_'),
-      name: formData.displayName.toLowerCase().replace(/\s+/g, '_'),
-      displayName: formData.displayName,
-      description: formData.description,
-      permissions: formData.selectedPermissions,
-      userCount: 0,
-      color: 'bg-gray-100 text-gray-800 border-gray-200'
-    };
-
-    setRoles([...roles, newRole]);
-    toast.success('Rôle créé avec succès');
-    setIsAddDialogOpen(false);
-    resetForm();
+    const roleId = formData.displayName.toLowerCase().replace(/\s+/g, '_');
+    updateRolePermissions(roleId, formData.selectedPermissions, formData.description, formData.displayName)
+      .then((success) => {
+        if (success) {
+          toast.success('Rôle créé avec succès');
+          setIsAddDialogOpen(false);
+          resetForm();
+        } else {
+          toast.error('Erreur lors de la création du rôle');
+        }
+      });
   };
 
   const handleEdit = (role: Role) => {
@@ -170,17 +122,17 @@ export default function AdminRoles() {
 
     if (!selectedRole) return;
 
-    const updatedRoles = roles.map(r =>
-      r.id === selectedRole.id
-        ? { ...r, displayName: formData.displayName, description: formData.description, permissions: formData.selectedPermissions }
-        : r
-    );
-
-    setRoles(updatedRoles);
-    toast.success('Rôle modifié avec succès');
-    setIsEditDialogOpen(false);
-    setSelectedRole(null);
-    resetForm();
+    updateRolePermissions(selectedRole.id, formData.selectedPermissions, formData.description, formData.displayName)
+      .then((success) => {
+        if (success) {
+          toast.success('Rôle modifié avec succès');
+          setIsEditDialogOpen(false);
+          setSelectedRole(null);
+          resetForm();
+        } else {
+          toast.error('Erreur lors de la modification du rôle');
+        }
+      });
   };
 
   const handleDeleteClick = (role: Role) => {
@@ -197,10 +149,15 @@ export default function AdminRoles() {
       return;
     }
 
-    setRoles(roles.filter(r => r.id !== selectedRole.id));
-    toast.success('Rôle supprimé avec succès');
-    setIsDeleteAlertOpen(false);
-    setSelectedRole(null);
+    deleteRole(selectedRole.id).then((success) => {
+      if (success) {
+        toast.success('Rôle supprimé avec succès');
+        setIsDeleteAlertOpen(false);
+        setSelectedRole(null);
+      } else {
+        toast.error('Erreur lors de la suppression du rôle');
+      }
+    });
   };
 
   const togglePermission = (permissionId: string) => {
@@ -336,11 +293,10 @@ export default function AdminRoles() {
                             return (
                               <div
                                 key={permission.id}
-                                className={`flex items-start gap-3 p-3 rounded-lg cursor-pointer transition-all ${
-                                  formData.selectedPermissions.includes(permission.id)
+                                className={`flex items-start gap-3 p-3 rounded-lg cursor-pointer transition-all ${formData.selectedPermissions.includes(permission.id)
                                     ? 'bg-white border-2 border-blue-500 shadow-sm'
                                     : 'bg-white/50 border border-gray-200 hover:bg-white'
-                                }`}
+                                  }`}
                                 onClick={() => togglePermission(permission.id)}
                               >
                                 <input
@@ -597,11 +553,10 @@ export default function AdminRoles() {
                           return (
                             <div
                               key={permission.id}
-                              className={`flex items-start gap-3 p-3 rounded-lg cursor-pointer transition-all ${
-                                formData.selectedPermissions.includes(permission.id)
+                              className={`flex items-start gap-3 p-3 rounded-lg cursor-pointer transition-all ${formData.selectedPermissions.includes(permission.id)
                                   ? 'bg-white border-2 border-blue-500 shadow-sm'
                                   : 'bg-white/50 border border-gray-200 hover:bg-white'
-                              }`}
+                                }`}
                               onClick={() => togglePermission(permission.id)}
                             >
                               <input

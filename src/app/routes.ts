@@ -10,7 +10,7 @@ import Formations from "./pages/Formations";
 import Reservations from "./pages/Reservations";
 import Planning from "./pages/Planning";
 import Inscriptions from "./pages/Inscriptions";
-import ProfessorSchedule from "./pages/ProfessorSchedule";
+
 import CandidateReservations from "./pages/CandidateReservations";
 import Attendance from "./pages/Attendance";
 import Statistics from "./pages/Statistics";
@@ -38,7 +38,7 @@ export const router = createBrowserRouter([
       { path: "reservations", Component: Reservations },
       { path: "planning", Component: Planning },
       { path: "inscriptions", Component: Inscriptions },
-      { path: "professor-schedule", Component: ProfessorSchedule },
+
       { path: "candidate-reservations", Component: CandidateReservations },
       { path: "attendance", Component: Attendance },
       { path: "statistics", Component: Statistics },

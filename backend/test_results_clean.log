@@ -1,0 +1,417 @@
+=== Attendance API Integration Test Report ===
+Logging in as Professor Rachid Bouazza (rachid.bouazza@demo.com)...
+Login Status: 200. Token acquired: true. Professor ID: 2048c2ac-8553-432a-a495-c58ed2fe989c
+Logging in as Admin (admin@formation.com)...
+Admin login status: 200. Token acquired: true
+Using Professor Reservation: 2f1e0bd4-f5d6-4aa1-8a64-173076da8133 (Code: RES-00001)
+Using Other Professor Reservation: 0396db36-25df-47a8-8704-c53398b38486 (Professor ID: 7f0ff2c9-f284-446a-ad58-47e75d7f882a)
+[TEST 1] GET attendance for owned reservation (Expected: 200 OK)
+Status: 200
+Body: {
+  "message": "success",
+  "data": {
+    "reservation": {
+      "id": "2f1e0bd4-f5d6-4aa1-8a64-173076da8133",
+      "reservationCode": "RES-00001",
+      "reservationDate": "2026-07-27T00:00:00.000Z",
+      "startTime": "2026-07-27T12:00:00.000Z",
+      "endTime": "2026-07-27T13:30:00.000Z",
+      "status": "COMPLETED"
+    },
+    "formation": {
+      "id": "77e3cf59-187f-40f6-8539-bfb1b1e5752a",
+      "matiere": "Français",
+      "niveau": "A2",
+      "type": "individual",
+      "duration": 60,
+      "totalSessions": 1,
+      "prix": "1000",
+      "volumeHoraire": 0,
+      "description": null,
+      "createdAt": "2026-07-25T12:46:31.319Z",
+      "updatedAt": "2026-07-25T12:46:31.319Z"
+    },
+    "room": {
+      "id": "a5adc952-80bf-4d67-a12b-fbaf79112ff4",
+      "numero": "Salle 3",
+      "capacite": 10,
+      "type": "Individuel",
+      "available": true,
+      "description": null,
+      "createdAt": "2026-07-25T13:02:27.400Z",
+      "updatedAt": "2026-07-25T13:02:27.400Z"
+    },
+    "professor": {
+      "id": "2048c2ac-8553-432a-a495-c58ed2fe989c",
+      "nom": "Bouazza",
+      "prenom": "Rachid",
+      "email": "rachid.bouazza@demo.com",
+      "telephone": "+212654444444",
+      "adresse": "Marrakech, Maroc",
+      "type": "permanent",
+      "dayOff": "Sunday",
+      "maxSessions": 30,
+      "createdAt": "2026-07-25T12:47:11.633Z",
+      "updatedAt": "2026-07-25T12:47:11.633Z"
+    },
+    "students": [
+      {
+        "candidateId": "44d6dce3-ab90-485d-b6be-9d45b73e8997",
+        "candidateCode": "CAN-2026-6364",
+        "firstName": "Mehdi",
+        "lastName": "El Fassi",
+        "status": "ABSENT",
+        "attendanceId": "795f532a-afee-4b92-bd02-648c91149025",
+        "note": "Modified status to ABSENT"
+      },
+      {
+        "candidateId": "ea4d708e-22f5-4814-a0ee-4f40c55fb29e",
+        "candidateCode": "CAN-2026-7515",
+        "firstName": "Tariq",
+        "lastName": "El Amrani",
+        "status": "ABSENT",
+        "attendanceId": "9020464f-65b5-4d6a-ab37-c4acc30b3bb5",
+        "note": "Absent candidate"
+      },
+      {
+        "candidateId": "4cf2691a-4454-4fff-b5b9-0e50dafd3a65",
+        "candidateCode": "CAN-2026-2891",
+        "firstName": "Anas",
+        "lastName": "Kabbaj",
+        "status": "ABSENT",
+        "attendanceId": "03660242-502e-45e2-8144-4810b5d749bd",
+        "note": "Absent candidate"
+      },
+      {
+        "candidateId": "421bc052-084f-43f5-b734-7bfc2190f049",
+        "candidateCode": "CAN-2026-7774",
+        "firstName": "Sarah",
+        "lastName": "Bennani",
+        "status": "ABSENT",
+        "attendanceId": "b41749cf-77e9-4e5e-bb1d-5a8516a33dd6",
+        "note": "Absent candidate"
+      },
+      {
+        "candidateId": "7f04ad2b-2c49-4d97-ba93-f24af37da53e",
+        "candidateCode": "CAN-2026-2586",
+        "firstName": "Amine",
+        "lastName": "Rachidi",
+        "status": "ABSENT",
+        "attendanceId": "e76f4b90-b4f4-4076-8c9f-d206d03f345d",
+        "note": "Absent candidate"
+      },
+      {
+        "candidateId": "ccb3151f-b7b1-4552-961c-ff61e419e9b7",
+        "candidateCode": "CAN-2026-9711",
+        "firstName": "Zaid",
+        "lastName": "Semlali",
+        "status": "ABSENT",
+        "attendanceId": "aedbf39b-75c1-4eee-903f-49b1707fe402",
+        "note": "Absent candidate"
+      },
+      {
+        "candidateId": "655ca79e-4b83-4890-9227-89e0346e7f2c",
+        "candidateCode": "CAN-2026-4447",
+        "firstName": "Ghita",
+        "lastName": "Filali",
+        "status": "ABSENT",
+        "attendanceId": "847701cc-a121-4577-8783-3224b50f295f",
+        "note": "Absent candidate"
+      }
+    ]
+  }
+}
+----------------------------------------
+[TEST 2] GET attendance for other reservation as Professor (Expected: 403 Forbidden)
+Status: 403
+Body: {
+  "message": "error",
+  "error": "FORBIDDEN"
+}
+----------------------------------------
+[TEST 3] Admin GET attendance for other reservation (Expected: 200 OK)
+Status: 200
+Body: {
+  "message": "success",
+  "data": {
+    "reservation": {
+      "id": "0396db36-25df-47a8-8704-c53398b38486",
+      "reservationCode": "RES-00002",
+      "reservationDate": "2026-07-28T00:00:00.000Z",
+      "startTime": "2026-07-28T12:00:00.000Z",
+      "endTime": "2026-07-28T13:30:00.000Z",
+      "status": "CONFIRMED"
+    },
+    "formation": {
+      "id": "77e3cf59-187f-40f6-8539-bfb1b1e5752a",
+      "matiere": "Français",
+      "niveau": "A2",
+      "type": "individual",
+      "duration": 60,
+      "totalSessions": 1,
+      "prix": "1000",
+      "volumeHoraire": 0,
+      "description": null,
+      "createdAt": "2026-07-25T12:46:31.319Z",
+      "updatedAt": "2026-07-25T12:46:31.319Z"
+    },
+    "room": {
+      "id": "12acc1f6-0594-4b04-b9cb-423e2b80843f",
+      "numero": "Salle 1",
+      "capacite": 15,
+      "type": "Individuel",
+      "available": true,
+      "description": null,
+      "createdAt": "2026-07-25T13:02:27.400Z",
+      "updatedAt": "2026-07-25T13:02:27.400Z"
+    },
+    "professor": {
+      "id": "7f0ff2c9-f284-446a-ad58-47e75d7f882a",
+      "nom": "Belkhayat",
+      "prenom": "Nora",
+      "email": "nora.belkhayat@demo.com",
+      "telephone": "+212655555555",
+      "adresse": "Tangier, Maroc",
+      "type": "vacataire",
+      "dayOff": "Friday",
+      "maxSessions": 12,
+      "createdAt": "2026-07-25T12:47:11.643Z",
+      "updatedAt": "2026-07-25T12:47:11.643Z"
+    },
+    "students": [
+      {
+        "candidateId": "44d6dce3-ab90-485d-b6be-9d45b73e8997",
+        "candidateCode": "CAN-2026-6364",
+        "firstName": "Mehdi",
+        "lastName": "El Fassi",
+        "status": "PRESENT",
+        "attendanceId": "e31c1732-4ed6-47b8-b010-eb853decfdce",
+        "note": null
+      },
+      {
+        "candidateId": "ea4d708e-22f5-4814-a0ee-4f40c55fb29e",
+        "candidateCode": "CAN-2026-7515",
+        "firstName": "Tariq",
+        "lastName": "El Amrani",
+        "status": null,
+        "attendanceId": null,
+        "note": null
+      },
+      {
+        "candidateId": "4cf2691a-4454-4fff-b5b9-0e50dafd3a65",
+        "candidateCode": "CAN-2026-2891",
+        "firstName": "Anas",
+        "lastName": "Kabbaj",
+        "status": null,
+        "attendanceId": null,
+        "note": null
+      },
+      {
+        "candidateId": "421bc052-084f-43f5-b734-7bfc2190f049",
+        "candidateCode": "CAN-2026-7774",
+        "firstName": "Sarah",
+        "lastName": "Bennani",
+        "status": null,
+        "attendanceId": null,
+        "note": null
+      },
+      {
+        "candidateId": "7f04ad2b-2c49-4d97-ba93-f24af37da53e",
+        "candidateCode": "CAN-2026-2586",
+        "firstName": "Amine",
+        "lastName": "Rachidi",
+        "status": null,
+        "attendanceId": null,
+        "note": null
+      },
+      {
+        "candidateId": "ccb3151f-b7b1-4552-961c-ff61e419e9b7",
+        "candidateCode": "CAN-2026-9711",
+        "firstName": "Zaid",
+        "lastName": "Semlali",
+        "status": null,
+        "attendanceId": null,
+        "note": null
+      },
+      {
+        "candidateId": "655ca79e-4b83-4890-9227-89e0346e7f2c",
+        "candidateCode": "CAN-2026-4447",
+        "firstName": "Ghita",
+        "lastName": "Filali",
+        "status": null,
+        "attendanceId": null,
+        "note": null
+      }
+    ]
+  }
+}
+----------------------------------------
+[TEST 4] POST save attendance on owned reservation (Expected: 200 OK)
+Status: 200
+Body: {
+  "message": "success",
+  "data": {
+    "reservation": {
+      "id": "2f1e0bd4-f5d6-4aa1-8a64-173076da8133",
+      "reservationCode": "RES-00001",
+      "reservationDate": "2026-07-27T00:00:00.000Z",
+      "startTime": "2026-07-27T12:00:00.000Z",
+      "endTime": "2026-07-27T13:30:00.000Z",
+      "status": "COMPLETED"
+    },
+    "formation": {
+      "id": "77e3cf59-187f-40f6-8539-bfb1b1e5752a",
+      "matiere": "Français",
+      "niveau": "A2",
+      "type": "individual",
+      "duration": 60,
+      "totalSessions": 1,
+      "prix": "1000",
+      "volumeHoraire": 0,
+      "description": null,
+      "createdAt": "2026-07-25T12:46:31.319Z",
+      "updatedAt": "2026-07-25T12:46:31.319Z"
+    },
+    "room": {
+      "id": "a5adc952-80bf-4d67-a12b-fbaf79112ff4",
+      "numero": "Salle 3",
+      "capacite": 10,
+      "type": "Individuel",
+      "available": true,
+      "description": null,
+      "createdAt": "2026-07-25T13:02:27.400Z",
+      "updatedAt": "2026-07-25T13:02:27.400Z"
+    },
+    "professor": {
+      "id": "2048c2ac-8553-432a-a495-c58ed2fe989c",
+      "nom": "Bouazza",
+      "prenom": "Rachid",
+      "email": "rachid.bouazza@demo.com",
+      "telephone": "+212654444444",
+      "adresse": "Marrakech, Maroc",
+      "type": "permanent",
+      "dayOff": "Sunday",
+      "maxSessions": 30,
+      "createdAt": "2026-07-25T12:47:11.633Z",
+      "updatedAt": "2026-07-25T12:47:11.633Z"
+    },
+    "students": [
+      {
+        "candidateId": "44d6dce3-ab90-485d-b6be-9d45b73e8997",
+        "candidateCode": "CAN-2026-6364",
+        "firstName": "Mehdi",
+        "lastName": "El Fassi",
+        "status": "ABSENT",
+        "attendanceId": "795f532a-afee-4b92-bd02-648c91149025",
+        "note": "Absent candidate"
+      },
+      {
+        "candidateId": "ea4d708e-22f5-4814-a0ee-4f40c55fb29e",
+        "candidateCode": "CAN-2026-7515",
+        "firstName": "Tariq",
+        "lastName": "El Amrani",
+        "status": "ABSENT",
+        "attendanceId": "9020464f-65b5-4d6a-ab37-c4acc30b3bb5",
+        "note": "Absent candidate"
+      },
+      {
+        "candidateId": "4cf2691a-4454-4fff-b5b9-0e50dafd3a65",
+        "candidateCode": "CAN-2026-2891",
+        "firstName": "Anas",
+        "lastName": "Kabbaj",
+        "status": "ABSENT",
+        "attendanceId": "03660242-502e-45e2-8144-4810b5d749bd",
+        "note": "Absent candidate"
+      },
+      {
+        "candidateId": "421bc052-084f-43f5-b734-7bfc2190f049",
+        "candidateCode": "CAN-2026-7774",
+        "firstName": "Sarah",
+        "lastName": "Bennani",
+        "status": "ABSENT",
+        "attendanceId": "b41749cf-77e9-4e5e-bb1d-5a8516a33dd6",
+        "note": "Absent candidate"
+      },
+      {
+        "candidateId": "7f04ad2b-2c49-4d97-ba93-f24af37da53e",
+        "candidateCode": "CAN-2026-2586",
+        "firstName": "Amine",
+        "lastName": "Rachidi",
+        "status": "ABSENT",
+        "attendanceId": "e76f4b90-b4f4-4076-8c9f-d206d03f345d",
+        "note": "Absent candidate"
+      },
+      {
+        "candidateId": "ccb3151f-b7b1-4552-961c-ff61e419e9b7",
+        "candidateCode": "CAN-2026-9711",
+        "firstName": "Zaid",
+        "lastName": "Semlali",
+        "status": "ABSENT",
+        "attendanceId": "aedbf39b-75c1-4eee-903f-49b1707fe402",
+        "note": "Absent candidate"
+      },
+      {
+        "candidateId": "655ca79e-4b83-4890-9227-89e0346e7f2c",
+        "candidateCode": "CAN-2026-4447",
+        "firstName": "Ghita",
+        "lastName": "Filali",
+        "status": "ABSENT",
+        "attendanceId": "847701cc-a121-4577-8783-3224b50f295f",
+        "note": "Absent candidate"
+      }
+    ]
+  }
+}
+----------------------------------------
+[TEST 5] POST save attendance with invalid candidate ID (Expected: 400 Bad Request)
+Status: 400
+Body: {
+  "message": "error",
+  "error": "CANDIDATE_NOT_IN_RESERVATION",
+  "candidateId": "d6a73099-0000-0000-0000-000000000000"
+}
+----------------------------------------
+[TEST 6] POST save attendance on other reservation as Professor (Expected: 403 Forbidden)
+Status: 403
+Body: {
+  "message": "error",
+  "error": "FORBIDDEN"
+}
+----------------------------------------
+[TEST 7] PATCH attendance record 795f532a-afee-4b92-bd02-648c91149025 as Professor (Expected: 200 OK)
+Status: 200
+Body: {
+  "message": "success",
+  "data": {
+    "id": "795f532a-afee-4b92-bd02-648c91149025",
+    "reservationId": "2f1e0bd4-f5d6-4aa1-8a64-173076da8133",
+    "candidateId": "44d6dce3-ab90-485d-b6be-9d45b73e8997",
+    "status": "ABSENT",
+    "note": "Modified status to ABSENT",
+    "createdAt": "2026-08-01T11:48:09.923Z",
+    "updatedAt": "2026-08-01T22:25:21.927Z"
+  }
+}
+----------------------------------------
+[TEST 8] PATCH other attendance record e31c1732-4ed6-47b8-b010-eb853decfdce as Professor (Expected: 403 Forbidden)
+Status: 403
+Body: {
+  "message": "error",
+  "error": "FORBIDDEN"
+}
+----------------------------------------
+[TEST 9] Admin POST save attendance (Expected: 403 Forbidden)
+Status: 403
+Body: {
+  "message": "error",
+  "error": "FORBIDDEN"
+}
+----------------------------------------
+[TEST 10] Admin PATCH attendance record 795f532a-afee-4b92-bd02-648c91149025 (Expected: 403 Forbidden)
+Status: 403
+Body: {
+  "message": "error",
+  "error": "FORBIDDEN"
+}
+----------------------------------------
+=== All Integration Tests Finished Success ===

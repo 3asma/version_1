@@ -2,6 +2,9 @@ import commercialService from '../services/commercialService.js';
 
 export const getAllCommercials = async (req, res) => {
     try {
+        if (req.user && req.user.role === 'PROFESSOR') {
+            return res.json({ message: 'success', data: [] });
+        }
         const commercials = await commercialService.getAllCommercials();
         res.json({ message: 'success', data: commercials });
     } catch (error) {

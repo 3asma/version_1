@@ -1,0 +1,9 @@
+ERROR MESSAGE:
+express is not defined
+
+STACK TRACE:
+ReferenceError: express is not defined
+    at file:///D:/formation_v2/backend/src/routes/roleRoutes.js:4:16
+    at ModuleJob.run (node:internal/modules/esm/module_job:268:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:543:26)
+    at async main (file:///D:/formation_v2/backend/test_load.js:6:9)

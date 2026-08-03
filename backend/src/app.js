@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import prisma from './config/prisma.js';
 import authRoutes from './routes/authRoutes.js';
 import prospectRoutes from './routes/prospectRoutes.js';
@@ -14,6 +16,12 @@ import commercialRoutes from './routes/commercialRoutes.js';
 import reservationRoutes from './routes/reservationRoutes.js';
 import planningRoutes from './routes/planningRoutes.js';
 import paymentRoutes from './routes/paymentRoutes.js';
+import attendanceRoutes from './routes/attendanceRoutes.js';
+import userRoutes from './routes/userRoutes.js';
+import roleRoutes from './routes/roleRoutes.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 
@@ -24,6 +32,7 @@ app.use(cors({
     credentials: true
 }));
 app.use(express.json());
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 // Routes
 app.use('/auth', authRoutes);
@@ -38,6 +47,9 @@ app.use('/commercials', commercialRoutes);
 app.use('/reservations', reservationRoutes);
 app.use('/planning', planningRoutes);
 app.use('/payments', paymentRoutes);
+app.use('/attendances', attendanceRoutes);
+app.use('/users', userRoutes);
+app.use('/roles', roleRoutes);
 
 // Health check endpoint (Public)
 app.get('/health', async (req, res) => {

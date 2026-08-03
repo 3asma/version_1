@@ -176,7 +176,7 @@ export default function Planning() {
   // Filter sessions based on current user role
   const getFilteredSessions = () => {
     if (currentUser?.role === 'professor') {
-      return sessions.filter(s => s.professorId === 'p1');
+      return sessions.filter(s => s.professorId === currentUser.professorId);
     }
     if (currentUser?.role === 'candidate') {
       return sessions.filter(s => s.candidateId === 'c1');

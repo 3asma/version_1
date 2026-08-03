@@ -1,8 +1,27 @@
 import reservationService from '../services/reservationService.js';
+import prisma from '../config/prisma.js';
 
 export const getAllReservations = async (req, res) => {
     try {
-        const reservations = await reservationService.getAllReservations();
+        let reservations;
+        if (req.user && req.user.role === 'PROFESSOR') {
+            reservations = await prisma.reservation.findMany({
+                where: { professorId: req.user.professorId },
+                include: {
+                    inscription: {
+                        include: {
+                            candidate: true,
+                            formation: true
+                        }
+                    },
+                    professor: true,
+                    room: true
+                },
+                orderBy: { startTime: 'asc' }
+            });
+        } else {
+            reservations = await reservationService.getAllReservations();
+        }
         res.json({ message: 'success', data: reservations });
     } catch (error) {
         res.status(500).json({ message: 'error', error: error.message });
@@ -12,6 +31,12 @@ export const getAllReservations = async (req, res) => {
 export const getReservationById = async (req, res) => {
     try {
         const reservation = await reservationService.getReservationById(req.params.id);
+        if (!reservation) {
+            return res.status(404).json({ message: 'error', error: 'RESERVATION_NOT_FOUND' });
+        }
+        if (req.user && req.user.role === 'PROFESSOR' && reservation.professorId !== req.user.professorId) {
+            return res.status(403).json({ message: 'error', error: 'FORBIDDEN' });
+        }
         res.json({ message: 'success', data: reservation });
     } catch (error) {
         const status = error.message === 'RESERVATION_NOT_FOUND' ? 404 : 500;

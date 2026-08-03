@@ -1,9 +1,26 @@
 import candidateService from '../services/candidateService.js';
 import { streamPDF } from '../services/pdfService.js';
+import prisma from '../config/prisma.js';
 
 export const exportCandidatesPDF = async (req, res) => {
     try {
-        const data = await candidateService.getAllCandidates();
+        let data;
+        if (req.user && req.user.role === 'PROFESSOR') {
+            data = await prisma.candidate.findMany({
+                where: {
+                    inscriptionCandidates: {
+                        some: {
+                            inscription: {
+                                professorId: req.user.professorId
+                            }
+                        }
+                    }
+                },
+                orderBy: { createdAt: 'desc' }
+            });
+        } else {
+            data = await candidateService.getAllCandidates();
+        }
         const headers = [
             { label: 'Code', key: 'candidateCode', width: 80 },
             { label: 'Nom', key: 'lastName', width: 85 },
@@ -29,7 +46,30 @@ export const exportCandidatesPDF = async (req, res) => {
 export const getAllCandidates = async (req, res) => {
 
     try {
-        const candidates = await candidateService.getAllCandidates();
+        let candidates;
+        if (req.user && req.user.role === 'PROFESSOR') {
+            candidates = await prisma.candidate.findMany({
+                where: {
+                    inscriptionCandidates: {
+                        some: {
+                            inscription: {
+                                professorId: req.user.professorId
+                            }
+                        }
+                    }
+                },
+                orderBy: { createdAt: 'desc' },
+                include: {
+                    inscriptions: {
+                        include: {
+                            formation: true
+                        }
+                    }
+                }
+            });
+        } else {
+            candidates = await candidateService.getAllCandidates();
+        }
         res.json({ message: 'success', data: candidates });
     } catch (error) {
         res.status(500).json({ message: 'error', error: error.message });

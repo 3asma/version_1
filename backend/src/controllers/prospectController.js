@@ -4,6 +4,9 @@ import { streamPDF } from '../services/pdfService.js';
 class ProspectController {
     async exportPDF(req, res, next) {
         try {
+            if (req.user && req.user.role === 'PROFESSOR') {
+                return res.status(403).json({ message: 'error', error: 'Forbidden' });
+            }
             const data = await prospectService.getAllProspects();
             const headers = [
                 { label: 'Nom & Prénom', key: 'fullName', width: 140 },
@@ -24,8 +27,10 @@ class ProspectController {
     }
 
     async getAll(req, res, next) {
-
         try {
+            if (req.user && req.user.role === 'PROFESSOR') {
+                return res.status(200).json({ message: 'success', data: [] });
+            }
             const data = await prospectService.getAllProspects();
             res.status(200).json({ message: 'success', data });
         } catch (error) {

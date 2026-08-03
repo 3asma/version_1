@@ -1,9 +1,69 @@
+import prisma from '../config/prisma.js';
 import inscriptionService from '../services/inscriptionService.js';
 import { streamPDF } from '../services/pdfService.js';
 
 export const exportInscriptionsPDF = async (req, res) => {
     try {
-        const data = await inscriptionService.getAllInscriptions();
+        let data;
+        if (req.user && req.user.role === 'PROFESSOR') {
+            const groups = await prisma.group.findMany({
+                where: {
+                    inscription: {
+                        professorId: req.user.professorId
+                    }
+                },
+                include: {
+                    inscription: {
+                        include: {
+                            formation: true,
+                            professor: true,
+                            members: {
+                                include: {
+                                    candidate: true
+                                }
+                            }
+                        }
+                    }
+                },
+                orderBy: { createdAt: 'desc' }
+            });
+            data = groups.map(g => {
+                const ins = g.inscription || {};
+                const formatCode = (g.nom && g.nom.split(' - ').length > 1) ? g.nom.split(' - ')[g.nom.split(' - ').length - 1] : g.nom;
+                const mappedInscriptions = (ins.members || []).map(m => ({
+                    id: ins.id,
+                    dateInscription: ins.dateInscription,
+                    status: ins.status,
+                    note: ins.note,
+                    duration: ins.duration,
+                    price: ins.price,
+                    volumeHoraire: ins.volumeHoraire,
+                    remainingHours: ins.remainingHours,
+                    learningMode: ins.learningMode,
+                    candidateId: m.candidateId,
+                    candidate: m.candidate,
+                    formationId: ins.formationId,
+                    professorId: ins.professorId,
+                    createdAt: ins.createdAt,
+                    updatedAt: ins.updatedAt,
+                    inscriptionCode: formatCode,
+                    learningGroupId: g.id
+                }));
+                return {
+                    id: g.id,
+                    groupName: g.nom,
+                    inscriptionCode: formatCode,
+                    learningMode: ins.learningMode || 'GROUPE',
+                    dateInscription: ins.dateInscription || g.createdAt,
+                    note: ins.note || null,
+                    formation: ins.formation || null,
+                    professor: ins.professor || null,
+                    inscriptions: mappedInscriptions
+                };
+            }).filter(g => g.inscriptions && g.inscriptions.length > 0);
+        } else {
+            data = await inscriptionService.getAllInscriptions();
+        }
         const headers = [
             { label: 'N° Inscription', key: 'inscriptionCode', width: 100 },
             { label: 'Nom Groupe', key: 'groupName', width: 110 },
@@ -37,7 +97,72 @@ export const exportInscriptionsPDF = async (req, res) => {
 export const getAllInscriptions = async (req, res) => {
 
     try {
-        const inscriptions = await inscriptionService.getAllInscriptions();
+        let inscriptions;
+        if (req.user && req.user.role === 'PROFESSOR') {
+            const groups = await prisma.group.findMany({
+                where: {
+                    inscription: {
+                        professorId: req.user.professorId
+                    }
+                },
+                include: {
+                    inscription: {
+                        include: {
+                            formation: true,
+                            professor: true,
+                            members: {
+                                include: {
+                                    candidate: true
+                                }
+                            }
+                        }
+                    }
+                },
+                orderBy: { createdAt: 'desc' }
+            });
+            inscriptions = groups.map(g => {
+                const ins = g.inscription || {};
+                const formatCode = (g.nom && g.nom.split(' - ').length > 1) ? g.nom.split(' - ')[g.nom.split(' - ').length - 1] : g.nom;
+                const mappedInscriptions = (ins.members || []).map(m => ({
+                    id: ins.id,
+                    dateInscription: ins.dateInscription,
+                    status: ins.status,
+                    note: ins.note,
+                    duration: ins.duration,
+                    price: ins.price,
+                    volumeHoraire: ins.volumeHoraire,
+                    remainingHours: ins.remainingHours,
+                    learningMode: ins.learningMode,
+                    candidateId: m.candidateId,
+                    candidate: m.candidate,
+                    formationId: ins.formationId,
+                    professorId: ins.professorId,
+                    createdAt: ins.createdAt,
+                    updatedAt: ins.updatedAt,
+                    inscriptionCode: formatCode,
+                    learningGroupId: g.id
+                }));
+                return {
+                    id: g.id,
+                    groupName: g.nom,
+                    inscriptionCode: formatCode,
+                    learningMode: ins.learningMode || 'GROUPE',
+                    dateInscription: ins.dateInscription || g.createdAt,
+                    note: ins.note || null,
+                    formation: ins.formation || null,
+                    professor: ins.professor || null,
+                    inscriptions: mappedInscriptions,
+                    inscription: {
+                        id: ins.id,
+                        status: ins.status,
+                        learningMode: ins.learningMode,
+                        members: ins.members || []
+                    }
+                };
+            }).filter(g => g.inscriptions && g.inscriptions.length > 0);
+        } else {
+            inscriptions = await inscriptionService.getAllInscriptions();
+        }
         res.json({ message: 'success', data: inscriptions });
     } catch (error) {
         res.status(500).json({ message: 'error', error: error.message });

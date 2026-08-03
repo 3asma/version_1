@@ -1,0 +1,33 @@
+﻿Ôùç injected env (0) from .env // tip: Ôîÿ multiple files { path: ['.env.local', '.env'] }
+­ƒÅü Starting comprehensive role protection integration tests...
+­ƒæÑ Test credentials identified.
+
+­ƒöÆ Testing ADMIN-only routers (/users, /roles, /professors, /rooms, /formations):
+   ÔööÔöÇ GET /users => 200 (Expected: 200) - PASSED
+   ÔööÔöÇ GET /users => 403 (Expected: 403) - PASSED
+   ÔööÔöÇ GET /users => 403 (Expected: 403) - PASSED
+   ÔööÔöÇ GET /roles => 200 (Expected: 200) - PASSED
+   ÔööÔöÇ GET /roles => 403 (Expected: 403) - PASSED
+   ÔööÔöÇ GET /rooms => 200 (Expected: 200) - PASSED
+   ÔööÔöÇ GET /rooms => 403 (Expected: 403) - PASSED
+   ÔööÔöÇ GET /formations => 200 (Expected: 200) - PASSED
+   ÔööÔöÇ GET /formations => 403 (Expected: 403) - PASSED
+
+­ƒöÆ Testing Agent Reception routers (/prospects, /candidates, /commercials):
+   ÔööÔöÇ GET /prospects => 200 (Expected: 200) - PASSED
+   ÔööÔöÇ GET /prospects => 403 (Expected: 403) - PASSED
+   ÔööÔöÇ GET /candidates => 200 (Expected: 200) - PASSED
+   ÔööÔöÇ GET /candidates => 403 (Expected: 403) - PASSED
+   ÔööÔöÇ GET /candidates => 403 (Expected: 403) - PASSED
+
+­ƒöÆ Testing Candidate ownership checks (own candidates/:id vs others):
+   ÔööÔöÇ GET /candidates/b2170dd5-1c78-4365-a695-489308bd7fb7 => 200 (Expected: 200) - PASSED
+   ÔööÔöÇ GET /candidates/7f04ad2b-2c49-4d97-ba93-f24af37da53e => 403 (Expected: 403) - PASSED
+
+­ƒöÆ Testing Agent Reservation routers (/reservations, /planning, /payments):
+   ÔööÔöÇ GET /reservations => 200 (Expected: 200) - PASSED
+   ÔööÔöÇ GET /reservations => 403 (Expected: 403) - PASSED
+   ÔööÔöÇ GET /payments => 200 (Expected: 200) - PASSED
+   ÔööÔöÇ GET /payments => 403 (Expected: 403) - PASSED
+
+­ƒÄë Comprehensive security audit integration tests completed successfully!

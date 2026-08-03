@@ -1,5 +1,5 @@
 import express from 'express';
-import { verifyToken } from '../middlewares/authMiddleware.js';
+import { verifyToken, requireRole } from '../middlewares/authMiddleware.js';
 import {
     getAllCommercials,
     getCommercialById,
@@ -12,6 +12,7 @@ const router = express.Router();
 
 // All routes protected by JWT
 router.use(verifyToken);
+router.use(requireRole(['admin', 'agent_reception']));
 
 router.get('/', getAllCommercials);
 router.get('/:id', getCommercialById);

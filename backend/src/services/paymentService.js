@@ -130,7 +130,8 @@ class PaymentService {
                         paymentMethod,
                         status,
                         paymentDate: data.paymentDate ? new Date(data.paymentDate) : new Date(),
-                        note: data.note || null
+                        note: data.note || null,
+                        chequeFile: data.chequeFile || null
                     },
                     include: {
                         candidate: true,

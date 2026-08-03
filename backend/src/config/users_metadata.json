@@ -1,0 +1,27 @@
+{
+  "admin@formation.com": {
+    "name": "Administrateur",
+    "status": "active",
+    "role": "admin"
+  },
+  "reception@formation.com": {
+    "name": "Agent Réception",
+    "status": "active",
+    "role": "agent_reception"
+  },
+  "reservation@formation.com": {
+    "name": "Agent Réservation",
+    "status": "active",
+    "role": "agent_reservation"
+  },
+  "prof@formation.com": {
+    "name": "Marie Dupont",
+    "status": "active",
+    "role": "professor"
+  },
+  "candidat@formation.com": {
+    "name": "Jean Martin",
+    "status": "active",
+    "role": "candidate"
+  }
+}

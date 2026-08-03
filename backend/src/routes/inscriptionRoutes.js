@@ -1,5 +1,5 @@
 import express from 'express';
-import { verifyToken } from '../middlewares/authMiddleware.js';
+import { verifyToken, requireRole } from '../middlewares/authMiddleware.js';
 import {
     exportInscriptionsPDF,
     getAllInscriptions,
@@ -15,6 +15,7 @@ const router = express.Router();
 
 // All routes protected by JWT
 router.use(verifyToken);
+router.use(requireRole(['admin', 'agent_reception', 'agent_reservation']));
 
 router.get('/export/pdf', exportInscriptionsPDF);
 router.get('/', getAllInscriptions);

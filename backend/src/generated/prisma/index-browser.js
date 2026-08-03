@@ -257,6 +257,7 @@ exports.Prisma.PaymentScalarFieldEnum = {
   status: 'status',
   paymentDate: 'paymentDate',
   note: 'note',
+  chequeFile: 'chequeFile',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -280,6 +281,16 @@ exports.Prisma.PaymentPlanScalarFieldEnum = {
   candidateId: 'candidateId',
   formationId: 'formationId',
   totalAmount: 'totalAmount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AttendanceScalarFieldEnum = {
+  id: 'id',
+  reservationId: 'reservationId',
+  candidateId: 'candidateId',
+  status: 'status',
+  note: 'note',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -354,6 +365,11 @@ exports.ReservationStatus = exports.$Enums.ReservationStatus = {
   COMPLETED: 'COMPLETED'
 };
 
+exports.AttendanceStatus = exports.$Enums.AttendanceStatus = {
+  PRESENT: 'PRESENT',
+  ABSENT: 'ABSENT'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   Prospect: 'Prospect',
@@ -367,7 +383,8 @@ exports.Prisma.ModelName = {
   Commercial: 'Commercial',
   Payment: 'Payment',
   Reservation: 'Reservation',
-  PaymentPlan: 'PaymentPlan'
+  PaymentPlan: 'PaymentPlan',
+  Attendance: 'Attendance'
 };
 
 /**

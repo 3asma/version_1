@@ -1,0 +1,19 @@
+=== Assigned Candidates Integration Test ===
+Logging in as Professor Rachid Bouazza (rachid.bouazza@demo.com)...
+Login Status: 200. Token acquired: true. Professor ID: 2048c2ac-8553-432a-a495-c58ed2fe989c
+Fetching candidates list for Professor...
+GET /candidates status: 200
+Number of candidates retrieved: 7
+[Candidate 1] Code: CAN-2026-9711, Name: Zaid Semlali
+[Candidate 2] Code: CAN-2026-4447, Name: Ghita Filali
+[Candidate 3] Code: CAN-2026-7515, Name: Tariq El Amrani
+[Candidate 4] Code: CAN-2026-2891, Name: Anas Kabbaj
+[Candidate 5] Code: CAN-2026-6364, Name: Mehdi El Fassi
+[Candidate 6] Code: CAN-2026-7774, Name: Sarah Bennani
+[Candidate 7] Code: CAN-2026-2586, Name: Amine Rachidi
+Expected count from direct database query: 7
+SUCCESS: Candidate count retrieved via API matches database expectation.
+Testing PDF Export route for Professor...
+GET /candidates/export/pdf status: 200
+SUCCESS: PDF export returned 200 OK.
+=== Test Finished Successfully ===
