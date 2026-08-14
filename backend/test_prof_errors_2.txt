@@ -1,0 +1,13 @@
+g) [], RemoteExc     eption     + FullyQualifiedErrorId : Native     CommandError   (Use `node --trace-warnings ...` to  show where the warning was created) node.exe : (node:8800)  Experimenta
+     + FullyQualifiedErrorId : Native     CommandError   (Use `node --trace-warnings ...` to  show where the warning was created) node.exe : (node:8800)  ExperimentalWarning: Support for  loadi
+g) [], RemoteExc     eption     + FullyQualifiedErrorId : Native     CommandError   (Use `node --trace-warnings ...` to  show where the warning was created) (node:13392) ExperimentalWarning:  
+     + FullyQualifiedErrorId : Native     CommandError   (Use `node --trace-warnings ...` to  show where the warning was created) (node:13392) ExperimentalWarning:  Support for loading ES Module
+isting email[32m 27[2mms[22m[39m [31m   ÔåÆ expected 200 to be 409 // Object.is equality[39m  [32mÔ£ô[39m src/tests/integration/professor.test.js[2m > [22mProfessor Integration Tests (Post
+39m  [31mÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[39m[1m[ 41m Failed Tests 1 [49m[22m[31mÔÄ» ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[39m  [41m[1m FAIL [22m[49m src/tests/i ntegration/professor.test.js[2m >  [22mProfess
+22m[31mÔÄ» ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[39m  [41m[1m FAIL [22m[49m src/tests/i ntegration/professor.test.js[2m >  [22mProfessor Integration Tests  (PostgreSQL Test DB)[2m >  [22mPATCH /professo
+g  email to an existing email [31m[1mAssertionError[22m:  expected 200 to be 409 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 409[39m [31m+ 200[39m 
+n existing email [31m[1mAssertionError[22m:  expected 200 to be 409 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 409[39m [31m+ 200[39m  [36m [2mÔØ»
+ to be 409 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 409[39m [31m+ 200[39m  [36m [2mÔØ»[22m src/tests/integrat ion/professor.test.js:[2m355:37[22
+e xpect[39m(response[33m.[39mbody[3 3m.[39merror)[33m.[39m[34mtoBe[3 9m([32m'Email already  exists'[39m)[33m;[39m     [90m357|[39m          })[33m;[39m  [31m[2mÔÄ»ÔÄ»ÔÄ»ÔÄ»Ô
+»[22m[39m   [2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m [2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m17 passed[39m[22m[90m (18)[39m [2m   Start
+m[90m (1)[39m [2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m17 passed[39m[22m[90m (18)[39m [2m   Start at [22m 16:01:48 [2m   Duration [22m 7.41s[2m (transform 35

@@ -1,0 +1,135 @@
+g) [], RemoteExc     eption     + FullyQualifiedErrorId : Native     CommandError   (Use `node --trace-warnings ...` to  show where the warning was created) node.exe : (node:12360)  Experiment
+     + FullyQualifiedErrorId : Native     CommandError   (Use `node --trace-warnings ...` to  show where the warning was created) node.exe : (node:12360)  ExperimentalWarning: Support for  load
+g) [], RemoteExc     eption     + FullyQualifiedErrorId : Native     CommandError   (Use `node --trace-warnings ...` to  show where the warning was created) (node:19280) ExperimentalWarning:  
+     + FullyQualifiedErrorId : Native     CommandError   (Use `node --trace-warnings ...` to  show where the warning was created) (node:19280) ExperimentalWarning:  Support for loading ES Module
+ed Professor[32m 55[2mms[22m[39m [31m   ÔåÆ expected 404 to be 200 // Object.is equality[39m  [31m├ù[39m src/tests/integration/attendance.test.js[2m > [22mAttendance Integration Tests (Pos
+ reservation[32m 21[2mms[22m[39m [31m   ÔåÆ expected 404 to be 403 // Object.is equality[39m  [31m├ù[39m src/tests/integration/attendance.test.js[2m > [22mAttendance Integration Tests (Pos
+sorId check)[32m 13[2mms[22m[39m [31m   ÔåÆ expected 404 to be 200 // Object.is equality[39m [0mGET /attendance/reservation/00000000-0000-0000-0000-000000000000 [33m404[0m 1.917 ms - 198[0
+e_attendance[32m 12[2mms[22m[39m [31m   ÔåÆ expected 404 to be 403 // Object.is equality[39m  [31m├ù[39m src/tests/integration/attendance.test.js[2m > [22mAttendance Integration Tests (Pos
+is not found[32m 20[2mms[22m[39m [31m   ÔåÆ expected undefined to be 'RESERVATION_NOT_FOUND' // Object.is equality[39m  [31m├ù[39m src/tests/integration/attendance.test.js[2m > [22mAttenda
+ndance list, save records, and update reservation status to COMPLETED[32m 15[2mms[22m[39m [31m   ÔåÆ expected 404 to be 200 // Object.is equality[39m  [31m├ù[39m src/tests/integration/attend
+to COMPLETED[32m 15[2mms[22m[39m [31m   ÔåÆ expected 404 to be 200 // Object.is equality[39m  [31m├ù[39m src/tests/integration/attendance.test.js[2m > [22mAttendance Integration Tests (Pos
+FESSOR only)[32m 11[2mms[22m[39m [31m   ÔåÆ expected 404 to be 403 // Object.is equality[39m  [31m├ù[39m src/tests/integration/attendance.test.js[2m > [22mAttendance Integration Tests (Pos
+es to submit[32m 10[2mms[22m[39m [31m   ÔåÆ expected 404 to be 403 // Object.is equality[39m  [31m├ù[39m src/tests/integration/attendance.test.js[2m > [22mAttendance Integration Tests (Pos
+dances array[32m 10[2mms[22m[39m [31m   ÔåÆ expected 404 to be 400 // Object.is equality[39m  [31m├ù[39m src/tests/integration/attendance.test.js[2m > [22mAttendance Integration Tests (Pos
+ng in record[32m 25[2mms[22m[39m [31m   ÔåÆ expected 404 to be 400 // Object.is equality[39m [0mPOST /attendance/reservation/29377e35-f1f0-4e6f-a39b-63f8a623c05a [33m404[0m 1.280 ms - 199[
+e reservation[32m 9[2mms[22m[39m [31m   ÔåÆ expected 404 to be 400 // Object.is equality[39m  [31m├ù[39m src/tests/integration/attendance.test.js[2m > [22mAttendance Integration Tests (Pos
+Id (Soumission)[2m > [22mshould return 400 when status is invalid[32m 10[2mms[22m[39m [31m   ÔåÆ expected 404 to be 400 // Object.is equality[39m  [31m├ù[39m src/tests/integration/attendan
+s is invalid[32m 10[2mms[22m[39m [31m   ÔåÆ expected 404 to be 400 // Object.is equality[39m  [31m├ù[39m src/tests/integration/attendance.test.js[2m > [22mAttendance Integration Tests (Pos
+nd on submit[32m 10[2mms[22m[39m [31m   ÔåÆ expected undefined to be 'RESERVATION_NOT_FOUND' // Object.is equality[39m  [31m├ù[39m src/tests/integration/attendance.test.js[2m > [22mAttenda
+[2m > [22mshould successfully update attendance status or note by the assigned Professor[32m 11[2mms[22m[39m [31m   ÔåÆ expected 404 to be 200 // Object.is equality[39m  [31m├ù[39m src/tes
+ed Professor[32m 11[2mms[22m[39m [31m   ÔåÆ expected 404 to be 200 // Object.is equality[39m  [31m├ù[39m src/tests/integration/attendance.test.js[2m > [22mAttendance Integration Tests (Pos
+dance record[32m 10[2mms[22m[39m [31m   ÔåÆ expected 404 to be 403 // Object.is equality[39m  [31m├ù[39m src/tests/integration/attendance.test.js[2m > [22mAttendance Integration Tests (Pos
+ (Modification)[2m > [22mshould return 400 when status in update is invalid[32m 9[2mms[22m[39m [31m   ÔåÆ expected 404 to be 400 // Object.is equality[39m  [31m├ù[39m src/tests/integration
+te is invalid[32m 9[2mms[22m[39m [31m   ÔåÆ expected 404 to be 400 // Object.is equality[39m  [31m├ù[39m src/tests/integration/attendance.test.js[2m > [22mAttendance Integration Tests (Pos
+ is not found[32m 9[2mms[22m[39m [31m   ÔåÆ expected undefined to be 'ATTENDANCE_NOT_FOUND' // Object.is equality[39m  [31mÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[39m[1m[41m  Failed Tests 17 [49m[22m[31mÔ
+y[39m  [31mÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[39m[1m[41m  Failed Tests 17 [49m[22m[31mÔÄ»ÔÄ »ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[39m  [41m[1m FAIL [22m[49m src/tests/i ntegration/attendance.test.js[2m >  [22mAtten
+22m[31mÔÄ»ÔÄ »ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[39m  [41m[1m FAIL [22m[49m src/tests/i ntegration/attendance.test.js[2m >  [22mAttendance Integration Tests  (PostgreSQL Test DB)[2m > [22mGET / attendan
+t for  the assigned Professor [31m[1mAssertionError[22m:  expected 404 to be 200 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 200[39m [31m+ 404[39m 
+signed Professor [31m[1mAssertionError[22m:  expected 404 to be 200 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 200[39m [31m+ 404[39m  [36m [2mÔØ»
+ to be 200 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 200[39m [31m+ 404[39m  [36m [2mÔØ»[22m src/tests/integrat ion/attendance.test.js:[2m241:37[2
+            [34me xpect[39m(response[33m.[39mstatus) [33m.[39m[34mtoBe[39m([34m200[3 9m)[33m;[39m     [90m   |[39m                                      [31m^[39m     [90m242|[3
+ÔÄ»ÔÄ»ÔÄ»ÔÄ »ÔÄ»[1/17]ÔÄ»[22m[39m  [41m[1m FAIL [22m[49m src/tests/i ntegration/attendance.test.js[2m >  [22mAttendance Integration Tests  (PostgreSQL Test DB)[2m > [22mGET / attendan
+ot assigned to the reservation [31m[1mAssertionError[22m:  expected 404 to be 403 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 403[39m [31m+ 404[39m 
+ the reservation [31m[1mAssertionError[22m:  expected 404 to be 403 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 403[39m [31m+ 404[39m  [36m [2mÔØ»
+ to be 403 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 403[39m [31m+ 404[39m  [36m [2mÔØ»[22m src/tests/integrat ion/attendance.test.js:[2m260:37[2
+            [34me xpect[39m(response[33m.[39mstatus) [33m.[39m[34mtoBe[39m([34m403[3 9m)[33m;[39m     [90m   |[39m                                      [31m^[39m     [90m261|[3
+e xpect[39m(response[33m.[39mbody[3 3m.[39merror)[33m.[39m[34mtoBe[3 9m([32m'FORBIDDEN'[39m)[33m;[39m     [90m262|[39m          })[33m;[39m  [31m[2mÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ
+ÔÄ»ÔÄ»ÔÄ»ÔÄ »ÔÄ»[2/17]ÔÄ»[22m[39m  [41m[1m FAIL [22m[49m src/tests/i ntegration/attendance.test.js[2m >  [22mAttendance Integration Tests  (PostgreSQL Test DB)[2m > [22mGET / attendan
+in (ignores professorId check) [31m[1mAssertionError[22m:  expected 404 to be 200 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 200[39m [31m+ 404[39m 
+ofessorId check) [31m[1mAssertionError[22m:  expected 404 to be 200 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 200[39m [31m+ 404[39m  [36m [2mÔØ»
+ to be 200 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 200[39m [31m+ 404[39m  [36m [2mÔØ»[22m src/tests/integrat ion/attendance.test.js:[2m269:37[2
+            [34me xpect[39m(response[33m.[39mstatus) [33m.[39m[34mtoBe[39m([34m200[3 9m)[33m;[39m     [90m   |[39m                                      [31m^[39m     [90m270|[3
+ÔÄ»ÔÄ»ÔÄ»ÔÄ »ÔÄ»[3/17]ÔÄ»[22m[39m  [41m[1m FAIL [22m[49m src/tests/i ntegration/attendance.test.js[2m >  [22mAttendance Integration Tests  (PostgreSQL Test DB)[2m > [22mGET / attendan
+user lacking manage_attendance [31m[1mAssertionError[22m:  expected 404 to be 403 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 403[39m [31m+ 404[39m 
+anage_attendance [31m[1mAssertionError[22m:  expected 404 to be 403 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 403[39m [31m+ 404[39m  [36m [2mÔØ»
+ to be 403 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 403[39m [31m+ 404[39m  [36m [2mÔØ»[22m src/tests/integrat ion/attendance.test.js:[2m278:37[2
+            [34me xpect[39m(response[33m.[39mstatus) [33m.[39m[34mtoBe[39m([34m403[3 9m)[33m;[39m     [90m   |[39m                                      [31m^[39m     [90m279|[3
+[90m279|[39m             expect (response.body.error).toContain('Acce ss denied. InsuÔÇª     [90m280|[39m          })[33m;[39m  [31m[2mÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»Ô Ä»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»Ô
+ÔÄ»ÔÄ»ÔÄ»ÔÄ »ÔÄ»[4/17]ÔÄ»[22m[39m  [41m[1m FAIL [22m[49m src/tests/i ntegration/attendance.test.js[2m >  [22mAttendance Integration Tests  (PostgreSQL Test DB)[2m > [22mGET / attendan
+hen reservation is not  found [31m[1mAssertionError[22m:  expected undefined to be  'RESERVATION_NOT_FOUND' // Object.is  equality[39m  [32m- Expected:[39m "RESERVATION_NOT_FOUND"  [3
+n is not  found [31m[1mAssertionError[22m:  expected undefined to be  'RESERVATION_NOT_FOUND' // Object.is  equality[39m  [32m- Expected:[39m "RESERVATION_NOT_FOUND"  [31m+ Received:
+NOT_FOUND' // Object.is  equality[39m  [32m- Expected:[39m "RESERVATION_NOT_FOUND"  [31m+ Received:[39m undefined  [36m [2mÔØ»[22m src/tests/integrat ion/attendance.test.js:[2m288:4
+            [34me xpect[39m(response[33m.[39mstatus) [33m.[39m[34mtoBe[39m([34m404[3 9m)[33m;[39m     [90m288|[39m             [34me xpect[39m(response[33m.[39mbody[3 3m.[39m
+e xpect[39m(response[33m.[39mbody[3 3m.[39merror)[33m.[39m[34mtoBe[3 9m([32m'RESERVATION_NOT_FOUND'[39m) [33m;[39m     [90m   |[39m                                          [31m^
+ÔÄ»ÔÄ»ÔÄ»ÔÄ »ÔÄ»[5/17]ÔÄ»[22m[39m  [41m[1m FAIL [22m[49m src/tests/i ntegration/attendance.test.js[2m >  [22mAttendance Integration Tests  (PostgreSQL Test DB)[2m > [22mPOST  /attenda
+ce list,  save records, and update reservation  status to COMPLETED [31m[1mAssertionError[22m:  expected 404 to be 200 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m
+ervation  status to COMPLETED [31m[1mAssertionError[22m:  expected 404 to be 200 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 200[39m [31m+ 404[39m 
+tus to COMPLETED [31m[1mAssertionError[22m:  expected 404 to be 200 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 200[39m [31m+ 404[39m  [36m [2mÔØ»
+ to be 200 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 200[39m [31m+ 404[39m  [36m [2mÔØ»[22m src/tests/integrat ion/attendance.test.js:[2m309:37[2
+            [34me xpect[39m(response[33m.[39mstatus) [33m.[39m[34mtoBe[39m([34m200[3 9m)[33m;[39m     [90m   |[39m                                      [31m^[39m     [90m310|[3
+ÔÄ»ÔÄ»ÔÄ»ÔÄ »ÔÄ»[6/17]ÔÄ»[22m[39m  [41m[1m FAIL [22m[49m src/tests/i ntegration/attendance.test.js[2m >  [22mAttendance Integration Tests  (PostgreSQL Test DB)[2m > [22mPOST  /attenda
+it (strictly PROFESSOR  only) [31m[1mAssertionError[22m:  expected 404 to be 403 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 403[39m [31m+ 404[39m 
+ROFESSOR  only) [31m[1mAssertionError[22m:  expected 404 to be 403 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 403[39m [31m+ 404[39m  [36m [2mÔØ»
+ to be 403 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 403[39m [31m+ 404[39m  [36m [2mÔØ»[22m src/tests/integrat ion/attendance.test.js:[2m342:37[2
+            [34me xpect[39m(response[33m.[39mstatus) [33m.[39m[34mtoBe[39m([34m403[3 9m)[33m;[39m     [90m   |[39m                                      [31m^[39m     [90m343|[3
+e xpect[39m(response[33m.[39mbody[3 3m.[39merror)[33m.[39m[34mtoBe[3 9m([32m'FORBIDDEN'[39m)[33m;[39m     [90m344|[39m          })[33m;[39m  [31m[2mÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ
+ÔÄ»ÔÄ»ÔÄ»ÔÄ »ÔÄ»[7/17]ÔÄ»[22m[39m  [41m[1m FAIL [22m[49m src/tests/i ntegration/attendance.test.js[2m >  [22mAttendance Integration Tests  (PostgreSQL Test DB)[2m > [22mPOST  /attenda
+ed Professor tries to  submit [31m[1mAssertionError[22m:  expected 404 to be 403 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 403[39m [31m+ 404[39m 
+ries to  submit [31m[1mAssertionError[22m:  expected 404 to be 403 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 403[39m [31m+ 404[39m  [36m [2mÔØ»
+ to be 403 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 403[39m [31m+ 404[39m  [36m [2mÔØ»[22m src/tests/integrat ion/attendance.test.js:[2m356:37[2
+            [34me xpect[39m(response[33m.[39mstatus) [33m.[39m[34mtoBe[39m([34m403[3 9m)[33m;[39m     [90m   |[39m                                      [31m^[39m     [90m357|[3
+e xpect[39m(response[33m.[39mbody[3 3m.[39merror)[33m.[39m[34mtoBe[3 9m([32m'FORBIDDEN'[39m)[33m;[39m     [90m358|[39m          })[33m;[39m  [31m[2mÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ
+ÔÄ»ÔÄ»ÔÄ»ÔÄ »ÔÄ»[8/17]ÔÄ»[22m[39m  [41m[1m FAIL [22m[49m src/tests/i ntegration/attendance.test.js[2m >  [22mAttendance Integration Tests  (PostgreSQL Test DB)[2m > [22mPOST  /attenda
+ contain an attendances array [31m[1mAssertionError[22m:  expected 404 to be 400 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 400[39m [31m+ 404[39m 
+ttendances array [31m[1mAssertionError[22m:  expected 404 to be 400 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 400[39m [31m+ 404[39m  [36m [2mÔØ»
+ to be 400 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 400[39m [31m+ 404[39m  [36m [2mÔØ»[22m src/tests/integrat ion/attendance.test.js:[2m366:37[2
+            [34me xpect[39m(response[33m.[39mstatus) [33m.[39m[34mtoBe[39m([34m400[3 9m)[33m;[39m     [90m   |[39m                                      [31m^[39m     [90m367|[3
+[90m367|[39m             expect (response.body.error).toBe('INVALID_A TTENDANCES_FORMÔÇª     [90m368|[39m          })[33m;[39m  [31m[2mÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»Ô Ä»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»Ô
+ÔÄ»ÔÄ»ÔÄ»ÔÄ »ÔÄ»[9/17]ÔÄ»[22m[39m  [41m[1m FAIL [22m[49m src/tests/i ntegration/attendance.test.js[2m >  [22mAttendance Integration Tests  (PostgreSQL Test DB)[2m > [22mPOST  /attenda
+idateId is  missing in record [31m[1mAssertionError[22m:  expected 404 to be 400 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 400[39m [31m+ 404[39m 
+issing in record [31m[1mAssertionError[22m:  expected 404 to be 400 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 400[39m [31m+ 404[39m  [36m [2mÔØ»
+ to be 400 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 400[39m [31m+ 404[39m  [36m [2mÔØ»[22m src/tests/integrat ion/attendance.test.js:[2m380:37[2
+            [34me xpect[39m(response[33m.[39mstatus) [33m.[39m[34mtoBe[39m([34m400[3 9m)[33m;[39m     [90m   |[39m                                      [31m^[39m     [90m381|[3
+e xpect[39m(response[33m.[39mbody[3 3m.[39merror)[33m.[39m[34mtoBe[3 9m([32m'CANDIDATE_ID_REQUIRED'[39m) [33m;[39m     [90m382|[39m          })[33m;[39m  [31m[2mÔÄ»ÔÄ»ÔÄ»ÔÄ»
+Ä»ÔÄ»ÔÄ»ÔÄ»ÔÄ »[10/17]ÔÄ»[22m[39m  [41m[1m FAIL [22m[49m src/tests/i ntegration/attendance.test.js[2m >  [22mAttendance Integration Tests  (PostgreSQL Test DB)[2m > [22mPOST  /attenda
+registered for the reservation [31m[1mAssertionError[22m:  expected 404 to be 400 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 400[39m [31m+ 404[39m 
+ the reservation [31m[1mAssertionError[22m:  expected 404 to be 400 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 400[39m [31m+ 404[39m  [36m [2mÔØ»
+ to be 400 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 400[39m [31m+ 404[39m  [36m [2mÔØ»[22m src/tests/integrat ion/attendance.test.js:[2m394:37[2
+            [34me xpect[39m(response[33m.[39mstatus) [33m.[39m[34mtoBe[39m([34m400[3 9m)[33m;[39m     [90m   |[39m                                      [31m^[39m     [90m395|[3
+[90m395|[39m             expect (response.body.error).toBe('CANDIDATE _NOT_IN_RESERVAÔÇª     [90m396|[39m             [34me xpect[39m(response[33m.[39mbody[3 3m.[39mcandidateId)[33m.[
+Ä»ÔÄ»ÔÄ»ÔÄ»ÔÄ »[11/17]ÔÄ»[22m[39m  [41m[1m FAIL [22m[49m src/tests/i ntegration/attendance.test.js[2m >  [22mAttendance Integration Tests  (PostgreSQL Test DB)[2m > [22mPOST  /attenda
+ (Soumission)[2m > [22mshould  return 400 when status is invalid [31m[1mAssertionError[22m:  expected 404 to be 400 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m 
+urn 400 when status is invalid [31m[1mAssertionError[22m:  expected 404 to be 400 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 400[39m [31m+ 404[39m 
+tatus is invalid [31m[1mAssertionError[22m:  expected 404 to be 400 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 400[39m [31m+ 404[39m  [36m [2mÔØ»
+ to be 400 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 400[39m [31m+ 404[39m  [36m [2mÔØ»[22m src/tests/integrat ion/attendance.test.js:[2m409:37[2
+[33m ;[39m  [2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m [2m      Tests [22m [1m[31m17 failed[39m[22m[90m (17)[39m [2m   Start at [22m 16:25:52 [2m   Duration [2
+[90m (1)[39m [2m      Tests [22m [1m[31m17 failed[39m[22m[90m (17)[39m [2m   Start at [22m 16:25:52 [2m   Duration [22m 14.03s[2m (transform 1.03s, setup 9.19s, import 2.98s, tests 1
+            [34me xpect[39m(response[33m.[39mstatus) [33m.[39m[34mtoBe[39m([34m400[3 9m)[33m;[39m     [90m   |[39m                                      [31m^[39m     [90m410|[3
+e xpect[39m(response[33m.[39mbody[3 3m.[39merror)[33m.[39m[34mtoBe[3 9m([32m'INVALID_STATUS'[39m)[33m; [39m     [90m411|[39m          })[33m;[39m  [31m[2mÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»Ô
+9merror)[33m.[39m[34mtoBe[3 9m([32m'INVALID_STATUS'[39m)[33m; [39m     [90m411|[39m          })[33m;[39m  [31m[2mÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»Ô Ä»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ
+Ä»ÔÄ»ÔÄ»ÔÄ»ÔÄ »[12/17]ÔÄ»[22m[39m  [41m[1m FAIL [22m[49m src/tests/i ntegration/attendance.test.js[2m >  [22mAttendance Integration Tests  (PostgreSQL Test DB)[2m > [22mPOST  /attenda
+ation is not  found on submit [31m[1mAssertionError[22m:  expected undefined to be  'RESERVATION_NOT_FOUND' // Object.is  equality[39m  [32m- Expected:[39m "RESERVATION_NOT_FOUND"  [3
+ found on submit [31m[1mAssertionError[22m:  expected undefined to be  'RESERVATION_NOT_FOUND' // Object.is  equality[39m  [32m- Expected:[39m "RESERVATION_NOT_FOUND"  [31m+ Received:
+NOT_FOUND' // Object.is  equality[39m  [32m- Expected:[39m "RESERVATION_NOT_FOUND"  [31m+ Received:[39m undefined  [36m [2mÔØ»[22m src/tests/integrat ion/attendance.test.js:[2m424:4
+            [34me xpect[39m(response[33m.[39mstatus) [33m.[39m[34mtoBe[39m([34m404[3 9m)[33m;[39m     [90m424|[39m             [34me xpect[39m(response[33m.[39mbody[3 3m.[39m
+e xpect[39m(response[33m.[39mbody[3 3m.[39merror)[33m.[39m[34mtoBe[3 9m([32m'RESERVATION_NOT_FOUND'[39m) [33m;[39m     [90m   |[39m                                          [31m^
+Ä»ÔÄ»ÔÄ»ÔÄ»ÔÄ »[13/17]ÔÄ»[22m[39m  [41m[1m FAIL [22m[49m src/tests/i ntegration/attendance.test.js[2m >  [22mAttendance Integration Tests  (PostgreSQL Test DB)[2m >  [22mPATCH /attend
+ > [22mshould  successfully update attendance  status or note by the assigned  Professor [31m[1mAssertionError[22m:  expected 404 to be 200 // Object.is  equality[39m  [32m- Expected[39
+te by the assigned  Professor [31m[1mAssertionError[22m:  expected 404 to be 200 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 200[39m [31m+ 404[39m 
+gned  Professor [31m[1mAssertionError[22m:  expected 404 to be 200 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 200[39m [31m+ 404[39m  [36m [2mÔØ»
+ to be 200 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 200[39m [31m+ 404[39m  [36m [2mÔØ»[22m src/tests/integrat ion/attendance.test.js:[2m440:37[2
+            [34me xpect[39m(response[33m.[39mstatus) [33m.[39m[34mtoBe[39m([34m200[3 9m)[33m;[39m     [90m   |[39m                                      [31m^[39m     [90m441|[3
+esponse[33m.[39mbody[3 3m.[39mdata[33m.[39mstatus)[33m. [39m[34mtoBe[39m([32m'ABSENT'[39m )[33m;[39m  [31m[2mÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»Ô Ä»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ »
+Ä»ÔÄ»ÔÄ»ÔÄ»ÔÄ »[14/17]ÔÄ»[22m[39m  [41m[1m FAIL [22m[49m src/tests/i ntegration/attendance.test.js[2m >  [22mAttendance Integration Tests  (PostgreSQL Test DB)[2m >  [22mPATCH /attend
+pdates the  attendance record [31m[1mAssertionError[22m:  expected 404 to be 403 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 403[39m [31m+ 404[39m 
+ttendance record [31m[1mAssertionError[22m:  expected 404 to be 403 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 403[39m [31m+ 404[39m  [36m [2mÔØ»
+ to be 403 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 403[39m [31m+ 404[39m  [36m [2mÔØ»[22m src/tests/integrat ion/attendance.test.js:[2m456:37[2
+m                  [33m.[39m[34msend[39m({  status[33m:[39m  [32m'PRESENT'[39m })[33m;[39m     [90m455|[39m     [90m456|[39m             [34me xpect[39m(response[33m.[39mstatus
+            [34me xpect[39m(response[33m.[39mstatus) [33m.[39m[34mtoBe[39m([34m403[3 9m)[33m;[39m     [90m   |[39m                                      [31m^[39m     [90m457|[3
+e xpect[39m(response[33m.[39mbody[3 3m.[39merror)[33m.[39m[34mtoBe[3 9m([32m'FORBIDDEN'[39m)[33m;[39m     [90m458|[39m          })[33m;[39m  [31m[2mÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ
+Ä»ÔÄ»ÔÄ»ÔÄ»ÔÄ »[15/17]ÔÄ»[22m[39m  [41m[1m FAIL [22m[49m src/tests/i ntegration/attendance.test.js[2m >  [22mAttendance Integration Tests  (PostgreSQL Test DB)[2m >  [22mPATCH /attend
+Modification)[2m > [22mshould  return 400 when status in update is  invalid [31m[1mAssertionError[22m:  expected 404 to be 400 // Object.is  equality[39m  [32m- Expected[39m [31m+ Rec
+ status in update is  invalid [31m[1mAssertionError[22m:  expected 404 to be 400 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 400[39m [31m+ 404[39m 
+ate is  invalid [31m[1mAssertionError[22m:  expected 404 to be 400 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 400[39m [31m+ 404[39m  [36m [2mÔØ»
+ to be 400 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 400[39m [31m+ 404[39m  [36m [2mÔØ»[22m src/tests/integrat ion/attendance.test.js:[2m466:37[2
+m                  [33m.[39m[34msend[39m({  status[33m:[39m [32m'LATE'[39m  })[33m;[39m     [90m465|[39m     [90m466|[39m             [34me xpect[39m(response[33m.[39mstatus) 
+            [34me xpect[39m(response[33m.[39mstatus) [33m.[39m[34mtoBe[39m([34m400[3 9m)[33m;[39m     [90m   |[39m                                      [31m^[39m     [90m467|[3
+e xpect[39m(response[33m.[39mbody[3 3m.[39merror)[33m.[39m[34mtoBe[3 9m([32m'INVALID_STATUS'[39m)[33m; [39m     [90m468|[39m          })[33m;[39m  [31m[2mÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»Ô
+9merror)[33m.[39m[34mtoBe[3 9m([32m'INVALID_STATUS'[39m)[33m; [39m     [90m468|[39m          })[33m;[39m  [31m[2mÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»Ô Ä»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ
+Ä»ÔÄ»ÔÄ»ÔÄ»ÔÄ »[16/17]ÔÄ»[22m[39m  [41m[1m FAIL [22m[49m src/tests/i ntegration/attendance.test.js[2m >  [22mAttendance Integration Tests  (PostgreSQL Test DB)[2m >  [22mPATCH /attend
+tendance record is  not found [31m[1mAssertionError[22m:  expected undefined to be  'ATTENDANCE_NOT_FOUND' // Object.is  equality[39m  [32m- Expected:[39m "ATTENDANCE_NOT_FOUND"  [31m
+d is  not found [31m[1mAssertionError[22m:  expected undefined to be  'ATTENDANCE_NOT_FOUND' // Object.is  equality[39m  [32m- Expected:[39m "ATTENDANCE_NOT_FOUND"  [31m+ Received:[3
+NOT_FOUND' // Object.is  equality[39m  [32m- Expected:[39m "ATTENDANCE_NOT_FOUND"  [31m+ Received:[39m undefined  [36m [2mÔØ»[22m src/tests/integrat ion/attendance.test.js:[2m477:41
+            [34me xpect[39m(response[33m.[39mstatus) [33m.[39m[34mtoBe[39m([34m404[3 9m)[33m;[39m     [90m477|[39m             [34me xpect[39m(response[33m.[39mbody[3 3m.[39m
+e xpect[39m(response[33m.[39mbody[3 3m.[39merror)[33m.[39m[34mtoBe[3 9m([32m'ATTENDANCE_NOT_FOUND'[39m) [33m;[39m     [90m   |[39m                                          [31m^

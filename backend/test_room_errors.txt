@@ -1,0 +1,12 @@
+g) [], RemoteExc     eption     + FullyQualifiedErrorId : Native     CommandError   (Use `node --trace-warnings ...` to  show where the warning was created) node.exe : (node:17788)  Experiment
+     + FullyQualifiedErrorId : Native     CommandError   (Use `node --trace-warnings ...` to  show where the warning was created) node.exe : (node:17788)  ExperimentalWarning: Support for  load
+g) [], RemoteExc     eption     + FullyQualifiedErrorId : Native     CommandError   (Use `node --trace-warnings ...` to  show where the warning was created) (node:1960) ExperimentalWarning:  S
+     + FullyQualifiedErrorId : Native     CommandError   (Use `node --trace-warnings ...` to  show where the warning was created) (node:1960) ExperimentalWarning:  Support for loading ES Module 
+m attributes[32m 19[2mms[22m[39m [31m   ÔåÆ expected 'Individuel' to be 'Conf├®rence' // Object.is equality[39m  [32mÔ£ô[39m src/tests/integration/room.test.js[2m > [22mRoom Integration Te
+39m  [31mÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[39m[1m[ 41m Failed Tests 1 [49m[22m[31mÔÄ» ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[39m  [41m[1m FAIL [22m[49m src/tests/i ntegration/room.test.js[2m >  [22mRoom Integra
+22m[31mÔÄ» ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[39m  [41m[1m FAIL [22m[49m src/tests/i ntegration/room.test.js[2m >  [22mRoom Integration Tests  (PostgreSQL Test DB)[2m >  [22mPATCH /rooms/:id  (Modif
+ssfully update room attributes [31m[1mAssertionError[22m:  expected 'Individuel' to be  'Conf├®rence' // Object.is  equality[39m  Expected: [32m"Conf├®rence"[39m Received: [31m"Individue
+ room attributes [31m[1mAssertionError[22m:  expected 'Individuel' to be  'Conf├®rence' // Object.is  equality[39m  Expected: [32m"Conf├®rence"[39m Received: [31m"Individuel"[39m  [3
+e  'Conf├®rence' // Object.is  equality[39m  Expected: [32m"Conf├®rence"[39m Received: [31m"Individuel"[39m  [36m [2mÔØ»[22m src/tests/integrat ion/room.test.js:[2m270:33[22m[39m  
+»[22m[39m   [2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m [2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m19 passed[39m[22m[90m (20)[39m [2m   Start
+m[90m (1)[39m [2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m19 passed[39m[22m[90m (20)[39m [2m   Start at [22m 16:10:12 [2m   Duration [22m 6.44s[2m (transform 32

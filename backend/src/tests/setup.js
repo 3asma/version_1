@@ -27,11 +27,9 @@ if (!global.__PRISMA_MIGRATED__) {
     console.log('\n[TEST SETUP] ========================================================');
     console.log('[TEST SETUP] Overriding DATABASE_URL to DATABASE_URL_TEST.');
     console.log(`[TEST SETUP] Target Database URL: ${process.env.DATABASE_URL}`);
-    console.log('[TEST SETUP] Deploying schemas using Prisma migrate deploy...');
-    console.log('[TEST SETUP] ========================================================\n');
-
     try {
-        execSync('npx prisma migrate deploy', {
+        console.log('[TEST SETUP] Pushing schemas using Prisma db push...');
+        execSync('npx prisma db push --accept-data-loss --skip-generate', {
             cwd: path.resolve(__dirname, '../../'),
             stdio: 'inherit',
             env: {

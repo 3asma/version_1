@@ -1,0 +1,20 @@
+g) [], RemoteExc     eption     + FullyQualifiedErrorId : Native     CommandError   (Use `node --trace-warnings ...` to  show where the warning was created) node.exe : (node:20180)  Experiment
+     + FullyQualifiedErrorId : Native     CommandError   (Use `node --trace-warnings ...` to  show where the warning was created) node.exe : (node:20180)  ExperimentalWarning: Support for  load
+g) [], RemoteExc     eption     + FullyQualifiedErrorId : Native     CommandError   (Use `node --trace-warnings ...` to  show where the warning was created) (node:10416) ExperimentalWarning:  
+     + FullyQualifiedErrorId : Native     CommandError   (Use `node --trace-warnings ...` to  show where the warning was created) (node:10416) ExperimentalWarning:  Support for loading ES Module
+t group name[32m 53[2mms[22m[39m [31m   ÔåÆ expected 'Mon├┤me TEST_Mono TEST_LastName' to be 'Mon├┤me Test_mono TEST_LASTNAME' // Object.is equality[39m  [32mÔ£ô[39m src/tests/integration/in
+exists in db[32m 23[2mms[22m[39m [31m   ÔåÆ expected 201 to be 409 // Object.is equality[39m  [32mÔ£ô[39m src/tests/integration/inscription.test.js[2m > [22mInscription Integration Tests (
+39m  [31mÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[39m[1m[ 41m Failed Tests 2 [49m[22m[31mÔÄ» ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[39m  [41m[1m FAIL [22m[49m src/tests/i ntegration/inscription.test.js[2m >  [22mInscr
+22m[31mÔÄ» ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[39m  [41m[1m FAIL [22m[49m src/tests/i ntegration/inscription.test.js[2m >  [22mInscription Integration Tests  (PostgreSQL Test DB)[2m > [22mPOST  /inscr
+and match default group  name [31m[1mAssertionError[22m:  expected 'Mon├┤me TEST_Mono  TEST_LastName' to be 'Mon├┤me  Test_mono TEST_LASTNAME' //  Object.is equality[39m  Expected: [32m"M
+ult group  name [31m[1mAssertionError[22m:  expected 'Mon├┤me TEST_Mono  TEST_LastName' to be 'Mon├┤me  Test_mono TEST_LASTNAME' //  Object.is equality[39m  Expected: [32m"Mon├┤me  T[7m
+no TEST_LASTNAME' //  Object.is equality[39m  Expected: [32m"Mon├┤me  T[7mest_m[27mono  TEST_L[7mASTNAME[27m"[39m Received: [31m"Mon├┤me  T[7mEST_M[27mono  TEST_L[7mastName[27m"[3
+»ÔÄ»ÔÄ»ÔÄ »ÔÄ»ÔÄ»[1/2]ÔÄ»[22m[39m  [41m[1m FAIL [22m[49m src/tests/i ntegration/inscription.test.js[2m >  [22mInscription Integration Tests  (PostgreSQL Test DB)[2m > [22mPOST  /inscr
+ptionCode already exists in db [31m[1mAssertionError[22m:  expected 201 to be 409 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 409[39m [31m+ 201[39m 
+ady exists in db [31m[1mAssertionError[22m:  expected 201 to be 409 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 409[39m [31m+ 201[39m  [36m [2mÔØ»
+ to be 409 // Object.is  equality[39m  [32m- Expected[39m [31m+ Received[39m  [32m- 409[39m [31m+ 201[39m  [36m [2mÔØ»[22m src/tests/integrat ion/inscription.test.js:[2m403:37[
+[90m404|[39m              expect(response.body.error).toBe("Le  num├®ro d'inscription ÔÇª     [90m405|[39m          })[33m;[39m  [31m[2mÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»Ô Ä»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»
+»[22m[39m   [2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m [2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m9 passed[39m[22m[90m (11)[39m [2m   Start 
+m[90m (1)[39m [2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m9 passed[39m[22m[90m (11)[39m [2m   Start at [22m 15:47:02 [2m   Duration [22m 5.34s[2m (transform 357
+ts 589ms, environment 0ms)[22m  [vitest-pool]: Failed to terminate  forks worker for test files D:/format ion_v2/backend/src/tests/integration/ inscription.test.js. Error: kill  EPERM     at C
+kend/src/tests/integration/ inscription.test.js. Error: kill  EPERM     at ChildProcess.kill  (node:internal/child_process:511:26)     at ForksPoolWorker.stop (file:/// D:/formation_v2/backend/n

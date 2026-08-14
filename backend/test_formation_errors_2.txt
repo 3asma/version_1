@@ -1,0 +1,13 @@
+g) [], RemoteExc     eption     + FullyQualifiedErrorId : Native     CommandError   (Use `node --trace-warnings ...` to  show where the warning was created) node.exe : (node:6480)  Experimenta
+     + FullyQualifiedErrorId : Native     CommandError   (Use `node --trace-warnings ...` to  show where the warning was created) node.exe : (node:6480)  ExperimentalWarning: Support for  loadi
+g) [], RemoteExc     eption     + FullyQualifiedErrorId : Native     CommandError   (Use `node --trace-warnings ...` to  show where the warning was created) (node:19996) ExperimentalWarning:  
+     + FullyQualifiedErrorId : Native     CommandError   (Use `node --trace-warnings ...` to  show where the warning was created) (node:19996) ExperimentalWarning:  Support for loading ES Module
+await prisma.candidate.create( Unique constraint failed on the fields: (`candidateCode`)[39m  [32mÔ£ô[39m src/tests/integration/formation.test.js[2m > [22mFormation Integration Tests (PostgreSQ
+39m  [31mÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[39m[1m[ 41m Failed Tests 1 [49m[22m[31mÔÄ» ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[39m  [41m[1m FAIL [22m[49m src/tests/i ntegration/formation.test.js[2m >  [22mFormati
+22m[31mÔÄ» ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[39m  [41m[1m FAIL [22m[49m src/tests/i ntegration/formation.test.js[2m >  [22mFormation Integration Tests  (PostgreSQL Test DB)[2m >  [22mDELETE /formati
+await prisma.candidate.create( Unique constraint failed on the  fields: (`candidateCode`)[39m [90m [2mÔØ»[22m  ei.handleRequestError src/generated/p risma/runtime/library.js:[2m125:7268 [2
+Code`)[39m [90m [2mÔØ»[22m  ei.handleRequestError src/generated/p risma/runtime/library.js:[2m125:7268 [22m[39m [90m [2mÔØ»[22m  ei.handleAndLogRequestError src/gener ated/prisma/runt
+[39m [90m [2mÔØ»[22m  ei.handleAndLogRequestError src/gener ated/prisma/runtime/library.js:[2m12 5:6593[22m[39m [90m [2mÔØ»[22m ei.request src/gen erated/prisma/runtime/library.js:[2m
+»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[22m[39m  [31m[1mSerialized Error:[22m[39m  [90m{ code: 'P2002', meta: {  modelName: 'Candidate', target: [  'candidateCode' ] }, clientVersion:  '6.19.3', batchRequestIdx
+efined  }[39m [2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m [2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m16 passed[39m[22m[90m (17)[39m [2m   Start
+m[90m (1)[39m [2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m16 passed[39m[22m[90m (17)[39m [2m   Start at [22m 16:15:50 [2m   Duration [22m 6.72s[2m (transform 39
