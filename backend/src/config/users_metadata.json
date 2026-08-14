@@ -23,5 +23,40 @@
     "name": "Jean Martin",
     "status": "active",
     "role": "candidate"
+  },
+  "khadija.yousfi@demo.com": {
+    "name": "Khadija El Yousfi",
+    "status": "active",
+    "role": "professor"
+  },
+  "mustapha.fadli@demo.com": {
+    "name": "Mustapha Fadli",
+    "status": "active",
+    "role": "professor"
+  },
+  "fz.chakiri@demo.com": {
+    "name": "Fatima-Zahra Chakiri",
+    "status": "active",
+    "role": "professor"
+  },
+  "rachid.bouazza@demo.com": {
+    "name": "Rachid Bouazza",
+    "status": "active",
+    "role": "professor"
+  },
+  "nora.belkhayat@demo.com": {
+    "name": "Nora Belkhayat",
+    "status": "active",
+    "role": "professor"
+  },
+  "reserv@formation.com": {
+    "name": "Hassan Ali",
+    "status": "active",
+    "role": "agent_reservation"
+  },
+  "recep@formation.com": {
+    "name": "Rokaia",
+    "status": "active",
+    "role": "agent_reception"
   }
 }

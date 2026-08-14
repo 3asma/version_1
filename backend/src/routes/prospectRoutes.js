@@ -1,19 +1,18 @@
 import express from 'express';
 import prospectController from '../controllers/prospectController.js';
-import { verifyToken, requireRole } from '../middlewares/authMiddleware.js';
+import { verifyToken, requirePermission } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 
 // Apply verifyToken to all routes
 router.use(verifyToken);
-router.use(requireRole(['admin', 'agent_reception']));
 
-router.get('/export/pdf', prospectController.exportPDF);
-router.get('/', prospectController.getAll);
-router.get('/:id', prospectController.getById);
+router.get('/export/pdf', requirePermission('view_prospects'), prospectController.exportPDF);
+router.get('/', requirePermission('view_prospects'), prospectController.getAll);
+router.get('/:id', requirePermission('view_prospects'), prospectController.getById);
 
-router.post('/', prospectController.create);
-router.patch('/:id', prospectController.update);
-router.delete('/:id', prospectController.delete);
+router.post('/', requirePermission('manage_prospects'), prospectController.create);
+router.patch('/:id', requirePermission('manage_prospects'), prospectController.update);
+router.delete('/:id', requirePermission('manage_prospects'), prospectController.delete);
 
 export default router;

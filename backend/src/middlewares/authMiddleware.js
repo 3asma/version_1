@@ -104,8 +104,8 @@ export const isAdmin = (req, res, next) => {
     }
 };
 
-export const requirePermission = (permission) => {
-    return (req, res, next) => {
+export const requirePermission = (permission, options = {}) => {
+    return async (req, res, next) => {
         // ADMIN gets full access automatically
         if (req.user && req.user.role === 'ADMIN') {
             return next();
@@ -116,6 +116,26 @@ export const requirePermission = (permission) => {
                 message: 'error',
                 error: 'Access denied. No role profile found.'
             });
+        }
+
+        const role = req.user.role;
+
+        // Special case: CANDIDATE own profile access
+        if (role === 'CANDIDATE' && options.allowOwnCandidate) {
+            try {
+                const candidateId = req.params.id;
+                if (candidateId) {
+                    const candidate = await prisma.candidate.findUnique({
+                        where: { id: candidateId }
+                    });
+                    if (candidate && candidate.email && req.user.email &&
+                        candidate.email.toLowerCase() === req.user.email.toLowerCase()) {
+                        return next();
+                    }
+                }
+            } catch (err) {
+                console.error('Error checking own candidate profile:', err);
+            }
         }
 
         const roleStr = req.user.role.toLowerCase();

@@ -21,12 +21,35 @@ export default function Reservations() {
     formations,
     reservationRequests,
     updateReservationRequest,
-    inscriptions
+    inscriptions,
+    cancelRequests,
+    approveCancelRequest,
+    rejectCancelRequest
   } = useApp();
 
   // Local helper functions for assignments as they are not defined in AppContext
   const getCandidateAssignments = (candidateId: string) => {
     return inscriptions.filter(ins => ins.candidateId === candidateId);
+  };
+
+  const handleApproveCancelRequest = async (requestId: string) => {
+    try {
+      await approveCancelRequest(requestId);
+      toast.success("Demande d'annulation approuvée avec succès (séance annulée)");
+    } catch (error: any) {
+      console.error(error);
+      toast.error(error.response?.data?.error || "Erreur lors de l'approbation de la demande");
+    }
+  };
+
+  const handleRejectCancelRequest = async (requestId: string) => {
+    try {
+      await rejectCancelRequest(requestId);
+      toast.success("Demande d'annulation rejetée avec succès (séance conservée)");
+    } catch (error: any) {
+      console.error(error);
+      toast.error(error.response?.data?.error || "Erreur lors du rejet de la demande");
+    }
   };
 
   const [formData, setFormData] = useState({
@@ -270,7 +293,63 @@ export default function Reservations() {
     toast.success('Demande rejetée');
   };
 
-  const pendingRequests = reservationRequests.filter(r => r.status === 'pending');
+  const pendingRequests = reservationRequests.filter(r => r.status === 'pending' && r.type !== 'candidate_request');
+  const pendingCancelRequests = cancelRequests.filter(r => r.status === 'PENDING');
+  const totalPendingCount = pendingRequests.length + pendingCancelRequests.length;
+
+  const unifiedCancelRequests = [
+    ...(pendingCancelRequests || []).map(c => {
+      let dateVal = 'N/A';
+      let timeVal = 'N/A';
+
+      try {
+        const dateStr = c?.reservation?.startTime || c?.reservation?.reservationDate;
+        if (dateStr) {
+          const parsedDate = new Date(dateStr);
+          if (!isNaN(parsedDate.getTime())) {
+            dateVal = parsedDate.toLocaleDateString('fr-FR');
+          }
+        }
+      } catch (e) {
+        console.error("Error formatting date:", e);
+      }
+
+      try {
+        const timeStr = c?.reservation?.startTime;
+        if (timeStr) {
+          const parsedTime = new Date(timeStr);
+          if (!isNaN(parsedTime.getTime())) {
+            timeVal = parsedTime.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+          }
+        }
+      } catch (e) {
+        console.error("Error formatting time:", e);
+      }
+
+      return {
+        id: c?.id || '',
+        type: 'professor_cancellation' as const,
+        professorId: c?.professorId || '',
+        candidateId: c?.reservation?.inscription?.candidate?.id || '',
+        roomId: c?.reservation?.room?.id || '',
+        date: dateVal,
+        time: timeVal,
+        isDatabaseRequest: true,
+        reason: c?.reason || ''
+      };
+    }),
+    ...(pendingRequests || []).filter(r => r && r.type === 'candidate_cancellation').map(r => ({
+      id: r.id || '',
+      type: 'candidate_cancellation' as const,
+      professorId: r.professorId || '',
+      candidateId: r.candidateId || '',
+      roomId: r.roomId || '',
+      date: r.date || 'N/A',
+      time: r.time || 'N/A',
+      isDatabaseRequest: false,
+      reason: ''
+    }))
+  ];
 
   return (
     <div className="p-8">
@@ -487,14 +566,14 @@ export default function Reservations() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              {pendingRequests.length === 0 ? (
+              {totalPendingCount === 0 ? (
                 <p className="text-center text-gray-500 py-8">
                   Aucune demande en attente
                 </p>
               ) : (
                 <div className="space-y-4">
                   {/* Cancellation Requests */}
-                  {pendingRequests.filter(r => r.type === 'professor_cancellation' || r.type === 'candidate_cancellation').length > 0 && (
+                  {unifiedCancelRequests.length > 0 && (
                     <div>
                       <h3 className="text-lg font-semibold mb-3 text-red-650">Demandes d'annulation</h3>
                       <Table>
@@ -509,125 +588,80 @@ export default function Reservations() {
                           </TableRow>
                         </TableHeader>
                         <TableBody>
-                          {pendingRequests
-                            .filter(r => r.type === 'professor_cancellation' || r.type === 'candidate_cancellation')
-                            .map((request) => {
-                              const professor = professors.find(p => p.id === request.professorId);
-                              const candidate = candidates.find(c => c.id === request.candidateId);
-                              const room = rooms.find(r => r.id === request.roomId);
+                          {unifiedCancelRequests.map((request) => {
+                            const professor = professors.find(p => p.id === request.professorId);
+                            const candidate = candidates.find(c => c.id === request.candidateId);
+                            const room = rooms.find(r => r.id === request.roomId);
 
-                              const profFullName = professor ? `${professor.prenom} ${professor.nom}` : 'N/A';
-                              const candFullName = candidate ? `${candidate.firstName} ${candidate.lastName}` : 'N/A';
+                            const profFullName = professor ? `${professor.prenom} ${professor.nom}` : 'N/A';
+                            const candFullName = candidate ? `${candidate.firstName} ${candidate.lastName}` : 'N/A';
 
-                              return (
-                                <TableRow key={request.id}>
-                                  <TableCell>
-                                    <Badge variant={request.type === 'professor_cancellation' ? 'default' : 'secondary'}>
-                                      {request.type === 'professor_cancellation' ? 'Professeur' : 'Candidat'}
-                                    </Badge>
-                                  </TableCell>
-                                  <TableCell className="font-medium">
+                            return (
+                              <TableRow key={request.id}>
+                                <TableCell>
+                                  <Badge variant={request.type === 'professor_cancellation' ? 'default' : 'secondary'}>
+                                    {request.type === 'professor_cancellation' ? 'Professeur' : 'Candidat'}
+                                  </Badge>
+                                </TableCell>
+                                <TableCell className="font-medium">
+                                  <div>
                                     {request.type === 'professor_cancellation'
                                       ? profFullName
                                       : candFullName
                                     }
-                                  </TableCell>
-                                  <TableCell>
-                                    {candFullName}
-                                  </TableCell>
-                                  <TableCell>
-                                    {request.date} à {request.time}
-                                  </TableCell>
-                                  <TableCell>
-                                    Salle {room?.numero || 'N/A'}
-                                  </TableCell>
-                                  <TableCell>
-                                    <div className="flex gap-2">
-                                      <Button
-                                        size="sm"
-                                        variant="outline"
-                                        className="text-green-600 border-green-600 hover:bg-green-50"
-                                        onClick={() => handleApprove(request.id)}
-                                      >
-                                        <Check size={16} className="mr-1" />
-                                        Approuver
-                                      </Button>
-                                      <Button
-                                        size="sm"
-                                        variant="outline"
-                                        className="text-red-650 border-red-650 hover:bg-red-50"
-                                        onClick={() => handleReject(request.id)}
-                                      >
-                                        <X size={16} className="mr-1" />
-                                        Rejeter
-                                      </Button>
+                                  </div>
+                                  {request.reason && (
+                                    <div className="text-xs text-gray-500 font-normal italic mt-0.5">
+                                      Motif: {request.reason}
                                     </div>
-                                  </TableCell>
-                                </TableRow>
-                              );
-                            })}
-                        </TableBody>
-                      </Table>
-                    </div>
-                  )}
-
-                  {/* Candidate Requests */}
-                  {pendingRequests.filter(r => r.type === 'candidate_request').length > 0 && (
-                    <div>
-                      <h3 className="text-lg font-semibold mb-3 text-blue-650">Demandes de réservation des candidats</h3>
-                      <Table>
-                        <TableHeader>
-                          <TableRow>
-                            <TableHead>Candidat</TableHead>
-                            <TableHead>Formation</TableHead>
-                            <TableHead>Date et heure</TableHead>
-                            <TableHead>Actions</TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {pendingRequests
-                            .filter(r => r.type === 'candidate_request')
-                            .map((request) => {
-                              const candidate = candidates.find(c => c.id === request.candidateId);
-                              const formation = formations.find(f => f.id === request.formationId);
-                              const candFullName = candidate ? `${candidate.firstName} ${candidate.lastName}` : 'N/A';
-
-                              return (
-                                <TableRow key={request.id}>
-                                  <TableCell className="font-medium">
-                                    {candFullName}
-                                  </TableCell>
-                                  <TableCell>
-                                    {formation ? `${formation.matiere} - ${formation.niveau}` : 'Non spécifiée'}
-                                  </TableCell>
-                                  <TableCell>
-                                    {request.date} à {request.time}
-                                  </TableCell>
-                                  <TableCell>
-                                    <div className="flex gap-2">
-                                      <Button
-                                        size="sm"
-                                        variant="outline"
-                                        className="text-green-600 border-green-600 hover:bg-green-50"
-                                        onClick={() => handleApprove(request.id)}
-                                      >
-                                        <Check size={16} className="mr-1" />
-                                        Approuver
-                                      </Button>
-                                      <Button
-                                        size="sm"
-                                        variant="outline"
-                                        className="text-red-650 border-red-650 hover:bg-red-50"
-                                        onClick={() => handleReject(request.id)}
-                                      >
-                                        <X size={16} className="mr-1" />
-                                        Rejeter
-                                      </Button>
-                                    </div>
-                                  </TableCell>
-                                </TableRow>
-                              );
-                            })}
+                                  )}
+                                </TableCell>
+                                <TableCell>
+                                  {candFullName}
+                                </TableCell>
+                                <TableCell>
+                                  {request.date} à {request.time}
+                                </TableCell>
+                                <TableCell>
+                                  Salle {room?.numero || (room && (room as any).roomNumber) || 'N/A'}
+                                </TableCell>
+                                <TableCell>
+                                  <div className="flex gap-2">
+                                    <Button
+                                      size="sm"
+                                      variant="outline"
+                                      className="text-green-600 border-green-600 hover:bg-green-50"
+                                      onClick={() => {
+                                        if (request.isDatabaseRequest) {
+                                          handleApproveCancelRequest(request.id);
+                                        } else {
+                                          handleApprove(request.id);
+                                        }
+                                      }}
+                                    >
+                                      <Check size={16} className="mr-1" />
+                                      Approuver
+                                    </Button>
+                                    <Button
+                                      size="sm"
+                                      variant="outline"
+                                      className="text-red-650 border-red-650 hover:bg-red-50"
+                                      onClick={() => {
+                                        if (request.isDatabaseRequest) {
+                                          handleRejectCancelRequest(request.id);
+                                        } else {
+                                          handleReject(request.id);
+                                        }
+                                      }}
+                                    >
+                                      <X size={16} className="mr-1" />
+                                      Rejeter
+                                    </Button>
+                                  </div>
+                                </TableCell>
+                              </TableRow>
+                            );
+                          })}
                         </TableBody>
                       </Table>
                     </div>

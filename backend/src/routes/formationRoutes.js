@@ -1,5 +1,5 @@
 import express from 'express';
-import { verifyToken, requireRole } from '../middlewares/authMiddleware.js';
+import { verifyToken, requirePermission } from '../middlewares/authMiddleware.js';
 import {
     exportFormationsPDF,
     getAllFormations,
@@ -13,14 +13,13 @@ const router = express.Router();
 
 // All routes protected by JWT
 router.use(verifyToken);
-router.use(requireRole(['admin']));
 
-router.get('/export/pdf', exportFormationsPDF);
-router.get('/', getAllFormations);
-router.get('/:id', getFormationById);
+router.get('/export/pdf', requirePermission('view_formations'), exportFormationsPDF);
+router.get('/', requirePermission('view_formations'), getAllFormations);
+router.get('/:id', requirePermission('view_formations'), getFormationById);
 
-router.post('/', createFormation);
-router.patch('/:id', updateFormation);
-router.delete('/:id', deleteFormation);
+router.post('/', requirePermission('manage_formations'), createFormation);
+router.patch('/:id', requirePermission('manage_formations'), updateFormation);
+router.delete('/:id', requirePermission('manage_formations'), deleteFormation);
 
 export default router;

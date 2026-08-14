@@ -1,5 +1,5 @@
 import express from 'express';
-import { verifyToken, requireRole } from '../middlewares/authMiddleware.js';
+import { verifyToken, requirePermission } from '../middlewares/authMiddleware.js';
 import {
     getAttendanceForReservation,
     saveAttendance,
@@ -10,10 +10,9 @@ const router = express.Router();
 
 // Apply auth middleware to all attendance routes
 router.use(verifyToken);
-router.use(requireRole(['admin', 'professor']));
 
-router.get('/reservation/:reservationId', getAttendanceForReservation);
-router.post('/reservation/:reservationId', saveAttendance);
-router.patch('/:attendanceId', updateAttendance);
+router.get('/reservation/:reservationId', requirePermission('manage_attendance'), getAttendanceForReservation);
+router.post('/reservation/:reservationId', requirePermission('manage_attendance'), saveAttendance);
+router.patch('/:attendanceId', requirePermission('manage_attendance'), updateAttendance);
 
 export default router;

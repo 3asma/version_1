@@ -172,6 +172,8 @@ export const login = async (req, res) => {
             { expiresIn: JWT_EXPIRES_IN }
         );
 
+        const permissions = readPermissionsForRole(resolvedRole);
+
         // Response
         return res.status(200).json({
             message: 'success',
@@ -181,6 +183,7 @@ export const login = async (req, res) => {
                 email: user.email,
                 role: resolvedRole,
                 name: userMeta ? userMeta.name : user.email.split('@')[0],
+                permissions,
                 ...(professorId ? { professorId } : {})
             }
         });
@@ -192,11 +195,27 @@ export const login = async (req, res) => {
     }
 };
 
+
+const ROLES_PERMS_PATH = path.join(__dirname, '../config/roles_permissions.json');
+
+const readPermissionsForRole = (role) => {
+    try {
+        if (fs.existsSync(ROLES_PERMS_PATH)) {
+            const rolesData = JSON.parse(fs.readFileSync(ROLES_PERMS_PATH, 'utf-8'));
+            return rolesData[role.toLowerCase()]?.permissions || [];
+        }
+    } catch (e) {
+        console.error('Error reading roles permissions file:', e);
+    }
+    return [];
+};
+
 export const getMe = async (req, res) => {
     try {
         // req.user is populated by verifyToken middleware (using uppercase role)
         const userMeta = getUserMetadata(req.user.email);
         const resolvedRole = userMeta ? userMeta.role : req.user.role.toLowerCase();
+        const permissions = readPermissionsForRole(resolvedRole);
 
         return res.status(200).json({
             message: 'success',
@@ -205,6 +224,7 @@ export const getMe = async (req, res) => {
                 email: req.user.email,
                 role: resolvedRole,
                 name: userMeta ? userMeta.name : req.user.email.split('@')[0],
+                permissions,
                 ...(req.user.professorId ? { professorId: req.user.professorId } : {})
             }
         });
@@ -213,5 +233,75 @@ export const getMe = async (req, res) => {
             message: 'error',
             error: error.message
         });
+    }
+};
+
+export const updateProfile = async (req, res) => {
+    try {
+        const { name } = req.body;
+        if (!name) {
+            return res.status(400).json({ message: 'error', error: 'Name is required.' });
+        }
+
+        const userMeta = getUserMetadata(req.user.email);
+        const nextMeta = {
+            name,
+            status: userMeta ? userMeta.status : 'active',
+            role: userMeta ? userMeta.role : (req.user.role === 'ADMIN' ? 'admin' : 'candidate')
+        };
+        writeUserMetadata(req.user.email, nextMeta);
+
+        return res.status(200).json({
+            message: 'success',
+            user: {
+                id: req.user.id,
+                email: req.user.email,
+                role: nextMeta.role,
+                name: nextMeta.name
+            }
+        });
+    } catch (error) {
+        return res.status(500).json({ message: 'error', error: error.message });
+    }
+};
+
+export const changePassword = async (req, res) => {
+    try {
+        const { currentPassword, newPassword } = req.body;
+        if (!currentPassword || !newPassword) {
+            return res.status(400).json({
+                message: 'error',
+                error: 'Current password and new password are required.'
+            });
+        }
+
+        if (newPassword.length < 6) {
+            return res.status(400).json({
+                message: 'error',
+                error: 'New password must be at least 6 characters long.'
+            });
+        }
+
+        const user = await prisma.user.findUnique({ where: { email: req.user.email } });
+        if (!user) {
+            return res.status(404).json({ message: 'error', error: 'User not found.' });
+        }
+
+        const isValid = await bcrypt.compare(currentPassword, user.password);
+        if (!isValid) {
+            return res.status(400).json({ message: 'error', error: 'Invalid current password.' });
+        }
+
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+        await prisma.user.update({
+            where: { email: req.user.email },
+            data: { password: hashedPassword }
+        });
+
+        return res.status(200).json({ message: 'success' });
+    } catch (error) {
+        return res.status(500).json({ message: 'error', error: error.message });
     }
 };

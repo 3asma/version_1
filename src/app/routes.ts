@@ -19,6 +19,7 @@ import Payments from "./pages/Payments";
 import RoleManagement from "./pages/RoleManagement";
 import ProfileManagement from "./pages/ProfileManagement";
 import AdminRoles from "./pages/AdminRoles";
+import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
 export const router = createBrowserRouter([
@@ -45,6 +46,7 @@ export const router = createBrowserRouter([
       { path: "role-management", Component: RoleManagement },
       { path: "profile-management", Component: ProfileManagement },
       { path: "admin-roles", Component: AdminRoles },
+      { path: "settings", Component: Settings },
       { path: "*", Component: NotFound },
     ],
   },

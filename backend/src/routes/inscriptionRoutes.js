@@ -1,5 +1,5 @@
 import express from 'express';
-import { verifyToken, requireRole } from '../middlewares/authMiddleware.js';
+import { verifyToken, requirePermission } from '../middlewares/authMiddleware.js';
 import {
     exportInscriptionsPDF,
     getAllInscriptions,
@@ -15,16 +15,15 @@ const router = express.Router();
 
 // All routes protected by JWT
 router.use(verifyToken);
-router.use(requireRole(['admin', 'agent_reception', 'agent_reservation']));
 
-router.get('/export/pdf', exportInscriptionsPDF);
-router.get('/', getAllInscriptions);
-router.get('/:id', getInscriptionById);
+router.get('/export/pdf', requirePermission('view_candidates'), exportInscriptionsPDF);
+router.get('/', requirePermission('view_candidates'), getAllInscriptions);
+router.get('/:id', requirePermission('view_candidates'), getInscriptionById);
 
-router.put('/groups/:id', updateLearningGroup);
-router.post('/', createInscription);
-router.patch('/:id', updateInscription);
-router.delete('/:id', deleteInscription);
-router.post('/:id/deduct-hours', deductHours);
+router.put('/groups/:id', requirePermission('manage_candidates'), updateLearningGroup);
+router.post('/', requirePermission('manage_candidates'), createInscription);
+router.patch('/:id', requirePermission('manage_candidates'), updateInscription);
+router.delete('/:id', requirePermission('manage_candidates'), deleteInscription);
+router.post('/:id/deduct-hours', requirePermission('manage_candidates'), deductHours);
 
 export default router;

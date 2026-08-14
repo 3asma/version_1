@@ -1,5 +1,5 @@
 import express from 'express';
-import { verifyToken, requireRole } from '../middlewares/authMiddleware.js';
+import { verifyToken, requirePermission } from '../middlewares/authMiddleware.js';
 import {
     exportRoomsPDF,
     getAllRooms,
@@ -13,14 +13,13 @@ const router = express.Router();
 
 // All routes protected by JWT
 router.use(verifyToken);
-router.use(requireRole(['admin']));
 
-router.get('/export/pdf', exportRoomsPDF);
-router.get('/', getAllRooms);
-router.get('/:id', getRoomById);
+router.get('/export/pdf', requirePermission('view_formations'), exportRoomsPDF);
+router.get('/', requirePermission('view_formations'), getAllRooms);
+router.get('/:id', requirePermission('view_formations'), getRoomById);
 
-router.post('/', createRoom);
-router.patch('/:id', updateRoom);
-router.delete('/:id', deleteRoom);
+router.post('/', requirePermission('manage_formations'), createRoom);
+router.patch('/:id', requirePermission('manage_formations'), updateRoom);
+router.delete('/:id', requirePermission('manage_formations'), deleteRoom);
 
 export default router;

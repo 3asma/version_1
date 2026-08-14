@@ -1,5 +1,5 @@
 import express from 'express';
-import { verifyToken, requireRole } from '../middlewares/authMiddleware.js';
+import { verifyToken, requirePermission } from '../middlewares/authMiddleware.js';
 import {
     exportProfessorsPDF,
     getAllProfessors,
@@ -13,14 +13,13 @@ const router = express.Router();
 
 // All routes protected by JWT
 router.use(verifyToken);
-router.use(requireRole(['admin']));
 
-router.get('/export/pdf', exportProfessorsPDF);
-router.get('/', getAllProfessors);
-router.get('/:id', getProfessorById);
+router.get('/export/pdf', requirePermission('view_professors'), exportProfessorsPDF);
+router.get('/', requirePermission('view_professors'), getAllProfessors);
+router.get('/:id', requirePermission('view_professors'), getProfessorById);
 
-router.post('/', createProfessor);
-router.patch('/:id', updateProfessor);
-router.delete('/:id', deleteProfessor);
+router.post('/', requirePermission('manage_professors'), createProfessor);
+router.patch('/:id', requirePermission('manage_professors'), updateProfessor);
+router.delete('/:id', requirePermission('manage_professors'), deleteProfessor);
 
 export default router;

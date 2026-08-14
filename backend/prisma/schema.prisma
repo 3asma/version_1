@@ -121,6 +121,7 @@ maxSessions Int      @default(25)
   updatedAt   DateTime @updatedAt
   inscriptions Inscription[]
   reservations Reservation[]
+  cancelRequests CancelRequest[]
 }
 
 enum LearningMode {
@@ -263,6 +264,7 @@ model Reservation {
   professor       Professor         @relation(fields: [professorId], references: [id], onDelete: Cascade)
   room            Room              @relation(fields: [roomId], references: [id], onDelete: Cascade)
   attendances     Attendance[]
+  cancelRequests  CancelRequest[]
 
   @@index([reservationDate])
   @@index([professorId])
@@ -312,6 +314,22 @@ model Attendance {
 enum AttendanceStatus {
   PRESENT
   ABSENT
+}
+
+model CancelRequest {
+  id            String       @id @default(uuid())
+  reservationId String
+  reservation   Reservation  @relation(fields: [reservationId], references: [id], onDelete: Cascade)
+  professorId   String
+  professor     Professor    @relation(fields: [professorId], references: [id], onDelete: Cascade)
+  reason        String
+  status        String       @default("PENDING") // PENDING, APPROVED, REJECTED
+  createdAt     DateTime     @default(now())
+  processedAt   DateTime?
+  processedBy   String?
+
+  @@index([reservationId])
+  @@index([professorId])
 }
 
 

@@ -108,19 +108,20 @@ model Room {
 }
 
 model Professor {
-  id           String        @id @default(uuid())
-  nom          String
-  prenom       String
-  email        String?       @unique
-  telephone    String?
-  adresse      String?
-  type         String        @default("permanent")
-  dayOff       String        @default("Sunday")
-  maxSessions  Int           @default(25)
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  inscriptions Inscription[]
-  reservations Reservation[]
+  id             String          @id @default(uuid())
+  nom            String
+  prenom         String
+  email          String?         @unique
+  telephone      String?
+  adresse        String?
+  type           String          @default("permanent")
+  dayOff         String          @default("Sunday")
+  maxSessions    Int             @default(25)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  inscriptions   Inscription[]
+  reservations   Reservation[]
+  cancelRequests CancelRequest[]
 }
 
 enum LearningMode {
@@ -259,10 +260,11 @@ model Reservation {
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
 
-  inscription Inscription  @relation(fields: [inscriptionId], references: [id], onDelete: Cascade)
-  professor   Professor    @relation(fields: [professorId], references: [id], onDelete: Cascade)
-  room        Room         @relation(fields: [roomId], references: [id], onDelete: Cascade)
-  attendances Attendance[]
+  inscription    Inscription     @relation(fields: [inscriptionId], references: [id], onDelete: Cascade)
+  professor      Professor       @relation(fields: [professorId], references: [id], onDelete: Cascade)
+  room           Room            @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  attendances    Attendance[]
+  cancelRequests CancelRequest[]
 
   @@unique([inscriptionId, reservationDate, startTime])
   @@index([reservationDate])
@@ -311,4 +313,20 @@ model Attendance {
 enum AttendanceStatus {
   PRESENT
   ABSENT
+}
+
+model CancelRequest {
+  id            String      @id @default(uuid())
+  reservationId String
+  reservation   Reservation @relation(fields: [reservationId], references: [id], onDelete: Cascade)
+  professorId   String
+  professor     Professor   @relation(fields: [professorId], references: [id], onDelete: Cascade)
+  reason        String
+  status        String      @default("PENDING") // PENDING, APPROVED, REJECTED
+  createdAt     DateTime    @default(now())
+  processedAt   DateTime?
+  processedBy   String?
+
+  @@index([reservationId])
+  @@index([professorId])
 }

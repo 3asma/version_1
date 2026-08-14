@@ -48,7 +48,8 @@
     "description": "Gestion des prospects uniquement",
     "permissions": [
       "view_prospects",
-      "manage_prospects"
+      "manage_prospects",
+      "view_candidates"
     ]
   },
   "professor": {

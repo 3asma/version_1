@@ -1,5 +1,5 @@
 import express from 'express';
-import { verifyToken, requireRole } from '../middlewares/authMiddleware.js';
+import { verifyToken, requirePermission } from '../middlewares/authMiddleware.js';
 import { upload } from '../middlewares/uploadMiddleware.js';
 import {
     getAllPayments,
@@ -17,14 +17,13 @@ const router = express.Router();
 
 // Protect all endpoints using verifyToken
 router.use(verifyToken);
-router.use(requireRole(['admin', 'agent_reservation']));
 
-router.get('/plan', getPaymentPlanQuery);
+router.get('/plan', requirePermission('view_payments'), getPaymentPlanQuery);
 
 // PaymentPlan routes
-router.get('/payment-plan/:candidateId/:formationId', getPaymentPlan);
-router.post('/payment-plan', createPaymentPlan);
-router.put('/payment-plan/:candidateId/:formationId', updatePaymentPlan);
+router.get('/payment-plan/:candidateId/:formationId', requirePermission('view_payments'), getPaymentPlan);
+router.post('/payment-plan', requirePermission('manage_payments'), createPaymentPlan);
+router.put('/payment-plan/:candidateId/:formationId', requirePermission('manage_payments'), updatePaymentPlan);
 
 // Helper middleware for upload parsing and errors
 const handleUpload = (req, res, next) => {
@@ -44,10 +43,10 @@ const handleUpload = (req, res, next) => {
 };
 
 // Payment routes
-router.get('/', getAllPayments);
-router.get('/:id', getPaymentById);
-router.post('/', handleUpload, createPayment);
-router.patch('/:id', updatePayment);
-router.delete('/:id', deletePayment);
+router.get('/', requirePermission('view_payments'), getAllPayments);
+router.get('/:id', requirePermission('view_payments'), getPaymentById);
+router.post('/', requirePermission('manage_payments'), handleUpload, createPayment);
+router.patch('/:id', requirePermission('manage_payments'), updatePayment);
+router.delete('/:id', requirePermission('manage_payments'), deletePayment);
 
 export default router;

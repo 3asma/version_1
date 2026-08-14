@@ -83,6 +83,11 @@ export type PaymentPlan = $Result.DefaultSelection<Prisma.$PaymentPlanPayload>
  * 
  */
 export type Attendance = $Result.DefaultSelection<Prisma.$AttendancePayload>
+/**
+ * Model CancelRequest
+ * 
+ */
+export type CancelRequest = $Result.DefaultSelection<Prisma.$CancelRequestPayload>
 
 /**
  * Enums
@@ -490,6 +495,16 @@ export class PrismaClient<
     * ```
     */
   get attendance(): Prisma.AttendanceDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.cancelRequest`: Exposes CRUD operations for the **CancelRequest** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CancelRequests
+    * const cancelRequests = await prisma.cancelRequest.findMany()
+    * ```
+    */
+  get cancelRequest(): Prisma.CancelRequestDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -944,7 +959,8 @@ export namespace Prisma {
     Payment: 'Payment',
     Reservation: 'Reservation',
     PaymentPlan: 'PaymentPlan',
-    Attendance: 'Attendance'
+    Attendance: 'Attendance',
+    CancelRequest: 'CancelRequest'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -963,7 +979,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "prospect" | "candidate" | "formation" | "room" | "professor" | "inscription" | "group" | "inscriptionCandidate" | "commercial" | "payment" | "reservation" | "paymentPlan" | "attendance"
+      modelProps: "user" | "prospect" | "candidate" | "formation" | "room" | "professor" | "inscription" | "group" | "inscriptionCandidate" | "commercial" | "payment" | "reservation" | "paymentPlan" | "attendance" | "cancelRequest"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2003,6 +2019,80 @@ export namespace Prisma {
           }
         }
       }
+      CancelRequest: {
+        payload: Prisma.$CancelRequestPayload<ExtArgs>
+        fields: Prisma.CancelRequestFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CancelRequestFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CancelRequestPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CancelRequestFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CancelRequestPayload>
+          }
+          findFirst: {
+            args: Prisma.CancelRequestFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CancelRequestPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CancelRequestFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CancelRequestPayload>
+          }
+          findMany: {
+            args: Prisma.CancelRequestFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CancelRequestPayload>[]
+          }
+          create: {
+            args: Prisma.CancelRequestCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CancelRequestPayload>
+          }
+          createMany: {
+            args: Prisma.CancelRequestCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CancelRequestCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CancelRequestPayload>[]
+          }
+          delete: {
+            args: Prisma.CancelRequestDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CancelRequestPayload>
+          }
+          update: {
+            args: Prisma.CancelRequestUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CancelRequestPayload>
+          }
+          deleteMany: {
+            args: Prisma.CancelRequestDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CancelRequestUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CancelRequestUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CancelRequestPayload>[]
+          }
+          upsert: {
+            args: Prisma.CancelRequestUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CancelRequestPayload>
+          }
+          aggregate: {
+            args: Prisma.CancelRequestAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCancelRequest>
+          }
+          groupBy: {
+            args: Prisma.CancelRequestGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CancelRequestGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CancelRequestCountArgs<ExtArgs>
+            result: $Utils.Optional<CancelRequestCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2113,6 +2203,7 @@ export namespace Prisma {
     reservation?: ReservationOmit
     paymentPlan?: PaymentPlanOmit
     attendance?: AttendanceOmit
+    cancelRequest?: CancelRequestOmit
   }
 
   /* Types for Logging */
@@ -2342,11 +2433,13 @@ export namespace Prisma {
   export type ProfessorCountOutputType = {
     inscriptions: number
     reservations: number
+    cancelRequests: number
   }
 
   export type ProfessorCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     inscriptions?: boolean | ProfessorCountOutputTypeCountInscriptionsArgs
     reservations?: boolean | ProfessorCountOutputTypeCountReservationsArgs
+    cancelRequests?: boolean | ProfessorCountOutputTypeCountCancelRequestsArgs
   }
 
   // Custom InputTypes
@@ -2372,6 +2465,13 @@ export namespace Prisma {
    */
   export type ProfessorCountOutputTypeCountReservationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ReservationWhereInput
+  }
+
+  /**
+   * ProfessorCountOutputType without action
+   */
+  export type ProfessorCountOutputTypeCountCancelRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CancelRequestWhereInput
   }
 
 
@@ -2421,10 +2521,12 @@ export namespace Prisma {
 
   export type ReservationCountOutputType = {
     attendances: number
+    cancelRequests: number
   }
 
   export type ReservationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     attendances?: boolean | ReservationCountOutputTypeCountAttendancesArgs
+    cancelRequests?: boolean | ReservationCountOutputTypeCountCancelRequestsArgs
   }
 
   // Custom InputTypes
@@ -2443,6 +2545,13 @@ export namespace Prisma {
    */
   export type ReservationCountOutputTypeCountAttendancesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AttendanceWhereInput
+  }
+
+  /**
+   * ReservationCountOutputType without action
+   */
+  export type ReservationCountOutputTypeCountCancelRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CancelRequestWhereInput
   }
 
 
@@ -8591,6 +8700,7 @@ export namespace Prisma {
     updatedAt?: boolean
     inscriptions?: boolean | Professor$inscriptionsArgs<ExtArgs>
     reservations?: boolean | Professor$reservationsArgs<ExtArgs>
+    cancelRequests?: boolean | Professor$cancelRequestsArgs<ExtArgs>
     _count?: boolean | ProfessorCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["professor"]>
 
@@ -8640,6 +8750,7 @@ export namespace Prisma {
   export type ProfessorInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     inscriptions?: boolean | Professor$inscriptionsArgs<ExtArgs>
     reservations?: boolean | Professor$reservationsArgs<ExtArgs>
+    cancelRequests?: boolean | Professor$cancelRequestsArgs<ExtArgs>
     _count?: boolean | ProfessorCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ProfessorIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -8650,6 +8761,7 @@ export namespace Prisma {
     objects: {
       inscriptions: Prisma.$InscriptionPayload<ExtArgs>[]
       reservations: Prisma.$ReservationPayload<ExtArgs>[]
+      cancelRequests: Prisma.$CancelRequestPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -9059,6 +9171,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     inscriptions<T extends Professor$inscriptionsArgs<ExtArgs> = {}>(args?: Subset<T, Professor$inscriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     reservations<T extends Professor$reservationsArgs<ExtArgs> = {}>(args?: Subset<T, Professor$reservationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReservationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    cancelRequests<T extends Professor$cancelRequestsArgs<ExtArgs> = {}>(args?: Subset<T, Professor$cancelRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CancelRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9532,6 +9645,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ReservationScalarFieldEnum | ReservationScalarFieldEnum[]
+  }
+
+  /**
+   * Professor.cancelRequests
+   */
+  export type Professor$cancelRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CancelRequest
+     */
+    select?: CancelRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CancelRequest
+     */
+    omit?: CancelRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CancelRequestInclude<ExtArgs> | null
+    where?: CancelRequestWhereInput
+    orderBy?: CancelRequestOrderByWithRelationInput | CancelRequestOrderByWithRelationInput[]
+    cursor?: CancelRequestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CancelRequestScalarFieldEnum | CancelRequestScalarFieldEnum[]
   }
 
   /**
@@ -15442,6 +15579,7 @@ export namespace Prisma {
     professor?: boolean | ProfessorDefaultArgs<ExtArgs>
     room?: boolean | RoomDefaultArgs<ExtArgs>
     attendances?: boolean | Reservation$attendancesArgs<ExtArgs>
+    cancelRequests?: boolean | Reservation$cancelRequestsArgs<ExtArgs>
     _count?: boolean | ReservationCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["reservation"]>
 
@@ -15499,6 +15637,7 @@ export namespace Prisma {
     professor?: boolean | ProfessorDefaultArgs<ExtArgs>
     room?: boolean | RoomDefaultArgs<ExtArgs>
     attendances?: boolean | Reservation$attendancesArgs<ExtArgs>
+    cancelRequests?: boolean | Reservation$cancelRequestsArgs<ExtArgs>
     _count?: boolean | ReservationCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ReservationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -15519,6 +15658,7 @@ export namespace Prisma {
       professor: Prisma.$ProfessorPayload<ExtArgs>
       room: Prisma.$RoomPayload<ExtArgs>
       attendances: Prisma.$AttendancePayload<ExtArgs>[]
+      cancelRequests: Prisma.$CancelRequestPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -15930,6 +16070,7 @@ export namespace Prisma {
     professor<T extends ProfessorDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProfessorDefaultArgs<ExtArgs>>): Prisma__ProfessorClient<$Result.GetResult<Prisma.$ProfessorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     room<T extends RoomDefaultArgs<ExtArgs> = {}>(args?: Subset<T, RoomDefaultArgs<ExtArgs>>): Prisma__RoomClient<$Result.GetResult<Prisma.$RoomPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     attendances<T extends Reservation$attendancesArgs<ExtArgs> = {}>(args?: Subset<T, Reservation$attendancesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    cancelRequests<T extends Reservation$cancelRequestsArgs<ExtArgs> = {}>(args?: Subset<T, Reservation$cancelRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CancelRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -16387,6 +16528,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: AttendanceScalarFieldEnum | AttendanceScalarFieldEnum[]
+  }
+
+  /**
+   * Reservation.cancelRequests
+   */
+  export type Reservation$cancelRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CancelRequest
+     */
+    select?: CancelRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CancelRequest
+     */
+    omit?: CancelRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CancelRequestInclude<ExtArgs> | null
+    where?: CancelRequestWhereInput
+    orderBy?: CancelRequestOrderByWithRelationInput | CancelRequestOrderByWithRelationInput[]
+    cursor?: CancelRequestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CancelRequestScalarFieldEnum | CancelRequestScalarFieldEnum[]
   }
 
   /**
@@ -18614,6 +18779,1111 @@ export namespace Prisma {
 
 
   /**
+   * Model CancelRequest
+   */
+
+  export type AggregateCancelRequest = {
+    _count: CancelRequestCountAggregateOutputType | null
+    _min: CancelRequestMinAggregateOutputType | null
+    _max: CancelRequestMaxAggregateOutputType | null
+  }
+
+  export type CancelRequestMinAggregateOutputType = {
+    id: string | null
+    reservationId: string | null
+    professorId: string | null
+    reason: string | null
+    status: string | null
+    createdAt: Date | null
+    processedAt: Date | null
+    processedBy: string | null
+  }
+
+  export type CancelRequestMaxAggregateOutputType = {
+    id: string | null
+    reservationId: string | null
+    professorId: string | null
+    reason: string | null
+    status: string | null
+    createdAt: Date | null
+    processedAt: Date | null
+    processedBy: string | null
+  }
+
+  export type CancelRequestCountAggregateOutputType = {
+    id: number
+    reservationId: number
+    professorId: number
+    reason: number
+    status: number
+    createdAt: number
+    processedAt: number
+    processedBy: number
+    _all: number
+  }
+
+
+  export type CancelRequestMinAggregateInputType = {
+    id?: true
+    reservationId?: true
+    professorId?: true
+    reason?: true
+    status?: true
+    createdAt?: true
+    processedAt?: true
+    processedBy?: true
+  }
+
+  export type CancelRequestMaxAggregateInputType = {
+    id?: true
+    reservationId?: true
+    professorId?: true
+    reason?: true
+    status?: true
+    createdAt?: true
+    processedAt?: true
+    processedBy?: true
+  }
+
+  export type CancelRequestCountAggregateInputType = {
+    id?: true
+    reservationId?: true
+    professorId?: true
+    reason?: true
+    status?: true
+    createdAt?: true
+    processedAt?: true
+    processedBy?: true
+    _all?: true
+  }
+
+  export type CancelRequestAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CancelRequest to aggregate.
+     */
+    where?: CancelRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CancelRequests to fetch.
+     */
+    orderBy?: CancelRequestOrderByWithRelationInput | CancelRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CancelRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CancelRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CancelRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CancelRequests
+    **/
+    _count?: true | CancelRequestCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CancelRequestMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CancelRequestMaxAggregateInputType
+  }
+
+  export type GetCancelRequestAggregateType<T extends CancelRequestAggregateArgs> = {
+        [P in keyof T & keyof AggregateCancelRequest]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCancelRequest[P]>
+      : GetScalarType<T[P], AggregateCancelRequest[P]>
+  }
+
+
+
+
+  export type CancelRequestGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CancelRequestWhereInput
+    orderBy?: CancelRequestOrderByWithAggregationInput | CancelRequestOrderByWithAggregationInput[]
+    by: CancelRequestScalarFieldEnum[] | CancelRequestScalarFieldEnum
+    having?: CancelRequestScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CancelRequestCountAggregateInputType | true
+    _min?: CancelRequestMinAggregateInputType
+    _max?: CancelRequestMaxAggregateInputType
+  }
+
+  export type CancelRequestGroupByOutputType = {
+    id: string
+    reservationId: string
+    professorId: string
+    reason: string
+    status: string
+    createdAt: Date
+    processedAt: Date | null
+    processedBy: string | null
+    _count: CancelRequestCountAggregateOutputType | null
+    _min: CancelRequestMinAggregateOutputType | null
+    _max: CancelRequestMaxAggregateOutputType | null
+  }
+
+  type GetCancelRequestGroupByPayload<T extends CancelRequestGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CancelRequestGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CancelRequestGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CancelRequestGroupByOutputType[P]>
+            : GetScalarType<T[P], CancelRequestGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CancelRequestSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    reservationId?: boolean
+    professorId?: boolean
+    reason?: boolean
+    status?: boolean
+    createdAt?: boolean
+    processedAt?: boolean
+    processedBy?: boolean
+    reservation?: boolean | ReservationDefaultArgs<ExtArgs>
+    professor?: boolean | ProfessorDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["cancelRequest"]>
+
+  export type CancelRequestSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    reservationId?: boolean
+    professorId?: boolean
+    reason?: boolean
+    status?: boolean
+    createdAt?: boolean
+    processedAt?: boolean
+    processedBy?: boolean
+    reservation?: boolean | ReservationDefaultArgs<ExtArgs>
+    professor?: boolean | ProfessorDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["cancelRequest"]>
+
+  export type CancelRequestSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    reservationId?: boolean
+    professorId?: boolean
+    reason?: boolean
+    status?: boolean
+    createdAt?: boolean
+    processedAt?: boolean
+    processedBy?: boolean
+    reservation?: boolean | ReservationDefaultArgs<ExtArgs>
+    professor?: boolean | ProfessorDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["cancelRequest"]>
+
+  export type CancelRequestSelectScalar = {
+    id?: boolean
+    reservationId?: boolean
+    professorId?: boolean
+    reason?: boolean
+    status?: boolean
+    createdAt?: boolean
+    processedAt?: boolean
+    processedBy?: boolean
+  }
+
+  export type CancelRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "reservationId" | "professorId" | "reason" | "status" | "createdAt" | "processedAt" | "processedBy", ExtArgs["result"]["cancelRequest"]>
+  export type CancelRequestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    reservation?: boolean | ReservationDefaultArgs<ExtArgs>
+    professor?: boolean | ProfessorDefaultArgs<ExtArgs>
+  }
+  export type CancelRequestIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    reservation?: boolean | ReservationDefaultArgs<ExtArgs>
+    professor?: boolean | ProfessorDefaultArgs<ExtArgs>
+  }
+  export type CancelRequestIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    reservation?: boolean | ReservationDefaultArgs<ExtArgs>
+    professor?: boolean | ProfessorDefaultArgs<ExtArgs>
+  }
+
+  export type $CancelRequestPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CancelRequest"
+    objects: {
+      reservation: Prisma.$ReservationPayload<ExtArgs>
+      professor: Prisma.$ProfessorPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      reservationId: string
+      professorId: string
+      reason: string
+      status: string
+      createdAt: Date
+      processedAt: Date | null
+      processedBy: string | null
+    }, ExtArgs["result"]["cancelRequest"]>
+    composites: {}
+  }
+
+  type CancelRequestGetPayload<S extends boolean | null | undefined | CancelRequestDefaultArgs> = $Result.GetResult<Prisma.$CancelRequestPayload, S>
+
+  type CancelRequestCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CancelRequestFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CancelRequestCountAggregateInputType | true
+    }
+
+  export interface CancelRequestDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CancelRequest'], meta: { name: 'CancelRequest' } }
+    /**
+     * Find zero or one CancelRequest that matches the filter.
+     * @param {CancelRequestFindUniqueArgs} args - Arguments to find a CancelRequest
+     * @example
+     * // Get one CancelRequest
+     * const cancelRequest = await prisma.cancelRequest.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CancelRequestFindUniqueArgs>(args: SelectSubset<T, CancelRequestFindUniqueArgs<ExtArgs>>): Prisma__CancelRequestClient<$Result.GetResult<Prisma.$CancelRequestPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one CancelRequest that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {CancelRequestFindUniqueOrThrowArgs} args - Arguments to find a CancelRequest
+     * @example
+     * // Get one CancelRequest
+     * const cancelRequest = await prisma.cancelRequest.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CancelRequestFindUniqueOrThrowArgs>(args: SelectSubset<T, CancelRequestFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CancelRequestClient<$Result.GetResult<Prisma.$CancelRequestPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CancelRequest that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CancelRequestFindFirstArgs} args - Arguments to find a CancelRequest
+     * @example
+     * // Get one CancelRequest
+     * const cancelRequest = await prisma.cancelRequest.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CancelRequestFindFirstArgs>(args?: SelectSubset<T, CancelRequestFindFirstArgs<ExtArgs>>): Prisma__CancelRequestClient<$Result.GetResult<Prisma.$CancelRequestPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CancelRequest that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CancelRequestFindFirstOrThrowArgs} args - Arguments to find a CancelRequest
+     * @example
+     * // Get one CancelRequest
+     * const cancelRequest = await prisma.cancelRequest.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CancelRequestFindFirstOrThrowArgs>(args?: SelectSubset<T, CancelRequestFindFirstOrThrowArgs<ExtArgs>>): Prisma__CancelRequestClient<$Result.GetResult<Prisma.$CancelRequestPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more CancelRequests that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CancelRequestFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CancelRequests
+     * const cancelRequests = await prisma.cancelRequest.findMany()
+     * 
+     * // Get first 10 CancelRequests
+     * const cancelRequests = await prisma.cancelRequest.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const cancelRequestWithIdOnly = await prisma.cancelRequest.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CancelRequestFindManyArgs>(args?: SelectSubset<T, CancelRequestFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CancelRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a CancelRequest.
+     * @param {CancelRequestCreateArgs} args - Arguments to create a CancelRequest.
+     * @example
+     * // Create one CancelRequest
+     * const CancelRequest = await prisma.cancelRequest.create({
+     *   data: {
+     *     // ... data to create a CancelRequest
+     *   }
+     * })
+     * 
+     */
+    create<T extends CancelRequestCreateArgs>(args: SelectSubset<T, CancelRequestCreateArgs<ExtArgs>>): Prisma__CancelRequestClient<$Result.GetResult<Prisma.$CancelRequestPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many CancelRequests.
+     * @param {CancelRequestCreateManyArgs} args - Arguments to create many CancelRequests.
+     * @example
+     * // Create many CancelRequests
+     * const cancelRequest = await prisma.cancelRequest.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CancelRequestCreateManyArgs>(args?: SelectSubset<T, CancelRequestCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CancelRequests and returns the data saved in the database.
+     * @param {CancelRequestCreateManyAndReturnArgs} args - Arguments to create many CancelRequests.
+     * @example
+     * // Create many CancelRequests
+     * const cancelRequest = await prisma.cancelRequest.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CancelRequests and only return the `id`
+     * const cancelRequestWithIdOnly = await prisma.cancelRequest.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CancelRequestCreateManyAndReturnArgs>(args?: SelectSubset<T, CancelRequestCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CancelRequestPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a CancelRequest.
+     * @param {CancelRequestDeleteArgs} args - Arguments to delete one CancelRequest.
+     * @example
+     * // Delete one CancelRequest
+     * const CancelRequest = await prisma.cancelRequest.delete({
+     *   where: {
+     *     // ... filter to delete one CancelRequest
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CancelRequestDeleteArgs>(args: SelectSubset<T, CancelRequestDeleteArgs<ExtArgs>>): Prisma__CancelRequestClient<$Result.GetResult<Prisma.$CancelRequestPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one CancelRequest.
+     * @param {CancelRequestUpdateArgs} args - Arguments to update one CancelRequest.
+     * @example
+     * // Update one CancelRequest
+     * const cancelRequest = await prisma.cancelRequest.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CancelRequestUpdateArgs>(args: SelectSubset<T, CancelRequestUpdateArgs<ExtArgs>>): Prisma__CancelRequestClient<$Result.GetResult<Prisma.$CancelRequestPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more CancelRequests.
+     * @param {CancelRequestDeleteManyArgs} args - Arguments to filter CancelRequests to delete.
+     * @example
+     * // Delete a few CancelRequests
+     * const { count } = await prisma.cancelRequest.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CancelRequestDeleteManyArgs>(args?: SelectSubset<T, CancelRequestDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CancelRequests.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CancelRequestUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CancelRequests
+     * const cancelRequest = await prisma.cancelRequest.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CancelRequestUpdateManyArgs>(args: SelectSubset<T, CancelRequestUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CancelRequests and returns the data updated in the database.
+     * @param {CancelRequestUpdateManyAndReturnArgs} args - Arguments to update many CancelRequests.
+     * @example
+     * // Update many CancelRequests
+     * const cancelRequest = await prisma.cancelRequest.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more CancelRequests and only return the `id`
+     * const cancelRequestWithIdOnly = await prisma.cancelRequest.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CancelRequestUpdateManyAndReturnArgs>(args: SelectSubset<T, CancelRequestUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CancelRequestPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one CancelRequest.
+     * @param {CancelRequestUpsertArgs} args - Arguments to update or create a CancelRequest.
+     * @example
+     * // Update or create a CancelRequest
+     * const cancelRequest = await prisma.cancelRequest.upsert({
+     *   create: {
+     *     // ... data to create a CancelRequest
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CancelRequest we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CancelRequestUpsertArgs>(args: SelectSubset<T, CancelRequestUpsertArgs<ExtArgs>>): Prisma__CancelRequestClient<$Result.GetResult<Prisma.$CancelRequestPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of CancelRequests.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CancelRequestCountArgs} args - Arguments to filter CancelRequests to count.
+     * @example
+     * // Count the number of CancelRequests
+     * const count = await prisma.cancelRequest.count({
+     *   where: {
+     *     // ... the filter for the CancelRequests we want to count
+     *   }
+     * })
+    **/
+    count<T extends CancelRequestCountArgs>(
+      args?: Subset<T, CancelRequestCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CancelRequestCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CancelRequest.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CancelRequestAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CancelRequestAggregateArgs>(args: Subset<T, CancelRequestAggregateArgs>): Prisma.PrismaPromise<GetCancelRequestAggregateType<T>>
+
+    /**
+     * Group by CancelRequest.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CancelRequestGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CancelRequestGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CancelRequestGroupByArgs['orderBy'] }
+        : { orderBy?: CancelRequestGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CancelRequestGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCancelRequestGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CancelRequest model
+   */
+  readonly fields: CancelRequestFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CancelRequest.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CancelRequestClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    reservation<T extends ReservationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ReservationDefaultArgs<ExtArgs>>): Prisma__ReservationClient<$Result.GetResult<Prisma.$ReservationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    professor<T extends ProfessorDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProfessorDefaultArgs<ExtArgs>>): Prisma__ProfessorClient<$Result.GetResult<Prisma.$ProfessorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CancelRequest model
+   */
+  interface CancelRequestFieldRefs {
+    readonly id: FieldRef<"CancelRequest", 'String'>
+    readonly reservationId: FieldRef<"CancelRequest", 'String'>
+    readonly professorId: FieldRef<"CancelRequest", 'String'>
+    readonly reason: FieldRef<"CancelRequest", 'String'>
+    readonly status: FieldRef<"CancelRequest", 'String'>
+    readonly createdAt: FieldRef<"CancelRequest", 'DateTime'>
+    readonly processedAt: FieldRef<"CancelRequest", 'DateTime'>
+    readonly processedBy: FieldRef<"CancelRequest", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CancelRequest findUnique
+   */
+  export type CancelRequestFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CancelRequest
+     */
+    select?: CancelRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CancelRequest
+     */
+    omit?: CancelRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CancelRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which CancelRequest to fetch.
+     */
+    where: CancelRequestWhereUniqueInput
+  }
+
+  /**
+   * CancelRequest findUniqueOrThrow
+   */
+  export type CancelRequestFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CancelRequest
+     */
+    select?: CancelRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CancelRequest
+     */
+    omit?: CancelRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CancelRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which CancelRequest to fetch.
+     */
+    where: CancelRequestWhereUniqueInput
+  }
+
+  /**
+   * CancelRequest findFirst
+   */
+  export type CancelRequestFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CancelRequest
+     */
+    select?: CancelRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CancelRequest
+     */
+    omit?: CancelRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CancelRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which CancelRequest to fetch.
+     */
+    where?: CancelRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CancelRequests to fetch.
+     */
+    orderBy?: CancelRequestOrderByWithRelationInput | CancelRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CancelRequests.
+     */
+    cursor?: CancelRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CancelRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CancelRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CancelRequests.
+     */
+    distinct?: CancelRequestScalarFieldEnum | CancelRequestScalarFieldEnum[]
+  }
+
+  /**
+   * CancelRequest findFirstOrThrow
+   */
+  export type CancelRequestFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CancelRequest
+     */
+    select?: CancelRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CancelRequest
+     */
+    omit?: CancelRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CancelRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which CancelRequest to fetch.
+     */
+    where?: CancelRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CancelRequests to fetch.
+     */
+    orderBy?: CancelRequestOrderByWithRelationInput | CancelRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CancelRequests.
+     */
+    cursor?: CancelRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CancelRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CancelRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CancelRequests.
+     */
+    distinct?: CancelRequestScalarFieldEnum | CancelRequestScalarFieldEnum[]
+  }
+
+  /**
+   * CancelRequest findMany
+   */
+  export type CancelRequestFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CancelRequest
+     */
+    select?: CancelRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CancelRequest
+     */
+    omit?: CancelRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CancelRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which CancelRequests to fetch.
+     */
+    where?: CancelRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CancelRequests to fetch.
+     */
+    orderBy?: CancelRequestOrderByWithRelationInput | CancelRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CancelRequests.
+     */
+    cursor?: CancelRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CancelRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CancelRequests.
+     */
+    skip?: number
+    distinct?: CancelRequestScalarFieldEnum | CancelRequestScalarFieldEnum[]
+  }
+
+  /**
+   * CancelRequest create
+   */
+  export type CancelRequestCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CancelRequest
+     */
+    select?: CancelRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CancelRequest
+     */
+    omit?: CancelRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CancelRequestInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CancelRequest.
+     */
+    data: XOR<CancelRequestCreateInput, CancelRequestUncheckedCreateInput>
+  }
+
+  /**
+   * CancelRequest createMany
+   */
+  export type CancelRequestCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CancelRequests.
+     */
+    data: CancelRequestCreateManyInput | CancelRequestCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CancelRequest createManyAndReturn
+   */
+  export type CancelRequestCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CancelRequest
+     */
+    select?: CancelRequestSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CancelRequest
+     */
+    omit?: CancelRequestOmit<ExtArgs> | null
+    /**
+     * The data used to create many CancelRequests.
+     */
+    data: CancelRequestCreateManyInput | CancelRequestCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CancelRequestIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CancelRequest update
+   */
+  export type CancelRequestUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CancelRequest
+     */
+    select?: CancelRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CancelRequest
+     */
+    omit?: CancelRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CancelRequestInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CancelRequest.
+     */
+    data: XOR<CancelRequestUpdateInput, CancelRequestUncheckedUpdateInput>
+    /**
+     * Choose, which CancelRequest to update.
+     */
+    where: CancelRequestWhereUniqueInput
+  }
+
+  /**
+   * CancelRequest updateMany
+   */
+  export type CancelRequestUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CancelRequests.
+     */
+    data: XOR<CancelRequestUpdateManyMutationInput, CancelRequestUncheckedUpdateManyInput>
+    /**
+     * Filter which CancelRequests to update
+     */
+    where?: CancelRequestWhereInput
+    /**
+     * Limit how many CancelRequests to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CancelRequest updateManyAndReturn
+   */
+  export type CancelRequestUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CancelRequest
+     */
+    select?: CancelRequestSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CancelRequest
+     */
+    omit?: CancelRequestOmit<ExtArgs> | null
+    /**
+     * The data used to update CancelRequests.
+     */
+    data: XOR<CancelRequestUpdateManyMutationInput, CancelRequestUncheckedUpdateManyInput>
+    /**
+     * Filter which CancelRequests to update
+     */
+    where?: CancelRequestWhereInput
+    /**
+     * Limit how many CancelRequests to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CancelRequestIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CancelRequest upsert
+   */
+  export type CancelRequestUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CancelRequest
+     */
+    select?: CancelRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CancelRequest
+     */
+    omit?: CancelRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CancelRequestInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CancelRequest to update in case it exists.
+     */
+    where: CancelRequestWhereUniqueInput
+    /**
+     * In case the CancelRequest found by the `where` argument doesn't exist, create a new CancelRequest with this data.
+     */
+    create: XOR<CancelRequestCreateInput, CancelRequestUncheckedCreateInput>
+    /**
+     * In case the CancelRequest was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CancelRequestUpdateInput, CancelRequestUncheckedUpdateInput>
+  }
+
+  /**
+   * CancelRequest delete
+   */
+  export type CancelRequestDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CancelRequest
+     */
+    select?: CancelRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CancelRequest
+     */
+    omit?: CancelRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CancelRequestInclude<ExtArgs> | null
+    /**
+     * Filter which CancelRequest to delete.
+     */
+    where: CancelRequestWhereUniqueInput
+  }
+
+  /**
+   * CancelRequest deleteMany
+   */
+  export type CancelRequestDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CancelRequests to delete
+     */
+    where?: CancelRequestWhereInput
+    /**
+     * Limit how many CancelRequests to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * CancelRequest without action
+   */
+  export type CancelRequestDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CancelRequest
+     */
+    select?: CancelRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CancelRequest
+     */
+    omit?: CancelRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CancelRequestInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -18841,6 +20111,20 @@ export namespace Prisma {
   };
 
   export type AttendanceScalarFieldEnum = (typeof AttendanceScalarFieldEnum)[keyof typeof AttendanceScalarFieldEnum]
+
+
+  export const CancelRequestScalarFieldEnum: {
+    id: 'id',
+    reservationId: 'reservationId',
+    professorId: 'professorId',
+    reason: 'reason',
+    status: 'status',
+    createdAt: 'createdAt',
+    processedAt: 'processedAt',
+    processedBy: 'processedBy'
+  };
+
+  export type CancelRequestScalarFieldEnum = (typeof CancelRequestScalarFieldEnum)[keyof typeof CancelRequestScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -19549,6 +20833,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Professor"> | Date | string
     inscriptions?: InscriptionListRelationFilter
     reservations?: ReservationListRelationFilter
+    cancelRequests?: CancelRequestListRelationFilter
   }
 
   export type ProfessorOrderByWithRelationInput = {
@@ -19565,6 +20850,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     inscriptions?: InscriptionOrderByRelationAggregateInput
     reservations?: ReservationOrderByRelationAggregateInput
+    cancelRequests?: CancelRequestOrderByRelationAggregateInput
   }
 
   export type ProfessorWhereUniqueInput = Prisma.AtLeast<{
@@ -19584,6 +20870,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Professor"> | Date | string
     inscriptions?: InscriptionListRelationFilter
     reservations?: ReservationListRelationFilter
+    cancelRequests?: CancelRequestListRelationFilter
   }, "id" | "email">
 
   export type ProfessorOrderByWithAggregationInput = {
@@ -20029,6 +21316,7 @@ export namespace Prisma {
     professor?: XOR<ProfessorScalarRelationFilter, ProfessorWhereInput>
     room?: XOR<RoomScalarRelationFilter, RoomWhereInput>
     attendances?: AttendanceListRelationFilter
+    cancelRequests?: CancelRequestListRelationFilter
   }
 
   export type ReservationOrderByWithRelationInput = {
@@ -20047,6 +21335,7 @@ export namespace Prisma {
     professor?: ProfessorOrderByWithRelationInput
     room?: RoomOrderByWithRelationInput
     attendances?: AttendanceOrderByRelationAggregateInput
+    cancelRequests?: CancelRequestOrderByRelationAggregateInput
   }
 
   export type ReservationWhereUniqueInput = Prisma.AtLeast<{
@@ -20069,6 +21358,7 @@ export namespace Prisma {
     professor?: XOR<ProfessorScalarRelationFilter, ProfessorWhereInput>
     room?: XOR<RoomScalarRelationFilter, RoomWhereInput>
     attendances?: AttendanceListRelationFilter
+    cancelRequests?: CancelRequestListRelationFilter
   }, "id" | "reservationCode" | "inscriptionId_reservationDate_startTime">
 
   export type ReservationOrderByWithAggregationInput = {
@@ -20238,6 +21528,79 @@ export namespace Prisma {
     note?: StringNullableWithAggregatesFilter<"Attendance"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Attendance"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Attendance"> | Date | string
+  }
+
+  export type CancelRequestWhereInput = {
+    AND?: CancelRequestWhereInput | CancelRequestWhereInput[]
+    OR?: CancelRequestWhereInput[]
+    NOT?: CancelRequestWhereInput | CancelRequestWhereInput[]
+    id?: StringFilter<"CancelRequest"> | string
+    reservationId?: StringFilter<"CancelRequest"> | string
+    professorId?: StringFilter<"CancelRequest"> | string
+    reason?: StringFilter<"CancelRequest"> | string
+    status?: StringFilter<"CancelRequest"> | string
+    createdAt?: DateTimeFilter<"CancelRequest"> | Date | string
+    processedAt?: DateTimeNullableFilter<"CancelRequest"> | Date | string | null
+    processedBy?: StringNullableFilter<"CancelRequest"> | string | null
+    reservation?: XOR<ReservationScalarRelationFilter, ReservationWhereInput>
+    professor?: XOR<ProfessorScalarRelationFilter, ProfessorWhereInput>
+  }
+
+  export type CancelRequestOrderByWithRelationInput = {
+    id?: SortOrder
+    reservationId?: SortOrder
+    professorId?: SortOrder
+    reason?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    processedAt?: SortOrderInput | SortOrder
+    processedBy?: SortOrderInput | SortOrder
+    reservation?: ReservationOrderByWithRelationInput
+    professor?: ProfessorOrderByWithRelationInput
+  }
+
+  export type CancelRequestWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: CancelRequestWhereInput | CancelRequestWhereInput[]
+    OR?: CancelRequestWhereInput[]
+    NOT?: CancelRequestWhereInput | CancelRequestWhereInput[]
+    reservationId?: StringFilter<"CancelRequest"> | string
+    professorId?: StringFilter<"CancelRequest"> | string
+    reason?: StringFilter<"CancelRequest"> | string
+    status?: StringFilter<"CancelRequest"> | string
+    createdAt?: DateTimeFilter<"CancelRequest"> | Date | string
+    processedAt?: DateTimeNullableFilter<"CancelRequest"> | Date | string | null
+    processedBy?: StringNullableFilter<"CancelRequest"> | string | null
+    reservation?: XOR<ReservationScalarRelationFilter, ReservationWhereInput>
+    professor?: XOR<ProfessorScalarRelationFilter, ProfessorWhereInput>
+  }, "id">
+
+  export type CancelRequestOrderByWithAggregationInput = {
+    id?: SortOrder
+    reservationId?: SortOrder
+    professorId?: SortOrder
+    reason?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    processedAt?: SortOrderInput | SortOrder
+    processedBy?: SortOrderInput | SortOrder
+    _count?: CancelRequestCountOrderByAggregateInput
+    _max?: CancelRequestMaxOrderByAggregateInput
+    _min?: CancelRequestMinOrderByAggregateInput
+  }
+
+  export type CancelRequestScalarWhereWithAggregatesInput = {
+    AND?: CancelRequestScalarWhereWithAggregatesInput | CancelRequestScalarWhereWithAggregatesInput[]
+    OR?: CancelRequestScalarWhereWithAggregatesInput[]
+    NOT?: CancelRequestScalarWhereWithAggregatesInput | CancelRequestScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"CancelRequest"> | string
+    reservationId?: StringWithAggregatesFilter<"CancelRequest"> | string
+    professorId?: StringWithAggregatesFilter<"CancelRequest"> | string
+    reason?: StringWithAggregatesFilter<"CancelRequest"> | string
+    status?: StringWithAggregatesFilter<"CancelRequest"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"CancelRequest"> | Date | string
+    processedAt?: DateTimeNullableWithAggregatesFilter<"CancelRequest"> | Date | string | null
+    processedBy?: StringNullableWithAggregatesFilter<"CancelRequest"> | string | null
   }
 
   export type UserCreateInput = {
@@ -20773,6 +22136,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     inscriptions?: InscriptionCreateNestedManyWithoutProfessorInput
     reservations?: ReservationCreateNestedManyWithoutProfessorInput
+    cancelRequests?: CancelRequestCreateNestedManyWithoutProfessorInput
   }
 
   export type ProfessorUncheckedCreateInput = {
@@ -20789,6 +22153,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     inscriptions?: InscriptionUncheckedCreateNestedManyWithoutProfessorInput
     reservations?: ReservationUncheckedCreateNestedManyWithoutProfessorInput
+    cancelRequests?: CancelRequestUncheckedCreateNestedManyWithoutProfessorInput
   }
 
   export type ProfessorUpdateInput = {
@@ -20805,6 +22170,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     inscriptions?: InscriptionUpdateManyWithoutProfessorNestedInput
     reservations?: ReservationUpdateManyWithoutProfessorNestedInput
+    cancelRequests?: CancelRequestUpdateManyWithoutProfessorNestedInput
   }
 
   export type ProfessorUncheckedUpdateInput = {
@@ -20821,6 +22187,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     inscriptions?: InscriptionUncheckedUpdateManyWithoutProfessorNestedInput
     reservations?: ReservationUncheckedUpdateManyWithoutProfessorNestedInput
+    cancelRequests?: CancelRequestUncheckedUpdateManyWithoutProfessorNestedInput
   }
 
   export type ProfessorCreateManyInput = {
@@ -21288,6 +22655,7 @@ export namespace Prisma {
     professor: ProfessorCreateNestedOneWithoutReservationsInput
     room: RoomCreateNestedOneWithoutReservationsInput
     attendances?: AttendanceCreateNestedManyWithoutReservationInput
+    cancelRequests?: CancelRequestCreateNestedManyWithoutReservationInput
   }
 
   export type ReservationUncheckedCreateInput = {
@@ -21303,6 +22671,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     attendances?: AttendanceUncheckedCreateNestedManyWithoutReservationInput
+    cancelRequests?: CancelRequestUncheckedCreateNestedManyWithoutReservationInput
   }
 
   export type ReservationUpdateInput = {
@@ -21318,6 +22687,7 @@ export namespace Prisma {
     professor?: ProfessorUpdateOneRequiredWithoutReservationsNestedInput
     room?: RoomUpdateOneRequiredWithoutReservationsNestedInput
     attendances?: AttendanceUpdateManyWithoutReservationNestedInput
+    cancelRequests?: CancelRequestUpdateManyWithoutReservationNestedInput
   }
 
   export type ReservationUncheckedUpdateInput = {
@@ -21333,6 +22703,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attendances?: AttendanceUncheckedUpdateManyWithoutReservationNestedInput
+    cancelRequests?: CancelRequestUncheckedUpdateManyWithoutReservationNestedInput
   }
 
   export type ReservationCreateManyInput = {
@@ -21501,6 +22872,81 @@ export namespace Prisma {
     note?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CancelRequestCreateInput = {
+    id?: string
+    reason: string
+    status?: string
+    createdAt?: Date | string
+    processedAt?: Date | string | null
+    processedBy?: string | null
+    reservation: ReservationCreateNestedOneWithoutCancelRequestsInput
+    professor: ProfessorCreateNestedOneWithoutCancelRequestsInput
+  }
+
+  export type CancelRequestUncheckedCreateInput = {
+    id?: string
+    reservationId: string
+    professorId: string
+    reason: string
+    status?: string
+    createdAt?: Date | string
+    processedAt?: Date | string | null
+    processedBy?: string | null
+  }
+
+  export type CancelRequestUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    processedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    processedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    reservation?: ReservationUpdateOneRequiredWithoutCancelRequestsNestedInput
+    professor?: ProfessorUpdateOneRequiredWithoutCancelRequestsNestedInput
+  }
+
+  export type CancelRequestUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reservationId?: StringFieldUpdateOperationsInput | string
+    professorId?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    processedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    processedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CancelRequestCreateManyInput = {
+    id?: string
+    reservationId: string
+    professorId: string
+    reason: string
+    status?: string
+    createdAt?: Date | string
+    processedAt?: Date | string | null
+    processedBy?: string | null
+  }
+
+  export type CancelRequestUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    processedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    processedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CancelRequestUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reservationId?: StringFieldUpdateOperationsInput | string
+    professorId?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    processedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    processedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -22045,6 +23491,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type CancelRequestListRelationFilter = {
+    every?: CancelRequestWhereInput
+    some?: CancelRequestWhereInput
+    none?: CancelRequestWhereInput
+  }
+
+  export type CancelRequestOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type ProfessorCountOrderByAggregateInput = {
@@ -22644,6 +24100,64 @@ export namespace Prisma {
     _max?: NestedEnumAttendanceStatusFilter<$PrismaModel>
   }
 
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type CancelRequestCountOrderByAggregateInput = {
+    id?: SortOrder
+    reservationId?: SortOrder
+    professorId?: SortOrder
+    reason?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    processedAt?: SortOrder
+    processedBy?: SortOrder
+  }
+
+  export type CancelRequestMaxOrderByAggregateInput = {
+    id?: SortOrder
+    reservationId?: SortOrder
+    professorId?: SortOrder
+    reason?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    processedAt?: SortOrder
+    processedBy?: SortOrder
+  }
+
+  export type CancelRequestMinOrderByAggregateInput = {
+    id?: SortOrder
+    reservationId?: SortOrder
+    professorId?: SortOrder
+    reason?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    processedAt?: SortOrder
+    processedBy?: SortOrder
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -23102,6 +24616,13 @@ export namespace Prisma {
     connect?: ReservationWhereUniqueInput | ReservationWhereUniqueInput[]
   }
 
+  export type CancelRequestCreateNestedManyWithoutProfessorInput = {
+    create?: XOR<CancelRequestCreateWithoutProfessorInput, CancelRequestUncheckedCreateWithoutProfessorInput> | CancelRequestCreateWithoutProfessorInput[] | CancelRequestUncheckedCreateWithoutProfessorInput[]
+    connectOrCreate?: CancelRequestCreateOrConnectWithoutProfessorInput | CancelRequestCreateOrConnectWithoutProfessorInput[]
+    createMany?: CancelRequestCreateManyProfessorInputEnvelope
+    connect?: CancelRequestWhereUniqueInput | CancelRequestWhereUniqueInput[]
+  }
+
   export type InscriptionUncheckedCreateNestedManyWithoutProfessorInput = {
     create?: XOR<InscriptionCreateWithoutProfessorInput, InscriptionUncheckedCreateWithoutProfessorInput> | InscriptionCreateWithoutProfessorInput[] | InscriptionUncheckedCreateWithoutProfessorInput[]
     connectOrCreate?: InscriptionCreateOrConnectWithoutProfessorInput | InscriptionCreateOrConnectWithoutProfessorInput[]
@@ -23114,6 +24635,13 @@ export namespace Prisma {
     connectOrCreate?: ReservationCreateOrConnectWithoutProfessorInput | ReservationCreateOrConnectWithoutProfessorInput[]
     createMany?: ReservationCreateManyProfessorInputEnvelope
     connect?: ReservationWhereUniqueInput | ReservationWhereUniqueInput[]
+  }
+
+  export type CancelRequestUncheckedCreateNestedManyWithoutProfessorInput = {
+    create?: XOR<CancelRequestCreateWithoutProfessorInput, CancelRequestUncheckedCreateWithoutProfessorInput> | CancelRequestCreateWithoutProfessorInput[] | CancelRequestUncheckedCreateWithoutProfessorInput[]
+    connectOrCreate?: CancelRequestCreateOrConnectWithoutProfessorInput | CancelRequestCreateOrConnectWithoutProfessorInput[]
+    createMany?: CancelRequestCreateManyProfessorInputEnvelope
+    connect?: CancelRequestWhereUniqueInput | CancelRequestWhereUniqueInput[]
   }
 
   export type InscriptionUpdateManyWithoutProfessorNestedInput = {
@@ -23144,6 +24672,20 @@ export namespace Prisma {
     deleteMany?: ReservationScalarWhereInput | ReservationScalarWhereInput[]
   }
 
+  export type CancelRequestUpdateManyWithoutProfessorNestedInput = {
+    create?: XOR<CancelRequestCreateWithoutProfessorInput, CancelRequestUncheckedCreateWithoutProfessorInput> | CancelRequestCreateWithoutProfessorInput[] | CancelRequestUncheckedCreateWithoutProfessorInput[]
+    connectOrCreate?: CancelRequestCreateOrConnectWithoutProfessorInput | CancelRequestCreateOrConnectWithoutProfessorInput[]
+    upsert?: CancelRequestUpsertWithWhereUniqueWithoutProfessorInput | CancelRequestUpsertWithWhereUniqueWithoutProfessorInput[]
+    createMany?: CancelRequestCreateManyProfessorInputEnvelope
+    set?: CancelRequestWhereUniqueInput | CancelRequestWhereUniqueInput[]
+    disconnect?: CancelRequestWhereUniqueInput | CancelRequestWhereUniqueInput[]
+    delete?: CancelRequestWhereUniqueInput | CancelRequestWhereUniqueInput[]
+    connect?: CancelRequestWhereUniqueInput | CancelRequestWhereUniqueInput[]
+    update?: CancelRequestUpdateWithWhereUniqueWithoutProfessorInput | CancelRequestUpdateWithWhereUniqueWithoutProfessorInput[]
+    updateMany?: CancelRequestUpdateManyWithWhereWithoutProfessorInput | CancelRequestUpdateManyWithWhereWithoutProfessorInput[]
+    deleteMany?: CancelRequestScalarWhereInput | CancelRequestScalarWhereInput[]
+  }
+
   export type InscriptionUncheckedUpdateManyWithoutProfessorNestedInput = {
     create?: XOR<InscriptionCreateWithoutProfessorInput, InscriptionUncheckedCreateWithoutProfessorInput> | InscriptionCreateWithoutProfessorInput[] | InscriptionUncheckedCreateWithoutProfessorInput[]
     connectOrCreate?: InscriptionCreateOrConnectWithoutProfessorInput | InscriptionCreateOrConnectWithoutProfessorInput[]
@@ -23170,6 +24712,20 @@ export namespace Prisma {
     update?: ReservationUpdateWithWhereUniqueWithoutProfessorInput | ReservationUpdateWithWhereUniqueWithoutProfessorInput[]
     updateMany?: ReservationUpdateManyWithWhereWithoutProfessorInput | ReservationUpdateManyWithWhereWithoutProfessorInput[]
     deleteMany?: ReservationScalarWhereInput | ReservationScalarWhereInput[]
+  }
+
+  export type CancelRequestUncheckedUpdateManyWithoutProfessorNestedInput = {
+    create?: XOR<CancelRequestCreateWithoutProfessorInput, CancelRequestUncheckedCreateWithoutProfessorInput> | CancelRequestCreateWithoutProfessorInput[] | CancelRequestUncheckedCreateWithoutProfessorInput[]
+    connectOrCreate?: CancelRequestCreateOrConnectWithoutProfessorInput | CancelRequestCreateOrConnectWithoutProfessorInput[]
+    upsert?: CancelRequestUpsertWithWhereUniqueWithoutProfessorInput | CancelRequestUpsertWithWhereUniqueWithoutProfessorInput[]
+    createMany?: CancelRequestCreateManyProfessorInputEnvelope
+    set?: CancelRequestWhereUniqueInput | CancelRequestWhereUniqueInput[]
+    disconnect?: CancelRequestWhereUniqueInput | CancelRequestWhereUniqueInput[]
+    delete?: CancelRequestWhereUniqueInput | CancelRequestWhereUniqueInput[]
+    connect?: CancelRequestWhereUniqueInput | CancelRequestWhereUniqueInput[]
+    update?: CancelRequestUpdateWithWhereUniqueWithoutProfessorInput | CancelRequestUpdateWithWhereUniqueWithoutProfessorInput[]
+    updateMany?: CancelRequestUpdateManyWithWhereWithoutProfessorInput | CancelRequestUpdateManyWithWhereWithoutProfessorInput[]
+    deleteMany?: CancelRequestScalarWhereInput | CancelRequestScalarWhereInput[]
   }
 
   export type CandidateCreateNestedOneWithoutInscriptionsInput = {
@@ -23467,11 +25023,25 @@ export namespace Prisma {
     connect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
   }
 
+  export type CancelRequestCreateNestedManyWithoutReservationInput = {
+    create?: XOR<CancelRequestCreateWithoutReservationInput, CancelRequestUncheckedCreateWithoutReservationInput> | CancelRequestCreateWithoutReservationInput[] | CancelRequestUncheckedCreateWithoutReservationInput[]
+    connectOrCreate?: CancelRequestCreateOrConnectWithoutReservationInput | CancelRequestCreateOrConnectWithoutReservationInput[]
+    createMany?: CancelRequestCreateManyReservationInputEnvelope
+    connect?: CancelRequestWhereUniqueInput | CancelRequestWhereUniqueInput[]
+  }
+
   export type AttendanceUncheckedCreateNestedManyWithoutReservationInput = {
     create?: XOR<AttendanceCreateWithoutReservationInput, AttendanceUncheckedCreateWithoutReservationInput> | AttendanceCreateWithoutReservationInput[] | AttendanceUncheckedCreateWithoutReservationInput[]
     connectOrCreate?: AttendanceCreateOrConnectWithoutReservationInput | AttendanceCreateOrConnectWithoutReservationInput[]
     createMany?: AttendanceCreateManyReservationInputEnvelope
     connect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
+  }
+
+  export type CancelRequestUncheckedCreateNestedManyWithoutReservationInput = {
+    create?: XOR<CancelRequestCreateWithoutReservationInput, CancelRequestUncheckedCreateWithoutReservationInput> | CancelRequestCreateWithoutReservationInput[] | CancelRequestUncheckedCreateWithoutReservationInput[]
+    connectOrCreate?: CancelRequestCreateOrConnectWithoutReservationInput | CancelRequestCreateOrConnectWithoutReservationInput[]
+    createMany?: CancelRequestCreateManyReservationInputEnvelope
+    connect?: CancelRequestWhereUniqueInput | CancelRequestWhereUniqueInput[]
   }
 
   export type EnumReservationStatusFieldUpdateOperationsInput = {
@@ -23516,6 +25086,20 @@ export namespace Prisma {
     deleteMany?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[]
   }
 
+  export type CancelRequestUpdateManyWithoutReservationNestedInput = {
+    create?: XOR<CancelRequestCreateWithoutReservationInput, CancelRequestUncheckedCreateWithoutReservationInput> | CancelRequestCreateWithoutReservationInput[] | CancelRequestUncheckedCreateWithoutReservationInput[]
+    connectOrCreate?: CancelRequestCreateOrConnectWithoutReservationInput | CancelRequestCreateOrConnectWithoutReservationInput[]
+    upsert?: CancelRequestUpsertWithWhereUniqueWithoutReservationInput | CancelRequestUpsertWithWhereUniqueWithoutReservationInput[]
+    createMany?: CancelRequestCreateManyReservationInputEnvelope
+    set?: CancelRequestWhereUniqueInput | CancelRequestWhereUniqueInput[]
+    disconnect?: CancelRequestWhereUniqueInput | CancelRequestWhereUniqueInput[]
+    delete?: CancelRequestWhereUniqueInput | CancelRequestWhereUniqueInput[]
+    connect?: CancelRequestWhereUniqueInput | CancelRequestWhereUniqueInput[]
+    update?: CancelRequestUpdateWithWhereUniqueWithoutReservationInput | CancelRequestUpdateWithWhereUniqueWithoutReservationInput[]
+    updateMany?: CancelRequestUpdateManyWithWhereWithoutReservationInput | CancelRequestUpdateManyWithWhereWithoutReservationInput[]
+    deleteMany?: CancelRequestScalarWhereInput | CancelRequestScalarWhereInput[]
+  }
+
   export type AttendanceUncheckedUpdateManyWithoutReservationNestedInput = {
     create?: XOR<AttendanceCreateWithoutReservationInput, AttendanceUncheckedCreateWithoutReservationInput> | AttendanceCreateWithoutReservationInput[] | AttendanceUncheckedCreateWithoutReservationInput[]
     connectOrCreate?: AttendanceCreateOrConnectWithoutReservationInput | AttendanceCreateOrConnectWithoutReservationInput[]
@@ -23528,6 +25112,20 @@ export namespace Prisma {
     update?: AttendanceUpdateWithWhereUniqueWithoutReservationInput | AttendanceUpdateWithWhereUniqueWithoutReservationInput[]
     updateMany?: AttendanceUpdateManyWithWhereWithoutReservationInput | AttendanceUpdateManyWithWhereWithoutReservationInput[]
     deleteMany?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[]
+  }
+
+  export type CancelRequestUncheckedUpdateManyWithoutReservationNestedInput = {
+    create?: XOR<CancelRequestCreateWithoutReservationInput, CancelRequestUncheckedCreateWithoutReservationInput> | CancelRequestCreateWithoutReservationInput[] | CancelRequestUncheckedCreateWithoutReservationInput[]
+    connectOrCreate?: CancelRequestCreateOrConnectWithoutReservationInput | CancelRequestCreateOrConnectWithoutReservationInput[]
+    upsert?: CancelRequestUpsertWithWhereUniqueWithoutReservationInput | CancelRequestUpsertWithWhereUniqueWithoutReservationInput[]
+    createMany?: CancelRequestCreateManyReservationInputEnvelope
+    set?: CancelRequestWhereUniqueInput | CancelRequestWhereUniqueInput[]
+    disconnect?: CancelRequestWhereUniqueInput | CancelRequestWhereUniqueInput[]
+    delete?: CancelRequestWhereUniqueInput | CancelRequestWhereUniqueInput[]
+    connect?: CancelRequestWhereUniqueInput | CancelRequestWhereUniqueInput[]
+    update?: CancelRequestUpdateWithWhereUniqueWithoutReservationInput | CancelRequestUpdateWithWhereUniqueWithoutReservationInput[]
+    updateMany?: CancelRequestUpdateManyWithWhereWithoutReservationInput | CancelRequestUpdateManyWithWhereWithoutReservationInput[]
+    deleteMany?: CancelRequestScalarWhereInput | CancelRequestScalarWhereInput[]
   }
 
   export type CandidateCreateNestedOneWithoutPaymentPlansInput = {
@@ -23588,6 +25186,38 @@ export namespace Prisma {
     upsert?: CandidateUpsertWithoutAttendancesInput
     connect?: CandidateWhereUniqueInput
     update?: XOR<XOR<CandidateUpdateToOneWithWhereWithoutAttendancesInput, CandidateUpdateWithoutAttendancesInput>, CandidateUncheckedUpdateWithoutAttendancesInput>
+  }
+
+  export type ReservationCreateNestedOneWithoutCancelRequestsInput = {
+    create?: XOR<ReservationCreateWithoutCancelRequestsInput, ReservationUncheckedCreateWithoutCancelRequestsInput>
+    connectOrCreate?: ReservationCreateOrConnectWithoutCancelRequestsInput
+    connect?: ReservationWhereUniqueInput
+  }
+
+  export type ProfessorCreateNestedOneWithoutCancelRequestsInput = {
+    create?: XOR<ProfessorCreateWithoutCancelRequestsInput, ProfessorUncheckedCreateWithoutCancelRequestsInput>
+    connectOrCreate?: ProfessorCreateOrConnectWithoutCancelRequestsInput
+    connect?: ProfessorWhereUniqueInput
+  }
+
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
+  }
+
+  export type ReservationUpdateOneRequiredWithoutCancelRequestsNestedInput = {
+    create?: XOR<ReservationCreateWithoutCancelRequestsInput, ReservationUncheckedCreateWithoutCancelRequestsInput>
+    connectOrCreate?: ReservationCreateOrConnectWithoutCancelRequestsInput
+    upsert?: ReservationUpsertWithoutCancelRequestsInput
+    connect?: ReservationWhereUniqueInput
+    update?: XOR<XOR<ReservationUpdateToOneWithWhereWithoutCancelRequestsInput, ReservationUpdateWithoutCancelRequestsInput>, ReservationUncheckedUpdateWithoutCancelRequestsInput>
+  }
+
+  export type ProfessorUpdateOneRequiredWithoutCancelRequestsNestedInput = {
+    create?: XOR<ProfessorCreateWithoutCancelRequestsInput, ProfessorUncheckedCreateWithoutCancelRequestsInput>
+    connectOrCreate?: ProfessorCreateOrConnectWithoutCancelRequestsInput
+    upsert?: ProfessorUpsertWithoutCancelRequestsInput
+    connect?: ProfessorWhereUniqueInput
+    update?: XOR<XOR<ProfessorUpdateToOneWithWhereWithoutCancelRequestsInput, ProfessorUpdateWithoutCancelRequestsInput>, ProfessorUncheckedUpdateWithoutCancelRequestsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -23993,6 +25623,31 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumAttendanceStatusFilter<$PrismaModel>
     _max?: NestedEnumAttendanceStatusFilter<$PrismaModel>
+  }
+
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type InscriptionCreateWithoutCandidateInput = {
@@ -24482,6 +26137,7 @@ export namespace Prisma {
     inscription: InscriptionCreateNestedOneWithoutReservationsInput
     professor: ProfessorCreateNestedOneWithoutReservationsInput
     attendances?: AttendanceCreateNestedManyWithoutReservationInput
+    cancelRequests?: CancelRequestCreateNestedManyWithoutReservationInput
   }
 
   export type ReservationUncheckedCreateWithoutRoomInput = {
@@ -24496,6 +26152,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     attendances?: AttendanceUncheckedCreateNestedManyWithoutReservationInput
+    cancelRequests?: CancelRequestUncheckedCreateNestedManyWithoutReservationInput
   }
 
   export type ReservationCreateOrConnectWithoutRoomInput = {
@@ -24601,6 +26258,7 @@ export namespace Prisma {
     inscription: InscriptionCreateNestedOneWithoutReservationsInput
     room: RoomCreateNestedOneWithoutReservationsInput
     attendances?: AttendanceCreateNestedManyWithoutReservationInput
+    cancelRequests?: CancelRequestCreateNestedManyWithoutReservationInput
   }
 
   export type ReservationUncheckedCreateWithoutProfessorInput = {
@@ -24615,6 +26273,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     attendances?: AttendanceUncheckedCreateNestedManyWithoutReservationInput
+    cancelRequests?: CancelRequestUncheckedCreateNestedManyWithoutReservationInput
   }
 
   export type ReservationCreateOrConnectWithoutProfessorInput = {
@@ -24624,6 +26283,36 @@ export namespace Prisma {
 
   export type ReservationCreateManyProfessorInputEnvelope = {
     data: ReservationCreateManyProfessorInput | ReservationCreateManyProfessorInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CancelRequestCreateWithoutProfessorInput = {
+    id?: string
+    reason: string
+    status?: string
+    createdAt?: Date | string
+    processedAt?: Date | string | null
+    processedBy?: string | null
+    reservation: ReservationCreateNestedOneWithoutCancelRequestsInput
+  }
+
+  export type CancelRequestUncheckedCreateWithoutProfessorInput = {
+    id?: string
+    reservationId: string
+    reason: string
+    status?: string
+    createdAt?: Date | string
+    processedAt?: Date | string | null
+    processedBy?: string | null
+  }
+
+  export type CancelRequestCreateOrConnectWithoutProfessorInput = {
+    where: CancelRequestWhereUniqueInput
+    create: XOR<CancelRequestCreateWithoutProfessorInput, CancelRequestUncheckedCreateWithoutProfessorInput>
+  }
+
+  export type CancelRequestCreateManyProfessorInputEnvelope = {
+    data: CancelRequestCreateManyProfessorInput | CancelRequestCreateManyProfessorInput[]
     skipDuplicates?: boolean
   }
 
@@ -24657,6 +26346,36 @@ export namespace Prisma {
   export type ReservationUpdateManyWithWhereWithoutProfessorInput = {
     where: ReservationScalarWhereInput
     data: XOR<ReservationUpdateManyMutationInput, ReservationUncheckedUpdateManyWithoutProfessorInput>
+  }
+
+  export type CancelRequestUpsertWithWhereUniqueWithoutProfessorInput = {
+    where: CancelRequestWhereUniqueInput
+    update: XOR<CancelRequestUpdateWithoutProfessorInput, CancelRequestUncheckedUpdateWithoutProfessorInput>
+    create: XOR<CancelRequestCreateWithoutProfessorInput, CancelRequestUncheckedCreateWithoutProfessorInput>
+  }
+
+  export type CancelRequestUpdateWithWhereUniqueWithoutProfessorInput = {
+    where: CancelRequestWhereUniqueInput
+    data: XOR<CancelRequestUpdateWithoutProfessorInput, CancelRequestUncheckedUpdateWithoutProfessorInput>
+  }
+
+  export type CancelRequestUpdateManyWithWhereWithoutProfessorInput = {
+    where: CancelRequestScalarWhereInput
+    data: XOR<CancelRequestUpdateManyMutationInput, CancelRequestUncheckedUpdateManyWithoutProfessorInput>
+  }
+
+  export type CancelRequestScalarWhereInput = {
+    AND?: CancelRequestScalarWhereInput | CancelRequestScalarWhereInput[]
+    OR?: CancelRequestScalarWhereInput[]
+    NOT?: CancelRequestScalarWhereInput | CancelRequestScalarWhereInput[]
+    id?: StringFilter<"CancelRequest"> | string
+    reservationId?: StringFilter<"CancelRequest"> | string
+    professorId?: StringFilter<"CancelRequest"> | string
+    reason?: StringFilter<"CancelRequest"> | string
+    status?: StringFilter<"CancelRequest"> | string
+    createdAt?: DateTimeFilter<"CancelRequest"> | Date | string
+    processedAt?: DateTimeNullableFilter<"CancelRequest"> | Date | string | null
+    processedBy?: StringNullableFilter<"CancelRequest"> | string | null
   }
 
   export type CandidateCreateWithoutInscriptionsInput = {
@@ -24758,6 +26477,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     reservations?: ReservationCreateNestedManyWithoutProfessorInput
+    cancelRequests?: CancelRequestCreateNestedManyWithoutProfessorInput
   }
 
   export type ProfessorUncheckedCreateWithoutInscriptionsInput = {
@@ -24773,6 +26493,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     reservations?: ReservationUncheckedCreateNestedManyWithoutProfessorInput
+    cancelRequests?: CancelRequestUncheckedCreateNestedManyWithoutProfessorInput
   }
 
   export type ProfessorCreateOrConnectWithoutInscriptionsInput = {
@@ -24833,6 +26554,7 @@ export namespace Prisma {
     professor: ProfessorCreateNestedOneWithoutReservationsInput
     room: RoomCreateNestedOneWithoutReservationsInput
     attendances?: AttendanceCreateNestedManyWithoutReservationInput
+    cancelRequests?: CancelRequestCreateNestedManyWithoutReservationInput
   }
 
   export type ReservationUncheckedCreateWithoutInscriptionInput = {
@@ -24847,6 +26569,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     attendances?: AttendanceUncheckedCreateNestedManyWithoutReservationInput
+    cancelRequests?: CancelRequestUncheckedCreateNestedManyWithoutReservationInput
   }
 
   export type ReservationCreateOrConnectWithoutInscriptionInput = {
@@ -24981,6 +26704,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reservations?: ReservationUpdateManyWithoutProfessorNestedInput
+    cancelRequests?: CancelRequestUpdateManyWithoutProfessorNestedInput
   }
 
   export type ProfessorUncheckedUpdateWithoutInscriptionsInput = {
@@ -24996,6 +26720,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reservations?: ReservationUncheckedUpdateManyWithoutProfessorNestedInput
+    cancelRequests?: CancelRequestUncheckedUpdateManyWithoutProfessorNestedInput
   }
 
   export type GroupUpsertWithoutInscriptionInput = {
@@ -25583,6 +27308,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     inscriptions?: InscriptionCreateNestedManyWithoutProfessorInput
+    cancelRequests?: CancelRequestCreateNestedManyWithoutProfessorInput
   }
 
   export type ProfessorUncheckedCreateWithoutReservationsInput = {
@@ -25598,6 +27324,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     inscriptions?: InscriptionUncheckedCreateNestedManyWithoutProfessorInput
+    cancelRequests?: CancelRequestUncheckedCreateNestedManyWithoutProfessorInput
   }
 
   export type ProfessorCreateOrConnectWithoutReservationsInput = {
@@ -25657,6 +27384,36 @@ export namespace Prisma {
 
   export type AttendanceCreateManyReservationInputEnvelope = {
     data: AttendanceCreateManyReservationInput | AttendanceCreateManyReservationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CancelRequestCreateWithoutReservationInput = {
+    id?: string
+    reason: string
+    status?: string
+    createdAt?: Date | string
+    processedAt?: Date | string | null
+    processedBy?: string | null
+    professor: ProfessorCreateNestedOneWithoutCancelRequestsInput
+  }
+
+  export type CancelRequestUncheckedCreateWithoutReservationInput = {
+    id?: string
+    professorId: string
+    reason: string
+    status?: string
+    createdAt?: Date | string
+    processedAt?: Date | string | null
+    processedBy?: string | null
+  }
+
+  export type CancelRequestCreateOrConnectWithoutReservationInput = {
+    where: CancelRequestWhereUniqueInput
+    create: XOR<CancelRequestCreateWithoutReservationInput, CancelRequestUncheckedCreateWithoutReservationInput>
+  }
+
+  export type CancelRequestCreateManyReservationInputEnvelope = {
+    data: CancelRequestCreateManyReservationInput | CancelRequestCreateManyReservationInput[]
     skipDuplicates?: boolean
   }
 
@@ -25733,6 +27490,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     inscriptions?: InscriptionUpdateManyWithoutProfessorNestedInput
+    cancelRequests?: CancelRequestUpdateManyWithoutProfessorNestedInput
   }
 
   export type ProfessorUncheckedUpdateWithoutReservationsInput = {
@@ -25748,6 +27506,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     inscriptions?: InscriptionUncheckedUpdateManyWithoutProfessorNestedInput
+    cancelRequests?: CancelRequestUncheckedUpdateManyWithoutProfessorNestedInput
   }
 
   export type RoomUpsertWithoutReservationsInput = {
@@ -25797,6 +27556,22 @@ export namespace Prisma {
   export type AttendanceUpdateManyWithWhereWithoutReservationInput = {
     where: AttendanceScalarWhereInput
     data: XOR<AttendanceUpdateManyMutationInput, AttendanceUncheckedUpdateManyWithoutReservationInput>
+  }
+
+  export type CancelRequestUpsertWithWhereUniqueWithoutReservationInput = {
+    where: CancelRequestWhereUniqueInput
+    update: XOR<CancelRequestUpdateWithoutReservationInput, CancelRequestUncheckedUpdateWithoutReservationInput>
+    create: XOR<CancelRequestCreateWithoutReservationInput, CancelRequestUncheckedCreateWithoutReservationInput>
+  }
+
+  export type CancelRequestUpdateWithWhereUniqueWithoutReservationInput = {
+    where: CancelRequestWhereUniqueInput
+    data: XOR<CancelRequestUpdateWithoutReservationInput, CancelRequestUncheckedUpdateWithoutReservationInput>
+  }
+
+  export type CancelRequestUpdateManyWithWhereWithoutReservationInput = {
+    where: CancelRequestScalarWhereInput
+    data: XOR<CancelRequestUpdateManyMutationInput, CancelRequestUncheckedUpdateManyWithoutReservationInput>
   }
 
   export type CandidateCreateWithoutPaymentPlansInput = {
@@ -25995,6 +27770,7 @@ export namespace Prisma {
     inscription: InscriptionCreateNestedOneWithoutReservationsInput
     professor: ProfessorCreateNestedOneWithoutReservationsInput
     room: RoomCreateNestedOneWithoutReservationsInput
+    cancelRequests?: CancelRequestCreateNestedManyWithoutReservationInput
   }
 
   export type ReservationUncheckedCreateWithoutAttendancesInput = {
@@ -26009,6 +27785,7 @@ export namespace Prisma {
     roomId: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    cancelRequests?: CancelRequestUncheckedCreateNestedManyWithoutReservationInput
   }
 
   export type ReservationCreateOrConnectWithoutAttendancesInput = {
@@ -26088,6 +27865,7 @@ export namespace Prisma {
     inscription?: InscriptionUpdateOneRequiredWithoutReservationsNestedInput
     professor?: ProfessorUpdateOneRequiredWithoutReservationsNestedInput
     room?: RoomUpdateOneRequiredWithoutReservationsNestedInput
+    cancelRequests?: CancelRequestUpdateManyWithoutReservationNestedInput
   }
 
   export type ReservationUncheckedUpdateWithoutAttendancesInput = {
@@ -26102,6 +27880,7 @@ export namespace Prisma {
     roomId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cancelRequests?: CancelRequestUncheckedUpdateManyWithoutReservationNestedInput
   }
 
   export type CandidateUpsertWithoutAttendancesInput = {
@@ -26157,6 +27936,162 @@ export namespace Prisma {
     inscriptionCandidates?: InscriptionCandidateUncheckedUpdateManyWithoutCandidateNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutCandidateNestedInput
     paymentPlans?: PaymentPlanUncheckedUpdateManyWithoutCandidateNestedInput
+  }
+
+  export type ReservationCreateWithoutCancelRequestsInput = {
+    id?: string
+    reservationCode: string
+    reservationDate: Date | string
+    startTime: Date | string
+    endTime: Date | string
+    status?: $Enums.ReservationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    inscription: InscriptionCreateNestedOneWithoutReservationsInput
+    professor: ProfessorCreateNestedOneWithoutReservationsInput
+    room: RoomCreateNestedOneWithoutReservationsInput
+    attendances?: AttendanceCreateNestedManyWithoutReservationInput
+  }
+
+  export type ReservationUncheckedCreateWithoutCancelRequestsInput = {
+    id?: string
+    reservationCode: string
+    reservationDate: Date | string
+    startTime: Date | string
+    endTime: Date | string
+    status?: $Enums.ReservationStatus
+    inscriptionId: string
+    professorId: string
+    roomId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutReservationInput
+  }
+
+  export type ReservationCreateOrConnectWithoutCancelRequestsInput = {
+    where: ReservationWhereUniqueInput
+    create: XOR<ReservationCreateWithoutCancelRequestsInput, ReservationUncheckedCreateWithoutCancelRequestsInput>
+  }
+
+  export type ProfessorCreateWithoutCancelRequestsInput = {
+    id?: string
+    nom: string
+    prenom: string
+    email?: string | null
+    telephone?: string | null
+    adresse?: string | null
+    type?: string
+    dayOff?: string
+    maxSessions?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    inscriptions?: InscriptionCreateNestedManyWithoutProfessorInput
+    reservations?: ReservationCreateNestedManyWithoutProfessorInput
+  }
+
+  export type ProfessorUncheckedCreateWithoutCancelRequestsInput = {
+    id?: string
+    nom: string
+    prenom: string
+    email?: string | null
+    telephone?: string | null
+    adresse?: string | null
+    type?: string
+    dayOff?: string
+    maxSessions?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    inscriptions?: InscriptionUncheckedCreateNestedManyWithoutProfessorInput
+    reservations?: ReservationUncheckedCreateNestedManyWithoutProfessorInput
+  }
+
+  export type ProfessorCreateOrConnectWithoutCancelRequestsInput = {
+    where: ProfessorWhereUniqueInput
+    create: XOR<ProfessorCreateWithoutCancelRequestsInput, ProfessorUncheckedCreateWithoutCancelRequestsInput>
+  }
+
+  export type ReservationUpsertWithoutCancelRequestsInput = {
+    update: XOR<ReservationUpdateWithoutCancelRequestsInput, ReservationUncheckedUpdateWithoutCancelRequestsInput>
+    create: XOR<ReservationCreateWithoutCancelRequestsInput, ReservationUncheckedCreateWithoutCancelRequestsInput>
+    where?: ReservationWhereInput
+  }
+
+  export type ReservationUpdateToOneWithWhereWithoutCancelRequestsInput = {
+    where?: ReservationWhereInput
+    data: XOR<ReservationUpdateWithoutCancelRequestsInput, ReservationUncheckedUpdateWithoutCancelRequestsInput>
+  }
+
+  export type ReservationUpdateWithoutCancelRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reservationCode?: StringFieldUpdateOperationsInput | string
+    reservationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumReservationStatusFieldUpdateOperationsInput | $Enums.ReservationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    inscription?: InscriptionUpdateOneRequiredWithoutReservationsNestedInput
+    professor?: ProfessorUpdateOneRequiredWithoutReservationsNestedInput
+    room?: RoomUpdateOneRequiredWithoutReservationsNestedInput
+    attendances?: AttendanceUpdateManyWithoutReservationNestedInput
+  }
+
+  export type ReservationUncheckedUpdateWithoutCancelRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reservationCode?: StringFieldUpdateOperationsInput | string
+    reservationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumReservationStatusFieldUpdateOperationsInput | $Enums.ReservationStatus
+    inscriptionId?: StringFieldUpdateOperationsInput | string
+    professorId?: StringFieldUpdateOperationsInput | string
+    roomId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attendances?: AttendanceUncheckedUpdateManyWithoutReservationNestedInput
+  }
+
+  export type ProfessorUpsertWithoutCancelRequestsInput = {
+    update: XOR<ProfessorUpdateWithoutCancelRequestsInput, ProfessorUncheckedUpdateWithoutCancelRequestsInput>
+    create: XOR<ProfessorCreateWithoutCancelRequestsInput, ProfessorUncheckedCreateWithoutCancelRequestsInput>
+    where?: ProfessorWhereInput
+  }
+
+  export type ProfessorUpdateToOneWithWhereWithoutCancelRequestsInput = {
+    where?: ProfessorWhereInput
+    data: XOR<ProfessorUpdateWithoutCancelRequestsInput, ProfessorUncheckedUpdateWithoutCancelRequestsInput>
+  }
+
+  export type ProfessorUpdateWithoutCancelRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nom?: StringFieldUpdateOperationsInput | string
+    prenom?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    telephone?: NullableStringFieldUpdateOperationsInput | string | null
+    adresse?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    dayOff?: StringFieldUpdateOperationsInput | string
+    maxSessions?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    inscriptions?: InscriptionUpdateManyWithoutProfessorNestedInput
+    reservations?: ReservationUpdateManyWithoutProfessorNestedInput
+  }
+
+  export type ProfessorUncheckedUpdateWithoutCancelRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nom?: StringFieldUpdateOperationsInput | string
+    prenom?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    telephone?: NullableStringFieldUpdateOperationsInput | string | null
+    adresse?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    dayOff?: StringFieldUpdateOperationsInput | string
+    maxSessions?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    inscriptions?: InscriptionUncheckedUpdateManyWithoutProfessorNestedInput
+    reservations?: ReservationUncheckedUpdateManyWithoutProfessorNestedInput
   }
 
   export type InscriptionCreateManyCandidateInput = {
@@ -26560,6 +28495,7 @@ export namespace Prisma {
     inscription?: InscriptionUpdateOneRequiredWithoutReservationsNestedInput
     professor?: ProfessorUpdateOneRequiredWithoutReservationsNestedInput
     attendances?: AttendanceUpdateManyWithoutReservationNestedInput
+    cancelRequests?: CancelRequestUpdateManyWithoutReservationNestedInput
   }
 
   export type ReservationUncheckedUpdateWithoutRoomInput = {
@@ -26574,6 +28510,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attendances?: AttendanceUncheckedUpdateManyWithoutReservationNestedInput
+    cancelRequests?: CancelRequestUncheckedUpdateManyWithoutReservationNestedInput
   }
 
   export type ReservationUncheckedUpdateManyWithoutRoomInput = {
@@ -26616,6 +28553,16 @@ export namespace Prisma {
     roomId: string
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type CancelRequestCreateManyProfessorInput = {
+    id?: string
+    reservationId: string
+    reason: string
+    status?: string
+    createdAt?: Date | string
+    processedAt?: Date | string | null
+    processedBy?: string | null
   }
 
   export type InscriptionUpdateWithoutProfessorInput = {
@@ -26684,6 +28631,7 @@ export namespace Prisma {
     inscription?: InscriptionUpdateOneRequiredWithoutReservationsNestedInput
     room?: RoomUpdateOneRequiredWithoutReservationsNestedInput
     attendances?: AttendanceUpdateManyWithoutReservationNestedInput
+    cancelRequests?: CancelRequestUpdateManyWithoutReservationNestedInput
   }
 
   export type ReservationUncheckedUpdateWithoutProfessorInput = {
@@ -26698,6 +28646,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attendances?: AttendanceUncheckedUpdateManyWithoutReservationNestedInput
+    cancelRequests?: CancelRequestUncheckedUpdateManyWithoutReservationNestedInput
   }
 
   export type ReservationUncheckedUpdateManyWithoutProfessorInput = {
@@ -26711,6 +28660,36 @@ export namespace Prisma {
     roomId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CancelRequestUpdateWithoutProfessorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    processedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    processedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    reservation?: ReservationUpdateOneRequiredWithoutCancelRequestsNestedInput
+  }
+
+  export type CancelRequestUncheckedUpdateWithoutProfessorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reservationId?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    processedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    processedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CancelRequestUncheckedUpdateManyWithoutProfessorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reservationId?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    processedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    processedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type InscriptionCandidateCreateManyInscriptionInput = {
@@ -26762,6 +28741,7 @@ export namespace Prisma {
     professor?: ProfessorUpdateOneRequiredWithoutReservationsNestedInput
     room?: RoomUpdateOneRequiredWithoutReservationsNestedInput
     attendances?: AttendanceUpdateManyWithoutReservationNestedInput
+    cancelRequests?: CancelRequestUpdateManyWithoutReservationNestedInput
   }
 
   export type ReservationUncheckedUpdateWithoutInscriptionInput = {
@@ -26776,6 +28756,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attendances?: AttendanceUncheckedUpdateManyWithoutReservationNestedInput
+    cancelRequests?: CancelRequestUncheckedUpdateManyWithoutReservationNestedInput
   }
 
   export type ReservationUncheckedUpdateManyWithoutInscriptionInput = {
@@ -26798,6 +28779,16 @@ export namespace Prisma {
     note?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type CancelRequestCreateManyReservationInput = {
+    id?: string
+    professorId: string
+    reason: string
+    status?: string
+    createdAt?: Date | string
+    processedAt?: Date | string | null
+    processedBy?: string | null
   }
 
   export type AttendanceUpdateWithoutReservationInput = {
@@ -26825,6 +28816,36 @@ export namespace Prisma {
     note?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CancelRequestUpdateWithoutReservationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    processedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    processedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    professor?: ProfessorUpdateOneRequiredWithoutCancelRequestsNestedInput
+  }
+
+  export type CancelRequestUncheckedUpdateWithoutReservationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    professorId?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    processedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    processedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CancelRequestUncheckedUpdateManyWithoutReservationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    professorId?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    processedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    processedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
 

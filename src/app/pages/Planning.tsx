@@ -14,7 +14,7 @@ import api from '../services/api';
 import { toast } from 'sonner';
 
 export default function Planning() {
-  const { currentUser, sessions, candidates, professors, rooms, formations, cancelSession, refreshPlanning } = useApp();
+  const { currentUser, sessions, candidates, professors, rooms, formations, cancelSession, refreshPlanning, createCancelRequest } = useApp();
 
   // Dynamically initialize selectedDate as local YYYY-MM-DD
   const getTodayString = () => {
@@ -31,6 +31,9 @@ export default function Planning() {
   const [selectedCandidate, setSelectedCandidate] = useState('');
   const [selectedFormation, setSelectedFormation] = useState('');
   const [viewMode, setViewMode] = useState<'daily' | 'weekly'>('weekly');
+  const [isProfCancelDialogOpen, setIsProfCancelDialogOpen] = useState(false);
+  const [cancelReason, setCancelReason] = useState('');
+  const [isSubmittingCancel, setIsSubmittingCancel] = useState(false);
 
   // Local date-shifting logic (retains local timezone)
   const shiftDate = (days: number) => {
@@ -762,6 +765,34 @@ export default function Planning() {
     }
   };
 
+  const handleProfessorCancelRequest = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedReservation || !cancelReason.trim()) return;
+
+    setIsSubmittingCancel(true);
+    try {
+      await createCancelRequest(selectedReservation.id, cancelReason);
+      toast.success("Demande d'annulation envoyée avec succès.");
+      setIsProfCancelDialogOpen(false);
+      setCancelReason('');
+
+      const updatedSessions = await refreshPlanning();
+      if (updatedSessions) {
+        const freshRes = updatedSessions.find(s => s.id === selectedReservation.id);
+        if (freshRes) {
+          setSelectedReservation(freshRes);
+        } else {
+          setSelectedReservation(null);
+        }
+      }
+    } catch (error: any) {
+      console.error(error);
+      toast.error(error.response?.data?.error || "Erreur lors de l'envoi de la demande d'annulation");
+    } finally {
+      setIsSubmittingCancel(false);
+    }
+  };
+
   const selectedCandidateObj = selectedReservation
     ? (selectedReservation.candidate
       ? `${selectedReservation.candidate.firstName} ${selectedReservation.candidate.lastName}`
@@ -1087,20 +1118,81 @@ export default function Planning() {
                 </div>
               </div>
 
-              {(currentUser?.role === 'agent_reservation' || currentUser?.role === 'admin') && (
-                <div className="flex justify-end gap-3 mt-6 pt-4 border-t border-gray-100">
-                  <Button
-                    variant="outline"
-                    onClick={() => handleOpenEdit(selectedReservation)}
-                  >
-                    Modifier
-                  </Button>
-                  <Button
-                    variant="destructive"
-                    onClick={() => setIsCancelConfirmOpen(true)}
-                  >
-                    Annuler
-                  </Button>
+              {/* Actions */}
+              {(currentUser?.role === 'agent_reservation' || currentUser?.role === 'admin' || (currentUser?.role === 'professor' && selectedReservation.professorId === currentUser.professorId)) && (
+                <div className="flex flex-col md:flex-row justify-end gap-3 mt-6 pt-4 border-t border-gray-100">
+                  {(currentUser?.role === 'agent_reservation' || currentUser?.role === 'admin') && (
+                    <>
+                      <Button
+                        variant="outline"
+                        onClick={() => handleOpenEdit(selectedReservation)}
+                      >
+                        Modifier
+                      </Button>
+                      <Button
+                        variant="destructive"
+                        onClick={() => setIsCancelConfirmOpen(true)}
+                      >
+                        Annuler
+                      </Button>
+                    </>
+                  )}
+                  {currentUser?.role === 'professor' && selectedReservation.professorId === currentUser.professorId && (
+                    <div className="w-full flex flex-col items-end gap-2">
+                      {(() => {
+                        const hasPendingCancel = selectedReservation.cancelRequests?.some((r: any) => r.status === 'PENDING');
+                        const isCancelled = selectedReservation.status === 'cancelled';
+                        if (isCancelled) {
+                          return null;
+                        }
+                        if (hasPendingCancel) {
+                          return (
+                            <div className="px-3 py-2 bg-yellow-50 border border-yellow-200 rounded-md w-full text-center">
+                              <p className="text-sm font-semibold text-yellow-800 flex items-center justify-center gap-1.5">
+                                <span className="inline-block w-2 h-2 bg-yellow-500 rounded-full animate-pulse" />
+                                Demande d'annulation : EN ATTENTE
+                              </p>
+                            </div>
+                          );
+                        }
+
+                        const sessionStartTime = new Date(selectedReservation.startTime || `${selectedReservation.date}T${selectedReservation.time}`).getTime();
+                        const nowTime = new Date().getTime();
+                        const diffInMs = sessionStartTime - nowTime;
+                        const is24hPassed = diffInMs <= 24 * 60 * 60 * 1000;
+
+                        if (is24hPassed) {
+                          return (
+                            <div className="w-full text-right">
+                              <Button
+                                variant="outline"
+                                className="w-full md:w-auto text-gray-400 border-gray-200"
+                                disabled
+                              >
+                                Demander l'annulation
+                              </Button>
+                              <p className="text-xs text-destructive mt-1">
+                                Annulation impossible : délai de 24h dépassé.
+                              </p>
+                            </div>
+                          );
+                        }
+
+                        return (
+                          <Button
+                            variant="destructive"
+                            className="bg-indigo-600 hover:bg-indigo-700 text-white w-full md:w-auto"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setIsProfCancelDialogOpen(true);
+                            }}
+                          >
+                            Demander l'annulation
+                          </Button>
+                        );
+                      })()}
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -1234,6 +1326,47 @@ export default function Planning() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Professor Cancel Request Dialog */}
+      <Dialog open={isProfCancelDialogOpen} onOpenChange={setIsProfCancelDialogOpen}>
+        <DialogContent className="max-w-md" onClick={(e) => e.stopPropagation()}>
+          <DialogHeader>
+            <DialogTitle>Demander l'annulation de la séance</DialogTitle>
+            <DialogDescription>
+              Veuillez saisir le motif pour cette demande d'annulation. Un administrateur ou un agent de réservation devra la valider.
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleProfessorCancelRequest} className="space-y-4 pt-2">
+            <div className="space-y-2">
+              <Label htmlFor="cancel-reason">Motif de l'annulation *</Label>
+              <textarea
+                id="cancel-reason"
+                className="w-full min-h-[100px] p-2 border border-gray-200 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                placeholder="Ex. Indisponibilité exceptionnelle, motif médical..."
+                value={cancelReason}
+                onChange={(e) => setCancelReason(e.target.value)}
+                required
+              />
+            </div>
+            <div className="flex justify-end gap-3 pt-4 border-t">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => {
+                  setIsProfCancelDialogOpen(false);
+                  setCancelReason('');
+                }}
+                disabled={isSubmittingCancel}
+              >
+                Annuler
+              </Button>
+              <Button type="submit" disabled={isSubmittingCancel || !cancelReason.trim()}>
+                {isSubmittingCancel ? "Envoi en cours..." : "Envoyer la demande"}
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div >
   );
 }

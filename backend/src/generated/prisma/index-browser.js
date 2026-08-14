@@ -295,6 +295,17 @@ exports.Prisma.AttendanceScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.CancelRequestScalarFieldEnum = {
+  id: 'id',
+  reservationId: 'reservationId',
+  professorId: 'professorId',
+  reason: 'reason',
+  status: 'status',
+  createdAt: 'createdAt',
+  processedAt: 'processedAt',
+  processedBy: 'processedBy'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -384,7 +395,8 @@ exports.Prisma.ModelName = {
   Payment: 'Payment',
   Reservation: 'Reservation',
   PaymentPlan: 'PaymentPlan',
-  Attendance: 'Attendance'
+  Attendance: 'Attendance',
+  CancelRequest: 'CancelRequest'
 };
 
 /**

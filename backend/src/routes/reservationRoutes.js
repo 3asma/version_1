@@ -1,5 +1,5 @@
 import express from 'express';
-import { verifyToken, requireRole } from '../middlewares/authMiddleware.js';
+import { verifyToken, requirePermission } from '../middlewares/authMiddleware.js';
 import {
     getAllReservations,
     getReservationById,
@@ -14,15 +14,14 @@ const router = express.Router();
 
 // All routes protected by JWT
 router.use(verifyToken);
-router.use(requireRole(['admin', 'agent_reservation']));
 
-router.get('/', getAllReservations);
-router.get('/search', searchByCode);
-router.post('/availability', checkAvailability);
-router.get('/:id', getReservationById);
+router.get('/', requirePermission('view_reservations'), getAllReservations);
+router.get('/search', requirePermission('view_reservations'), searchByCode);
+router.post('/availability', requirePermission('view_reservations'), checkAvailability);
+router.get('/:id', requirePermission('view_reservations'), getReservationById);
 
-router.post('/', createReservation);
-router.patch('/:id', updateReservation);
-router.delete('/:id', deleteReservation);
+router.post('/', requirePermission('manage_reservations'), createReservation);
+router.patch('/:id', requirePermission('manage_reservations'), updateReservation);
+router.delete('/:id', requirePermission('manage_reservations'), deleteReservation);
 
 export default router;

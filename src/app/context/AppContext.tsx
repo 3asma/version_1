@@ -9,6 +9,7 @@ export interface User {
   email: string;
   name: string;
   role: UserRole;
+  permissions?: string[];
   status?: 'active' | 'inactive';
   createdAt?: string;
   professorId?: string;
@@ -161,6 +162,7 @@ export interface Session {
   reservationDate?: string;
   startTime?: string;
   endTime?: string;
+  cancelRequests?: CancelRequest[];
 }
 
 export const mapReservationToSession = (r: any): Session => {
@@ -208,7 +210,8 @@ export const mapReservationToSession = (r: any): Session => {
       roomNumber: r.room.numero
     } : null,
     startTimeText: time,
-    endTimeText: end.toISOString().split('T')[1].substring(0, 5)
+    endTimeText: end.toISOString().split('T')[1].substring(0, 5),
+    cancelRequests: r.cancelRequests || []
   };
 };
 
@@ -263,6 +266,47 @@ export interface ReservationRequest {
   type: 'professor_cancellation' | 'candidate_request' | 'candidate_cancellation';
   sessionId?: string;
   createdAt: string;
+}
+
+export interface CancelRequest {
+  id: string;
+  reservationId: string;
+  reservation?: {
+    id: string;
+    reservationCode: string;
+    reservationDate: string;
+    startTime: string;
+    endTime: string;
+    status: string;
+    inscription?: {
+      id: string;
+      candidate?: {
+        id: string;
+        firstName: string;
+        lastName: string;
+      };
+      formation?: {
+        id: string;
+        subject: string;
+        level: string;
+      };
+    };
+    room?: {
+      id: string;
+      roomNumber: string;
+    };
+  };
+  professorId: string;
+  professor?: {
+    id: string;
+    nom: string;
+    prenom: string;
+  };
+  reason: string;
+  status: 'PENDING' | 'APPROVED' | 'REJECTED';
+  createdAt: string;
+  processedAt?: string | null;
+  processedBy?: string | null;
 }
 
 export interface Payment {
@@ -388,6 +432,11 @@ interface AppContextType {
   reservationRequests: ReservationRequest[];
   addReservationRequest: (request: Omit<ReservationRequest, 'id' | 'status' | 'createdAt'>) => void;
   updateReservationRequest: (id: string, status: 'approved' | 'rejected') => void;
+  cancelRequests: CancelRequest[];
+  fetchCancelRequests: () => Promise<void>;
+  createCancelRequest: (reservationId: string, reason: string) => Promise<void>;
+  approveCancelRequest: (requestId: string) => Promise<void>;
+  rejectCancelRequest: (requestId: string) => Promise<void>;
 
   // Payments
   payments: Payment[];
@@ -415,6 +464,7 @@ interface AppContextType {
 
   // Keep compatibility for destructured but unused route prop
   addCandidateAssignment?: any;
+  getCandidateAssignments: (candidateId: string) => any[];
 }
 
 export const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -541,6 +591,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
   ]);
 
+  const [cancelRequests, setCancelRequests] = useState<CancelRequest[]>([]);
+
   const [payments, setPayments] = useState<Payment[]>([]);
 
   const [invoices, setInvoices] = useState<Invoice[]>([
@@ -569,6 +621,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
               email: user.email,
               name: user.name || user.email.split('@')[0],
               role: mapBackendRole(user.role),
+              permissions: user.permissions || [],
               professorId: user.professorId
             });
           }
@@ -660,7 +713,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
           api.get('/rooms'),
           api.get('/professors'),
           api.get('/reservations'),
-          api.get('/payments')
+          api.get('/payments'),
+          (currentUser.role === 'admin' || currentUser.role === 'agent_reservation') ? api.get('/cancel-requests') : Promise.reject(new Error('unauthorized'))
         ]);
 
         const prospectsRes = results[0];
@@ -781,6 +835,14 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
           console.error('Failed to load payments:', paymentsRes.status === 'rejected' ? paymentsRes.reason : 'Invalid data format');
         }
 
+        const cancelRequestsRes = results[9];
+        if (cancelRequestsRes && cancelRequestsRes.status === 'fulfilled') {
+          const val = (cancelRequestsRes as any).value;
+          if (val && val.data && val.data.message === 'success') {
+            setCancelRequests(val.data.data);
+          }
+        }
+
         if (currentUser.role === 'admin') {
           try {
             const [usersRes, rolesRes] = await Promise.all([
@@ -816,6 +878,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
           email: user.email,
           name: user.name || user.email.split('@')[0],
           role: mapBackendRole(user.role),
+          permissions: user.permissions || [],
           professorId: user.professorId
         });
         return true;
@@ -1626,6 +1689,57 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     ));
   };
 
+  const fetchCancelRequests = async () => {
+    if (currentUser?.role !== 'admin' && currentUser?.role !== 'agent_reservation') return;
+    try {
+      const response = await api.get('/cancel-requests');
+      if (response.data.message === 'success') {
+        setCancelRequests(response.data.data);
+      }
+    } catch (error) {
+      console.error('Failed to fetch cancel requests:', error);
+    }
+  };
+
+  const createCancelRequest = async (reservationId: string, reason: string) => {
+    try {
+      const response = await api.post('/cancel-requests', { reservationId, reason });
+      if (response.data.message === 'success') {
+        await fetchCancelRequests();
+        await refreshPlanning();
+      }
+    } catch (error) {
+      console.error('Failed to create cancel request:', error);
+      throw error;
+    }
+  };
+
+  const approveCancelRequest = async (requestId: string) => {
+    try {
+      const response = await api.patch(`/cancel-requests/${requestId}/approve`);
+      if (response.data.message === 'success') {
+        await fetchCancelRequests();
+        await refreshPlanning();
+      }
+    } catch (error) {
+      console.error('Failed to approve cancel request:', error);
+      throw error;
+    }
+  };
+
+  const rejectCancelRequest = async (requestId: string) => {
+    try {
+      const response = await api.patch(`/cancel-requests/${requestId}/reject`);
+      if (response.data.message === 'success') {
+        await fetchCancelRequests();
+        await refreshPlanning();
+      }
+    } catch (error) {
+      console.error('Failed to reject cancel request:', error);
+      throw error;
+    }
+  };
+
   const refreshPayments = async () => {
     try {
       const res = await api.get('/payments');
@@ -1770,6 +1884,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     return invoiceNumber;
   };
 
+  const getCandidateAssignments = (candidateId: string) => {
+    return inscriptions.filter(ins => ins.candidateId === candidateId);
+  };
+
   const value: AppContextType = {
     currentUser,
     login,
@@ -1815,12 +1933,18 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     reservationRequests,
     addReservationRequest,
     updateReservationRequest,
+    cancelRequests,
+    fetchCancelRequests,
+    createCancelRequest,
+    approveCancelRequest,
+    rejectCancelRequest,
     payments,
     addPayment,
     updatePayment,
     deletePayment,
     invoices,
     generateInvoice,
+    getCandidateAssignments,
     isLoadingSession,
     users,
     fetchUsers,

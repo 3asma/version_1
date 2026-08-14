@@ -1,5 +1,5 @@
 import express from 'express';
-import { verifyToken, requireRole } from '../middlewares/authMiddleware.js';
+import { verifyToken, requirePermission } from '../middlewares/authMiddleware.js';
 import {
     getAllCommercials,
     getCommercialById,
@@ -12,12 +12,11 @@ const router = express.Router();
 
 // All routes protected by JWT
 router.use(verifyToken);
-router.use(requireRole(['admin', 'agent_reception']));
 
-router.get('/', getAllCommercials);
-router.get('/:id', getCommercialById);
-router.post('/', createCommercial);
-router.patch('/:id', updateCommercial);
-router.delete('/:id', deleteCommercial);
+router.get('/', requirePermission('view_prospects'), getAllCommercials);
+router.get('/:id', requirePermission('view_prospects'), getCommercialById);
+router.post('/', requirePermission('manage_prospects'), createCommercial);
+router.patch('/:id', requirePermission('manage_prospects'), updateCommercial);
+router.delete('/:id', requirePermission('manage_prospects'), deleteCommercial);
 
 export default router;

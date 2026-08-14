@@ -341,7 +341,8 @@ class ReservationService {
                     }
                 },
                 room: true,
-                professor: true
+                professor: true,
+                cancelRequests: true
             }
         });
     }
@@ -357,7 +358,8 @@ class ReservationService {
                     }
                 },
                 room: true,
-                professor: true
+                professor: true,
+                cancelRequests: true
             }
         });
     }
@@ -370,7 +372,8 @@ class ReservationService {
             where: {
                 inscriptionId: normalized.inscriptionId,
                 reservationDate: normalized.reservationDate,
-                startTime: normalized.startTime
+                startTime: normalized.startTime,
+                status: { not: 'CANCELLED' }
             }
         });
         if (checkConflict) {
@@ -381,6 +384,7 @@ class ReservationService {
             where: {
                 roomId: normalized.roomId,
                 reservationDate: normalized.reservationDate,
+                status: { not: 'CANCELLED' },
                 OR: [
                     {
                         startTime: { gte: normalized.startTime, lt: normalized.endTime }
@@ -399,6 +403,7 @@ class ReservationService {
             where: {
                 professorId: normalized.professorId,
                 reservationDate: normalized.reservationDate,
+                status: { not: 'CANCELLED' },
                 OR: [
                     {
                         startTime: { gte: normalized.startTime, lt: normalized.endTime }
@@ -455,7 +460,8 @@ class ReservationService {
                 id: { not: id },
                 inscriptionId: testInscription,
                 reservationDate: testDate,
-                startTime: testStart
+                startTime: testStart,
+                status: { not: 'CANCELLED' }
             }
         });
         if (checkConflict) {
@@ -467,6 +473,7 @@ class ReservationService {
                 id: { not: id },
                 roomId: testRoom,
                 reservationDate: testDate,
+                status: { not: 'CANCELLED' },
                 OR: [
                     {
                         startTime: { gte: testStart, lt: testEnd }
@@ -486,6 +493,7 @@ class ReservationService {
                 id: { not: id },
                 professorId: testProfessor,
                 reservationDate: testDate,
+                status: { not: 'CANCELLED' },
                 OR: [
                     {
                         startTime: { gte: testStart, lt: testEnd }
@@ -545,6 +553,7 @@ class ReservationService {
             where: {
                 inscriptionId: { in: inscriptionIds },
                 reservationDate,
+                status: { not: 'CANCELLED' },
                 OR: [
                     { startTime: { gte: startTime, lt: endTime } },
                     { endTime: { gt: startTime, lte: endTime } }
@@ -558,6 +567,7 @@ class ReservationService {
             where: {
                 professorId,
                 reservationDate,
+                status: { not: 'CANCELLED' },
                 OR: [
                     { startTime: { gte: startTime, lt: endTime } },
                     { endTime: { gt: startTime, lte: endTime } }
@@ -580,6 +590,7 @@ class ReservationService {
         const activeReservations = await prisma.reservation.findMany({
             where: {
                 reservationDate,
+                status: { not: 'CANCELLED' },
                 OR: [
                     { startTime: { gte: startTime, lt: endTime } },
                     { endTime: { gt: startTime, lte: endTime } }
