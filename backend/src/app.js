@@ -28,8 +28,18 @@ const app = express();
 
 app.use(morgan('dev'));
 
+const allowedOrigins = process.env.CORS_ORIGIN
+    ? process.env.CORS_ORIGIN.split(',').map(o => o.trim())
+    : ['http://localhost:5173', 'http://127.0.0.1:5173'];
+
 app.use(cors({
-    origin: ['http://localhost:5173', 'http://127.0.0.1:5173'],
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes('*') || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(null, true);
+        }
+    },
     credentials: true
 }));
 app.use(express.json());

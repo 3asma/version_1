@@ -5,7 +5,7 @@ dotenv.config();
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-    console.log(`🚀 Server running on http://localhost:${PORT}`);
-    console.log(`🏥 Health check at http://localhost:${PORT}/health`);
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 Server running on http://0.0.0.0:${PORT}`);
+    console.log(`🏥 Health check at http://0.0.0.0:${PORT}/health`);
 });
