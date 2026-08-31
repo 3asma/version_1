@@ -135,7 +135,6 @@ exports.Prisma.ProspectScalarFieldEnum = {
   lastName: 'lastName',
   age: 'age',
   occupation: 'occupation',
-  subject: 'subject',
   giftCode: 'giftCode',
   observation: 'observation',
   contact: 'contact',

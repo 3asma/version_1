@@ -1,4 +1,5 @@
 import fs from 'fs';
+import path from 'path';
 import paymentService from '../services/paymentService.js';
 
 export const getAllPayments = async (req, res) => {
@@ -401,5 +402,34 @@ export const getPaymentPlanQuery = async (req, res) => {
         });
     } catch (error) {
         return res.status(500).json({ message: 'error', error: error.message });
+    }
+};
+
+export const getChequeFile = async (req, res) => {
+    try {
+        if (req.user && req.user.role === 'PROFESSOR') {
+            return res.status(403).json({ message: 'error', error: 'Forbidden' });
+        }
+        const payment = await paymentService.getPaymentById(req.params.id);
+        if (!payment) {
+            return res.status(404).json({ message: 'error', error: 'Payment not found' });
+        }
+        if (payment.paymentMethod !== 'CHEQUE') {
+            return res.status(400).json({ message: 'error', error: 'Payment is not of type CHEQUE' });
+        }
+        if (!payment.chequeFile) {
+            return res.status(404).json({ message: 'error', error: 'No cheque file associated with this payment' });
+        }
+
+        const filePath = path.resolve(payment.chequeFile);
+        if (!fs.existsSync(filePath)) {
+            return res.status(404).json({ message: 'error', error: 'Cheque scan file not found on server' });
+        }
+
+        res.contentType('application/pdf');
+        res.setHeader('Content-Disposition', `inline; filename="${path.basename(filePath)}"`);
+        res.sendFile(filePath);
+    } catch (error) {
+        res.status(500).json({ message: 'error', error: error.message });
     }
 };

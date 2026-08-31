@@ -436,11 +436,31 @@ export default function Dashboard() {
   if (currentUser?.role === 'professor') {
     const profSessions = sessions.filter(s => s.professorId === currentUser.professorId);
     const profSessionsToday = profSessions.filter(s => s.date === todayDateStr);
-    const myCandidatesIds = new Set(profSessions.map(s => s.candidateId).filter(Boolean));
+
+    // Count all unique candidates from assigned inscriptions and professor's session members
+    const myCandidatesIds = new Set<string>();
+    inscriptions.forEach(ins => {
+      if (ins.professorId === currentUser.professorId && ins.candidateId) {
+        myCandidatesIds.add(ins.candidateId);
+      }
+    });
+    profSessions.forEach(s => {
+      if (s.members && s.members.length > 0) {
+        s.members.forEach(member => {
+          if (member && member.id) {
+            myCandidatesIds.add(member.id);
+          }
+        });
+      } else if (s.candidateId) {
+        myCandidatesIds.add(s.candidateId);
+      }
+    });
+
     const completedProfSessions = profSessions.filter(s => s.status === 'completed');
 
+    // Retrieve only future scheduled sessions
     const myUpcomingSessions = profSessions
-      .filter(s => s.status === 'scheduled')
+      .filter(s => s.status === 'scheduled' && s.startTime && new Date(s.startTime).getTime() >= new Date().getTime())
       .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
       .slice(0, 5);
 
@@ -507,17 +527,38 @@ export default function Dashboard() {
             <div className="space-y-4">
               {myUpcomingSessions.length > 0 ? (
                 myUpcomingSessions.map(s => {
-                  const candidate = candidates.find(c => c.id === s.candidateId);
                   const formation = formations.find(f => f.id === s.formationId);
+
+                  const getSessionSubtitle = () => {
+                    if (s.learningMode === 'GROUPE' && s.groupName) {
+                      return s.groupName;
+                    }
+                    if (s.learningMode === 'BINOME') {
+                      if (s.members && s.members.length > 0) {
+                        return s.members.map(m => `${m.firstName || m.prenom || ''} ${m.lastName || m.nom || ''}`.trim()).join(' & ');
+                      }
+                      return s.groupName || 'Binôme';
+                    }
+                    if (s.candidate) {
+                      return `${s.candidate.firstName} ${s.candidate.lastName}`;
+                    }
+                    const candidate = candidates.find(c => c.id === s.candidateId);
+                    if (candidate) {
+                      return `${candidate.firstName} ${candidate.lastName}`;
+                    }
+                    return s.groupName || 'Candidat inconnu';
+                  };
 
                   return (
                     <div key={s.id} className="flex justify-between items-center p-3.5 bg-gray-50 rounded-xl border">
                       <div>
+                        {/* Display Formation as Main Title */}
                         <p className="font-semibold text-sm text-gray-900">
-                          {candidatsLabel(candidate)}
+                          {formation ? `${formation.subject} ${formation.level}` : 'Formation inconnue'}
                         </p>
+                        {/* Display Group / Candidate details as Subtitle */}
                         <p className="text-xs text-gray-500 mt-0.5">
-                          Formation: {formation ? `${formation.subject} ${formation.level}` : '-'}
+                          {getSessionSubtitle()}
                         </p>
                       </div>
                       <div className="text-right">

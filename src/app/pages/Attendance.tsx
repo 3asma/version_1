@@ -6,7 +6,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '.
 import { Badge } from '../components/ui/badge';
 import { CheckCircle, XCircle, UserCheck, UserX, Loader2, AlertCircle, FileText } from 'lucide-react';
 import { toast } from 'sonner';
-import api from '../services/api';
+import api, { exportPDF } from '../services/api';
 
 interface AttendanceStudent {
   candidateId: string;
@@ -82,12 +82,7 @@ export default function Attendance() {
     );
   };
 
-  const handleNoteChange = (candidateId: string, note: string) => {
-    if (isAdmin) return; // Prevent admin note changes
-    setStudents(prev =>
-      prev.map(std => (std.candidateId === candidateId ? { ...std, note } : std))
-    );
-  };
+
 
   // Submit attendance records
   const handleSaveAttendance = async () => {
@@ -149,6 +144,14 @@ export default function Attendance() {
     } finally {
       setSaving(false);
     }
+  };
+
+  const handleExportPDF = () => {
+    if (!selectedSession) return;
+    const dateStr = selectedSession.date || 'attendance';
+    const refSuffix = selectedSession.reservationCode ? `${selectedSession.reservationCode}_` : '';
+    const filename = `presence_${refSuffix}${dateStr}.pdf`;
+    exportPDF(`/attendances/reservation/${selectedSession.id}/pdf`, filename);
   };
 
   return (
@@ -395,27 +398,7 @@ export default function Attendance() {
                           Code Candidat: {student.candidateCode}
                         </div>
 
-                        {/* Note area */}
-                        {isAdmin ? (
-                          student.note ? (
-                            <div className="text-xs text-indigo-900 mt-2 bg-indigo-50/40 p-2.5 rounded-lg border border-indigo-100/50 flex flex-col gap-1">
-                              <span className="font-semibold text-indigo-950">Observation / Note:</span>
-                              <p className="italic">"{student.note}"</p>
-                            </div>
-                          ) : (
-                            <div className="text-xs mt-2 text-gray-400 italic">Aucune note enregistrée.</div>
-                          )
-                        ) : (
-                          <div className="mt-2.5">
-                            <input
-                              type="text"
-                              placeholder="Observations/remarques..."
-                              value={student.note || ''}
-                              onChange={(e) => handleNoteChange(student.candidateId, e.target.value)}
-                              className="w-full text-xs px-2.5 py-1.5 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 bg-white"
-                            />
-                          </div>
-                        )}
+
                       </div>
 
                       {/* Status display */}
@@ -470,7 +453,16 @@ export default function Attendance() {
             </CardContent>
 
             {/* Footer */}
-            <div className="border-t p-6 bg-gray-50 flex justify-end gap-3 rounded-b-lg">
+            <div className="border-t p-6 bg-gray-50 flex justify-end gap-3 rounded-b-lg items-center">
+              <Button
+                variant="outline"
+                onClick={handleExportPDF}
+                disabled={loadingStudents || students.length === 0}
+                className="text-red-600 border-red-200 hover:bg-red-50 font-medium mr-auto animate-fadeIn"
+              >
+                <FileText size={18} className="mr-2" />
+                Exporter en PDF
+              </Button>
               <Button
                 variant={isAdmin ? 'default' : 'outline'}
                 onClick={() => setSelectedSession(null)}

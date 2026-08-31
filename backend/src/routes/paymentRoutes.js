@@ -10,7 +10,8 @@ import {
     getPaymentPlan,
     createPaymentPlan,
     updatePaymentPlan,
-    getPaymentPlanQuery
+    getPaymentPlanQuery,
+    getChequeFile
 } from '../controllers/paymentController.js';
 
 const router = express.Router();
@@ -45,6 +46,7 @@ const handleUpload = (req, res, next) => {
 // Payment routes
 router.get('/', requirePermission('view_payments'), getAllPayments);
 router.get('/:id', requirePermission('view_payments'), getPaymentById);
+router.get('/:id/cheque', requirePermission('view_payments'), getChequeFile);
 router.post('/', requirePermission('manage_payments'), handleUpload, createPayment);
 router.patch('/:id', requirePermission('manage_payments'), updatePayment);
 router.delete('/:id', requirePermission('manage_payments'), deletePayment);

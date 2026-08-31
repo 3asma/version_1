@@ -140,6 +140,8 @@ export interface Session {
   status: 'scheduled' | 'completed' | 'cancelled';
   attendance?: 'present' | 'absent';
   learningMode?: string;
+  groupName?: string;
+  members?: any[];
   candidate?: {
     firstName: string;
     lastName: string;
@@ -183,6 +185,8 @@ export const mapReservationToSession = (r: any): Session => {
     professorId: r.professorId,
     roomId: r.roomId,
     formationId: r.inscription?.formationId || '',
+    groupName: r.inscription?.group?.nom || '',
+    members: r.inscription?.members?.map((m: any) => m.candidate) || [],
     date,
     time,
     duration,
@@ -246,7 +250,7 @@ export const mapPaymentFromBackend = (p: any): Payment => {
       type: 'bank_check',
       dueDate: p.paymentDate?.split('T')[0] || p.paymentDate || '',
       checkStatus: (p.status === 'COMPLETED' ? 'validated' : 'pending'),
-      scanUrl: p.chequeFile ? `${(import.meta as any).env?.VITE_API_URL || 'http://localhost:5000'}/${p.chequeFile}` : undefined
+      scanUrl: p.chequeFile ? `${(import.meta as any).env?.VITE_API_URL || 'http://localhost:5000'}/payments/${p.id}/cheque` : undefined
     } : undefined,
     isMonthlyPayment: false,
     chequeFile: p.chequeFile || undefined,

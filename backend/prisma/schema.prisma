@@ -22,7 +22,6 @@ model Prospect {
   lastName              String
   age                   Int
   occupation            Occupation
-  subject               String
   giftCode              String?
   observation           Observation
   contact               String[]

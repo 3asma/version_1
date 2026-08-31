@@ -25,7 +25,7 @@ export default function Candidates() {
     inscriptions.some(
       ins =>
         ins.candidateId === candidateId &&
-        (ins.status || ins.statut) !== 'CANCELLED'
+        ins.status !== 'CANCELLED'
     );
 
   const [searchCode, setSearchCode] = useState('');
@@ -646,7 +646,7 @@ export default function Candidates() {
               </div>
 
               {searchResult.formationId !== 'unassigned' && (() => {
-                const activeIns = inscriptions.find(ins => ins.candidateId === searchResult.id && ins.statut === 'ACTIVE');
+                const activeIns = inscriptions.find(ins => ins.candidateId === searchResult.id && ins.status === 'ACTIVE');
                 if (activeIns && activeIns.volumeHoraire) {
                   return (
                     <div className="space-y-1 mt-4 pt-4 border-t border-blue-100">
@@ -750,13 +750,13 @@ export default function Candidates() {
                             .map((ins) => (
                               <div key={ins.id} className="flex items-center gap-1">
                                 <Badge
-                                  variant={ins.statut === 'ACTIVE' ? 'default' : 'outline'}
-                                  className={`text-[10px] px-1 h-4 ${ins.statut === 'ACTIVE' ? 'bg-blue-600' :
-                                    ins.statut === 'COMPLETED' ? 'bg-green-100 text-green-700 border-green-200' :
+                                  variant={ins.status === 'ACTIVE' ? 'default' : 'outline'}
+                                  className={`text-[10px] px-1 h-4 ${ins.status === 'ACTIVE' ? 'bg-blue-600' :
+                                    ins.status === 'COMPLETED' ? 'bg-green-100 text-green-700 border-green-200' :
                                       'bg-gray-100 text-gray-400 border-gray-200'
                                     }`}
                                 >
-                                  {ins.statut}
+                                  {ins.status}
                                 </Badge>
                                 <span className="text-xs">
                                   {(() => {
@@ -774,7 +774,7 @@ export default function Candidates() {
                     <TableCell>
                       <div className="flex flex-col gap-1 min-w-[100px]">
                         {inscriptions
-                          .filter(ins => ins.candidateId === candidate.id && ins.statut === 'ACTIVE')
+                          .filter(ins => ins.candidateId === candidate.id && ins.status === 'ACTIVE')
                           .map((ins) => (
                             <div key={ins.id} className="space-y-1">
                               <div className="flex justify-between text-[10px] leading-tight">
@@ -789,7 +789,7 @@ export default function Candidates() {
                               </div>
                             </div>
                           ))}
-                        {inscriptions.filter(ins => ins.candidateId === candidate.id && ins.statut === 'ACTIVE').length === 0 && (
+                        {inscriptions.filter(ins => ins.candidateId === candidate.id && ins.status === 'ACTIVE').length === 0 && (
                           <div className="text-center">
                             <span className="text-[10px] text-gray-300 italic">-</span>
                           </div>
@@ -868,7 +868,7 @@ export default function Candidates() {
                               <p className="font-semibold truncate">{getFormation(ins.formationId)?.subject}</p>
                               <div className="flex gap-2 items-center">
                                 <Badge variant="outline" className="text-[10px] h-4">
-                                  {ins.statut}
+                                  {ins.status}
                                 </Badge>
                                 <span className="text-xs text-gray-500">
                                   {new Date(ins.dateInscription).toLocaleDateString('fr-FR')}

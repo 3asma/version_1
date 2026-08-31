@@ -10,19 +10,27 @@ function getNestedValue(obj, path) {
     }, obj);
 }
 
-export const streamPDF = (res, title, headers, rows) => {
-    const doc = new PDFDocument({ margin: 50, size: 'A4' });
+export const streamPDF = (res, title, headers, rows, options = {}) => {
+    const layout = options.layout || 'portrait';
+    const doc = new PDFDocument({ margin: 50, size: 'A4', layout });
 
     const dateStr = new Date().toISOString().split('T')[0];
     const safeTitle = title.toLowerCase().replace(/[^a-z0-9]/g, '_');
+    const filename = options.filename || `${safeTitle}_${dateStr}.pdf`;
     res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', `attachment; filename="${safeTitle}_${dateStr}.pdf"`);
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
 
     doc.pipe(res);
 
     // Title
     doc.fontSize(20).font('Helvetica-Bold').fillColor('#111827').text(title, { align: 'center' });
     doc.moveDown(0.3);
+
+    // Subtitle (Custom or Date or both)
+    if (options.subtitle) {
+        doc.fontSize(10).font('Helvetica').fillColor('#374151').text(options.subtitle, { align: 'center' });
+        doc.moveDown(0.3);
+    }
 
     // Subtitle Date
     const formattedDate = new Date().toLocaleString('fr-FR', {
@@ -34,7 +42,8 @@ export const streamPDF = (res, title, headers, rows) => {
 
     // Empty dataset handling
     if (!rows || rows.length === 0) {
-        doc.fontSize(12).font('Helvetica').fillColor('#6b7280').text('No data available in this module.', { align: 'center' });
+        const emptyMsg = options.emptyMessage || 'No data available in this module.';
+        doc.fontSize(12).font('Helvetica').fillColor('#6b7280').text(emptyMsg, { align: 'center' });
         doc.end();
         return;
     }
@@ -61,10 +70,13 @@ export const streamPDF = (res, title, headers, rows) => {
 
     currentY += rowHeight;
 
+    const pageHeight = layout === 'landscape' ? 595.28 : 841.89;
+    const maxY = pageHeight - 90; // 505 for landscape, 750 for portrait
+
     // Draw grid rows
     rows.forEach((row, rowIndex) => {
-        // Page wrap check (Max page depth for A4 is around 842 points; A4 margins at 50 give 742 max height)
-        if (currentY > 750) {
+        // Page wrap check (Max page depth depends on page orientation)
+        if (currentY > maxY) {
             doc.addPage();
             currentY = 50;
 

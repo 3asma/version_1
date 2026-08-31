@@ -1,0 +1,11 @@
+g) [], RemoteExc     eption     + FullyQualifiedErrorId : Native     CommandError   (Use `node --trace-warnings ...` to  show where the warning was created) node.exe : (node:5096)  Experimenta
+     + FullyQualifiedErrorId : Native     CommandError   (Use `node --trace-warnings ...` to  show where the warning was created) node.exe : (node:5096)  ExperimentalWarning: Support for  loadi
+g) [], RemoteExc     eption     + FullyQualifiedErrorId : Native     CommandError   (Use `node --trace-warnings ...` to  show where the warning was created) (node:13844) ExperimentalWarning:  
+     + FullyQualifiedErrorId : Native     CommandError   (Use `node --trace-warnings ...` to  show where the warning was created) (node:13844) ExperimentalWarning:  Support for loading ES Module
+reject  [31mÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[39m[1m[41m  Failed Suites 1 [49m[22m[31mÔÄ»ÔÄ »ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[39m  [41m[1m FAIL [22m[49m src/tests/i ntegration/cancelRequest.test.js[2m  > [22mCa
+22m[31mÔÄ»ÔÄ »ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[39m  [41m[1m FAIL [22m[49m src/tests/i ntegration/cancelRequest.test.js[2m  > [22mCancelRequest Integration  Tests (PostgreSQL Test DB) [31m[1mPrismaClie
+ait prisma.reservation.create( Unique constraint failed on the  fields: (`inscriptionId`,`reservation Date`,`startTime`)[39m [90m [2mÔØ»[22m  ei.handleRequestError src/generated/p risma/runt
+Time`)[39m [90m [2mÔØ»[22m  ei.handleRequestError src/generated/p risma/runtime/library.js:[2m125:7268 [22m[39m [90m [2mÔØ»[22m  ei.handleAndLogRequestError src/gener ated/prisma/runt
+[39m [90m [2mÔØ»[22m  ei.handleAndLogRequestError src/gener ated/prisma/runtime/library.js:[2m12 5:6593[22m[39m [90m [2mÔØ»[22m ei.request src/gen erated/prisma/runtime/library.js:[2m
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[22m[39m [31m[1mSerialized Error:[22m[39m  [90m{ code: 'P2002', meta: {  modelName: 'Reservation', target: [  'inscriptionId', 'reservationDate',  'startTime' ] }, client
+»[22m[39m   [2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m [2m      Tests [22m [33m20 skipped[39m[90m (20)[39m [2m   Start at [22m 16:38:33 [2m   Duration [22m 15.00

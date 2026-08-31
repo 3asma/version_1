@@ -19,13 +19,25 @@ export default function Prospects() {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isTransformAlertOpen, setIsTransformAlertOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [selectedProspect, setSelectedProspect] = useState<string | null>(null);
 
-  const handleDelete = async (id: string) => {
-    if (confirm('Êtes-vous sûr de vouloir supprimer ce prospect ?')) {
-      await deleteProspect(id);
+  const handleDeleteClick = (id: string) => {
+    setSelectedProspect(id);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!selectedProspect) return;
+    try {
+      await deleteProspect(selectedProspect);
       toast.success('Prospect supprimé avec succès');
+    } catch (error: any) {
+      console.error(error);
+      toast.error(error.response?.data?.error || error.message || 'Une erreur est survenue lors de la suppression du prospect.');
     }
+    setIsDeleteDialogOpen(false);
+    setSelectedProspect(null);
   };
 
   const [formData, setFormData] = useState({
@@ -75,7 +87,7 @@ export default function Prospects() {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!formData.firstContactId) {
@@ -87,26 +99,31 @@ export default function Prospects() {
       return;
     }
 
-    addProspect({
-      membershipNumber: formData.membershipNumber || undefined,
-      firstName: formData.firstName,
-      lastName: formData.lastName,
-      age: parseInt(formData.age),
-      occupation: formData.occupation,
-      giftCode: formData.giftCode || undefined,
-      observation: formData.observation,
-      firstContactId: formData.firstContactId || undefined,
-      secondContactId: formData.secondContactId !== 'none' ? formData.secondContactId : undefined,
-      action: formData.action || undefined,
-      gender: formData.gender !== '' ? formData.gender : undefined,
-      email: formData.email || undefined,
-      phone: formData.phone || undefined,
-      registrationDate: formData.registrationDate || undefined
-    });
+    try {
+      await addProspect({
+        membershipNumber: formData.membershipNumber || undefined,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        age: parseInt(formData.age),
+        occupation: formData.occupation,
+        giftCode: formData.giftCode || undefined,
+        observation: formData.observation,
+        firstContactId: formData.firstContactId || undefined,
+        secondContactId: formData.secondContactId !== 'none' ? formData.secondContactId : undefined,
+        action: formData.action || undefined,
+        gender: formData.gender !== '' ? formData.gender : undefined,
+        email: formData.email || undefined,
+        phone: formData.phone || undefined,
+        registrationDate: formData.registrationDate || undefined
+      });
 
-    toast.success('Prospect ajouté avec succès');
-    setIsAddDialogOpen(false);
-    resetForm();
+      toast.success('Prospect ajouté avec succès');
+      setIsAddDialogOpen(false);
+      resetForm();
+    } catch (error: any) {
+      console.error(error);
+      toast.error(error.response?.data?.error || error.message || 'Une erreur est survenue lors de la création du prospect.');
+    }
   };
 
   const handleTransformClick = (prospectId: string) => {
@@ -178,25 +195,31 @@ export default function Prospects() {
       return;
     }
 
-    await updateProspect(selectedProspect, {
-      membershipNumber: formData.membershipNumber || undefined,
-      firstName: formData.firstName,
-      lastName: formData.lastName,
-      age: parseInt(formData.age),
-      occupation: formData.occupation as 'student' | 'employee',
-      giftCode: formData.giftCode || undefined,
-      observation: formData.observation as 'alone' | 'accompanied',
-      firstContactId: formData.firstContactId || undefined,
-      secondContactId: formData.secondContactId !== 'none' ? formData.secondContactId : undefined,
-      action: formData.action || undefined,
-      gender: formData.gender !== '' ? formData.gender : undefined,
-      email: formData.email || undefined,
-      phone: formData.phone || undefined,
-      registrationDate: formData.registrationDate || undefined
-    }); toast.success('Prospect mis à jour avec succès');
-    setIsEditDialogOpen(false);
-    resetForm();
-    setSelectedProspect(null);
+    try {
+      await updateProspect(selectedProspect, {
+        membershipNumber: formData.membershipNumber || undefined,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        age: parseInt(formData.age),
+        occupation: formData.occupation as 'student' | 'employee',
+        giftCode: formData.giftCode || undefined,
+        observation: formData.observation as 'alone' | 'accompanied',
+        firstContactId: formData.firstContactId || undefined,
+        secondContactId: formData.secondContactId !== 'none' ? formData.secondContactId : undefined,
+        action: formData.action || undefined,
+        gender: formData.gender !== '' ? formData.gender : undefined,
+        email: formData.email || undefined,
+        phone: formData.phone || undefined,
+        registrationDate: formData.registrationDate || undefined
+      });
+      toast.success('Prospect mis à jour avec succès');
+      setIsEditDialogOpen(false);
+      resetForm();
+      setSelectedProspect(null);
+    } catch (error: any) {
+      console.error(error);
+      toast.error(error.response?.data?.error || error.message || 'Une erreur est survenue lors de la mise à jour du prospect.');
+    }
   };
 
   // Check user permissions for transform action
@@ -692,12 +715,12 @@ export default function Prospects() {
                             <Edit size={16} />
                           </Button>
 
-                          {(currentUser?.role === 'admin' || currentUser?.role === 'agent_reception') && (
+                          {(currentUser?.role === 'admin' || currentUser?.role === 'agent_reception' || currentUser?.role === 'agent_reservation') && (
                             <Button
                               size="sm"
                               variant="ghost"
                               className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                              onClick={() => handleDelete(prospect.id)}
+                              onClick={() => handleDeleteClick(prospect.id)}
                             >
                               <Trash2 size={16} />
                             </Button>
@@ -730,6 +753,27 @@ export default function Prospects() {
             <AlertDialogCancel>Annuler</AlertDialogCancel>
             <AlertDialogAction onClick={confirmTransform} className="bg-green-600 hover:bg-green-700">
               Confirmer la transformation
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2">
+              <Trash2 className="text-red-600" />
+              Confirmer la suppression
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              Êtes-vous sûr de vouloir supprimer ce prospect ? Cette action est irréversible.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setSelectedProspect(null)}>Annuler</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDeleteConfirm} className="bg-red-600 hover:bg-red-700">
+              Supprimer
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

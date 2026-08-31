@@ -337,7 +337,13 @@ class ReservationService {
                 inscription: {
                     include: {
                         candidate: true,
-                        formation: true
+                        formation: true,
+                        group: true,
+                        members: {
+                            include: {
+                                candidate: true
+                            }
+                        }
                     }
                 },
                 room: true,
@@ -354,7 +360,13 @@ class ReservationService {
                 inscription: {
                     include: {
                         candidate: true,
-                        formation: true
+                        formation: true,
+                        group: true,
+                        members: {
+                            include: {
+                                candidate: true
+                            }
+                        }
                     }
                 },
                 room: true,

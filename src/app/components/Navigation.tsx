@@ -124,7 +124,7 @@ export function Navigation({ isCollapsed, setIsCollapsed, isMobileOpen, setIsMob
     }
 
     // 6. Inscriptions (view_candidates)
-    if (permissions.includes('view_candidates')) {
+    if (permissions.includes('view_candidates') && role !== 'agent_reception') {
       items.push({
         path: '/inscriptions',
         icon: Users,
@@ -168,7 +168,7 @@ export function Navigation({ isCollapsed, setIsCollapsed, isMobileOpen, setIsMob
     }
 
     // 10. Reservations (view_reservations)
-    if (permissions.includes('view_reservations')) {
+    if (permissions.includes('view_reservations') && role !== 'professor') {
       items.push({
         path: '/reservations',
         icon: Calendar,

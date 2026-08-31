@@ -10,7 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '../components/ui/alert-dialog';
-import api from '../services/api';
+import api, { exportPDF } from '../services/api';
 import { toast } from 'sonner';
 
 export default function Planning() {
@@ -31,6 +31,7 @@ export default function Planning() {
   const [selectedCandidate, setSelectedCandidate] = useState('');
   const [selectedFormation, setSelectedFormation] = useState('');
   const [viewMode, setViewMode] = useState<'daily' | 'weekly'>('weekly');
+  const [activeTab, setActiveTab] = useState<'weekly' | 'formation' | 'professor' | 'room' | 'candidate'>('weekly');
   const [isProfCancelDialogOpen, setIsProfCancelDialogOpen] = useState(false);
   const [cancelReason, setCancelReason] = useState('');
   const [isSubmittingCancel, setIsSubmittingCancel] = useState(false);
@@ -396,7 +397,24 @@ export default function Planning() {
 
   // Print function
   const handlePrint = () => {
-    window.print();
+    const params = new URLSearchParams();
+    params.append('date', selectedDate);
+    params.append('viewMode', viewMode);
+    params.append('tab', activeTab);
+
+    if (activeTab === 'formation' && selectedFormation) {
+      params.append('formationId', selectedFormation);
+    } else if (activeTab === 'professor' && selectedProfessor) {
+      params.append('professorId', selectedProfessor);
+    } else if (activeTab === 'room' && selectedRoom) {
+      params.append('roomId', selectedRoom);
+    } else if (activeTab === 'candidate' && selectedCandidate) {
+      params.append('candidateId', selectedCandidate);
+    }
+
+    const endpoint = `/planning/export/pdf?${params.toString()}`;
+    const filename = `planning_${selectedDate}.pdf`;
+    exportPDF(endpoint, filename);
   };
 
   // Time slots for calendar view
@@ -832,7 +850,7 @@ export default function Planning() {
         <p className="text-gray-500 text-xs mt-1">Consultation des séances programmées</p>
       </div>
 
-      <Tabs defaultValue="weekly" className="space-y-3">
+      <Tabs value={activeTab} onValueChange={(val) => setActiveTab(val as any)} className="space-y-3">
         <TabsList>
           <TabsTrigger value="weekly">
             <Calendar size={18} className="mr-2" />

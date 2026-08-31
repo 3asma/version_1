@@ -1,17 +1,17 @@
 import multer from 'multer';
 import fs from 'fs';
+import path from 'path';
 import crypto from 'crypto';
-
-const UPLOAD_DIR = './uploads/cheques';
-
-// Autocreate directory if not exists
-if (!fs.existsSync(UPLOAD_DIR)) {
-    fs.mkdirSync(UPLOAD_DIR, { recursive: true });
-}
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, UPLOAD_DIR);
+        const rawDir = process.env.NODE_ENV === 'test' ? 'uploads/cheques_test' : 'uploads/cheques';
+        const uploadDir = path.resolve(rawDir);
+
+        if (!fs.existsSync(uploadDir)) {
+            fs.mkdirSync(uploadDir, { recursive: true });
+        }
+        cb(null, rawDir);
     },
     filename: (req, file, cb) => {
         const uuid = crypto.randomUUID();
@@ -34,3 +34,4 @@ export const upload = multer({
         fileSize: 10 * 1024 * 1024 // 10 MB
     }
 });
+

@@ -105,8 +105,8 @@ describe('Payment Integration Tests (PostgreSQL Test DB)', () => {
         try { fs.unlinkSync(dummyPdfPath); } catch (e) { }
         try { fs.unlinkSync(dummyTxtPath); } catch (e) { }
 
-        // In addition, clear uploaded test files from uploads/cheques
-        const uploadDir = './uploads/cheques';
+        // In addition, clear uploaded test files from uploads/cheques_test
+        const uploadDir = './uploads/cheques_test';
         if (fs.existsSync(uploadDir)) {
             const files = fs.readdirSync(uploadDir);
             for (const file of files) {
@@ -187,7 +187,7 @@ describe('Payment Integration Tests (PostgreSQL Test DB)', () => {
             expect(response.body.data.paymentMethod).toBe('CHEQUE');
             expect(response.body.data.status).toBe('PENDING');
             expect(response.body.data.chequeFile).toBeDefined();
-            expect(response.body.data.chequeFile).toContain('uploads/cheques/CHEQUE_');
+            expect(response.body.data.chequeFile).toContain('uploads/cheques_test/CHEQUE_');
 
             // Verify checkDueDate conversion and persistence
             const dbPayment = await prisma.payment.findUnique({
@@ -350,6 +350,75 @@ describe('Payment Integration Tests (PostgreSQL Test DB)', () => {
                 .send(payload);
 
             expect(response.status).toBe(403);
+        });
+    });
+
+    describe('GET /payments/:id/cheque (Secure File Access)', () => {
+        let chequePaymentId = '';
+
+        beforeAll(async () => {
+            // Create a valid CHEQUE payment with attachment to test retrieve
+            const checkDueDate = '2026-11-20T00:00:00.000Z';
+            const response = await request(app)
+                .post('/payments')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .field('candidateId', candidateId)
+                .field('formationId', formationId)
+                .field('amount', 800)
+                .field('paymentMethod', 'CHEQUE')
+                .field('status', 'PENDING')
+                .field('checkDueDate', checkDueDate)
+                .attach('chequeFile', dummyPdfPath);
+            chequePaymentId = response.body.data.id;
+        });
+
+        it('should return 200 and serve PDF file for authorized requests', async () => {
+            const response = await request(app)
+                .get(`/payments/${chequePaymentId}/cheque`)
+                .set('Authorization', `Bearer ${adminToken}`);
+
+            expect(response.status).toBe(200);
+            expect(response.headers['content-type']).toBe('application/pdf');
+            expect(response.headers['content-disposition']).toContain('inline;');
+            expect(response.headers['content-disposition']).toContain('CHEQUE_');
+        });
+
+        it('should return 401 Unauthorized when request is missing auth header', async () => {
+            const response = await request(app)
+                .get(`/payments/${chequePaymentId}/cheque`);
+
+            expect(response.status).toBe(401);
+        });
+
+        it('should return 404 Not Found for non-existing payment IDs', async () => {
+            const response = await request(app)
+                .get('/payments/00000000-0000-0000-0000-000000000000/cheque')
+                .set('Authorization', `Bearer ${adminToken}`);
+
+            expect(response.status).toBe(404);
+            expect(response.body.error).toContain('Payment not found');
+        });
+
+        it('should return 400 Bad Request if the payment method is not CHEQUE', async () => {
+            // We create a cash payment to test this
+            const cashRes = await request(app)
+                .post('/payments')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({
+                    candidateId,
+                    formationId,
+                    amount: 100,
+                    paymentMethod: 'CASH',
+                    status: 'COMPLETED'
+                });
+            const cashId = cashRes.body.data.id;
+
+            const response = await request(app)
+                .get(`/payments/${cashId}/cheque`)
+                .set('Authorization', `Bearer ${adminToken}`);
+
+            expect(response.status).toBe(400);
+            expect(response.body.error).toContain('is not of type CHEQUE');
         });
     });
 });

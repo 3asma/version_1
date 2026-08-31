@@ -30,6 +30,7 @@
     "description": "Gestion des candidats, formations et paiements",
     "permissions": [
       "view_prospects",
+      "manage_prospects",
       "view_candidates",
       "manage_candidates",
       "transform_prospect",

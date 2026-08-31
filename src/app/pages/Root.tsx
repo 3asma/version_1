@@ -83,9 +83,11 @@ function RootContent() {
     !currentUser ||
     !KNOWN_ROUTES.includes(location.pathname) ||
     location.pathname === '/dashboard' ||
-    (ROUTE_REQUIRED_PERMISSIONS[location.pathname] &&
-      (ROUTE_REQUIRED_PERMISSIONS[location.pathname].length === 0 ||
-        ROUTE_REQUIRED_PERMISSIONS[location.pathname].some(p => permissions.includes(p))));
+    (location.pathname === '/inscriptions' && currentUser.role === 'agent_reception' ? false :
+      location.pathname === '/reservations' && currentUser.role === 'professor' ? false :
+        (ROUTE_REQUIRED_PERMISSIONS[location.pathname] &&
+          (ROUTE_REQUIRED_PERMISSIONS[location.pathname].length === 0 ||
+            ROUTE_REQUIRED_PERMISSIONS[location.pathname].some(p => permissions.includes(p)))));
 
   return (
     <div className="min-h-screen bg-gray-50 flex">

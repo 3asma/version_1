@@ -3584,7 +3584,6 @@ export namespace Prisma {
     lastName: string | null
     age: number | null
     occupation: $Enums.Occupation | null
-    subject: string | null
     giftCode: string | null
     observation: $Enums.Observation | null
     action: string | null
@@ -3601,7 +3600,6 @@ export namespace Prisma {
     lastName: string | null
     age: number | null
     occupation: $Enums.Occupation | null
-    subject: string | null
     giftCode: string | null
     observation: $Enums.Observation | null
     action: string | null
@@ -3618,7 +3616,6 @@ export namespace Prisma {
     lastName: number
     age: number
     occupation: number
-    subject: number
     giftCode: number
     observation: number
     contact: number
@@ -3650,7 +3647,6 @@ export namespace Prisma {
     lastName?: true
     age?: true
     occupation?: true
-    subject?: true
     giftCode?: true
     observation?: true
     action?: true
@@ -3667,7 +3663,6 @@ export namespace Prisma {
     lastName?: true
     age?: true
     occupation?: true
-    subject?: true
     giftCode?: true
     observation?: true
     action?: true
@@ -3684,7 +3679,6 @@ export namespace Prisma {
     lastName?: true
     age?: true
     occupation?: true
-    subject?: true
     giftCode?: true
     observation?: true
     contact?: true
@@ -3789,7 +3783,6 @@ export namespace Prisma {
     lastName: string
     age: number
     occupation: $Enums.Occupation
-    subject: string
     giftCode: string | null
     observation: $Enums.Observation
     contact: string[]
@@ -3826,7 +3819,6 @@ export namespace Prisma {
     lastName?: boolean
     age?: boolean
     occupation?: boolean
-    subject?: boolean
     giftCode?: boolean
     observation?: boolean
     contact?: boolean
@@ -3844,7 +3836,6 @@ export namespace Prisma {
     lastName?: boolean
     age?: boolean
     occupation?: boolean
-    subject?: boolean
     giftCode?: boolean
     observation?: boolean
     contact?: boolean
@@ -3862,7 +3853,6 @@ export namespace Prisma {
     lastName?: boolean
     age?: boolean
     occupation?: boolean
-    subject?: boolean
     giftCode?: boolean
     observation?: boolean
     contact?: boolean
@@ -3880,7 +3870,6 @@ export namespace Prisma {
     lastName?: boolean
     age?: boolean
     occupation?: boolean
-    subject?: boolean
     giftCode?: boolean
     observation?: boolean
     contact?: boolean
@@ -3892,7 +3881,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type ProspectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "firstName" | "lastName" | "age" | "occupation" | "subject" | "giftCode" | "observation" | "contact" | "action" | "status" | "freeSessionsCompleted" | "absences" | "createdAt" | "updatedAt", ExtArgs["result"]["prospect"]>
+  export type ProspectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "firstName" | "lastName" | "age" | "occupation" | "giftCode" | "observation" | "contact" | "action" | "status" | "freeSessionsCompleted" | "absences" | "createdAt" | "updatedAt", ExtArgs["result"]["prospect"]>
 
   export type $ProspectPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Prospect"
@@ -3903,7 +3892,6 @@ export namespace Prisma {
       lastName: string
       age: number
       occupation: $Enums.Occupation
-      subject: string
       giftCode: string | null
       observation: $Enums.Observation
       contact: string[]
@@ -4341,7 +4329,6 @@ export namespace Prisma {
     readonly lastName: FieldRef<"Prospect", 'String'>
     readonly age: FieldRef<"Prospect", 'Int'>
     readonly occupation: FieldRef<"Prospect", 'Occupation'>
-    readonly subject: FieldRef<"Prospect", 'String'>
     readonly giftCode: FieldRef<"Prospect", 'String'>
     readonly observation: FieldRef<"Prospect", 'Observation'>
     readonly contact: FieldRef<"Prospect", 'String[]'>
@@ -19914,7 +19901,6 @@ export namespace Prisma {
     lastName: 'lastName',
     age: 'age',
     occupation: 'occupation',
-    subject: 'subject',
     giftCode: 'giftCode',
     observation: 'observation',
     contact: 'contact',
@@ -20437,7 +20423,6 @@ export namespace Prisma {
     lastName?: StringFilter<"Prospect"> | string
     age?: IntFilter<"Prospect"> | number
     occupation?: EnumOccupationFilter<"Prospect"> | $Enums.Occupation
-    subject?: StringFilter<"Prospect"> | string
     giftCode?: StringNullableFilter<"Prospect"> | string | null
     observation?: EnumObservationFilter<"Prospect"> | $Enums.Observation
     contact?: StringNullableListFilter<"Prospect">
@@ -20455,7 +20440,6 @@ export namespace Prisma {
     lastName?: SortOrder
     age?: SortOrder
     occupation?: SortOrder
-    subject?: SortOrder
     giftCode?: SortOrderInput | SortOrder
     observation?: SortOrder
     contact?: SortOrder
@@ -20476,7 +20460,6 @@ export namespace Prisma {
     lastName?: StringFilter<"Prospect"> | string
     age?: IntFilter<"Prospect"> | number
     occupation?: EnumOccupationFilter<"Prospect"> | $Enums.Occupation
-    subject?: StringFilter<"Prospect"> | string
     giftCode?: StringNullableFilter<"Prospect"> | string | null
     observation?: EnumObservationFilter<"Prospect"> | $Enums.Observation
     contact?: StringNullableListFilter<"Prospect">
@@ -20494,7 +20477,6 @@ export namespace Prisma {
     lastName?: SortOrder
     age?: SortOrder
     occupation?: SortOrder
-    subject?: SortOrder
     giftCode?: SortOrderInput | SortOrder
     observation?: SortOrder
     contact?: SortOrder
@@ -20520,7 +20502,6 @@ export namespace Prisma {
     lastName?: StringWithAggregatesFilter<"Prospect"> | string
     age?: IntWithAggregatesFilter<"Prospect"> | number
     occupation?: EnumOccupationWithAggregatesFilter<"Prospect"> | $Enums.Occupation
-    subject?: StringWithAggregatesFilter<"Prospect"> | string
     giftCode?: StringNullableWithAggregatesFilter<"Prospect"> | string | null
     observation?: EnumObservationWithAggregatesFilter<"Prospect"> | $Enums.Observation
     contact?: StringNullableListFilter<"Prospect">
@@ -21665,7 +21646,6 @@ export namespace Prisma {
     lastName: string
     age: number
     occupation: $Enums.Occupation
-    subject: string
     giftCode?: string | null
     observation: $Enums.Observation
     contact?: ProspectCreatecontactInput | string[]
@@ -21683,7 +21663,6 @@ export namespace Prisma {
     lastName: string
     age: number
     occupation: $Enums.Occupation
-    subject: string
     giftCode?: string | null
     observation: $Enums.Observation
     contact?: ProspectCreatecontactInput | string[]
@@ -21701,7 +21680,6 @@ export namespace Prisma {
     lastName?: StringFieldUpdateOperationsInput | string
     age?: IntFieldUpdateOperationsInput | number
     occupation?: EnumOccupationFieldUpdateOperationsInput | $Enums.Occupation
-    subject?: StringFieldUpdateOperationsInput | string
     giftCode?: NullableStringFieldUpdateOperationsInput | string | null
     observation?: EnumObservationFieldUpdateOperationsInput | $Enums.Observation
     contact?: ProspectUpdatecontactInput | string[]
@@ -21719,7 +21697,6 @@ export namespace Prisma {
     lastName?: StringFieldUpdateOperationsInput | string
     age?: IntFieldUpdateOperationsInput | number
     occupation?: EnumOccupationFieldUpdateOperationsInput | $Enums.Occupation
-    subject?: StringFieldUpdateOperationsInput | string
     giftCode?: NullableStringFieldUpdateOperationsInput | string | null
     observation?: EnumObservationFieldUpdateOperationsInput | $Enums.Observation
     contact?: ProspectUpdatecontactInput | string[]
@@ -21737,7 +21714,6 @@ export namespace Prisma {
     lastName: string
     age: number
     occupation: $Enums.Occupation
-    subject: string
     giftCode?: string | null
     observation: $Enums.Observation
     contact?: ProspectCreatecontactInput | string[]
@@ -21755,7 +21731,6 @@ export namespace Prisma {
     lastName?: StringFieldUpdateOperationsInput | string
     age?: IntFieldUpdateOperationsInput | number
     occupation?: EnumOccupationFieldUpdateOperationsInput | $Enums.Occupation
-    subject?: StringFieldUpdateOperationsInput | string
     giftCode?: NullableStringFieldUpdateOperationsInput | string | null
     observation?: EnumObservationFieldUpdateOperationsInput | $Enums.Observation
     contact?: ProspectUpdatecontactInput | string[]
@@ -21773,7 +21748,6 @@ export namespace Prisma {
     lastName?: StringFieldUpdateOperationsInput | string
     age?: IntFieldUpdateOperationsInput | number
     occupation?: EnumOccupationFieldUpdateOperationsInput | $Enums.Occupation
-    subject?: StringFieldUpdateOperationsInput | string
     giftCode?: NullableStringFieldUpdateOperationsInput | string | null
     observation?: EnumObservationFieldUpdateOperationsInput | $Enums.Observation
     contact?: ProspectUpdatecontactInput | string[]
@@ -23107,7 +23081,6 @@ export namespace Prisma {
     lastName?: SortOrder
     age?: SortOrder
     occupation?: SortOrder
-    subject?: SortOrder
     giftCode?: SortOrder
     observation?: SortOrder
     contact?: SortOrder
@@ -23131,7 +23104,6 @@ export namespace Prisma {
     lastName?: SortOrder
     age?: SortOrder
     occupation?: SortOrder
-    subject?: SortOrder
     giftCode?: SortOrder
     observation?: SortOrder
     action?: SortOrder
@@ -23148,7 +23120,6 @@ export namespace Prisma {
     lastName?: SortOrder
     age?: SortOrder
     occupation?: SortOrder
-    subject?: SortOrder
     giftCode?: SortOrder
     observation?: SortOrder
     action?: SortOrder

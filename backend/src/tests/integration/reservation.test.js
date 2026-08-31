@@ -218,6 +218,21 @@ describe('Reservation Integration Tests (PostgreSQL Test DB)', () => {
             // Check formatted date objects match
             expect(new Date(dbReservation.startTime).toISOString()).toBe(payload.startTime);
             expect(new Date(dbReservation.endTime).toISOString()).toBe(payload.endTime);
+
+            // Verify via GET request that group and members relations are included
+            const getResponse = await request(app)
+                .get('/reservations')
+                .set('Authorization', `Bearer ${adminToken}`);
+
+            expect(getResponse.status).toBe(200);
+            const found = getResponse.body.data.find(r => r.id === response.body.data.id);
+            expect(found).toBeDefined();
+            expect(found.inscription).toBeDefined();
+            expect(found.inscription.group).toBeDefined();
+            expect(found.inscription.group.nom).toContain('Monôme');
+            expect(found.inscription.members).toBeDefined();
+            expect(Array.isArray(found.inscription.members)).toBe(true);
+            expect(found.inscription.members.length).toBeGreaterThan(0);
         });
     });
 

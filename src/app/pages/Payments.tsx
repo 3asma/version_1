@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../components/ui/table';
 import { Badge } from '../components/ui/badge';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '../components/ui/dialog';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '../components/ui/alert-dialog';
 import { DollarSign, CreditCard, TrendingUp, AlertCircle, Plus, FileText, Download, Printer, Upload, Calendar, CheckCircle, Eye, XCircle, Clock, Pencil, Trash2, Search } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -27,6 +28,8 @@ export default function Payments() {
   const [selectedPayment, setSelectedPayment] = useState<any>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedPaymentId, setSelectedPaymentId] = useState<string | null>(null);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [paymentToDeleteId, setPaymentToDeleteId] = useState<string | null>(null);
 
 
   const [candidateFormations, setCandidateFormations] = useState<any[]>([]);
@@ -221,15 +224,21 @@ export default function Payments() {
     setIsAddDialogOpen(true);
   };
 
-  const handleDelete = async (id: string) => {
-    if (confirm('Êtes-vous sûr de vouloir supprimer ce paiement ?')) {
-      try {
-        await deletePayment(id);
-        toast.success('Paiement supprimé avec succès');
-      } catch (error: any) {
-        toast.error(error.response?.data?.error || 'Erreur lors de la suppression du paiement');
-      }
+  const handleDeleteClick = (id: string) => {
+    setPaymentToDeleteId(id);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!paymentToDeleteId) return;
+    try {
+      await deletePayment(paymentToDeleteId);
+      toast.success('Paiement supprimé avec succès');
+    } catch (error: any) {
+      toast.error(error.response?.data?.error || 'Erreur lors de la suppression du paiement');
     }
+    setIsDeleteDialogOpen(false);
+    setPaymentToDeleteId(null);
   };
 
   const resetForm = () => {
@@ -255,19 +264,24 @@ export default function Payments() {
     setSelectedFile(null);
   };
 
-  const handleOpenPreview = async (url: string) => {
-    setPreviewUrl(url);
+  const [previewFilename, setPreviewFilename] = useState('');
+
+  const handleOpenPreview = async (url: string, filename: string) => {
+    setPreviewFilename(filename);
     setIsLoadingPreview(true);
     setHasPreviewError(false);
     setIsPreviewDialogOpen(true);
 
     try {
-      const response = await fetch(url, { method: 'HEAD' });
-      if (!response.ok) {
-        setHasPreviewError(true);
-        setIsLoadingPreview(false);
-      }
+      const urlObj = new URL(url);
+      const endpoint = urlObj.pathname;
+
+      const response = await api.get(endpoint, { responseType: 'blob' });
+      const blob = new Blob([response.data], { type: 'application/pdf' });
+      const objectUrl = URL.createObjectURL(blob);
+      setPreviewUrl(objectUrl);
     } catch (e) {
+      console.error("Failed to load PDF preview:", e);
       setHasPreviewError(true);
       setIsLoadingPreview(false);
     }
@@ -1082,7 +1096,7 @@ export default function Payments() {
                             <Button
                               size="sm"
                               variant="ghost"
-                              onClick={() => handleDelete(payment.id)}
+                              onClick={() => handleDeleteClick(payment.id)}
                               title="Supprimer"
                             >
                               <Trash2 size={16} className="text-red-650" />
@@ -1272,7 +1286,7 @@ export default function Payments() {
                           </TableCell>
                           <TableCell>
                             {payment.checkDetails?.scanUrl ? (
-                              <Button size="sm" variant="outline" onClick={() => handleOpenPreview(payment.checkDetails.scanUrl!)}>
+                              <Button size="sm" variant="outline" onClick={() => handleOpenPreview(payment.checkDetails.scanUrl!, `CHEQUE_${payment.reference}.pdf`)}>
                                 <Eye size={16} className="mr-1" />
                                 Voir scan
                               </Button>
@@ -1377,7 +1391,7 @@ export default function Payments() {
                       <Label className="text-sm text-gray-650">Scan</Label>
                       {selectedPayment.checkDetails.scanUrl ? (
                         <div>
-                          <Button size="sm" variant="outline" onClick={() => handleOpenPreview(selectedPayment.checkDetails.scanUrl!)}>
+                          <Button size="sm" variant="outline" onClick={() => handleOpenPreview(selectedPayment.checkDetails.scanUrl!, `CHEQUE_${selectedPayment.reference}.pdf`)}>
                             📄 Voir le chèque
                           </Button>
                         </div>
@@ -1440,7 +1454,16 @@ export default function Payments() {
       </Dialog>
 
       {/* PDF Scan Preview Dialog */}
-      <Dialog open={isPreviewDialogOpen} onOpenChange={setIsPreviewDialogOpen}>
+      <Dialog open={isPreviewDialogOpen} onOpenChange={(open) => {
+        setIsPreviewDialogOpen(open);
+        if (!open) {
+          if (previewUrl && previewUrl.startsWith('blob:')) {
+            URL.revokeObjectURL(previewUrl);
+          }
+          setPreviewUrl('');
+          setPreviewFilename('');
+        }
+      }}>
         <DialogContent className="max-w-none w-screen h-screen md:max-w-4xl md:w-[60vw] md:h-[80vh] flex flex-col p-6">
           <DialogHeader className="flex-none">
             <DialogTitle className="text-xl font-bold flex items-center gap-2">
@@ -1484,7 +1507,7 @@ export default function Payments() {
                 onClick={() => {
                   const link = document.createElement('a');
                   link.href = previewUrl;
-                  link.setAttribute('download', previewUrl.split('/').pop() || 'cheque.pdf');
+                  link.setAttribute('download', previewFilename || 'cheque.pdf');
                   document.body.appendChild(link);
                   link.click();
                   document.body.removeChild(link);
@@ -1498,13 +1521,41 @@ export default function Payments() {
               type="button"
               variant="default"
               className="bg-gray-800 hover:bg-gray-900 text-white"
-              onClick={() => setIsPreviewDialogOpen(false)}
+              onClick={() => {
+                setIsPreviewDialogOpen(false);
+                if (previewUrl && previewUrl.startsWith('blob:')) {
+                  URL.revokeObjectURL(previewUrl);
+                }
+                setPreviewUrl('');
+                setPreviewFilename('');
+              }}
             >
               Fermer
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2">
+              <Trash2 className="text-red-600" />
+              Confirmer la suppression
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              Êtes-vous sûr de vouloir supprimer ce paiement ? Cette action est irréversible.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setPaymentToDeleteId(null)}>Annuler</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDeleteConfirm} className="bg-red-600 hover:bg-red-700">
+              Supprimer
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

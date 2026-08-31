@@ -16,8 +16,7 @@ class ProspectService {
             'action',
             'status',
             'freeSessionsCompleted',
-            'absences',
-            'subject'
+            'absences'
         ];
 
         const normalized = {};

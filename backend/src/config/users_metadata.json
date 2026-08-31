@@ -14,16 +14,6 @@
     "status": "active",
     "role": "agent_reservation"
   },
-  "prof@formation.com": {
-    "name": "Marie Dupont",
-    "status": "active",
-    "role": "professor"
-  },
-  "candidat@formation.com": {
-    "name": "Jean Martin",
-    "status": "active",
-    "role": "candidate"
-  },
   "khadija.yousfi@demo.com": {
     "name": "Khadija El Yousfi",
     "status": "active",
@@ -58,5 +48,10 @@
     "name": "Rokaia",
     "status": "active",
     "role": "agent_reception"
+  },
+  "prof@formation.com": {
+    "name": "TEST Professor",
+    "status": "active",
+    "role": "professor"
   }
 }

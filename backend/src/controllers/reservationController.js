@@ -11,7 +11,13 @@ export const getAllReservations = async (req, res) => {
                     inscription: {
                         include: {
                             candidate: true,
-                            formation: true
+                            formation: true,
+                            group: true,
+                            members: {
+                                include: {
+                                    candidate: true
+                                }
+                            }
                         }
                     },
                     professor: true,

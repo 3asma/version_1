@@ -1,0 +1,16 @@
+g) [], RemoteExc     eption     + FullyQualifiedErrorId : Native     CommandError   (Use `node --trace-warnings ...` to  show where the warning was created) node.exe : (node:19908)  Experiment
+     + FullyQualifiedErrorId : Native     CommandError   (Use `node --trace-warnings ...` to  show where the warning was created) node.exe : (node:19908)  ExperimentalWarning: Support for  load
+g) [], RemoteExc     eption     + FullyQualifiedErrorId : Native     CommandError   (Use `node --trace-warnings ...` to  show where the warning was created) (node:18972) ExperimentalWarning:  
+     + FullyQualifiedErrorId : Native     CommandError   (Use `node --trace-warnings ...` to  show where the warning was created) (node:18972) ExperimentalWarning:  Support for loading ES Module
+(e.g. Admin)[32m 52[2mms[22m[39m [31m   ÔåÆ expected 'Access denied. Insufficient permissioÔÇª' to contain 'Access denied. Role not authorized'[39m  [32mÔ£ô[39m src/tests/integration/cancelR
+39m  [31mÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[39m[1m[ 41m Failed Tests 1 [49m[22m[31mÔÄ» ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[39m  [41m[1m FAIL [22m[49m src/tests/i ntegration/cancelRequest.test.js[2m  > [22mCan
+22m[31mÔÄ» ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[39m  [41m[1m FAIL [22m[49m src/tests/i ntegration/cancelRequest.test.js[2m  > [22mCancelRequest Integration  Tests (PostgreSQL Test DB)[2m >  [22mPOST /c
+ofessor  account (e.g. Admin) [31m[1mAssertionError[22m:  expected 'Access denied.  Insufficient permissioÔÇª' to  contain 'Access denied. Role not  authorized'[39m  Expected: [32m"Access
+unt (e.g. Admin) [31m[1mAssertionError[22m:  expected 'Access denied.  Insufficient permissioÔÇª' to  contain 'Access denied. Role not  authorized'[39m  Expected: [32m"Access denied.  [7
+in 'Access denied. Role not  authorized'[39m  Expected: [32m"Access denied.  [7mRole not authorized[27m"[39m Received: [31m"Access denied.  [7mInsufficient  permissions.[27m"[39m  [
+            [34me xpect[39m(response[33m.[39mstatus) [33m.[39m[34mtoBe[39m([34m403[3 9m)[33m;[39m     [90m347|[39m             expect (response.body.error).toContain('Acce ss denie
+[90m347|[39m             expect (response.body.error).toContain('Acce ss denied. RoleÔÇª     [90m   |[39m                                          [31m^[39m     [90m348|[39m          })
+»[22m[39m   [2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m [2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m19 passed[39m[22m[90m (20)[39m [2m   Start
+m[90m (1)[39m [2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m19 passed[39m[22m[90m (20)[39m [2m   Start at [22m 16:40:26 [2m   Duration [22m 16.73s[2m (transform 1
+ts 2.15s, environment 0ms)[22m  [vitest-pool]: Failed to terminate  forks worker for test files D:/format ion_v2/backend/src/tests/integration/ cancelRequest.test.js. Error: kill  EPERM     at
+nd/src/tests/integration/ cancelRequest.test.js. Error: kill  EPERM     at ChildProcess.kill  (node:internal/child_process:511:26)     at ForksPoolWorker.stop (file:/// D:/formation_v2/backend/n
