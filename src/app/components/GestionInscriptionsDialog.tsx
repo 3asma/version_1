@@ -533,24 +533,7 @@ export function GestionInscriptionsDialog({
                         )}
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
-                        {/* Field 5: Prix */}
-                        <div className="space-y-1">
-                            <Label htmlFor="price" className="font-semibold text-gray-700 text-sm flex items-center gap-1">
-                                <DollarSign size={14} className="text-gray-400" />
-                                Prix total (DH) *
-                            </Label>
-                            <Input
-                                id="price"
-                                type="number"
-                                value={formState.price}
-                                onChange={(e) => setFormState(prev => ({ ...prev, price: Number(e.target.value) }))}
-                                className="h-10 rounded-lg"
-                                min="0"
-                                required
-                            />
-                        </div>
-
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         {/* Field 6: Durée */}
                         <div className="space-y-1">
                             <Label htmlFor="duration" className="font-semibold text-gray-700 text-sm flex items-center gap-1">

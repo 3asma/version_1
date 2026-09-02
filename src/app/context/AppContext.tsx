@@ -494,6 +494,30 @@ export const mapBackendRole = (roleStr: string): UserRole => {
   }
 };
 
+export const normalizeProspectFromBackend = (p: any): Prospect => ({
+  ...p,
+  occupation: p.occupation ? (p.occupation.toLowerCase() as 'student' | 'employee') : 'student',
+  observation: p.observation ? (p.observation.toLowerCase() as 'alone' | 'accompanied') : 'alone',
+});
+
+export const normalizeCandidateFromBackend = (c: any): Candidate => ({
+  ...c,
+  occupation: c.occupation ? (c.occupation.toLowerCase() as 'student' | 'employee') : 'student',
+  observation: c.observation ? (c.observation.toLowerCase() as 'alone' | 'accompanied') : 'alone',
+  formationId: c.formationId || 'unassigned',
+});
+
+export const normalizeProfessorFromBackend = (p: any): Professor => ({
+  ...p,
+  firstName: p.prenom || p.firstName || '',
+  lastName: p.nom || p.lastName || '',
+  phone: p.telephone || p.phone || '',
+  email: p.email || '',
+  address: p.adresse || p.address || '',
+  subjects: p.specialite ? p.specialite.split(', ').map((s: string) => s.trim()) : (Array.isArray(p.subjects) ? p.subjects : []),
+  totalHoursWorked: Number(p.totalHoursWorked || 0),
+});
+
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [isLoadingSession, setIsLoadingSession] = useState(true);
@@ -732,11 +756,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         const paymentsRes = results[8];
 
         if (prospectsRes.status === 'fulfilled' && prospectsRes.value.data.message === 'success') {
-          const normalized = prospectsRes.value.data.data.map((p: any) => ({
-            ...p,
-            occupation: p.occupation,
-            observation: p.observation
-          }));
+          const normalized = prospectsRes.value.data.data.map(normalizeProspectFromBackend);
           setProspects(normalized);
         } else {
           console.error('Failed to load prospects:', prospectsRes.status === 'rejected' ? prospectsRes.reason : 'Invalid data format');
@@ -798,16 +818,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         }
 
         if (professorsRes.status === 'fulfilled' && professorsRes.value.data.message === 'success') {
-          const mapped = professorsRes.value.data.data.map((p: any) => ({
-            ...p,
-            firstName: p.prenom,
-            lastName: p.nom,
-            phone: p.telephone,
-            email: p.email,
-            address: p.adresse,
-            subjects: p.specialite ? p.specialite.split(', ').map((s: string) => s.trim()) : [],
-            totalHoursWorked: Number(p.totalHoursWorked || 0)
-          }));
+          const mapped = professorsRes.value.data.data.map(normalizeProfessorFromBackend);
           setProfessors(mapped);
         } else {
           console.error('Failed to load professors:', professorsRes.status === 'rejected' ? professorsRes.reason : 'Invalid data format');
@@ -816,10 +827,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         if (candidatesRes.status === 'fulfilled' && candidatesRes.value.data.message === 'success') {
           const normalized = candidatesRes.value.data.data.map((c: any) => {
             const activeIns = activeInscriptions.find((ins: any) => ins.candidateId === c.id);
-            return {
+            return normalizeCandidateFromBackend({
               ...c,
               formationId: activeIns ? activeIns.formationId : 'unassigned'
-            };
+            });
           });
           setCandidates(normalized);
         } else {
@@ -1046,7 +1057,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         secondContactId: prospect.secondContactId || null
       });
       if (response.data.message === 'success') {
-        setProspects(prev => [response.data.data, ...prev]);
+        setProspects(prev => [normalizeProspectFromBackend(response.data.data), ...prev]);
       }
     } catch (error) {
       console.error('Failed to add prospect:', error);
@@ -1075,7 +1086,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         absences: updates.absences !== undefined ? Number(updates.absences) : undefined
       });
       if (response.data.message === 'success') {
-        setProspects(prev => prev.map(p => p.id === id ? response.data.data : p));
+        setProspects(prev => prev.map(p => p.id === id ? normalizeProspectFromBackend({ ...p, ...response.data.data }) : p));
       }
     } catch (error) {
       console.error('Failed to update prospect:', error);
@@ -1166,11 +1177,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         registrationDate: candidate.registrationDate ? new Date(candidate.registrationDate).toISOString() : null
       });
       if (response.data.message === 'success') {
-        const added = {
-          ...response.data.data,
-          formationId: 'unassigned'
-        };
-        setCandidates(prev => [added, ...prev]);
+        setCandidates(prev => [normalizeCandidateFromBackend(response.data.data), ...prev]);
       }
     } catch (error) {
       console.error('Failed to add candidate:', error);
@@ -1198,10 +1205,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       });
       if (response.data.message === 'success') {
         const updated = response.data.data;
-        setCandidates(prev => prev.map(c => c.id === id ? {
-          ...c,
-          ...updated
-        } : c));
+        setCandidates(prev => prev.map(c => c.id === id ? normalizeCandidateFromBackend({ ...c, ...updated }) : c));
       }
     } catch (error) {
       console.error('Failed to update candidate:', error);
@@ -1336,29 +1340,23 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   // Professor functions
   const addProfessor = async (professor: Omit<Professor, 'id' | 'createdAt' | 'updatedAt'>) => {
     try {
+      const specialite = (professor.subjects && professor.subjects.length > 0)
+        ? professor.subjects.join(', ')
+        : (professor as any).specialite || null;
+
       const response = await api.post('/professors', {
         prenom: professor.prenom || (professor as any).firstName,
         nom: professor.nom || (professor as any).lastName,
         telephone: professor.telephone || (professor as any).phone || null,
         email: professor.email || null,
         adresse: professor.adresse || (professor as any).address || null,
+        specialite,
         type: professor.type || 'permanent',
         dayOff: professor.dayOff || 'Sunday',
         maxSessions: professor.maxSessions !== undefined ? parseInt(String(professor.maxSessions)) : 25
       });
       if (response.data.message === 'success') {
-        const newProf = response.data.data;
-        const mapped = {
-          ...newProf,
-          firstName: newProf.prenom,
-          lastName: newProf.nom,
-          phone: newProf.telephone,
-          email: newProf.email,
-          address: newProf.adresse,
-          subjects: newProf.specialite ? newProf.specialite.split(', ').map((s: string) => s.trim()) : [],
-          totalHoursWorked: Number(newProf.totalHoursWorked || 0)
-        };
-        setProfessors(prev => [...prev, mapped]);
+        setProfessors(prev => [...prev, normalizeProfessorFromBackend(response.data.data)]);
       }
     } catch (error) {
       console.error('Failed to add professor:', error);
@@ -1370,33 +1368,24 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     try {
       const nom = updates.nom || (updates as any).lastName;
       const prenom = updates.prenom || (updates as any).firstName;
-      const telephone = updates.telephone || (updates as any).phone;
-      const adresse = updates.adresse || (updates as any).address;
+      const rawPhone = updates.telephone !== undefined ? updates.telephone : (updates as any).phone;
+      const rawAddress = updates.adresse !== undefined ? updates.adresse : (updates as any).address;
+      const specialite = updates.subjects ? updates.subjects.join(', ') : (updates as any).specialite;
 
       const payload: any = {};
       if (nom !== undefined) payload.nom = nom;
       if (prenom !== undefined) payload.prenom = prenom;
-      if (updates.email !== undefined) payload.email = updates.email;
-      if (telephone !== undefined) payload.telephone = telephone;
-      if (adresse !== undefined) payload.adresse = adresse;
+      if (updates.email !== undefined) payload.email = updates.email && String(updates.email).trim() !== '' ? updates.email : null;
+      if (rawPhone !== undefined) payload.telephone = rawPhone && String(rawPhone).trim() !== '' ? rawPhone : null;
+      if (rawAddress !== undefined) payload.adresse = rawAddress && String(rawAddress).trim() !== '' ? rawAddress : null;
+      if (specialite !== undefined) payload.specialite = specialite;
       if (updates.type !== undefined) payload.type = updates.type;
       if (updates.dayOff !== undefined) payload.dayOff = updates.dayOff;
       if (updates.maxSessions !== undefined) payload.maxSessions = parseInt(String(updates.maxSessions));
 
       const response = await api.patch(`/professors/${id}`, payload);
       if (response.data.message === 'success') {
-        const updated = response.data.data;
-        const mapped = {
-          ...updated,
-          firstName: updated.prenom,
-          lastName: updated.nom,
-          phone: updated.telephone,
-          email: updated.email,
-          address: updated.adresse,
-          subjects: updated.specialite ? updated.specialite.split(', ').map((s: string) => s.trim()) : [],
-          totalHoursWorked: Number(updated.totalHoursWorked || 0)
-        };
-        setProfessors(prev => prev.map(p => p.id === id ? mapped : p));
+        setProfessors(prev => prev.map(p => p.id === id ? normalizeProfessorFromBackend({ ...p, ...response.data.data }) : p));
       }
     } catch (error) {
       console.error('Failed to update professor:', error);
@@ -1824,7 +1813,12 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       reservation: 'PENDING',
       pending: 'PENDING',
       paid: 'COMPLETED',
-      validated: 'COMPLETED'
+      validated: 'COMPLETED',
+      COMPLETED: 'COMPLETED',
+      late: 'FAILED',
+      failed: 'FAILED',
+      rejected: 'FAILED',
+      FAILED: 'FAILED'
     };
 
     const payload: any = {};
@@ -1835,6 +1829,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     if (updates.status !== undefined) payload.status = statusMap[updates.status] || 'PENDING';
     if (updates.paymentDate !== undefined) payload.paymentDate = updates.paymentDate ? new Date(updates.paymentDate).toISOString() : undefined;
     if ((updates as any).note !== undefined) payload.note = (updates as any).note;
+    if ((updates as any).checkDueDate !== undefined) payload.checkDueDate = (updates as any).checkDueDate;
 
     try {
       const response = await api.patch(`/payments/${id}`, payload);

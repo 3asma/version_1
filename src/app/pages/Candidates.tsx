@@ -107,6 +107,7 @@ export default function Candidates() {
         lastName: formData.lastName,
         age: parseInt(formData.age),
         occupation: formData.occupation,
+        giftCode: formData.giftCode || undefined,
         observation: formData.observation,
         firstContactId: formData.firstContactId || undefined,
         secondContactId: formData.secondContactId !== 'none' ? formData.secondContactId : undefined,
@@ -452,6 +453,7 @@ export default function Candidates() {
         lastName: formData.lastName,
         age: parseInt(formData.age),
         occupation: formData.occupation,
+        giftCode: formData.giftCode || undefined,
         observation: formData.observation,
         firstContactId: formData.firstContactId || undefined,
         secondContactId: formData.secondContactId !== 'none' ? formData.secondContactId : undefined,
@@ -529,9 +531,15 @@ export default function Candidates() {
 
             <>
 
-              <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+              <Dialog open={isAddDialogOpen} onOpenChange={(open) => {
+                setIsAddDialogOpen(open);
+                if (open) {
+                  setSelectedCandidate(null);
+                  resetForm();
+                }
+              }}>
                 <DialogTrigger asChild>
-                  <Button size="lg" className="shadow-md">
+                  <Button size="lg" className="shadow-md" onClick={() => { setSelectedCandidate(null); resetForm(); }}>
                     <UserPlus size={20} className="mr-2" />
                     Nouveau candidat
                   </Button>

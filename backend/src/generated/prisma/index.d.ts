@@ -3580,13 +3580,20 @@ export namespace Prisma {
 
   export type ProspectMinAggregateOutputType = {
     id: string | null
+    membershipNumber: string | null
     firstName: string | null
     lastName: string | null
+    gender: string | null
     age: number | null
     occupation: $Enums.Occupation | null
+    phone: string | null
+    email: string | null
+    registrationDate: Date | null
     giftCode: string | null
     observation: $Enums.Observation | null
     action: string | null
+    firstContactId: string | null
+    secondContactId: string | null
     status: string | null
     freeSessionsCompleted: number | null
     absences: number | null
@@ -3596,13 +3603,20 @@ export namespace Prisma {
 
   export type ProspectMaxAggregateOutputType = {
     id: string | null
+    membershipNumber: string | null
     firstName: string | null
     lastName: string | null
+    gender: string | null
     age: number | null
     occupation: $Enums.Occupation | null
+    phone: string | null
+    email: string | null
+    registrationDate: Date | null
     giftCode: string | null
     observation: $Enums.Observation | null
     action: string | null
+    firstContactId: string | null
+    secondContactId: string | null
     status: string | null
     freeSessionsCompleted: number | null
     absences: number | null
@@ -3612,14 +3626,21 @@ export namespace Prisma {
 
   export type ProspectCountAggregateOutputType = {
     id: number
+    membershipNumber: number
     firstName: number
     lastName: number
+    gender: number
     age: number
     occupation: number
+    phone: number
+    email: number
+    registrationDate: number
     giftCode: number
     observation: number
     contact: number
     action: number
+    firstContactId: number
+    secondContactId: number
     status: number
     freeSessionsCompleted: number
     absences: number
@@ -3643,13 +3664,20 @@ export namespace Prisma {
 
   export type ProspectMinAggregateInputType = {
     id?: true
+    membershipNumber?: true
     firstName?: true
     lastName?: true
+    gender?: true
     age?: true
     occupation?: true
+    phone?: true
+    email?: true
+    registrationDate?: true
     giftCode?: true
     observation?: true
     action?: true
+    firstContactId?: true
+    secondContactId?: true
     status?: true
     freeSessionsCompleted?: true
     absences?: true
@@ -3659,13 +3687,20 @@ export namespace Prisma {
 
   export type ProspectMaxAggregateInputType = {
     id?: true
+    membershipNumber?: true
     firstName?: true
     lastName?: true
+    gender?: true
     age?: true
     occupation?: true
+    phone?: true
+    email?: true
+    registrationDate?: true
     giftCode?: true
     observation?: true
     action?: true
+    firstContactId?: true
+    secondContactId?: true
     status?: true
     freeSessionsCompleted?: true
     absences?: true
@@ -3675,14 +3710,21 @@ export namespace Prisma {
 
   export type ProspectCountAggregateInputType = {
     id?: true
+    membershipNumber?: true
     firstName?: true
     lastName?: true
+    gender?: true
     age?: true
     occupation?: true
+    phone?: true
+    email?: true
+    registrationDate?: true
     giftCode?: true
     observation?: true
     contact?: true
     action?: true
+    firstContactId?: true
+    secondContactId?: true
     status?: true
     freeSessionsCompleted?: true
     absences?: true
@@ -3779,14 +3821,21 @@ export namespace Prisma {
 
   export type ProspectGroupByOutputType = {
     id: string
+    membershipNumber: string | null
     firstName: string
     lastName: string
+    gender: string | null
     age: number
     occupation: $Enums.Occupation
+    phone: string | null
+    email: string | null
+    registrationDate: Date | null
     giftCode: string | null
     observation: $Enums.Observation
     contact: string[]
     action: string | null
+    firstContactId: string | null
+    secondContactId: string | null
     status: string
     freeSessionsCompleted: number
     absences: number
@@ -3815,14 +3864,21 @@ export namespace Prisma {
 
   export type ProspectSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    membershipNumber?: boolean
     firstName?: boolean
     lastName?: boolean
+    gender?: boolean
     age?: boolean
     occupation?: boolean
+    phone?: boolean
+    email?: boolean
+    registrationDate?: boolean
     giftCode?: boolean
     observation?: boolean
     contact?: boolean
     action?: boolean
+    firstContactId?: boolean
+    secondContactId?: boolean
     status?: boolean
     freeSessionsCompleted?: boolean
     absences?: boolean
@@ -3832,14 +3888,21 @@ export namespace Prisma {
 
   export type ProspectSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    membershipNumber?: boolean
     firstName?: boolean
     lastName?: boolean
+    gender?: boolean
     age?: boolean
     occupation?: boolean
+    phone?: boolean
+    email?: boolean
+    registrationDate?: boolean
     giftCode?: boolean
     observation?: boolean
     contact?: boolean
     action?: boolean
+    firstContactId?: boolean
+    secondContactId?: boolean
     status?: boolean
     freeSessionsCompleted?: boolean
     absences?: boolean
@@ -3849,14 +3912,21 @@ export namespace Prisma {
 
   export type ProspectSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    membershipNumber?: boolean
     firstName?: boolean
     lastName?: boolean
+    gender?: boolean
     age?: boolean
     occupation?: boolean
+    phone?: boolean
+    email?: boolean
+    registrationDate?: boolean
     giftCode?: boolean
     observation?: boolean
     contact?: boolean
     action?: boolean
+    firstContactId?: boolean
+    secondContactId?: boolean
     status?: boolean
     freeSessionsCompleted?: boolean
     absences?: boolean
@@ -3866,14 +3936,21 @@ export namespace Prisma {
 
   export type ProspectSelectScalar = {
     id?: boolean
+    membershipNumber?: boolean
     firstName?: boolean
     lastName?: boolean
+    gender?: boolean
     age?: boolean
     occupation?: boolean
+    phone?: boolean
+    email?: boolean
+    registrationDate?: boolean
     giftCode?: boolean
     observation?: boolean
     contact?: boolean
     action?: boolean
+    firstContactId?: boolean
+    secondContactId?: boolean
     status?: boolean
     freeSessionsCompleted?: boolean
     absences?: boolean
@@ -3881,21 +3958,28 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type ProspectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "firstName" | "lastName" | "age" | "occupation" | "giftCode" | "observation" | "contact" | "action" | "status" | "freeSessionsCompleted" | "absences" | "createdAt" | "updatedAt", ExtArgs["result"]["prospect"]>
+  export type ProspectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "membershipNumber" | "firstName" | "lastName" | "gender" | "age" | "occupation" | "phone" | "email" | "registrationDate" | "giftCode" | "observation" | "contact" | "action" | "firstContactId" | "secondContactId" | "status" | "freeSessionsCompleted" | "absences" | "createdAt" | "updatedAt", ExtArgs["result"]["prospect"]>
 
   export type $ProspectPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Prospect"
     objects: {}
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      membershipNumber: string | null
       firstName: string
       lastName: string
+      gender: string | null
       age: number
       occupation: $Enums.Occupation
+      phone: string | null
+      email: string | null
+      registrationDate: Date | null
       giftCode: string | null
       observation: $Enums.Observation
       contact: string[]
       action: string | null
+      firstContactId: string | null
+      secondContactId: string | null
       status: string
       freeSessionsCompleted: number
       absences: number
@@ -4325,14 +4409,21 @@ export namespace Prisma {
    */
   interface ProspectFieldRefs {
     readonly id: FieldRef<"Prospect", 'String'>
+    readonly membershipNumber: FieldRef<"Prospect", 'String'>
     readonly firstName: FieldRef<"Prospect", 'String'>
     readonly lastName: FieldRef<"Prospect", 'String'>
+    readonly gender: FieldRef<"Prospect", 'String'>
     readonly age: FieldRef<"Prospect", 'Int'>
     readonly occupation: FieldRef<"Prospect", 'Occupation'>
+    readonly phone: FieldRef<"Prospect", 'String'>
+    readonly email: FieldRef<"Prospect", 'String'>
+    readonly registrationDate: FieldRef<"Prospect", 'DateTime'>
     readonly giftCode: FieldRef<"Prospect", 'String'>
     readonly observation: FieldRef<"Prospect", 'Observation'>
     readonly contact: FieldRef<"Prospect", 'String[]'>
     readonly action: FieldRef<"Prospect", 'String'>
+    readonly firstContactId: FieldRef<"Prospect", 'String'>
+    readonly secondContactId: FieldRef<"Prospect", 'String'>
     readonly status: FieldRef<"Prospect", 'String'>
     readonly freeSessionsCompleted: FieldRef<"Prospect", 'Int'>
     readonly absences: FieldRef<"Prospect", 'Int'>
@@ -4727,14 +4818,19 @@ export namespace Prisma {
   export type CandidateMinAggregateOutputType = {
     id: string | null
     candidateCode: string | null
+    membershipNumber: string | null
     firstName: string | null
     lastName: string | null
+    gender: string | null
     email: string | null
     phone: string | null
     age: number | null
     occupation: $Enums.Occupation | null
     giftCode: string | null
     observation: $Enums.Observation | null
+    registrationDate: Date | null
+    firstContactId: string | null
+    secondContactId: string | null
     action: string | null
     status: $Enums.CandidateStatus | null
     createdAt: Date | null
@@ -4744,14 +4840,19 @@ export namespace Prisma {
   export type CandidateMaxAggregateOutputType = {
     id: string | null
     candidateCode: string | null
+    membershipNumber: string | null
     firstName: string | null
     lastName: string | null
+    gender: string | null
     email: string | null
     phone: string | null
     age: number | null
     occupation: $Enums.Occupation | null
     giftCode: string | null
     observation: $Enums.Observation | null
+    registrationDate: Date | null
+    firstContactId: string | null
+    secondContactId: string | null
     action: string | null
     status: $Enums.CandidateStatus | null
     createdAt: Date | null
@@ -4761,8 +4862,10 @@ export namespace Prisma {
   export type CandidateCountAggregateOutputType = {
     id: number
     candidateCode: number
+    membershipNumber: number
     firstName: number
     lastName: number
+    gender: number
     email: number
     phone: number
     age: number
@@ -4770,6 +4873,9 @@ export namespace Prisma {
     giftCode: number
     observation: number
     contact: number
+    registrationDate: number
+    firstContactId: number
+    secondContactId: number
     action: number
     status: number
     createdAt: number
@@ -4789,14 +4895,19 @@ export namespace Prisma {
   export type CandidateMinAggregateInputType = {
     id?: true
     candidateCode?: true
+    membershipNumber?: true
     firstName?: true
     lastName?: true
+    gender?: true
     email?: true
     phone?: true
     age?: true
     occupation?: true
     giftCode?: true
     observation?: true
+    registrationDate?: true
+    firstContactId?: true
+    secondContactId?: true
     action?: true
     status?: true
     createdAt?: true
@@ -4806,14 +4917,19 @@ export namespace Prisma {
   export type CandidateMaxAggregateInputType = {
     id?: true
     candidateCode?: true
+    membershipNumber?: true
     firstName?: true
     lastName?: true
+    gender?: true
     email?: true
     phone?: true
     age?: true
     occupation?: true
     giftCode?: true
     observation?: true
+    registrationDate?: true
+    firstContactId?: true
+    secondContactId?: true
     action?: true
     status?: true
     createdAt?: true
@@ -4823,8 +4939,10 @@ export namespace Prisma {
   export type CandidateCountAggregateInputType = {
     id?: true
     candidateCode?: true
+    membershipNumber?: true
     firstName?: true
     lastName?: true
+    gender?: true
     email?: true
     phone?: true
     age?: true
@@ -4832,6 +4950,9 @@ export namespace Prisma {
     giftCode?: true
     observation?: true
     contact?: true
+    registrationDate?: true
+    firstContactId?: true
+    secondContactId?: true
     action?: true
     status?: true
     createdAt?: true
@@ -4928,8 +5049,10 @@ export namespace Prisma {
   export type CandidateGroupByOutputType = {
     id: string
     candidateCode: string
+    membershipNumber: string | null
     firstName: string
     lastName: string
+    gender: string | null
     email: string | null
     phone: string | null
     age: number
@@ -4937,6 +5060,9 @@ export namespace Prisma {
     giftCode: string | null
     observation: $Enums.Observation
     contact: string[]
+    registrationDate: Date | null
+    firstContactId: string | null
+    secondContactId: string | null
     action: string | null
     status: $Enums.CandidateStatus
     createdAt: Date
@@ -4965,8 +5091,10 @@ export namespace Prisma {
   export type CandidateSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     candidateCode?: boolean
+    membershipNumber?: boolean
     firstName?: boolean
     lastName?: boolean
+    gender?: boolean
     email?: boolean
     phone?: boolean
     age?: boolean
@@ -4974,6 +5102,9 @@ export namespace Prisma {
     giftCode?: boolean
     observation?: boolean
     contact?: boolean
+    registrationDate?: boolean
+    firstContactId?: boolean
+    secondContactId?: boolean
     action?: boolean
     status?: boolean
     createdAt?: boolean
@@ -4989,8 +5120,10 @@ export namespace Prisma {
   export type CandidateSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     candidateCode?: boolean
+    membershipNumber?: boolean
     firstName?: boolean
     lastName?: boolean
+    gender?: boolean
     email?: boolean
     phone?: boolean
     age?: boolean
@@ -4998,6 +5131,9 @@ export namespace Prisma {
     giftCode?: boolean
     observation?: boolean
     contact?: boolean
+    registrationDate?: boolean
+    firstContactId?: boolean
+    secondContactId?: boolean
     action?: boolean
     status?: boolean
     createdAt?: boolean
@@ -5007,8 +5143,10 @@ export namespace Prisma {
   export type CandidateSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     candidateCode?: boolean
+    membershipNumber?: boolean
     firstName?: boolean
     lastName?: boolean
+    gender?: boolean
     email?: boolean
     phone?: boolean
     age?: boolean
@@ -5016,6 +5154,9 @@ export namespace Prisma {
     giftCode?: boolean
     observation?: boolean
     contact?: boolean
+    registrationDate?: boolean
+    firstContactId?: boolean
+    secondContactId?: boolean
     action?: boolean
     status?: boolean
     createdAt?: boolean
@@ -5025,8 +5166,10 @@ export namespace Prisma {
   export type CandidateSelectScalar = {
     id?: boolean
     candidateCode?: boolean
+    membershipNumber?: boolean
     firstName?: boolean
     lastName?: boolean
+    gender?: boolean
     email?: boolean
     phone?: boolean
     age?: boolean
@@ -5034,13 +5177,16 @@ export namespace Prisma {
     giftCode?: boolean
     observation?: boolean
     contact?: boolean
+    registrationDate?: boolean
+    firstContactId?: boolean
+    secondContactId?: boolean
     action?: boolean
     status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type CandidateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "candidateCode" | "firstName" | "lastName" | "email" | "phone" | "age" | "occupation" | "giftCode" | "observation" | "contact" | "action" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["candidate"]>
+  export type CandidateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "candidateCode" | "membershipNumber" | "firstName" | "lastName" | "gender" | "email" | "phone" | "age" | "occupation" | "giftCode" | "observation" | "contact" | "registrationDate" | "firstContactId" | "secondContactId" | "action" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["candidate"]>
   export type CandidateInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     inscriptions?: boolean | Candidate$inscriptionsArgs<ExtArgs>
     inscriptionCandidates?: boolean | Candidate$inscriptionCandidatesArgs<ExtArgs>
@@ -5064,8 +5210,10 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       candidateCode: string
+      membershipNumber: string | null
       firstName: string
       lastName: string
+      gender: string | null
       email: string | null
       phone: string | null
       age: number
@@ -5073,6 +5221,9 @@ export namespace Prisma {
       giftCode: string | null
       observation: $Enums.Observation
       contact: string[]
+      registrationDate: Date | null
+      firstContactId: string | null
+      secondContactId: string | null
       action: string | null
       status: $Enums.CandidateStatus
       createdAt: Date
@@ -5507,8 +5658,10 @@ export namespace Prisma {
   interface CandidateFieldRefs {
     readonly id: FieldRef<"Candidate", 'String'>
     readonly candidateCode: FieldRef<"Candidate", 'String'>
+    readonly membershipNumber: FieldRef<"Candidate", 'String'>
     readonly firstName: FieldRef<"Candidate", 'String'>
     readonly lastName: FieldRef<"Candidate", 'String'>
+    readonly gender: FieldRef<"Candidate", 'String'>
     readonly email: FieldRef<"Candidate", 'String'>
     readonly phone: FieldRef<"Candidate", 'String'>
     readonly age: FieldRef<"Candidate", 'Int'>
@@ -5516,6 +5669,9 @@ export namespace Prisma {
     readonly giftCode: FieldRef<"Candidate", 'String'>
     readonly observation: FieldRef<"Candidate", 'Observation'>
     readonly contact: FieldRef<"Candidate", 'String[]'>
+    readonly registrationDate: FieldRef<"Candidate", 'DateTime'>
+    readonly firstContactId: FieldRef<"Candidate", 'String'>
+    readonly secondContactId: FieldRef<"Candidate", 'String'>
     readonly action: FieldRef<"Candidate", 'String'>
     readonly status: FieldRef<"Candidate", 'CandidateStatus'>
     readonly createdAt: FieldRef<"Candidate", 'DateTime'>
@@ -19897,14 +20053,21 @@ export namespace Prisma {
 
   export const ProspectScalarFieldEnum: {
     id: 'id',
+    membershipNumber: 'membershipNumber',
     firstName: 'firstName',
     lastName: 'lastName',
+    gender: 'gender',
     age: 'age',
     occupation: 'occupation',
+    phone: 'phone',
+    email: 'email',
+    registrationDate: 'registrationDate',
     giftCode: 'giftCode',
     observation: 'observation',
     contact: 'contact',
     action: 'action',
+    firstContactId: 'firstContactId',
+    secondContactId: 'secondContactId',
     status: 'status',
     freeSessionsCompleted: 'freeSessionsCompleted',
     absences: 'absences',
@@ -19918,8 +20081,10 @@ export namespace Prisma {
   export const CandidateScalarFieldEnum: {
     id: 'id',
     candidateCode: 'candidateCode',
+    membershipNumber: 'membershipNumber',
     firstName: 'firstName',
     lastName: 'lastName',
+    gender: 'gender',
     email: 'email',
     phone: 'phone',
     age: 'age',
@@ -19927,6 +20092,9 @@ export namespace Prisma {
     giftCode: 'giftCode',
     observation: 'observation',
     contact: 'contact',
+    registrationDate: 'registrationDate',
+    firstContactId: 'firstContactId',
+    secondContactId: 'secondContactId',
     action: 'action',
     status: 'status',
     createdAt: 'createdAt',
@@ -20419,14 +20587,21 @@ export namespace Prisma {
     OR?: ProspectWhereInput[]
     NOT?: ProspectWhereInput | ProspectWhereInput[]
     id?: StringFilter<"Prospect"> | string
+    membershipNumber?: StringNullableFilter<"Prospect"> | string | null
     firstName?: StringFilter<"Prospect"> | string
     lastName?: StringFilter<"Prospect"> | string
+    gender?: StringNullableFilter<"Prospect"> | string | null
     age?: IntFilter<"Prospect"> | number
     occupation?: EnumOccupationFilter<"Prospect"> | $Enums.Occupation
+    phone?: StringNullableFilter<"Prospect"> | string | null
+    email?: StringNullableFilter<"Prospect"> | string | null
+    registrationDate?: DateTimeNullableFilter<"Prospect"> | Date | string | null
     giftCode?: StringNullableFilter<"Prospect"> | string | null
     observation?: EnumObservationFilter<"Prospect"> | $Enums.Observation
     contact?: StringNullableListFilter<"Prospect">
     action?: StringNullableFilter<"Prospect"> | string | null
+    firstContactId?: StringNullableFilter<"Prospect"> | string | null
+    secondContactId?: StringNullableFilter<"Prospect"> | string | null
     status?: StringFilter<"Prospect"> | string
     freeSessionsCompleted?: IntFilter<"Prospect"> | number
     absences?: IntFilter<"Prospect"> | number
@@ -20436,14 +20611,21 @@ export namespace Prisma {
 
   export type ProspectOrderByWithRelationInput = {
     id?: SortOrder
+    membershipNumber?: SortOrderInput | SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
+    gender?: SortOrderInput | SortOrder
     age?: SortOrder
     occupation?: SortOrder
+    phone?: SortOrderInput | SortOrder
+    email?: SortOrderInput | SortOrder
+    registrationDate?: SortOrderInput | SortOrder
     giftCode?: SortOrderInput | SortOrder
     observation?: SortOrder
     contact?: SortOrder
     action?: SortOrderInput | SortOrder
+    firstContactId?: SortOrderInput | SortOrder
+    secondContactId?: SortOrderInput | SortOrder
     status?: SortOrder
     freeSessionsCompleted?: SortOrder
     absences?: SortOrder
@@ -20456,14 +20638,21 @@ export namespace Prisma {
     AND?: ProspectWhereInput | ProspectWhereInput[]
     OR?: ProspectWhereInput[]
     NOT?: ProspectWhereInput | ProspectWhereInput[]
+    membershipNumber?: StringNullableFilter<"Prospect"> | string | null
     firstName?: StringFilter<"Prospect"> | string
     lastName?: StringFilter<"Prospect"> | string
+    gender?: StringNullableFilter<"Prospect"> | string | null
     age?: IntFilter<"Prospect"> | number
     occupation?: EnumOccupationFilter<"Prospect"> | $Enums.Occupation
+    phone?: StringNullableFilter<"Prospect"> | string | null
+    email?: StringNullableFilter<"Prospect"> | string | null
+    registrationDate?: DateTimeNullableFilter<"Prospect"> | Date | string | null
     giftCode?: StringNullableFilter<"Prospect"> | string | null
     observation?: EnumObservationFilter<"Prospect"> | $Enums.Observation
     contact?: StringNullableListFilter<"Prospect">
     action?: StringNullableFilter<"Prospect"> | string | null
+    firstContactId?: StringNullableFilter<"Prospect"> | string | null
+    secondContactId?: StringNullableFilter<"Prospect"> | string | null
     status?: StringFilter<"Prospect"> | string
     freeSessionsCompleted?: IntFilter<"Prospect"> | number
     absences?: IntFilter<"Prospect"> | number
@@ -20473,14 +20662,21 @@ export namespace Prisma {
 
   export type ProspectOrderByWithAggregationInput = {
     id?: SortOrder
+    membershipNumber?: SortOrderInput | SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
+    gender?: SortOrderInput | SortOrder
     age?: SortOrder
     occupation?: SortOrder
+    phone?: SortOrderInput | SortOrder
+    email?: SortOrderInput | SortOrder
+    registrationDate?: SortOrderInput | SortOrder
     giftCode?: SortOrderInput | SortOrder
     observation?: SortOrder
     contact?: SortOrder
     action?: SortOrderInput | SortOrder
+    firstContactId?: SortOrderInput | SortOrder
+    secondContactId?: SortOrderInput | SortOrder
     status?: SortOrder
     freeSessionsCompleted?: SortOrder
     absences?: SortOrder
@@ -20498,14 +20694,21 @@ export namespace Prisma {
     OR?: ProspectScalarWhereWithAggregatesInput[]
     NOT?: ProspectScalarWhereWithAggregatesInput | ProspectScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Prospect"> | string
+    membershipNumber?: StringNullableWithAggregatesFilter<"Prospect"> | string | null
     firstName?: StringWithAggregatesFilter<"Prospect"> | string
     lastName?: StringWithAggregatesFilter<"Prospect"> | string
+    gender?: StringNullableWithAggregatesFilter<"Prospect"> | string | null
     age?: IntWithAggregatesFilter<"Prospect"> | number
     occupation?: EnumOccupationWithAggregatesFilter<"Prospect"> | $Enums.Occupation
+    phone?: StringNullableWithAggregatesFilter<"Prospect"> | string | null
+    email?: StringNullableWithAggregatesFilter<"Prospect"> | string | null
+    registrationDate?: DateTimeNullableWithAggregatesFilter<"Prospect"> | Date | string | null
     giftCode?: StringNullableWithAggregatesFilter<"Prospect"> | string | null
     observation?: EnumObservationWithAggregatesFilter<"Prospect"> | $Enums.Observation
     contact?: StringNullableListFilter<"Prospect">
     action?: StringNullableWithAggregatesFilter<"Prospect"> | string | null
+    firstContactId?: StringNullableWithAggregatesFilter<"Prospect"> | string | null
+    secondContactId?: StringNullableWithAggregatesFilter<"Prospect"> | string | null
     status?: StringWithAggregatesFilter<"Prospect"> | string
     freeSessionsCompleted?: IntWithAggregatesFilter<"Prospect"> | number
     absences?: IntWithAggregatesFilter<"Prospect"> | number
@@ -20519,8 +20722,10 @@ export namespace Prisma {
     NOT?: CandidateWhereInput | CandidateWhereInput[]
     id?: StringFilter<"Candidate"> | string
     candidateCode?: StringFilter<"Candidate"> | string
+    membershipNumber?: StringNullableFilter<"Candidate"> | string | null
     firstName?: StringFilter<"Candidate"> | string
     lastName?: StringFilter<"Candidate"> | string
+    gender?: StringNullableFilter<"Candidate"> | string | null
     email?: StringNullableFilter<"Candidate"> | string | null
     phone?: StringNullableFilter<"Candidate"> | string | null
     age?: IntFilter<"Candidate"> | number
@@ -20528,6 +20733,9 @@ export namespace Prisma {
     giftCode?: StringNullableFilter<"Candidate"> | string | null
     observation?: EnumObservationFilter<"Candidate"> | $Enums.Observation
     contact?: StringNullableListFilter<"Candidate">
+    registrationDate?: DateTimeNullableFilter<"Candidate"> | Date | string | null
+    firstContactId?: StringNullableFilter<"Candidate"> | string | null
+    secondContactId?: StringNullableFilter<"Candidate"> | string | null
     action?: StringNullableFilter<"Candidate"> | string | null
     status?: EnumCandidateStatusFilter<"Candidate"> | $Enums.CandidateStatus
     createdAt?: DateTimeFilter<"Candidate"> | Date | string
@@ -20542,8 +20750,10 @@ export namespace Prisma {
   export type CandidateOrderByWithRelationInput = {
     id?: SortOrder
     candidateCode?: SortOrder
+    membershipNumber?: SortOrderInput | SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
+    gender?: SortOrderInput | SortOrder
     email?: SortOrderInput | SortOrder
     phone?: SortOrderInput | SortOrder
     age?: SortOrder
@@ -20551,6 +20761,9 @@ export namespace Prisma {
     giftCode?: SortOrderInput | SortOrder
     observation?: SortOrder
     contact?: SortOrder
+    registrationDate?: SortOrderInput | SortOrder
+    firstContactId?: SortOrderInput | SortOrder
+    secondContactId?: SortOrderInput | SortOrder
     action?: SortOrderInput | SortOrder
     status?: SortOrder
     createdAt?: SortOrder
@@ -20569,14 +20782,19 @@ export namespace Prisma {
     AND?: CandidateWhereInput | CandidateWhereInput[]
     OR?: CandidateWhereInput[]
     NOT?: CandidateWhereInput | CandidateWhereInput[]
+    membershipNumber?: StringNullableFilter<"Candidate"> | string | null
     firstName?: StringFilter<"Candidate"> | string
     lastName?: StringFilter<"Candidate"> | string
+    gender?: StringNullableFilter<"Candidate"> | string | null
     phone?: StringNullableFilter<"Candidate"> | string | null
     age?: IntFilter<"Candidate"> | number
     occupation?: EnumOccupationFilter<"Candidate"> | $Enums.Occupation
     giftCode?: StringNullableFilter<"Candidate"> | string | null
     observation?: EnumObservationFilter<"Candidate"> | $Enums.Observation
     contact?: StringNullableListFilter<"Candidate">
+    registrationDate?: DateTimeNullableFilter<"Candidate"> | Date | string | null
+    firstContactId?: StringNullableFilter<"Candidate"> | string | null
+    secondContactId?: StringNullableFilter<"Candidate"> | string | null
     action?: StringNullableFilter<"Candidate"> | string | null
     status?: EnumCandidateStatusFilter<"Candidate"> | $Enums.CandidateStatus
     createdAt?: DateTimeFilter<"Candidate"> | Date | string
@@ -20591,8 +20809,10 @@ export namespace Prisma {
   export type CandidateOrderByWithAggregationInput = {
     id?: SortOrder
     candidateCode?: SortOrder
+    membershipNumber?: SortOrderInput | SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
+    gender?: SortOrderInput | SortOrder
     email?: SortOrderInput | SortOrder
     phone?: SortOrderInput | SortOrder
     age?: SortOrder
@@ -20600,6 +20820,9 @@ export namespace Prisma {
     giftCode?: SortOrderInput | SortOrder
     observation?: SortOrder
     contact?: SortOrder
+    registrationDate?: SortOrderInput | SortOrder
+    firstContactId?: SortOrderInput | SortOrder
+    secondContactId?: SortOrderInput | SortOrder
     action?: SortOrderInput | SortOrder
     status?: SortOrder
     createdAt?: SortOrder
@@ -20617,8 +20840,10 @@ export namespace Prisma {
     NOT?: CandidateScalarWhereWithAggregatesInput | CandidateScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Candidate"> | string
     candidateCode?: StringWithAggregatesFilter<"Candidate"> | string
+    membershipNumber?: StringNullableWithAggregatesFilter<"Candidate"> | string | null
     firstName?: StringWithAggregatesFilter<"Candidate"> | string
     lastName?: StringWithAggregatesFilter<"Candidate"> | string
+    gender?: StringNullableWithAggregatesFilter<"Candidate"> | string | null
     email?: StringNullableWithAggregatesFilter<"Candidate"> | string | null
     phone?: StringNullableWithAggregatesFilter<"Candidate"> | string | null
     age?: IntWithAggregatesFilter<"Candidate"> | number
@@ -20626,6 +20851,9 @@ export namespace Prisma {
     giftCode?: StringNullableWithAggregatesFilter<"Candidate"> | string | null
     observation?: EnumObservationWithAggregatesFilter<"Candidate"> | $Enums.Observation
     contact?: StringNullableListFilter<"Candidate">
+    registrationDate?: DateTimeNullableWithAggregatesFilter<"Candidate"> | Date | string | null
+    firstContactId?: StringNullableWithAggregatesFilter<"Candidate"> | string | null
+    secondContactId?: StringNullableWithAggregatesFilter<"Candidate"> | string | null
     action?: StringNullableWithAggregatesFilter<"Candidate"> | string | null
     status?: EnumCandidateStatusWithAggregatesFilter<"Candidate"> | $Enums.CandidateStatus
     createdAt?: DateTimeWithAggregatesFilter<"Candidate"> | Date | string
@@ -21642,14 +21870,21 @@ export namespace Prisma {
 
   export type ProspectCreateInput = {
     id?: string
+    membershipNumber?: string | null
     firstName: string
     lastName: string
+    gender?: string | null
     age: number
     occupation: $Enums.Occupation
+    phone?: string | null
+    email?: string | null
+    registrationDate?: Date | string | null
     giftCode?: string | null
     observation: $Enums.Observation
     contact?: ProspectCreatecontactInput | string[]
     action?: string | null
+    firstContactId?: string | null
+    secondContactId?: string | null
     status?: string
     freeSessionsCompleted?: number
     absences?: number
@@ -21659,14 +21894,21 @@ export namespace Prisma {
 
   export type ProspectUncheckedCreateInput = {
     id?: string
+    membershipNumber?: string | null
     firstName: string
     lastName: string
+    gender?: string | null
     age: number
     occupation: $Enums.Occupation
+    phone?: string | null
+    email?: string | null
+    registrationDate?: Date | string | null
     giftCode?: string | null
     observation: $Enums.Observation
     contact?: ProspectCreatecontactInput | string[]
     action?: string | null
+    firstContactId?: string | null
+    secondContactId?: string | null
     status?: string
     freeSessionsCompleted?: number
     absences?: number
@@ -21676,14 +21918,21 @@ export namespace Prisma {
 
   export type ProspectUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    membershipNumber?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     age?: IntFieldUpdateOperationsInput | number
     occupation?: EnumOccupationFieldUpdateOperationsInput | $Enums.Occupation
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     giftCode?: NullableStringFieldUpdateOperationsInput | string | null
     observation?: EnumObservationFieldUpdateOperationsInput | $Enums.Observation
     contact?: ProspectUpdatecontactInput | string[]
     action?: NullableStringFieldUpdateOperationsInput | string | null
+    firstContactId?: NullableStringFieldUpdateOperationsInput | string | null
+    secondContactId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     freeSessionsCompleted?: IntFieldUpdateOperationsInput | number
     absences?: IntFieldUpdateOperationsInput | number
@@ -21693,14 +21942,21 @@ export namespace Prisma {
 
   export type ProspectUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    membershipNumber?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     age?: IntFieldUpdateOperationsInput | number
     occupation?: EnumOccupationFieldUpdateOperationsInput | $Enums.Occupation
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     giftCode?: NullableStringFieldUpdateOperationsInput | string | null
     observation?: EnumObservationFieldUpdateOperationsInput | $Enums.Observation
     contact?: ProspectUpdatecontactInput | string[]
     action?: NullableStringFieldUpdateOperationsInput | string | null
+    firstContactId?: NullableStringFieldUpdateOperationsInput | string | null
+    secondContactId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     freeSessionsCompleted?: IntFieldUpdateOperationsInput | number
     absences?: IntFieldUpdateOperationsInput | number
@@ -21710,14 +21966,21 @@ export namespace Prisma {
 
   export type ProspectCreateManyInput = {
     id?: string
+    membershipNumber?: string | null
     firstName: string
     lastName: string
+    gender?: string | null
     age: number
     occupation: $Enums.Occupation
+    phone?: string | null
+    email?: string | null
+    registrationDate?: Date | string | null
     giftCode?: string | null
     observation: $Enums.Observation
     contact?: ProspectCreatecontactInput | string[]
     action?: string | null
+    firstContactId?: string | null
+    secondContactId?: string | null
     status?: string
     freeSessionsCompleted?: number
     absences?: number
@@ -21727,14 +21990,21 @@ export namespace Prisma {
 
   export type ProspectUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    membershipNumber?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     age?: IntFieldUpdateOperationsInput | number
     occupation?: EnumOccupationFieldUpdateOperationsInput | $Enums.Occupation
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     giftCode?: NullableStringFieldUpdateOperationsInput | string | null
     observation?: EnumObservationFieldUpdateOperationsInput | $Enums.Observation
     contact?: ProspectUpdatecontactInput | string[]
     action?: NullableStringFieldUpdateOperationsInput | string | null
+    firstContactId?: NullableStringFieldUpdateOperationsInput | string | null
+    secondContactId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     freeSessionsCompleted?: IntFieldUpdateOperationsInput | number
     absences?: IntFieldUpdateOperationsInput | number
@@ -21744,14 +22014,21 @@ export namespace Prisma {
 
   export type ProspectUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    membershipNumber?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     age?: IntFieldUpdateOperationsInput | number
     occupation?: EnumOccupationFieldUpdateOperationsInput | $Enums.Occupation
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     giftCode?: NullableStringFieldUpdateOperationsInput | string | null
     observation?: EnumObservationFieldUpdateOperationsInput | $Enums.Observation
     contact?: ProspectUpdatecontactInput | string[]
     action?: NullableStringFieldUpdateOperationsInput | string | null
+    firstContactId?: NullableStringFieldUpdateOperationsInput | string | null
+    secondContactId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     freeSessionsCompleted?: IntFieldUpdateOperationsInput | number
     absences?: IntFieldUpdateOperationsInput | number
@@ -21762,8 +22039,10 @@ export namespace Prisma {
   export type CandidateCreateInput = {
     id?: string
     candidateCode: string
+    membershipNumber?: string | null
     firstName: string
     lastName: string
+    gender?: string | null
     email?: string | null
     phone?: string | null
     age: number
@@ -21771,6 +22050,9 @@ export namespace Prisma {
     giftCode?: string | null
     observation: $Enums.Observation
     contact?: CandidateCreatecontactInput | string[]
+    registrationDate?: Date | string | null
+    firstContactId?: string | null
+    secondContactId?: string | null
     action?: string | null
     status?: $Enums.CandidateStatus
     createdAt?: Date | string
@@ -21785,8 +22067,10 @@ export namespace Prisma {
   export type CandidateUncheckedCreateInput = {
     id?: string
     candidateCode: string
+    membershipNumber?: string | null
     firstName: string
     lastName: string
+    gender?: string | null
     email?: string | null
     phone?: string | null
     age: number
@@ -21794,6 +22078,9 @@ export namespace Prisma {
     giftCode?: string | null
     observation: $Enums.Observation
     contact?: CandidateCreatecontactInput | string[]
+    registrationDate?: Date | string | null
+    firstContactId?: string | null
+    secondContactId?: string | null
     action?: string | null
     status?: $Enums.CandidateStatus
     createdAt?: Date | string
@@ -21808,8 +22095,10 @@ export namespace Prisma {
   export type CandidateUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     candidateCode?: StringFieldUpdateOperationsInput | string
+    membershipNumber?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     age?: IntFieldUpdateOperationsInput | number
@@ -21817,6 +22106,9 @@ export namespace Prisma {
     giftCode?: NullableStringFieldUpdateOperationsInput | string | null
     observation?: EnumObservationFieldUpdateOperationsInput | $Enums.Observation
     contact?: CandidateUpdatecontactInput | string[]
+    registrationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    firstContactId?: NullableStringFieldUpdateOperationsInput | string | null
+    secondContactId?: NullableStringFieldUpdateOperationsInput | string | null
     action?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCandidateStatusFieldUpdateOperationsInput | $Enums.CandidateStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -21831,8 +22123,10 @@ export namespace Prisma {
   export type CandidateUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     candidateCode?: StringFieldUpdateOperationsInput | string
+    membershipNumber?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     age?: IntFieldUpdateOperationsInput | number
@@ -21840,6 +22134,9 @@ export namespace Prisma {
     giftCode?: NullableStringFieldUpdateOperationsInput | string | null
     observation?: EnumObservationFieldUpdateOperationsInput | $Enums.Observation
     contact?: CandidateUpdatecontactInput | string[]
+    registrationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    firstContactId?: NullableStringFieldUpdateOperationsInput | string | null
+    secondContactId?: NullableStringFieldUpdateOperationsInput | string | null
     action?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCandidateStatusFieldUpdateOperationsInput | $Enums.CandidateStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -21854,8 +22151,10 @@ export namespace Prisma {
   export type CandidateCreateManyInput = {
     id?: string
     candidateCode: string
+    membershipNumber?: string | null
     firstName: string
     lastName: string
+    gender?: string | null
     email?: string | null
     phone?: string | null
     age: number
@@ -21863,6 +22162,9 @@ export namespace Prisma {
     giftCode?: string | null
     observation: $Enums.Observation
     contact?: CandidateCreatecontactInput | string[]
+    registrationDate?: Date | string | null
+    firstContactId?: string | null
+    secondContactId?: string | null
     action?: string | null
     status?: $Enums.CandidateStatus
     createdAt?: Date | string
@@ -21872,8 +22174,10 @@ export namespace Prisma {
   export type CandidateUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     candidateCode?: StringFieldUpdateOperationsInput | string
+    membershipNumber?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     age?: IntFieldUpdateOperationsInput | number
@@ -21881,6 +22185,9 @@ export namespace Prisma {
     giftCode?: NullableStringFieldUpdateOperationsInput | string | null
     observation?: EnumObservationFieldUpdateOperationsInput | $Enums.Observation
     contact?: CandidateUpdatecontactInput | string[]
+    registrationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    firstContactId?: NullableStringFieldUpdateOperationsInput | string | null
+    secondContactId?: NullableStringFieldUpdateOperationsInput | string | null
     action?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCandidateStatusFieldUpdateOperationsInput | $Enums.CandidateStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -21890,8 +22197,10 @@ export namespace Prisma {
   export type CandidateUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     candidateCode?: StringFieldUpdateOperationsInput | string
+    membershipNumber?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     age?: IntFieldUpdateOperationsInput | number
@@ -21899,6 +22208,9 @@ export namespace Prisma {
     giftCode?: NullableStringFieldUpdateOperationsInput | string | null
     observation?: EnumObservationFieldUpdateOperationsInput | $Enums.Observation
     contact?: CandidateUpdatecontactInput | string[]
+    registrationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    firstContactId?: NullableStringFieldUpdateOperationsInput | string | null
+    secondContactId?: NullableStringFieldUpdateOperationsInput | string | null
     action?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCandidateStatusFieldUpdateOperationsInput | $Enums.CandidateStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -23022,6 +23334,21 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -23040,19 +23367,15 @@ export namespace Prisma {
     not?: NestedEnumOccupationFilter<$PrismaModel> | $Enums.Occupation
   }
 
-  export type StringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
   export type EnumObservationFilter<$PrismaModel = never> = {
@@ -23077,14 +23400,21 @@ export namespace Prisma {
 
   export type ProspectCountOrderByAggregateInput = {
     id?: SortOrder
+    membershipNumber?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
+    gender?: SortOrder
     age?: SortOrder
     occupation?: SortOrder
+    phone?: SortOrder
+    email?: SortOrder
+    registrationDate?: SortOrder
     giftCode?: SortOrder
     observation?: SortOrder
     contact?: SortOrder
     action?: SortOrder
+    firstContactId?: SortOrder
+    secondContactId?: SortOrder
     status?: SortOrder
     freeSessionsCompleted?: SortOrder
     absences?: SortOrder
@@ -23100,13 +23430,20 @@ export namespace Prisma {
 
   export type ProspectMaxOrderByAggregateInput = {
     id?: SortOrder
+    membershipNumber?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
+    gender?: SortOrder
     age?: SortOrder
     occupation?: SortOrder
+    phone?: SortOrder
+    email?: SortOrder
+    registrationDate?: SortOrder
     giftCode?: SortOrder
     observation?: SortOrder
     action?: SortOrder
+    firstContactId?: SortOrder
+    secondContactId?: SortOrder
     status?: SortOrder
     freeSessionsCompleted?: SortOrder
     absences?: SortOrder
@@ -23116,13 +23453,20 @@ export namespace Prisma {
 
   export type ProspectMinOrderByAggregateInput = {
     id?: SortOrder
+    membershipNumber?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
+    gender?: SortOrder
     age?: SortOrder
     occupation?: SortOrder
+    phone?: SortOrder
+    email?: SortOrder
+    registrationDate?: SortOrder
     giftCode?: SortOrder
     observation?: SortOrder
     action?: SortOrder
+    firstContactId?: SortOrder
+    secondContactId?: SortOrder
     status?: SortOrder
     freeSessionsCompleted?: SortOrder
     absences?: SortOrder
@@ -23134,6 +23478,24 @@ export namespace Prisma {
     age?: SortOrder
     freeSessionsCompleted?: SortOrder
     absences?: SortOrder
+  }
+
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type IntWithAggregatesFilter<$PrismaModel = never> = {
@@ -23162,22 +23524,18 @@ export namespace Prisma {
     _max?: NestedEnumOccupationFilter<$PrismaModel>
   }
 
-  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
     _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type EnumObservationWithAggregatesFilter<$PrismaModel = never> = {
@@ -23250,8 +23608,10 @@ export namespace Prisma {
   export type CandidateCountOrderByAggregateInput = {
     id?: SortOrder
     candidateCode?: SortOrder
+    membershipNumber?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
+    gender?: SortOrder
     email?: SortOrder
     phone?: SortOrder
     age?: SortOrder
@@ -23259,6 +23619,9 @@ export namespace Prisma {
     giftCode?: SortOrder
     observation?: SortOrder
     contact?: SortOrder
+    registrationDate?: SortOrder
+    firstContactId?: SortOrder
+    secondContactId?: SortOrder
     action?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
@@ -23272,14 +23635,19 @@ export namespace Prisma {
   export type CandidateMaxOrderByAggregateInput = {
     id?: SortOrder
     candidateCode?: SortOrder
+    membershipNumber?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
+    gender?: SortOrder
     email?: SortOrder
     phone?: SortOrder
     age?: SortOrder
     occupation?: SortOrder
     giftCode?: SortOrder
     observation?: SortOrder
+    registrationDate?: SortOrder
+    firstContactId?: SortOrder
+    secondContactId?: SortOrder
     action?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
@@ -23289,14 +23657,19 @@ export namespace Prisma {
   export type CandidateMinOrderByAggregateInput = {
     id?: SortOrder
     candidateCode?: SortOrder
+    membershipNumber?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
+    gender?: SortOrder
     email?: SortOrder
     phone?: SortOrder
     age?: SortOrder
     occupation?: SortOrder
     giftCode?: SortOrder
     observation?: SortOrder
+    registrationDate?: SortOrder
+    firstContactId?: SortOrder
+    secondContactId?: SortOrder
     action?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
@@ -24071,17 +24444,6 @@ export namespace Prisma {
     _max?: NestedEnumAttendanceStatusFilter<$PrismaModel>
   }
 
-  export type DateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
   export type CancelRequestCountOrderByAggregateInput = {
     id?: SortOrder
     reservationId?: SortOrder
@@ -24115,20 +24477,6 @@ export namespace Prisma {
     processedBy?: SortOrder
   }
 
-  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
-  }
-
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -24145,6 +24493,10 @@ export namespace Prisma {
     set: string[]
   }
 
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
+  }
+
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -24157,8 +24509,8 @@ export namespace Prisma {
     set?: $Enums.Occupation
   }
 
-  export type NullableStringFieldUpdateOperationsInput = {
-    set?: string | null
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
   }
 
   export type EnumObservationFieldUpdateOperationsInput = {
@@ -25171,10 +25523,6 @@ export namespace Prisma {
     connect?: ProfessorWhereUniqueInput
   }
 
-  export type NullableDateTimeFieldUpdateOperationsInput = {
-    set?: Date | string | null
-  }
-
   export type ReservationUpdateOneRequiredWithoutCancelRequestsNestedInput = {
     create?: XOR<ReservationCreateWithoutCancelRequestsInput, ReservationUncheckedCreateWithoutCancelRequestsInput>
     connectOrCreate?: ReservationCreateOrConnectWithoutCancelRequestsInput
@@ -25275,13 +25623,6 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type NestedEnumOccupationFilter<$PrismaModel = never> = {
-    equals?: $Enums.Occupation | EnumOccupationFieldRefInput<$PrismaModel>
-    in?: $Enums.Occupation[] | ListEnumOccupationFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Occupation[] | ListEnumOccupationFieldRefInput<$PrismaModel>
-    not?: NestedEnumOccupationFilter<$PrismaModel> | $Enums.Occupation
-  }
-
   export type NestedStringNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -25296,11 +25637,57 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
+  export type NestedEnumOccupationFilter<$PrismaModel = never> = {
+    equals?: $Enums.Occupation | EnumOccupationFieldRefInput<$PrismaModel>
+    in?: $Enums.Occupation[] | ListEnumOccupationFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Occupation[] | ListEnumOccupationFieldRefInput<$PrismaModel>
+    not?: NestedEnumOccupationFilter<$PrismaModel> | $Enums.Occupation
+  }
+
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
   export type NestedEnumObservationFilter<$PrismaModel = never> = {
     equals?: $Enums.Observation | EnumObservationFieldRefInput<$PrismaModel>
     in?: $Enums.Observation[] | ListEnumObservationFieldRefInput<$PrismaModel>
     notIn?: $Enums.Observation[] | ListEnumObservationFieldRefInput<$PrismaModel>
     not?: NestedEnumObservationFilter<$PrismaModel> | $Enums.Observation
+  }
+
+  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
@@ -25340,32 +25727,18 @@ export namespace Prisma {
     _max?: NestedEnumOccupationFilter<$PrismaModel>
   }
 
-  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
     _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
-  }
-
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumObservationWithAggregatesFilter<$PrismaModel = never> = {
@@ -25594,31 +25967,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumAttendanceStatusFilter<$PrismaModel>
     _max?: NestedEnumAttendanceStatusFilter<$PrismaModel>
-  }
-
-  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
-  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type InscriptionCreateWithoutCandidateInput = {
@@ -26352,8 +26700,10 @@ export namespace Prisma {
   export type CandidateCreateWithoutInscriptionsInput = {
     id?: string
     candidateCode: string
+    membershipNumber?: string | null
     firstName: string
     lastName: string
+    gender?: string | null
     email?: string | null
     phone?: string | null
     age: number
@@ -26361,6 +26711,9 @@ export namespace Prisma {
     giftCode?: string | null
     observation: $Enums.Observation
     contact?: CandidateCreatecontactInput | string[]
+    registrationDate?: Date | string | null
+    firstContactId?: string | null
+    secondContactId?: string | null
     action?: string | null
     status?: $Enums.CandidateStatus
     createdAt?: Date | string
@@ -26374,8 +26727,10 @@ export namespace Prisma {
   export type CandidateUncheckedCreateWithoutInscriptionsInput = {
     id?: string
     candidateCode: string
+    membershipNumber?: string | null
     firstName: string
     lastName: string
+    gender?: string | null
     email?: string | null
     phone?: string | null
     age: number
@@ -26383,6 +26738,9 @@ export namespace Prisma {
     giftCode?: string | null
     observation: $Enums.Observation
     contact?: CandidateCreatecontactInput | string[]
+    registrationDate?: Date | string | null
+    firstContactId?: string | null
+    secondContactId?: string | null
     action?: string | null
     status?: $Enums.CandidateStatus
     createdAt?: Date | string
@@ -26567,8 +26925,10 @@ export namespace Prisma {
   export type CandidateUpdateWithoutInscriptionsInput = {
     id?: StringFieldUpdateOperationsInput | string
     candidateCode?: StringFieldUpdateOperationsInput | string
+    membershipNumber?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     age?: IntFieldUpdateOperationsInput | number
@@ -26576,6 +26936,9 @@ export namespace Prisma {
     giftCode?: NullableStringFieldUpdateOperationsInput | string | null
     observation?: EnumObservationFieldUpdateOperationsInput | $Enums.Observation
     contact?: CandidateUpdatecontactInput | string[]
+    registrationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    firstContactId?: NullableStringFieldUpdateOperationsInput | string | null
+    secondContactId?: NullableStringFieldUpdateOperationsInput | string | null
     action?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCandidateStatusFieldUpdateOperationsInput | $Enums.CandidateStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -26589,8 +26952,10 @@ export namespace Prisma {
   export type CandidateUncheckedUpdateWithoutInscriptionsInput = {
     id?: StringFieldUpdateOperationsInput | string
     candidateCode?: StringFieldUpdateOperationsInput | string
+    membershipNumber?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     age?: IntFieldUpdateOperationsInput | number
@@ -26598,6 +26963,9 @@ export namespace Prisma {
     giftCode?: NullableStringFieldUpdateOperationsInput | string | null
     observation?: EnumObservationFieldUpdateOperationsInput | $Enums.Observation
     contact?: CandidateUpdatecontactInput | string[]
+    registrationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    firstContactId?: NullableStringFieldUpdateOperationsInput | string | null
+    secondContactId?: NullableStringFieldUpdateOperationsInput | string | null
     action?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCandidateStatusFieldUpdateOperationsInput | $Enums.CandidateStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -26889,8 +27257,10 @@ export namespace Prisma {
   export type CandidateCreateWithoutInscriptionCandidatesInput = {
     id?: string
     candidateCode: string
+    membershipNumber?: string | null
     firstName: string
     lastName: string
+    gender?: string | null
     email?: string | null
     phone?: string | null
     age: number
@@ -26898,6 +27268,9 @@ export namespace Prisma {
     giftCode?: string | null
     observation: $Enums.Observation
     contact?: CandidateCreatecontactInput | string[]
+    registrationDate?: Date | string | null
+    firstContactId?: string | null
+    secondContactId?: string | null
     action?: string | null
     status?: $Enums.CandidateStatus
     createdAt?: Date | string
@@ -26911,8 +27284,10 @@ export namespace Prisma {
   export type CandidateUncheckedCreateWithoutInscriptionCandidatesInput = {
     id?: string
     candidateCode: string
+    membershipNumber?: string | null
     firstName: string
     lastName: string
+    gender?: string | null
     email?: string | null
     phone?: string | null
     age: number
@@ -26920,6 +27295,9 @@ export namespace Prisma {
     giftCode?: string | null
     observation: $Enums.Observation
     contact?: CandidateCreatecontactInput | string[]
+    registrationDate?: Date | string | null
+    firstContactId?: string | null
+    secondContactId?: string | null
     action?: string | null
     status?: $Enums.CandidateStatus
     createdAt?: Date | string
@@ -26998,8 +27376,10 @@ export namespace Prisma {
   export type CandidateUpdateWithoutInscriptionCandidatesInput = {
     id?: StringFieldUpdateOperationsInput | string
     candidateCode?: StringFieldUpdateOperationsInput | string
+    membershipNumber?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     age?: IntFieldUpdateOperationsInput | number
@@ -27007,6 +27387,9 @@ export namespace Prisma {
     giftCode?: NullableStringFieldUpdateOperationsInput | string | null
     observation?: EnumObservationFieldUpdateOperationsInput | $Enums.Observation
     contact?: CandidateUpdatecontactInput | string[]
+    registrationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    firstContactId?: NullableStringFieldUpdateOperationsInput | string | null
+    secondContactId?: NullableStringFieldUpdateOperationsInput | string | null
     action?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCandidateStatusFieldUpdateOperationsInput | $Enums.CandidateStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -27020,8 +27403,10 @@ export namespace Prisma {
   export type CandidateUncheckedUpdateWithoutInscriptionCandidatesInput = {
     id?: StringFieldUpdateOperationsInput | string
     candidateCode?: StringFieldUpdateOperationsInput | string
+    membershipNumber?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     age?: IntFieldUpdateOperationsInput | number
@@ -27029,6 +27414,9 @@ export namespace Prisma {
     giftCode?: NullableStringFieldUpdateOperationsInput | string | null
     observation?: EnumObservationFieldUpdateOperationsInput | $Enums.Observation
     contact?: CandidateUpdatecontactInput | string[]
+    registrationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    firstContactId?: NullableStringFieldUpdateOperationsInput | string | null
+    secondContactId?: NullableStringFieldUpdateOperationsInput | string | null
     action?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCandidateStatusFieldUpdateOperationsInput | $Enums.CandidateStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -27042,8 +27430,10 @@ export namespace Prisma {
   export type CandidateCreateWithoutPaymentsInput = {
     id?: string
     candidateCode: string
+    membershipNumber?: string | null
     firstName: string
     lastName: string
+    gender?: string | null
     email?: string | null
     phone?: string | null
     age: number
@@ -27051,6 +27441,9 @@ export namespace Prisma {
     giftCode?: string | null
     observation: $Enums.Observation
     contact?: CandidateCreatecontactInput | string[]
+    registrationDate?: Date | string | null
+    firstContactId?: string | null
+    secondContactId?: string | null
     action?: string | null
     status?: $Enums.CandidateStatus
     createdAt?: Date | string
@@ -27064,8 +27457,10 @@ export namespace Prisma {
   export type CandidateUncheckedCreateWithoutPaymentsInput = {
     id?: string
     candidateCode: string
+    membershipNumber?: string | null
     firstName: string
     lastName: string
+    gender?: string | null
     email?: string | null
     phone?: string | null
     age: number
@@ -27073,6 +27468,9 @@ export namespace Prisma {
     giftCode?: string | null
     observation: $Enums.Observation
     contact?: CandidateCreatecontactInput | string[]
+    registrationDate?: Date | string | null
+    firstContactId?: string | null
+    secondContactId?: string | null
     action?: string | null
     status?: $Enums.CandidateStatus
     createdAt?: Date | string
@@ -27139,8 +27537,10 @@ export namespace Prisma {
   export type CandidateUpdateWithoutPaymentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     candidateCode?: StringFieldUpdateOperationsInput | string
+    membershipNumber?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     age?: IntFieldUpdateOperationsInput | number
@@ -27148,6 +27548,9 @@ export namespace Prisma {
     giftCode?: NullableStringFieldUpdateOperationsInput | string | null
     observation?: EnumObservationFieldUpdateOperationsInput | $Enums.Observation
     contact?: CandidateUpdatecontactInput | string[]
+    registrationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    firstContactId?: NullableStringFieldUpdateOperationsInput | string | null
+    secondContactId?: NullableStringFieldUpdateOperationsInput | string | null
     action?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCandidateStatusFieldUpdateOperationsInput | $Enums.CandidateStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -27161,8 +27564,10 @@ export namespace Prisma {
   export type CandidateUncheckedUpdateWithoutPaymentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     candidateCode?: StringFieldUpdateOperationsInput | string
+    membershipNumber?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     age?: IntFieldUpdateOperationsInput | number
@@ -27170,6 +27575,9 @@ export namespace Prisma {
     giftCode?: NullableStringFieldUpdateOperationsInput | string | null
     observation?: EnumObservationFieldUpdateOperationsInput | $Enums.Observation
     contact?: CandidateUpdatecontactInput | string[]
+    registrationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    firstContactId?: NullableStringFieldUpdateOperationsInput | string | null
+    secondContactId?: NullableStringFieldUpdateOperationsInput | string | null
     action?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCandidateStatusFieldUpdateOperationsInput | $Enums.CandidateStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -27548,8 +27956,10 @@ export namespace Prisma {
   export type CandidateCreateWithoutPaymentPlansInput = {
     id?: string
     candidateCode: string
+    membershipNumber?: string | null
     firstName: string
     lastName: string
+    gender?: string | null
     email?: string | null
     phone?: string | null
     age: number
@@ -27557,6 +27967,9 @@ export namespace Prisma {
     giftCode?: string | null
     observation: $Enums.Observation
     contact?: CandidateCreatecontactInput | string[]
+    registrationDate?: Date | string | null
+    firstContactId?: string | null
+    secondContactId?: string | null
     action?: string | null
     status?: $Enums.CandidateStatus
     createdAt?: Date | string
@@ -27570,8 +27983,10 @@ export namespace Prisma {
   export type CandidateUncheckedCreateWithoutPaymentPlansInput = {
     id?: string
     candidateCode: string
+    membershipNumber?: string | null
     firstName: string
     lastName: string
+    gender?: string | null
     email?: string | null
     phone?: string | null
     age: number
@@ -27579,6 +27994,9 @@ export namespace Prisma {
     giftCode?: string | null
     observation: $Enums.Observation
     contact?: CandidateCreatecontactInput | string[]
+    registrationDate?: Date | string | null
+    firstContactId?: string | null
+    secondContactId?: string | null
     action?: string | null
     status?: $Enums.CandidateStatus
     createdAt?: Date | string
@@ -27645,8 +28063,10 @@ export namespace Prisma {
   export type CandidateUpdateWithoutPaymentPlansInput = {
     id?: StringFieldUpdateOperationsInput | string
     candidateCode?: StringFieldUpdateOperationsInput | string
+    membershipNumber?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     age?: IntFieldUpdateOperationsInput | number
@@ -27654,6 +28074,9 @@ export namespace Prisma {
     giftCode?: NullableStringFieldUpdateOperationsInput | string | null
     observation?: EnumObservationFieldUpdateOperationsInput | $Enums.Observation
     contact?: CandidateUpdatecontactInput | string[]
+    registrationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    firstContactId?: NullableStringFieldUpdateOperationsInput | string | null
+    secondContactId?: NullableStringFieldUpdateOperationsInput | string | null
     action?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCandidateStatusFieldUpdateOperationsInput | $Enums.CandidateStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -27667,8 +28090,10 @@ export namespace Prisma {
   export type CandidateUncheckedUpdateWithoutPaymentPlansInput = {
     id?: StringFieldUpdateOperationsInput | string
     candidateCode?: StringFieldUpdateOperationsInput | string
+    membershipNumber?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     age?: IntFieldUpdateOperationsInput | number
@@ -27676,6 +28101,9 @@ export namespace Prisma {
     giftCode?: NullableStringFieldUpdateOperationsInput | string | null
     observation?: EnumObservationFieldUpdateOperationsInput | $Enums.Observation
     contact?: CandidateUpdatecontactInput | string[]
+    registrationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    firstContactId?: NullableStringFieldUpdateOperationsInput | string | null
+    secondContactId?: NullableStringFieldUpdateOperationsInput | string | null
     action?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCandidateStatusFieldUpdateOperationsInput | $Enums.CandidateStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -27767,8 +28195,10 @@ export namespace Prisma {
   export type CandidateCreateWithoutAttendancesInput = {
     id?: string
     candidateCode: string
+    membershipNumber?: string | null
     firstName: string
     lastName: string
+    gender?: string | null
     email?: string | null
     phone?: string | null
     age: number
@@ -27776,6 +28206,9 @@ export namespace Prisma {
     giftCode?: string | null
     observation: $Enums.Observation
     contact?: CandidateCreatecontactInput | string[]
+    registrationDate?: Date | string | null
+    firstContactId?: string | null
+    secondContactId?: string | null
     action?: string | null
     status?: $Enums.CandidateStatus
     createdAt?: Date | string
@@ -27789,8 +28222,10 @@ export namespace Prisma {
   export type CandidateUncheckedCreateWithoutAttendancesInput = {
     id?: string
     candidateCode: string
+    membershipNumber?: string | null
     firstName: string
     lastName: string
+    gender?: string | null
     email?: string | null
     phone?: string | null
     age: number
@@ -27798,6 +28233,9 @@ export namespace Prisma {
     giftCode?: string | null
     observation: $Enums.Observation
     contact?: CandidateCreatecontactInput | string[]
+    registrationDate?: Date | string | null
+    firstContactId?: string | null
+    secondContactId?: string | null
     action?: string | null
     status?: $Enums.CandidateStatus
     createdAt?: Date | string
@@ -27868,8 +28306,10 @@ export namespace Prisma {
   export type CandidateUpdateWithoutAttendancesInput = {
     id?: StringFieldUpdateOperationsInput | string
     candidateCode?: StringFieldUpdateOperationsInput | string
+    membershipNumber?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     age?: IntFieldUpdateOperationsInput | number
@@ -27877,6 +28317,9 @@ export namespace Prisma {
     giftCode?: NullableStringFieldUpdateOperationsInput | string | null
     observation?: EnumObservationFieldUpdateOperationsInput | $Enums.Observation
     contact?: CandidateUpdatecontactInput | string[]
+    registrationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    firstContactId?: NullableStringFieldUpdateOperationsInput | string | null
+    secondContactId?: NullableStringFieldUpdateOperationsInput | string | null
     action?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCandidateStatusFieldUpdateOperationsInput | $Enums.CandidateStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -27890,8 +28333,10 @@ export namespace Prisma {
   export type CandidateUncheckedUpdateWithoutAttendancesInput = {
     id?: StringFieldUpdateOperationsInput | string
     candidateCode?: StringFieldUpdateOperationsInput | string
+    membershipNumber?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     age?: IntFieldUpdateOperationsInput | number
@@ -27899,6 +28344,9 @@ export namespace Prisma {
     giftCode?: NullableStringFieldUpdateOperationsInput | string | null
     observation?: EnumObservationFieldUpdateOperationsInput | $Enums.Observation
     contact?: CandidateUpdatecontactInput | string[]
+    registrationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    firstContactId?: NullableStringFieldUpdateOperationsInput | string | null
+    secondContactId?: NullableStringFieldUpdateOperationsInput | string | null
     action?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCandidateStatusFieldUpdateOperationsInput | $Enums.CandidateStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string

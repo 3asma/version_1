@@ -8,7 +8,7 @@ class RoomService {
         let rawCapacite = data.capacite !== undefined ? data.capacite : data.capacity;
 
         if (rawNumero !== undefined && rawNumero !== null) {
-            n.numero = String(rawNumero).trim().toUpperCase();
+            n.numero = String(rawNumero).trim();
         }
         if (rawCapacite !== undefined && rawCapacite !== null) {
             n.capacite = parseInt(rawCapacite);

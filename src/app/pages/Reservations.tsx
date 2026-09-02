@@ -169,7 +169,7 @@ export default function Reservations() {
     const runAvailabilityCheck = async () => {
       const { date, startTime, endTime } = formData;
       const candidateId = searchResult?.candidateId;
-      const professorId = searchResult?.professorId;
+      const professorId = formData.professorId || searchResult?.professorId;
 
       if (!date || !startTime || !endTime || !professorId || !candidateId) {
         setAvailabilityResult(null);
@@ -198,7 +198,7 @@ export default function Reservations() {
     };
 
     runAvailabilityCheck();
-  }, [formData.date, formData.startTime, formData.endTime, searchResult?.professorId, searchResult?.candidateId]);
+  }, [formData.date, formData.startTime, formData.endTime, formData.professorId, searchResult?.professorId, searchResult?.candidateId]);
 
   // Reset roomId if it becomes unavailable
   useEffect(() => {
@@ -530,8 +530,8 @@ export default function Reservations() {
                           <div className="space-y-1 text-sm font-semibold">
                             <p className={!availabilityResult.professorAvailable ? "text-red-600" : "text-green-600"}>
                               {!availabilityResult.professorAvailable
-                                ? `✗ Professeur : ${getProfName()} indisponible`
-                                : `✓ Professeur : ${getProfName()} disponible`}
+                                ? `✗ Professeur : ${getProfName()} indisponible (Occupé sur ce créneau)`
+                                : `✓ Professeur : ${getProfName()} disponible${availabilityResult.isDayOff ? ' (Jour de repos)' : ''}`}
                             </p>
                             {availabilityResult.availableRooms.length === 0 && (
                               <p className="text-red-600 mt-2 font-bold">

@@ -6,14 +6,21 @@ class ProspectService {
      */
     normalizeData(data) {
         const allowedKeys = [
+            'membershipNumber',
             'firstName',
             'lastName',
+            'gender',
             'age',
             'occupation',
+            'phone',
+            'email',
+            'registrationDate',
             'giftCode',
             'observation',
             'contact',
             'action',
+            'firstContactId',
+            'secondContactId',
             'status',
             'freeSessionsCompleted',
             'absences'
@@ -73,7 +80,7 @@ class ProspectService {
     async createProspect(data) {
         const normalized = this.normalizeData(data);
         if (normalized.membershipNumber) {
-            const existing = await prisma.prospect.findUnique({ where: { membershipNumber: normalized.membershipNumber } });
+            const existing = await prisma.prospect.findFirst({ where: { membershipNumber: normalized.membershipNumber } });
             if (existing) throw new Error('MEMBERSHIP_NUMBER_TAKEN');
         }
         return await prisma.prospect.create({
@@ -84,7 +91,7 @@ class ProspectService {
     async updateProspect(id, data) {
         const normalized = this.normalizeData(data);
         if (normalized.membershipNumber) {
-            const existing = await prisma.prospect.findUnique({ where: { membershipNumber: normalized.membershipNumber } });
+            const existing = await prisma.prospect.findFirst({ where: { membershipNumber: normalized.membershipNumber } });
             if (existing && existing.id !== id) throw new Error('MEMBERSHIP_NUMBER_TAKEN');
         }
         return await prisma.prospect.update({

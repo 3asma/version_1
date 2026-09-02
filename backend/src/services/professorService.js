@@ -9,6 +9,8 @@ class ProfessorService {
             'email',
             'telephone',
             'adresse',
+            'specialite',
+            'subjects',
             'type',
             'dayOff',
             'maxSessions',
@@ -30,11 +32,13 @@ class ProfessorService {
         let nom = raw.nom !== undefined ? raw.nom : raw.lastName;
         let telephone = raw.telephone !== undefined ? raw.telephone : raw.phone;
         let adresse = raw.adresse !== undefined ? raw.adresse : raw.address;
+        let specialite = raw.specialite !== undefined ? raw.specialite : (Array.isArray(raw.subjects) ? raw.subjects.join(', ') : raw.subjects);
 
         if (prenom !== undefined && prenom !== null) n.prenom = String(prenom).trim();
         if (nom !== undefined && nom !== null) n.nom = String(nom).trim();
         if (telephone !== undefined && telephone !== null) n.telephone = String(telephone).trim();
         if (adresse !== undefined && adresse !== null) n.adresse = String(adresse).trim();
+        if (specialite !== undefined && specialite !== null) n.specialite = String(specialite).trim();
 
         if (raw.email !== undefined && raw.email !== null) n.email = String(raw.email).trim().toLowerCase();
         if (raw.dayOff !== undefined && raw.dayOff !== null) n.dayOff = String(raw.dayOff).trim();

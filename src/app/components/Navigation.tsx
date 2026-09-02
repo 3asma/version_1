@@ -190,7 +190,7 @@ export function Navigation({ isCollapsed, setIsCollapsed, isMobileOpen, setIsMob
     }
 
     // 12. Candidate Reservations (view_own_reservations)
-    if (permissions.includes('view_own_reservations')) {
+    if (permissions.includes('view_own_reservations') && role !== 'admin') {
       items.push({
         path: '/candidate-reservations',
         icon: Calendar,

@@ -1,6 +1,7 @@
 generator client {
-  provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
+  provider      = "prisma-client-js"
+  output        = "../src/generated/prisma"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
@@ -18,14 +19,21 @@ model User {
 
 model Prospect {
   id                    String      @id @default(uuid())
+  membershipNumber      String?
   firstName             String
   lastName              String
+  gender                String?
   age                   Int
   occupation            Occupation
+  phone                 String?
+  email                 String?
+  registrationDate      DateTime?
   giftCode              String?
   observation           Observation
   contact               String[]
   action                String?
+  firstContactId        String?
+  secondContactId       String?
   status                String      @default("prospect")
   freeSessionsCompleted Int         @default(0)
   absences              Int         @default(0)
@@ -34,26 +42,31 @@ model Prospect {
 }
 
 model Candidate {
-  id            String          @id @default(uuid())
-  candidateCode String          @unique
-  firstName     String
-  lastName      String
-  email         String?         @unique
-  phone         String?
-  age           Int
-  occupation    Occupation
-  giftCode      String?
-  observation   Observation
-  contact       String[]
+  id                    String          @id @default(uuid())
+  candidateCode         String          @unique
+  membershipNumber      String?
+  firstName             String
+  lastName              String
+  gender                String?
+  email                 String?         @unique
+  phone                 String?
+  age                   Int
+  occupation            Occupation
+  giftCode              String?
+  observation           Observation
+  contact               String[]
+  registrationDate      DateTime?
+  firstContactId        String?
+  secondContactId       String?
   inscriptions          Inscription[]
   inscriptionCandidates InscriptionCandidate[]
   payments              Payment[]
   paymentPlans          PaymentPlan[]
   attendances           Attendance[]
-  action        String?
-  status        CandidateStatus @default(PENDING)
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
+  action                String?
+  status                CandidateStatus @default(PENDING)
+  createdAt             DateTime        @default(now())
+  updatedAt             DateTime        @updatedAt
 }
 
 enum Role {
@@ -113,9 +126,10 @@ model Professor {
   email       String?  @unique
   telephone   String?
   adresse     String?
+  specialite  String?
   type        String   @default("permanent")
   dayOff      String   @default("Sunday")
-maxSessions Int      @default(25)
+  maxSessions Int      @default(25)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   inscriptions Inscription[]

@@ -562,9 +562,15 @@ export default function Prospects() {
             Exporter PDF
           </Button>
 
-          <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+          <Dialog open={isAddDialogOpen} onOpenChange={(open) => {
+            setIsAddDialogOpen(open);
+            if (open) {
+              setSelectedProspect(null);
+              resetForm();
+            }
+          }}>
             <DialogTrigger asChild>
-              <Button size="lg" className="shadow-md">
+              <Button size="lg" className="shadow-md" onClick={() => { setSelectedProspect(null); resetForm(); }}>
                 <UserPlus size={20} className="mr-2" />
                 Nouveau prospect
               </Button>

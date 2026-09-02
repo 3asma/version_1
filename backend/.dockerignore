@@ -1,0 +1,7 @@
+node_modules
+npm-debug.log
+src/generated/prisma
+uploads/cheques_test
+dist
+.git
+.env

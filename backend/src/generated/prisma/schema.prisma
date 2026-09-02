@@ -1,6 +1,7 @@
 generator client {
-  provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
+  provider      = "prisma-client-js"
+  output        = "../src/generated/prisma"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
@@ -18,14 +19,21 @@ model User {
 
 model Prospect {
   id                    String      @id @default(uuid())
+  membershipNumber      String?
   firstName             String
   lastName              String
+  gender                String?
   age                   Int
   occupation            Occupation
+  phone                 String?
+  email                 String?
+  registrationDate      DateTime?
   giftCode              String?
   observation           Observation
   contact               String[]
   action                String?
+  firstContactId        String?
+  secondContactId       String?
   status                String      @default("prospect")
   freeSessionsCompleted Int         @default(0)
   absences              Int         @default(0)
@@ -36,8 +44,10 @@ model Prospect {
 model Candidate {
   id                    String                 @id @default(uuid())
   candidateCode         String                 @unique
+  membershipNumber      String?
   firstName             String
   lastName              String
+  gender                String?
   email                 String?                @unique
   phone                 String?
   age                   Int
@@ -45,6 +55,9 @@ model Candidate {
   giftCode              String?
   observation           Observation
   contact               String[]
+  registrationDate      DateTime?
+  firstContactId        String?
+  secondContactId       String?
   inscriptions          Inscription[]
   inscriptionCandidates InscriptionCandidate[]
   payments              Payment[]

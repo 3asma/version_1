@@ -20,14 +20,21 @@ class CandidateService {
     normalizeData(data) {
         const allowedKeys = [
             'candidateCode',
+            'membershipNumber',
             'firstName',
             'lastName',
+            'gender',
             'age',
             'occupation',
             'phone',
             'email',
+            'registrationDate',
+            'giftCode',
             'observation',
+            'contact',
             'action',
+            'firstContactId',
+            'secondContactId',
             'status'
         ];
 
@@ -89,6 +96,11 @@ class CandidateService {
             if (existing) throw new Error('EMAIL_TAKEN');
         }
 
+        if (normalized.membershipNumber) {
+            const existing = await prisma.candidate.findFirst({ where: { membershipNumber: normalized.membershipNumber } });
+            if (existing) throw new Error('MEMBERSHIP_NUMBER_TAKEN');
+        }
+
         const candidateCode = await generateCandidateCode();
 
         return await prisma.candidate.create({
@@ -109,6 +121,11 @@ class CandidateService {
         if (normalized.email) {
             const existing = await prisma.candidate.findUnique({ where: { email: normalized.email } });
             if (existing && existing.id !== id) throw new Error('EMAIL_TAKEN');
+        }
+
+        if (normalized.membershipNumber) {
+            const existing = await prisma.candidate.findFirst({ where: { membershipNumber: normalized.membershipNumber } });
+            if (existing && existing.id !== id) throw new Error('MEMBERSHIP_NUMBER_TAKEN');
         }
 
         if (normalized.status && !['ACTIVE', 'INACTIVE', 'PENDING'].includes(normalized.status)) {

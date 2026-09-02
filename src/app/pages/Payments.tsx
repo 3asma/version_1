@@ -91,11 +91,15 @@ export default function Payments() {
           setCustomTotalAmount(String(response.data.plan.totalAmount));
         } else {
           setPaymentPlan(null);
-          setCustomTotalAmount('');
+          const ins = inscriptions.find(i =>
+            i.candidateId === formData.candidateId &&
+            (i.formationId === formData.formationId || (i.learningGroup && i.learningGroup.formationId === formData.formationId))
+          );
+          const defaultPrice = ins?.price ? String(ins.price) : '';
+          setCustomTotalAmount(prev => prev || defaultPrice);
         }
       } catch (err: any) {
         setPaymentPlan(null);
-        setCustomTotalAmount('');
         console.error('Failed to fetch payment plan status:', err);
       } finally {
         setIsLoadingPaymentPlan(false);
@@ -103,7 +107,7 @@ export default function Payments() {
     };
 
     fetchPaymentPlan();
-  }, [formData.candidateId, formData.formationId, selectedPaymentId, payments]);
+  }, [formData.candidateId, formData.formationId, selectedPaymentId]);
 
   const handleCandidateChange = async (candidateId: string) => {
     handleInputChange('formationId', '');
@@ -169,7 +173,11 @@ export default function Payments() {
       }
     }
 
-    if (!selectedPaymentId && customTotalAmount) {
+    if (!selectedPaymentId && !paymentPlan) {
+      if (!customTotalAmount || isNaN(parseFloat(customTotalAmount)) || parseFloat(customTotalAmount) <= 0) {
+        toast.error("Veuillez saisir un montant global valide pour la formation");
+        return;
+      }
       paymentData.totalAmount = parseFloat(customTotalAmount);
     }
 
@@ -316,36 +324,33 @@ export default function Payments() {
     }
   };
 
-  const handleValidatePayment = (paymentId: string) => {
-    updatePayment(paymentId, { status: 'validated' });
-    toast.success('Paiement validé');
-  };
-
-  const handleRejectPayment = (paymentId: string) => {
-    const payment = payments.find(p => p.id === paymentId);
-    if (payment?.checkDetails) {
-      updatePayment(paymentId, {
-        checkDetails: {
-          ...payment.checkDetails,
-          checkStatus: 'rejected'
-        },
-        status: 'late'
-      });
-      toast.error('Paiement rejeté');
+  const handleValidatePayment = async (paymentId: string) => {
+    try {
+      await updatePayment(paymentId, { status: 'validated' });
+      toast.success('Paiement validé avec succès');
+    } catch (error: any) {
+      console.error(error);
+      toast.error(error.response?.data?.error || 'Erreur lors de la validation du paiement');
     }
   };
 
-  const handleValidateCheck = (paymentId: string) => {
-    const payment = payments.find(p => p.id === paymentId);
-    if (payment?.checkDetails) {
-      updatePayment(paymentId, {
-        checkDetails: {
-          ...payment.checkDetails,
-          checkStatus: 'validated'
-        },
-        status: 'validated'
-      });
-      toast.success('Chèque validé');
+  const handleRejectPayment = async (paymentId: string) => {
+    try {
+      await updatePayment(paymentId, { status: 'failed' as any });
+      toast.error('Paiement / Chèque rejeté');
+    } catch (error: any) {
+      console.error(error);
+      toast.error(error.response?.data?.error || 'Erreur lors du rejet du paiement');
+    }
+  };
+
+  const handleValidateCheck = async (paymentId: string) => {
+    try {
+      await updatePayment(paymentId, { status: 'validated' });
+      toast.success('Chèque et paiement validés avec succès');
+    } catch (error: any) {
+      console.error(error);
+      toast.error(error.response?.data?.error || 'Erreur lors de la validation du chèque');
     }
   };
 
@@ -640,15 +645,20 @@ export default function Payments() {
                     ) : (
                       <div className="grid grid-cols-2 gap-4 bg-gray-50/50 p-4 rounded-lg border border-gray-150 w-full">
                         <div className="space-y-2">
-                          <Label htmlFor="customTotalAmount">Montant Global de la formation (DH)</Label>
+                          <Label htmlFor="customTotalAmount">Montant Global de la formation (DH) *</Label>
                           <Input
                             id="customTotalAmount"
-                            type="number"
-                            step="0.01"
+                            type="text"
+                            inputMode="decimal"
                             value={customTotalAmount}
-                            onChange={(e) => setCustomTotalAmount(e.target.value)}
-                            placeholder="Saisir montant global"
-                            className="bg-white border-gray-300"
+                            onChange={(e) => {
+                              const val = e.target.value;
+                              if (val === '' || /^\d*\.?\d*$/.test(val)) {
+                                setCustomTotalAmount(val);
+                              }
+                            }}
+                            placeholder="Saisir montant global (ex: 2500)"
+                            className="bg-white border-gray-300 font-semibold text-gray-900"
                           />
                         </div>
                         <div className="flex items-center text-xs text-gray-500 pt-6">
@@ -1202,6 +1212,7 @@ export default function Payments() {
                     <TableHead className="font-semibold">Statut</TableHead>
                     <TableHead className="font-semibold">Mensualités</TableHead>
                     <TableHead className="font-semibold">Scan</TableHead>
+                    <TableHead className="text-right font-semibold">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -1292,6 +1303,31 @@ export default function Payments() {
                               </Button>
                             ) : (
                               <span className="text-sm text-gray-400">Non disponible</span>
+                            )}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            {payment.status !== 'validated' ? (
+                              <div className="flex justify-end gap-2">
+                                <Button
+                                  size="sm"
+                                  onClick={() => handleValidateCheck(payment.id)}
+                                  className="bg-green-600 hover:bg-green-700 text-xs"
+                                >
+                                  <CheckCircle size={14} className="mr-1" />
+                                  Valider
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  variant="destructive"
+                                  onClick={() => handleRejectPayment(payment.id)}
+                                  className="text-xs"
+                                >
+                                  <XCircle size={14} className="mr-1" />
+                                  Rejeter
+                                </Button>
+                              </div>
+                            ) : (
+                              <Badge className="bg-green-100 text-green-800 border-green-200">Encaissé</Badge>
                             )}
                           </TableCell>
                         </TableRow>

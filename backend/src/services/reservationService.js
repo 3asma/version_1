@@ -543,7 +543,6 @@ class ReservationService {
     }
 
     async checkAvailability(data) {
-        const reservationDate = new Date(data.reservationDate);
         const startTime = new Date(data.startTime);
         const endTime = new Date(data.endTime);
         const { professorId, candidateId } = data;
@@ -564,12 +563,9 @@ class ReservationService {
         const candidateConflict = await prisma.reservation.findFirst({
             where: {
                 inscriptionId: { in: inscriptionIds },
-                reservationDate,
                 status: { not: 'CANCELLED' },
-                OR: [
-                    { startTime: { gte: startTime, lt: endTime } },
-                    { endTime: { gt: startTime, lte: endTime } }
-                ]
+                startTime: { lt: endTime },
+                endTime: { gt: startTime }
             }
         });
         const candidateAvailable = !candidateConflict;
@@ -578,35 +574,29 @@ class ReservationService {
         const professorConflict = await prisma.reservation.findFirst({
             where: {
                 professorId,
-                reservationDate,
                 status: { not: 'CANCELLED' },
-                OR: [
-                    { startTime: { gte: startTime, lt: endTime } },
-                    { endTime: { gt: startTime, lte: endTime } }
-                ]
+                startTime: { lt: endTime },
+                endTime: { gt: startTime }
             }
         });
 
         const profObj = await prisma.professor.findUnique({
             where: { id: professorId }
         });
-        const dateDay = reservationDate.getUTCDay();
+        const dateDay = startTime.getDay();
         const weekdays = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
         const currentDayName = weekdays[dateDay];
-        const isDayOff = profObj && profObj.dayOff && profObj.dayOff.toUpperCase() === currentDayName;
+        const isDayOff = Boolean(profObj && profObj.dayOff && profObj.dayOff.toUpperCase() === currentDayName);
 
-        const professorAvailable = !professorConflict && !isDayOff;
+        const professorAvailable = !professorConflict;
 
         // 3. Room Availability
         const allRooms = await prisma.room.findMany();
         const activeReservations = await prisma.reservation.findMany({
             where: {
-                reservationDate,
                 status: { not: 'CANCELLED' },
-                OR: [
-                    { startTime: { gte: startTime, lt: endTime } },
-                    { endTime: { gt: startTime, lte: endTime } }
-                ]
+                startTime: { lt: endTime },
+                endTime: { gt: startTime }
             }
         });
         const reservedRoomIds = activeReservations.map(r => r.roomId).filter(Boolean);
@@ -615,6 +605,7 @@ class ReservationService {
         return {
             professorAvailable,
             candidateAvailable,
+            isDayOff,
             availableRooms
         };
     }

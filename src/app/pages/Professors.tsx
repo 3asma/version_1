@@ -24,7 +24,7 @@ import {
 } from '../components/ui/alert-dialog';
 
 export default function Professors() {
-  const { professors, addProfessor, updateProfessor, deleteProfessor, formations, sessions } = useApp();
+  const { professors, addProfessor, updateProfessor, deleteProfessor, formations, sessions, rooms, inscriptions, learningGroups } = useApp();
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isActivityDialogOpen, setIsActivityDialogOpen] = useState(false);
   const [editingProfessor, setEditingProfessor] = useState<string | null>(null);
@@ -66,15 +66,17 @@ export default function Professors() {
     const professor = professors.find(p => p.id === professorId);
     if (professor) {
       setFormData({
-        firstName: professor.firstName,
-        lastName: professor.lastName,
-        phone: professor.phone,
-        email: professor.email,
-        address: professor.address,
-        subjects: professor.subjects.join(', '),
-        type: professor.type,
-        dayOff: professor.dayOff,
-        maxSessions: professor.maxSessions.toString()
+        firstName: professor.firstName || (professor as any).prenom || '',
+        lastName: professor.lastName || (professor as any).nom || '',
+        phone: professor.phone || (professor as any).telephone || '',
+        email: professor.email || '',
+        address: professor.address || (professor as any).adresse || '',
+        subjects: Array.isArray(professor.subjects)
+          ? professor.subjects.join(', ')
+          : (typeof (professor as any).specialite === 'string' ? (professor as any).specialite : ''),
+        type: (professor.type as any) || 'permanent',
+        dayOff: professor.dayOff || 'Sunday',
+        maxSessions: professor.maxSessions !== undefined && professor.maxSessions !== null ? professor.maxSessions.toString() : '25'
       });
       setEditingProfessor(professorId);
       setIsAddDialogOpen(true);
@@ -105,40 +107,46 @@ export default function Professors() {
     const subjects = formData.subjects ? formData.subjects.split(',').map(s => s.trim()).filter(s => s) : [];
 
     if (editingProfessor) {
-      updateProfessor(editingProfessor, {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        phone: formData.phone,
-        email: formData.email,
-        address: formData.address,
-        subjects,
-        type: formData.type,
-        dayOff: formData.dayOff,
-        maxSessions: parseInt(formData.maxSessions)
-      });
-      toast.success('Professeur mis à jour');
-      setEditingProfessor(null);
-      setIsAddDialogOpen(false);
-      resetForm();
+      try {
+        await updateProfessor(editingProfessor, {
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          phone: formData.phone || undefined,
+          email: formData.email || undefined,
+          address: formData.address || undefined,
+          subjects,
+          type: formData.type,
+          dayOff: formData.dayOff,
+          maxSessions: parseInt(formData.maxSessions)
+        });
+        toast.success('Professeur mis à jour avec succès');
+        setEditingProfessor(null);
+        setIsAddDialogOpen(false);
+        resetForm();
+      } catch (error: any) {
+        console.error(error);
+        toast.error(error.response?.data?.error || error.message || 'Erreur lors de la mise à jour du professeur');
+      }
     } else {
       try {
         await addProfessor({
           firstName: formData.firstName,
           lastName: formData.lastName,
-          phone: formData.phone,
-          email: formData.email,
-          address: formData.address,
+          phone: formData.phone || undefined,
+          email: formData.email || undefined,
+          address: formData.address || undefined,
           subjects,
           type: formData.type,
           dayOff: formData.dayOff,
           maxSessions: parseInt(formData.maxSessions),
           totalHoursWorked: 0
         });
-        toast.success('Professeur ajouté');
+        toast.success('Professeur ajouté avec succès');
         setIsAddDialogOpen(false);
         resetForm();
-      } catch (error) {
-        toast.error('Erreur lors de l\'ajout du professeur');
+      } catch (error: any) {
+        console.error(error);
+        toast.error(error.response?.data?.error || error.message || 'Erreur lors de l\'ajout du professeur');
       }
     }
   };
@@ -211,91 +219,146 @@ export default function Professors() {
 
                   const professorSessions = sessions.filter(s =>
                     s.professorId === selectedProfessorForActivity &&
-                    s.status === 'completed' &&
-                    s.attendance === 'present'
+                    s.status !== 'cancelled'
                   );
 
-                  const totalHours = professor.totalHoursWorked;
+                  const assignedInscriptions = (inscriptions || []).filter(i => i.professorId === selectedProfessorForActivity);
+                  const assignedGroups = (learningGroups || []).filter(g => g.professorId === selectedProfessorForActivity);
 
-                  // Get current month sessions
+                  const getHours = (s: any) => (s.duration > 10 ? s.duration / 60 : (s.duration || 1));
+
+                  const totalSessionHours = professorSessions.reduce((total, session) => total + getHours(session), 0);
+                  const totalHours = totalSessionHours > 0 ? totalSessionHours : Number(professor.totalHoursWorked || 0);
+
                   const currentDate = new Date();
                   const currentMonth = currentDate.getMonth();
                   const currentYear = currentDate.getFullYear();
 
                   const monthSessions = professorSessions.filter(s => {
+                    if (!s.date) return false;
                     const sessionDate = new Date(s.date);
                     return sessionDate.getMonth() === currentMonth && sessionDate.getFullYear() === currentYear;
                   });
 
-                  const monthHours = monthSessions.reduce((total, session) => total + session.duration, 0);
+                  const monthHours = monthSessions.reduce((total, session) => total + getHours(session), 0);
+
+                  const displaySessions = monthSessions.length > 0 ? monthSessions : professorSessions;
 
                   return (
                     <div className="space-y-6">
                       {/* Statistiques principales */}
-                      <div className="grid grid-cols-3 gap-4">
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                         <Card>
-                          <CardHeader className="pb-3">
-                            <CardTitle className="text-sm font-medium text-gray-600">Heures enseignées</CardTitle>
+                          <CardHeader className="pb-2">
+                            <CardTitle className="text-xs font-medium text-gray-500">Heures enseignées</CardTitle>
                           </CardHeader>
                           <CardContent>
-                            <div className="text-2xl font-bold">{totalHours.toFixed(1)}h</div>
-                            <p className="text-xs text-gray-500 mt-1">Total</p>
+                            <div className="text-2xl font-bold text-indigo-600">{totalHours.toFixed(1)}h</div>
+                            <p className="text-[11px] text-gray-500 mt-1">Volume total</p>
                           </CardContent>
                         </Card>
 
                         <Card>
-                          <CardHeader className="pb-3">
-                            <CardTitle className="text-sm font-medium text-gray-600">Séances</CardTitle>
+                          <CardHeader className="pb-2">
+                            <CardTitle className="text-xs font-medium text-gray-500">Séances planifiées</CardTitle>
                           </CardHeader>
                           <CardContent>
-                            <div className="text-2xl font-bold">{professorSessions.length}</div>
-                            <p className="text-xs text-gray-500 mt-1">Total terminées</p>
+                            <div className="text-2xl font-bold text-blue-600">{professorSessions.length}</div>
+                            <p className="text-[11px] text-gray-500 mt-1">Au total</p>
                           </CardContent>
                         </Card>
 
                         <Card>
-                          <CardHeader className="pb-3">
-                            <CardTitle className="text-sm font-medium text-gray-600">Ce mois</CardTitle>
+                          <CardHeader className="pb-2">
+                            <CardTitle className="text-xs font-medium text-gray-500">Ce mois-ci</CardTitle>
                           </CardHeader>
                           <CardContent>
-                            <div className="text-2xl font-bold">{monthHours.toFixed(1)}h</div>
-                            <p className="text-xs text-gray-500 mt-1">{monthSessions.length} séances</p>
+                            <div className="text-2xl font-bold text-green-600">{monthHours.toFixed(1)}h</div>
+                            <p className="text-[11px] text-gray-500 mt-1">{monthSessions.length} séance(s)</p>
+                          </CardContent>
+                        </Card>
+
+                        <Card>
+                          <CardHeader className="pb-2">
+                            <CardTitle className="text-xs font-medium text-gray-500">Groupes affectés</CardTitle>
+                          </CardHeader>
+                          <CardContent>
+                            <div className="text-2xl font-bold text-purple-600">{assignedGroups.length || assignedInscriptions.length}</div>
+                            <p className="text-[11px] text-gray-500 mt-1">Inscription(s)</p>
                           </CardContent>
                         </Card>
                       </div>
 
-
-                      {/* Historique du mois */}
+                      {/* Detail list of sessions */}
                       <div>
-                        <h3 className="text-sm font-semibold mb-3">
-                          Historique du mois ({currentDate.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })})
+                        <h3 className="text-sm font-semibold mb-3 flex items-center justify-between">
+                          <span>
+                            {monthSessions.length > 0
+                              ? `Séances du mois (${currentDate.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })})`
+                              : 'Toutes les séances enregistrées'}
+                          </span>
+                          <Badge variant="outline" className="text-xs">
+                            {displaySessions.length} séance(s)
+                          </Badge>
                         </h3>
-                        {monthSessions.length === 0 ? (
-                          <p className="text-sm text-gray-500">Aucune séance ce mois-ci</p>
+
+                        {displaySessions.length === 0 ? (
+                          <div className="text-center py-8 bg-gray-50 rounded-xl border">
+                            <p className="text-sm text-gray-500">Aucune séance enregistrée pour ce professeur.</p>
+                            {(assignedGroups.length > 0 || assignedInscriptions.length > 0) && (
+                              <p className="text-xs text-indigo-600 mt-1 font-medium">
+                                Ce professeur est affecté à {assignedGroups.length || assignedInscriptions.length} groupe(s).
+                              </p>
+                            )}
+                          </div>
                         ) : (
-                          <Table>
-                            <TableHeader>
-                              <TableRow>
-                                <TableHead>Date</TableHead>
-                                <TableHead>Heure</TableHead>
-                                <TableHead>Formation</TableHead>
-                                <TableHead>Durée</TableHead>
-                              </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                              {monthSessions.map(session => {
-                                const formation = formations.find(f => f.id === session.formationId);
-                                return (
-                                  <TableRow key={session.id}>
-                                    <TableCell>{new Date(session.date).toLocaleDateString('fr-FR')}</TableCell>
-                                    <TableCell>{session.time}</TableCell>
-                                    <TableCell>{formation ? `${formation.subject} - ${formation.level}` : 'N/A'}</TableCell>
-                                    <TableCell>{session.duration}h</TableCell>
-                                  </TableRow>
-                                );
-                              })}
-                            </TableBody>
-                          </Table>
+                          <div className="border rounded-xl overflow-hidden">
+                            <Table>
+                              <TableHeader className="bg-gray-50">
+                                <TableRow>
+                                  <TableHead>Date</TableHead>
+                                  <TableHead>Heure</TableHead>
+                                  <TableHead>Formation / Groupe</TableHead>
+                                  <TableHead>Salle</TableHead>
+                                  <TableHead>Statut</TableHead>
+                                  <TableHead className="text-right">Durée</TableHead>
+                                </TableRow>
+                              </TableHeader>
+                              <TableBody>
+                                {displaySessions.map(session => {
+                                  const formation = formations.find(f => f.id === session.formationId);
+                                  const room = (rooms || []).find(r => r.id === session.roomId);
+                                  const hours = getHours(session);
+                                  const statusLabel =
+                                    session.status === 'completed' ? 'Terminée' :
+                                    session.status === 'cancelled' ? 'Annulée' : 'Programmée';
+
+                                  return (
+                                    <TableRow key={session.id}>
+                                      <TableCell className="font-medium text-xs">
+                                        {session.date ? new Date(session.date).toLocaleDateString('fr-FR') : '-'}
+                                      </TableCell>
+                                      <TableCell className="text-xs font-mono">{session.time || '-'}</TableCell>
+                                      <TableCell className="text-xs font-semibold text-gray-800">
+                                        {formation ? `${formation.subject} (${formation.level})` : (session.groupName || 'Formation')}
+                                      </TableCell>
+                                      <TableCell className="text-xs">
+                                        {room ? (room as any).roomNumber || (room as any).numero : 'N/A'}
+                                      </TableCell>
+                                      <TableCell>
+                                        <Badge variant={session.status === 'completed' ? 'default' : 'secondary'} className="text-[10px]">
+                                          {statusLabel}
+                                        </Badge>
+                                      </TableCell>
+                                      <TableCell className="text-right text-xs font-bold text-indigo-700">
+                                        {hours.toFixed(1)}h
+                                      </TableCell>
+                                    </TableRow>
+                                  );
+                                })}
+                              </TableBody>
+                            </Table>
+                          </div>
                         )}
                       </div>
                     </div>
@@ -313,7 +376,7 @@ export default function Professors() {
 
           <Dialog open={isAddDialogOpen} onOpenChange={handleDialogClose}>
             <DialogTrigger asChild>
-              <Button>
+              <Button onClick={() => { setEditingProfessor(null); resetForm(); }}>
                 <UserPlus size={18} className="mr-2" />
                 Nouveau professeur
               </Button>
